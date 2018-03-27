@@ -106,7 +106,7 @@ bool checkInsertPlayerPosition(int playerNum, ifstream & playerPositionFile)
             return false;
         }
         else{
-          fight();
+          fight(row,col,line[0]);
         }
       }
       else{
@@ -126,6 +126,22 @@ bool checkInsertPlayerPosition(int playerNum, ifstream & playerPositionFile)
   if (checkPieceOverFlow)
   {
     return false;
+  }
+}
+
+bool fight(int row, int col,char player2Piece) {
+  //TODO: ask if we can position flag on flag and who is loosing
+  player2Piece=toupper(player2Piece);
+  //case 1: 2 players in the same type.
+  if(board[row][col] == player2Piece){ 
+   if(board[row][col] == FLAG && )
+   {
+     return true;
+   } 
+  }
+  //case 2: 2 players in the same type.
+  else if(board[row][col] == FLAG){
+
   }
 }
 
