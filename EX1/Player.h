@@ -9,20 +9,21 @@ using namespace std;
 
 class Player
 {
-    Player(int playerNum);
-    ~Player(); 
-    Player& operator=(const Player& otherPlayer) = delete;			/* deletes the assignment operator - we want a player to be a Non Copyable object */
-    
-    private:
-    int playerNum;
-    int *numOfPieces;
-    int score;
+	Player(int playerNum);
+	~Player();
+	Player& operator=(const Player& otherPlayer) = delete;			/* deletes the assignment operator - we want a player to be a Non Copyable object */
 
-    int getPlayerNum()const;
-    int * getNumOfPieces();
-    int getScore()const;
+	int *numOfPieces;
 
-    void setScore(int updateScore);
+	int getPlayerNum()const;
+	int getScore()const;
+	bool getIsWinner() const;
+	void setIsWinner(bool isWinner);
+	void setScore(int updateScore);
+	bool isLeftMovingPieces()const;
 
-
+private:
+	int playerNum;
+	int score;
+	bool isWinner;
 };

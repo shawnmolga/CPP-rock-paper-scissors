@@ -22,5 +22,6 @@ using namespace std;
 #define JOKER 'J'
 #define FLAG 'F'
 
-//TODO : ask what we should do in case of wrong output file.
-enum WIN_TYPE {ALL_FLAGS_CAPTURED,ALL_PIECES_EATEN,WRONG_FILE_FORMAT}
+#define PLAYER_ONE 1
+#define PLAYER_TWO 2
+
