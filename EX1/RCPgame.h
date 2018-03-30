@@ -24,6 +24,7 @@ class RCPgame{
 	~RCPgame();
 	RCPgame(const RCPgame& game) = delete;
 	RCPgame& operator=(const RCPgame& game) = delete;
+
 	Player getPlayerOne()const;
 	Player getPlayerTwo()const;
 

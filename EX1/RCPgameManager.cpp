@@ -127,7 +127,7 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum, ifstream & playerP
 
     }
     else{
-    	Cell::updateCell(game.board[row][col], piece, isJoker,);
+    	Cell::updateCell(game.board[row][col], piece, isJoker);
     }
 
   }

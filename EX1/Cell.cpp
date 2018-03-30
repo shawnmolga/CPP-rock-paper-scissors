@@ -6,22 +6,18 @@
  */
 #include "Cell.h"
 
-Cell::Cell(char playerPiece , bool isPieceJoker, int playerNumber) : piece(playerPiece), isJoker(isPieceJoker), playerNum(playerNumber){};
-Cell::Cell() : piece(0), isJoker(false),playerNum(-1){}
+Cell::Cell(char playerPiece , bool isPieceJoker) : piece(playerPiece), isJoker(isPieceJoker){}
+Cell::Cell() : piece(0), isJoker(false){}
 
-static void updateCell(Cell& cell, char piece, bool isJoker,int playerNumber){
-		delete &cell;
-		cell = new Cell(piece, isJoker,playerNumber);
+static void Cell::updateCell(Cell& cell, char piece, bool isJoker){
+		delete cell;
+		cell = new Cell(piece, isJoker);
 }
 char Cell::getPiece() const{
 	return piece;
 }
 bool Cell::getIsJoker() const{
 	return isJoker;
-}
-int Cell::getPlayerNumber() const{
-
-	return playerNum;
 }
 
 

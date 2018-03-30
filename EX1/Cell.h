@@ -16,18 +16,17 @@ using namespace std;
 
 class Cell
 {
-	Cell(char piece , bool isJoker,int playerNumber);
+	Cell(char piece , bool isJoker);
 	Cell();
 
 	char getPiece() const;
 	bool getIsJoker() const;
-	int  getPlayerNumber() const;
-	static void updateCell(Cell& cell, char piece, bool isJoker,int playerNumber);
+
+	static void updateCell(Cell& cell, char piece, bool isJoker);
 
 private:
 	char piece;
 	bool isJoker;
-	int playerNum;
 };
 
 
