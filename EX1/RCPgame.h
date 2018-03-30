@@ -1,7 +1,7 @@
 /*
  * RCPgame.h
  *
- *  Created on: 27 бошх 2018
+ *  Created on: 27 пїЅпїЅпїЅпїЅ 2018
  *      Author: OR
  */
 
@@ -24,7 +24,6 @@ class RCPgame{
 	~RCPgame();
 	RCPgame(const RCPgame& game) = delete;
 	RCPgame& operator=(const RCPgame& game) = delete;
-
 	Player getPlayerOne()const;
 	Player getPlayerTwo()const;
 

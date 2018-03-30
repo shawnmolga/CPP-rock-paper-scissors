@@ -11,7 +11,7 @@ class Player
 {
 	Player(int playerNum);
 	~Player();
-	Player& operator=(const Player& otherPlayer) = delete;			/* deletes the assignment operator - we want a player to be a Non Copyable object */
+	Player& operator=(const Player& otherPlayer) = delete;	/* deletes the assignment operator - we want a player to be a Non Copyable object */
 
 	int *numOfPieces;
 
