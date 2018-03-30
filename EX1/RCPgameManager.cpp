@@ -1,7 +1,7 @@
 /*
  * RCPgameManager.cpp
  *
- *  Created on: 27 бошх 2018
+ *  Created on: 27 пїЅпїЅпїЅпїЅ 2018
  *      Author: OR
  */
 #include "RCPgameManager.h"
@@ -127,7 +127,7 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum, ifstream & playerP
 
     }
     else{
-    	Cell::updateCell(game.board[row][col], piece, isJoker);
+    	Cell::updateCell(game.board[row][col], piece, isJoker,);
     }
 
   }

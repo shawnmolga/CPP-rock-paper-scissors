@@ -1,7 +1,7 @@
 /*
  * Cells.h
  *
- *  Created on: 27 бошх 2018
+ *  Created on: 27 пїЅпїЅпїЅпїЅ 2018
  *      Author: OR
  */
 
@@ -16,17 +16,18 @@ using namespace std;
 
 class Cell
 {
-	Cell(char piece , bool isJoker);
+	Cell(char piece , bool isJoker,int playerNumber);
 	Cell();
 
 	char getPiece() const;
 	bool getIsJoker() const;
-
-	static void updateCell(Cell& cell, char piece, bool isJoker);
+	int  getPlayerNumber() const;
+	static void updateCell(Cell& cell, char piece, bool isJoker,int playerNumber);
 
 private:
 	char piece;
 	bool isJoker;
+	int playerNum;
 };
 
 
