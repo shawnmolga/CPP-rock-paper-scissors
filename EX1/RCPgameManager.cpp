@@ -6,8 +6,8 @@
  */
 #include "RCPgameManager.h"
 
-RCPgameManager::RCPgameManager(string PositionFileP1, string PositionFileP2, string moveFilePlayer1, string moveFilePlayer2)
-: game(new RCPgame()), posFileP1(PositionFileP1), posFileP2(PositionFileP2), moveFileP1(moveFilePlayer1), moveFileP2(moveFilePlayer2){}
+RCPgameManager::RCPgameManager(string PositionFileP1, string PositionFileP2, string moveFilePlayer1, string moveFilePlayer2,string gameOutputFile)
+: game(new RCPgame()), posFileP1(PositionFileP1), posFileP2(PositionFileP2), moveFileP1(moveFilePlayer1), moveFileP2(moveFilePlayer2), outputFile(gameOutputFile)){}
 
 RCPgameManager::~RCPgameManager(){
 	delete game;
@@ -124,7 +124,6 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum, ifstream & playerP
         cout << "Error: two or more pieces of player 1 are positioned on the same location" << endl;
         return false;
       }
-
     }
     else{
     	Cell::updateCell(game.board[row][col], piece, isJoker);
@@ -159,9 +158,14 @@ bool RCPgameManager::checkPositioningInputFiles(const string &player1PositionFil
     cout << "Error: Player2 position file doesnt exist" << endl;
     return false;
   }
-  // Case 2:
-
+  // Case 2: the files do exists
   return true;
 }
 
+void RCPgameManager::printOutputFile(string &outputFile){
+
+}
+void printBoardToFile(ofstream &outFile){
+  
+}
 

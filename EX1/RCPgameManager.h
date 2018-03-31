@@ -1,7 +1,7 @@
 /*
  * RCPgameManager.h
  *
- *  Created on: 27 áîøõ 2018
+ *  Created on: 27 ï¿½ï¿½ï¿½ï¿½ 2018
  *      Author: OR
  */
 
@@ -19,7 +19,7 @@
 using namespace std;
 
 class RCPgameManager{
-	RCPgameManager(string PositionFileP1, string PositionFileP2, string moveFilePlayer1, string moveFilePlayer2);
+	RCPgameManager(string PositionFileP1, string PositionFileP2, string moveFilePlayer1, string moveFilePlayer2, string gameOutputFile);
 	~RCPgameManager();
 	RCPgameManager(const RCPgameManager& manager) = delete;
 	RCPgameManager& operator=(const RCPgameManager& manager) = delete;
@@ -28,13 +28,15 @@ class RCPgameManager{
 	bool checkPieceOverFlow(int numOfPieces[]);
 	bool checkInsertPlayerPosition(int playerNum, ifstream & playerPositionFile);
 	bool checkPositioningInputFiles(const string &player1PositionFile, const string &player2PositionFile);
-
+	void printOutputFile(string &outputFile);
+	void printBoardToFile(ofstream &outFile);
 private:
 	RCPgame game;
 	string posFileP1;
 	string posFileP2;
 	string moveFileP1;
 	string moveFileP2;
+	string outputFile;
 };
 
 #endif /* EX1_RCPGAMEMANAGER_H_ */

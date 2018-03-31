@@ -27,13 +27,14 @@ class RCPgame{
 
 	Player getPlayerOne()const;
 	Player getPlayerTwo()const;
-
+	GAME_OVER_TYPE getGameOverReason() const;
 	bool fight(int row,int col,char piece, bool isJoker);
 	bool checkGameOver();
+	enum GAME_OVER_TYPE {ALL_FLAGS_CAPTURED,ALL_PIECES_EATEN,WRONG_FILE_FORMAT,TIE};
 
 private:
 	//TODO : ask what we should do in case of wrong output file.
-	enum GAME_OVER_TYPE {ALL_FLAGS_CAPTURED,ALL_PIECES_EATEN,WRONG_FILE_FORMAT,TIE};
+	//enum GAME_OVER_TYPE {ALL_FLAGS_CAPTURED,ALL_PIECES_EATEN,WRONG_FILE_FORMAT,TIE};
 	bool isGameOver;
 	Cell** board;
 	Player playerOne;

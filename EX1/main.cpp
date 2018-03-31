@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include "Constants.h"
+#include "RCPgameManager.h"
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -11,6 +12,9 @@ int main(int argc, char *argv[])
   if (argc < 5)
   {
     cout << "Error: Missing input files" << endl;
+    return 0;
+  }
+  if(!RCPgameManager::checkPositioningInputFiles(argv[1],argv[2])){
     return 0;
   }
 
