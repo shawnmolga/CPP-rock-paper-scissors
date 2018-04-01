@@ -19,7 +19,16 @@ RCPgame::~RCPgame(){
 	delete playerOne;
 	delete playerTwo;
 }
-
+string RCPgame::ToString(GAME_OVER_TYPE typeGame)
+{
+    switch (typeGame)
+    {
+        case ALL_FLAGS_CAPTURED:    return "All flags of the opponent are captured";
+        case ALL_PIECES_EATEN:   	return "All moving PIECEs of the opponent are eaten";
+        case WRONG_FILE_FORMAT: 	return "A tie - both Moves input files done without a winner";
+        default:      return "[Unknown GAME_OVER_TYPE]";
+    }
+}
 bool RCPgame::fight(int row,int col,char p2Piece, bool isP2PieceJoker){
 	//TODO: ask if we can position flag on flag and who is loosing
 	char player2Piece=toupper(p2Piece);

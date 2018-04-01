@@ -31,6 +31,7 @@ class RCPgame{
 	bool fight(int row,int col,char piece, bool isJoker);
 	bool checkGameOver();
 	enum GAME_OVER_TYPE {ALL_FLAGS_CAPTURED,ALL_PIECES_EATEN,WRONG_FILE_FORMAT,TIE};
+	string ToString(GAME_OVER_TYPE typeGame);
 
 private:
 	//TODO : ask what we should do in case of wrong output file.

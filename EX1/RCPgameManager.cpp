@@ -9,11 +9,12 @@
 RCPgameManager::RCPgameManager(string PositionFileP1, string PositionFileP2, string moveFilePlayer1, string moveFilePlayer2,string gameOutputFile)
 : game(new RCPgame()), posFileP1(PositionFileP1), posFileP2(PositionFileP2), moveFileP1(moveFilePlayer1), moveFileP2(moveFilePlayer2), outputFile(gameOutputFile)){}
 
-RCPgameManager::~RCPgameManager(){
-	delete game;
+RCPgameManager::~RCPgameManager()
+{
+  delete & game;
 }
 
-bool RCPgameManager::checkPositioningFormat(const string &line, int numOfPieces[], int &row, int &col, bool& isJoker, char& jokerPiece)
+bool RCPgameManager::checkPositioningFormat(const string &line, int numOfPieces[], int &row, int &col, bool &isJoker, char &jokerPiece)
 {
   //TODO: ask in forum if we have space or other char in end of input line
   if (line.length < 5)
@@ -91,7 +92,7 @@ bool RCPgameManager::checkPieceOverFlow(int numOfPieces[])
   }
   return false;
 }
-bool RCPgameManager::checkInsertPlayerPosition(int playerNum, ifstream & playerPositionFile)
+bool RCPgameManager::checkInsertPlayerPosition(int playerNum, ifstream &playerPositionFile)
 {
   //by order of pieces in constans file
   int numOfPieces[6] = {0};
@@ -102,8 +103,8 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum, ifstream & playerP
   bool isJoker = false;
   while (getline(playerPositionFile, line))
   {
-	piece = line[0];
-	isJoker = false;
+    piece = line[0];
+    isJoker = false;
     if (!checkPositioningFormat(line, numOfPieces, row, col, isJoker, piece))
     {
       return false;
@@ -111,24 +112,28 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum, ifstream & playerP
 
     if (game.board[row][col].getPiece() != 0)
     {
-      if(playerNum ==2){
-        if(islower(game.board[row][col].getPiece())){
-            cout << "Error: two or more pieces of player 2 are positioned on the same location" << endl;
-            return false;
+      if (playerNum == 2)
+      {
+        if (islower(game.board[row][col].getPiece()))
+        {
+          cout << "Error: two or more pieces of player 2 are positioned on the same location" << endl;
+          return false;
         }
-        else{
-        	game.fight(row,col,piece,isJoker);
+        else
+        {
+          game.fight(row, col, piece, isJoker);
         }
       }
-      else{
+      else
+      {
         cout << "Error: two or more pieces of player 1 are positioned on the same location" << endl;
         return false;
       }
     }
-    else{
-    	Cell::updateCell(game.board[row][col], piece, isJoker);
+    else
+    {
+      Cell::updateCell(game.board[row][col], piece, isJoker);
     }
-
   }
 
   if (numOfPieces[5] == 0)
@@ -162,10 +167,219 @@ bool RCPgameManager::checkPositioningInputFiles(const string &player1PositionFil
   return true;
 }
 
-void RCPgameManager::printOutputFile(string &outputFile){
+void RCPgameManager::printOutputFile(string &outputFile)
+{
+  ofstream output("outputFile");
+  //player 1 is thw winner
+  if(game.playerOne.isWinner())
+  {
+    output << "Winner : 1" <<endl;
+  }
+  //player 2 is the winner
+  else if(game.playerTwo.isWinner()){
+    output << "Winner : 2" <<endl;
+  }
+  //tie
+  else {
+    output << "Winner : 0" <<endl;
+  }
+  output <<game.ToString(game.gameOverReason)<< endl;
+}
+void printBoardToFile(ofstream &outFile)
+{
 
 }
-void printBoardToFile(ofstream &outFile){
-  
+
+bool RCPgameManager::Move(const string &player1MoveFile, const string &player2MoveFile)
+{
+  //checks if player moved peice (must)
+  //cheks if player changes one Joker from current representation to another (optional)
+
+  //check if one piece moved
+  ifstream player1Move(player1MoveFile);
+  ifstream player2Move(player2MoveFile);
+  if (!player1Move.is_open())
+  {
+    cout << "Error: Player1 move file doesnt exist" << endl;
+    return false;
+  }
+  if (!player2Move.is_open())
+  {
+    cout << "Error: Player2 move file doesnt exist" << endl;
+    return false;
+  }
+  //loop:
+  //get line from player1 file and make move
+  //get line from player2 file and make move
+  //if all ok, continue loop
+  string line1;
+  string line2;
+  while (getline(player1Move, line1))
+  {
+    if (!makeMove(line1, true))
+    {
+      //player1 loses round;
+      if (getline(player2Move, line2))
+      {
+        if (!makeMove(line2, false))
+        {
+          //player2 loses round
+        }
+      }
+      else if (player2Move.eof())
+      {
+        continue;
+      }
+      else
+      {
+        cout << "Error: Player2 move file error" << endl; //todo
+        continue;                                         //todo check this
+      }
+    }
+    else
+    {
+      //player1 wins round
+      if (getline(player2Move, line2))
+      {
+        if (!makeMove(line2, false))
+        {
+          //player2 loses round
+        }
+      }
+      else if (player2Move.eof())
+      {
+        continue;
+      }
+      else
+      {
+        cout << "Error: Player2 move file error" << endl; //todo
+        continue;                                         //todo check this
+      }
+    }
+  } //end of while loop - player1 file move over
+    //player2Move file not done
+    //continue executing player2Move until game is over.
+  if (player1Move.eof())
+  {
+    while (getline(player2Move, line2))
+    {
+      makeMove(line2, false);
+    }
+  }
+  else if (player2Move.eof())
+  {
+    while (getline(player1Move, line1))
+    {
+      makeMove(line1, true);
+    }
+  }
+  else
+  {
+    //end game - what happens?
+  }
+
+  //end of game
 }
 
+bool RCPgameManager::islegalMove(int from_x, int from_y, int to_x, int to_y, bool isPlayer1)
+{
+  if (isupper(game.board[from_x][from_y].getPiece()) == true && isPlayer1 == true)
+  {
+    if (isupper(board(to_x, to_y).getPiece()) == false)
+    {
+      return true;
+    }
+  }
+  if (isupper(game.board[from_x][from_y].getPiece()) == false && isPlayer2 == false)
+  {
+    if (isupper(game.board[to_x][to_y].getPiece()) == true)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool RCPgameManager::makeMove(string s, bool isPlayer1)
+{
+  bool isWinner = false;
+  int from_x_int = s[0] - '0';
+  int from_y_int = s[2] - '0';
+  int to_x_int = s[4] - '0';
+  int to_y_int = s[6] - '0';
+  if ((from_x_int < 1 || from_x_int > 1 - ROWS) || (to_x_int < 1 || to_x_int > 1 - ROWS) || (from_y_int < 1 || from_y_int > 1 - COLS) || (to_y_int < 1 || to_y_int > 1 - COLS) {
+    cout << "Error: illegal location on board" << endl;
+    isWinner = false;
+    return isWinner;
+	}
+	if (from_x_int == to_x_int && from_y_int == to_y_int) {
+    cout << "Error: user MUST move one piece" << endl;
+    isWinner = false;
+    return isWinner;
+	}
+	if (s[1] != '/s' || s[3] != '/s' || s[5] != '/s' || s[7] != '/s') {
+    cout << "Error: Bad format - should be space" << endl;
+    isWinner = false;
+    return isWinner;
+	}
+
+	// check : if there is a player1 peice in (to_x_int, to_y_int) return false
+	if (isLegalMove(from_x_int, from_y_int, to_x_int, to_y_int)) {
+    fight(from_x_int, from_y_int, game.board[to_x_int][to_y_int].getPiece(), game.board[to_x_int][to_y_int].getIsJoker() ))
+    {
+    }
+    else
+    {
+      isWinner = false return isWinner;
+    }
+
+    //CHECK JOKER REPOSITION
+    size_t pos = s.find("[J: ");
+    if (pos == npos)
+    {
+      return isWinner;
+    }
+    if (pos != 8)
+    {
+      cout << "Error: Bad format - Joker information not placed correctly" << endl;
+      isWinner = false;
+      return isWinner;
+    }
+    size_t posJoker = find_first_not_of(" ", pos);
+    if (pos == npos)
+    {
+      cout << "Error: Bad format - Joker information not placed correctly" << endl;
+      isWinner = false;
+      return isWinner;
+    }
+    int x_joker = s[posJoker] - '0';
+    int y_joker = s[posJoker + 2] - '0';
+    if (s[posJoker + 1] != '/s' || s[posJoker + 3] != '/s')
+    {
+      cout << "Error: Bad format - should be space" << endl;
+      isWinner = false;
+      return isWinner;
+    }
+    if (game.board[x_joker][y_joker].getIsJoker() == false)
+    { //if the original peice is not a joker
+      cout << "Error: Piece specified is not joker" << endl;
+      isWinner = false;
+      return isWinner;
+    }
+
+    string new_rep = s.substr(8, " ");
+    if (game.board[x_joker][y_joker].getPiece().compare(new_rep) == true)
+    {
+      //joker representation did not change
+      return isWinner;
+    }
+    if (new_rep.compare(ROCK) || new_rep.compare(PAPER) || new_rep.compare(SCISSOR) || new_rep.compare(BOMB))
+    {
+      updateCell(board(x_joker, y_joker), new_rep, true);
+      return isWinner;
+    }
+    else
+      cout << "Error: illegal NEW_REP " << endl;
+    isWinner = false;
+  //return ??
+}
