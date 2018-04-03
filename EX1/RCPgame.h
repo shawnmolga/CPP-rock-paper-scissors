@@ -34,7 +34,7 @@ class RCPgame
 	RCPgame();
 	~RCPgame();
 	Cell **board;
-	RCPgame(const RCPgame &game) = delete;
+	//RCPgame(const RCPgame &game) = delete;
 	RCPgame &operator=(RCPgame &game) = delete;
 
 	Player getPlayerOne() const;

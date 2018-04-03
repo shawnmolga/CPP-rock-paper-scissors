@@ -147,8 +147,9 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum, ifstream &playerPo
   }
   if (game.getPlayerTwo().checkPieceOverFlow())
   {
-    return true;
+    return false;
   }
+  return true;
 }
 
 bool RCPgameManager::checkPositioningInputFiles(
