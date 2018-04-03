@@ -288,6 +288,8 @@ void RCPgameManager::Move(const string &player1MoveFile,
 		}
 	}
 
+	player1Move.close();
+	player2Move.close();
 	return;
 }
 
