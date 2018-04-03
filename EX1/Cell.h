@@ -22,7 +22,7 @@ class Cell
 		static void cleanCell(Cell& cell);
 		char getPiece() const;
 		bool getIsJoker() const;
-
+		static bool isPlayerOnePiece(Cell& cell);
 		static void updateCell(Cell& cell, char piece, bool isJoker);
 
 private:
