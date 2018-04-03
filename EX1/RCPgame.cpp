@@ -60,8 +60,8 @@ bool RCPgame::fight(int row, int col, char p2Piece, bool isP2PieceJoker)
 			case FLAG:
 				playerTwo.numOfPieces[5]--;
 				playerOne.numOfPieces[5]--;
-			case ROCK:
 				break;
+			case ROCK:
 				playerTwo.numOfPieces[0]--;
 				playerOne.numOfPieces[0]--;
 				break;
