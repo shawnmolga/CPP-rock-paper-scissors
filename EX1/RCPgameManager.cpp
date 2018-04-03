@@ -140,63 +140,91 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 	}
 }
 
-bool RCPgameManager::checkPositioningInputFiles(
-		const string &player1PositionFile, const string &player2PositionFile) {
-	// Case 1: check if the file exist
-	// TODO : check file name - depends how we will get the input files - its not clear!
-	if (!player1PositionFile.compare("player1.rps_board")
-			|| !player2PositionFile.compare("player2.rps_board")) {
-		return false;
-	}
-	ifstream player1File(player1PositionFile);
-	ifstream player2File(player2PositionFile);
-	if (!player1File.is_open()) {
-		cout << "Error: Player1 position file doesnt exist" << endl;
-		return false;
-	}
-	if (!player2File.is_open()) {
-		cout << "Error: Player2 position file doesnt exist" << endl;
-		return false;
-	}
-	// Case 2: the files do exists
-	return true;
+bool RCPgameManager::checkPositioningInputFiles(const string &player1PositionFile, const string &player2PositionFile)
+{
+  // Case 1: check if the file exist
+  // TODO : check file name - depends how we will get the input files - its not clear!
+  if (!player1PositionFile.compare("player1.rps_board") || !player2PositionFile.compare("player2.rps_board"))
+  {
+    return false;
+  }
+  ifstream player1File(player1PositionFile);
+  ifstream player2File(player2PositionFile);
+  if (!player1File.is_open())
+  {
+    cout << "Error: Player1 position file doesnt exist" << endl;
+    player1File.ifstream::close();
+    player2File.ifstream::close();
+    return false;
+  }
+  if (!player2File.is_open())
+  {
+    player1File.ifstream::close();
+    player2File.ifstream::close();
+    cout << "Error: Player2 position file doesnt exist" << endl;
+    return false;
+  }
+  // Case 2: the files do exists
+  player1File.ifstream::close();
+  player2File.ifstream::close();
+  return true;
 }
 
-void RCPgameManager::printOutputFile(string &outputFile) {
-	ofstream output("outputFile");
-	//player 1 is thw winner
-	if (game.getPlayerOne.isWinner()) {
-		output << "Winner : 1" << endl;
-	}
-	//player 2 is the winner
-	else if (game.getPlayerTwo.isWinner()) {
-		output << "Winner : 2" << endl;
-	}
-	//tie
-	else {
-		output << "Winner : 0" << endl;
-	}
-	output << game.ToString(game.getGameOverReason()) << endl;
-	printBoardToFile(output);
+void RCPgameManager::printOutputFile(string &outputFile)
+{
+  ofstream output("outputFile");
+  //player 1 is thw winner
+  if (game.getPlayerOne.isWinner())
+  {
+    output << "Winner : 1" << endl;
+  }
+  //player 2 is the winner
+  else if (game.getPlayerTwo.isWinner())
+  {
+    output << "Winner : 2" << endl;
+  }
+  //tie
+  else
+  {
+    output << "Winner : 0" << endl;
+  }
+  output << endl; // the third line must be en empty line!
+  output << game.ToString(game.getGameOverReason()) << endl;
+  printBoardToFile(output);
 }
 
-void RCPgameManager::printBoardToFile(ofstream &output) {
-	for (int i = 0; i < ROWS; i++) {
-		for (int j = 0; j < COLS; j++) {
-			if (game.board[i][j].getIsJoker()) {
-				if (Cell::isPlayerOnePiece(game.board[i][j])) {
-					output << "J";
-				} else {
-					output << "j";
-				}
-			} else {
-				output << game.board[i][j].getPiece();
-			}
-		}
-		if (i != ROWS - 1) {
-			output << endl;
-		}
-	}
+void RCPgameManager::printBoardToFile(ofstream &output)
+{
+  for (int i = 0; i < ROWS; i++)
+  {
+    for (int j = 0; j < COLS; j++)
+    {
+      if (game.board[i][j].getIsJoker())
+      {
+        if (Cell::isPlayerOnePiece(game.board[i][j]))
+        {
+          output << "J";
+        }
+        else
+        {
+          output << "j";
+        }
+      }
+      else if(game.board[i][j].getPiece() == 0)
+      {
+          output << " ";
+
+      }
+      else
+      {
+        output << game.board[i][j].getPiece();
+      }
+    }
+    if (i != ROWS - 1)
+    {
+      output << endl;
+    }
+  }
 }
 
 bool RCPgameManager::Move(const string &player1MoveFile,
@@ -224,7 +252,7 @@ bool RCPgameManager::Move(const string &player1MoveFile,
 	while (getline(player1Move, line1)) {
 		makeMove(line1, true);
 		if (getline(player2Move, line2)) {
-			makeMove(line2, false)
+			makeMove(line2, false);
 		} else if (player2Move.eof()) {
 			break;
 		} else {

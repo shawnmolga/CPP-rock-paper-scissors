@@ -43,7 +43,7 @@ class RCPgame
 	GAME_OVER_TYPE getGameOverReason() const;
 	bool fight(int row, int col, char piece, bool isJoker);
 	bool checkGameOver();
-	void setGameOver(Player winner, GAME_OVER_TYPE type);
+	void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
 
 	string ToString(GAME_OVER_TYPE typeGame);
 

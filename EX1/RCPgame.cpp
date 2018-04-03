@@ -54,14 +54,18 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker) {
 	}
 
 	char currPlayerPiece = toupper(currPiece);
+	char nextPlayerPiece = toupper(board[row][col].getPiece());
 	//Case 1: 2 players in the same type.
-	if (board[row][col].getPiece() == currPlayerPiece) {
-		if (board[row][col].getIsJoker()) {
+	if (nextPlayerPiece == currPlayerPiece)
+	{
+		if (board[row][col].getIsJoker())
+		{
 			currPlayer->numOfPieces[4]--;
 			nextPlayer->numOfPieces[4]--;
 		} else {
 
-			switch (board[row][col].getPiece()) {
+			switch (nextPlayerPiece)
+			{
 			case FLAG:
 				currPlayer->numOfPieces[5]--;
 				nextPlayer->numOfPieces[5]--;
@@ -88,14 +92,15 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker) {
 	}
 
 	//Case 2: player 1 is flag and player 2 another piece
-	else if (board[row][col].getPiece() == FLAG) {
-		if (board[row][col].getIsJoker()) {
+	else if (nextPlayerPiece == FLAG)
+	{
+		if (board[row][col].getIsJoker())
+		{
 			nextPlayer->numOfPieces[4]--;
 		} else {
 			nextPlayer->numOfPieces[5]--;
 		}
-		Cell::updateCell(board[row][col], tolower(currPlayerPiece),
-				isCurrPieceJoker);
+		Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
 	}
 
 	//case 3: player 2 is flag and player 1 another piece
@@ -107,8 +112,10 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker) {
 	}
 
 	//case 4: player 1 is bomb and player 2 another piece
-	else if (board[row][col].getPiece() == BOMB) {
-		if (isCurrPieceJoker) {
+	else if (nextPlayerPiece == BOMB)
+	{
+		if (isCurrPieceJoker)
+		{
 			playerTwo.numOfPieces[4]--;
 		} else {
 			switch (currPlayerPiece) {
@@ -129,8 +136,11 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker) {
 	else if (currPlayerPiece == BOMB) {
 		if (isCurrPieceJoker) {
 			nextPlayer->numOfPieces[4]--;
-		} else {
-			switch (board[row][col].getPiece()) {
+		}
+		else
+		{
+			switch (nextPlayerPiece)
+			{
 			case ROCK:
 				nextPlayer->numOfPieces[0]--;
 				break;
@@ -142,14 +152,16 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker) {
 				break;
 			}
 		}
-		Cell::updateCell(board[row][col], tolower(currPlayerPiece),
-				isCurrPieceJoker);
+		Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
 	}
 
 	//case 6: player 1 is PAPER and player 2 another piece
-	else if (board[row][col].getPiece() == PAPER) {
-		if (currPlayerPiece == ROCK) {
-			if (isCurrPieceJoker) {
+	else if (nextPlayerPiece == PAPER)
+	{
+		if (currPlayerPiece == ROCK)
+		{
+			if (isCurrPieceJoker)
+			{
 				playerTwo.numOfPieces[4]--;
 			} else {
 				playerTwo.numOfPieces[0]--;
@@ -160,22 +172,26 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker) {
 			} else {
 				nextPlayer->numOfPieces[1]--;
 			}
-			Cell::updateCell(board[row][col], tolower(currPlayerPiece),
-					isCurrPieceJoker);
+			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
 		}
 	}
 	//case 7: player 1 is ROCK and player 2 another piece
-	else if (board[row][col].getPiece() == ROCK) {
-		if (currPlayerPiece == PAPER) {
-			if (board[row][col].getIsJoker()) {
+	else if (nextPlayerPiece == ROCK)
+	{
+		if (currPlayerPiece == PAPER)
+		{
+			if (board[row][col].getIsJoker())
+			{
 				nextPlayer->numOfPieces[4]--;
 			} else {
 				nextPlayer->numOfPieces[0]--;
 			}
-			Cell::updateCell(board[row][col], tolower(currPlayerPiece),
-					isCurrPieceJoker);
-		} else if (currPlayerPiece == SCISSOR) {
-			if (isCurrPieceJoker) {
+			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
+		}
+		else if (currPlayerPiece == SCISSOR)
+		{
+			if (isCurrPieceJoker)
+			{
 				playerTwo.numOfPieces[4]--;
 			} else {
 				playerTwo.numOfPieces[2]--;
@@ -183,8 +199,10 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker) {
 		}
 	}
 
-	else if (board[row][col].getPiece() == SCISSOR) {
-		if (currPlayerPiece == PAPER) {
+	else if (nextPlayerPiece == SCISSOR)
+	{
+		if (currPlayerPiece == PAPER)
+		{
 			playerTwo.numOfPieces[1]--;
 		} else if (currPlayerPiece == ROCK) {
 			if (board[row][col].getIsJoker()) {
@@ -192,8 +210,7 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker) {
 			} else {
 				nextPlayer->numOfPieces[0]--;
 			}
-			Cell::updateCell(board[row][col], tolower(currPlayerPiece),
-					isCurrPieceJoker);
+			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
 		}
 	}
 	return checkGameOver();
