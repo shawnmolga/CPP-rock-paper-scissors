@@ -31,7 +31,7 @@ class RCPgameManager{
 		bool checkPositioningInputFiles(const string &player1PositionFile, const string &player2PositionFile);
 		void printOutputFile(string &outputFile);
 		void printBoardToFile(ofstream &output);
-		bool Move(const string &player1MoveFile, const string &player2MoveFile);
+		void Move(const string &player1MoveFile, const string &player2MoveFile);
 		bool makeMove(string s, bool isPlayer1);
 		bool isLegalMove(int from_x, int from_y, int to_x, int to_y, bool isPlayer1);
 		

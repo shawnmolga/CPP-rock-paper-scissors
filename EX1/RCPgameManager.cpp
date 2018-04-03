@@ -227,65 +227,44 @@ void RCPgameManager::printBoardToFile(ofstream &output)
   }
 }
 
-bool RCPgameManager::Move(const string &player1MoveFile,
+void RCPgameManager::Move(const string &player1MoveFile,
 		const string &player2MoveFile) {
-	//checks if player moved peice (must)
-	//cheks if player changes one Joker from current representation to another (optional)
 
-	//check if one piece moved
 	ifstream player1Move(player1MoveFile);
 	ifstream player2Move(player2MoveFile);
 	if (!player1Move.is_open()) {
-		cout << "Error: Player1 move file doesnt exist" << endl;
-		return false;
+		if (!player2Move.is_open())
+			game.setGameOver(0, WRONG_FILE_FORMAT_BOTH);
 	}
-	if (!player2Move.is_open()) {
-		cout << "Error: Player2 move file doesnt exist" << endl;
-		return false;
-	}
-	//loop:
-	//get line from player1 file and make move
-	//get line from player2 file and make move
-	//if all ok, continue loop
+
 	string line1;
 	string line2;
-	while (getline(player1Move, line1)) {
-		makeMove(line1, true);
-		if (getline(player2Move, line2)) {
-			makeMove(line2, false);
-		} else if (player2Move.eof()) {
-			break;
-		} else {
-			cout << "Error: Player2 move file error" << endl; //todo
-			break;                                      //todo check this
-		}
 
-		if (getline(player2Move, line2))
-			makeMove(line2, false);
-		else if (player2Move.eof()) {
+	while (getline(player1Move, line1)) {
+		if (makeMove(line1, true))
 			break;
-		} else {
-			cout << "Error: Player2 move file error" << endl; //todo
-			break; //todo check this
+		if (getline(player2Move, line2)) {
+			if(makeMove(line2, false))
+				break;
 		}
+		else
+			break;
 	}
 
-//end of while loop - player1 file move over
-//player2Move file not done
-//continue executing player2Move until game is over.
+	//one move file is over
 	if (player1Move.eof()) {
 		while (getline(player2Move, line2)) {
-			makeMove(line2, false);
+			if (makeMove(line2, false))
+				break;
 		}
 	} else if (player2Move.eof()) {
 		while (getline(player1Move, line1)) {
-			makeMove(line1, true);
+			if(makeMove(line1, true))
+				break;
 		}
-	} else {
-//end game - what happens?
 	}
 
-//end of game
+	return;
 }
 
 bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
@@ -364,7 +343,7 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 		if (isPlayer1)
 			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
 		else
-			game.setGameOver(0, WRONG_FILE_FORMAT_TWO);
+			game.setGameOver(2, WRONG_FILE_FORMAT_TWO);
 		return isGameOver;
 	}
 
@@ -375,7 +354,7 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 		if (isPlayer1)
 			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
 		else
-			game.setGameOver(0, WRONG_FILE_FORMAT_TWO);
+			game.setGameOver(2, WRONG_FILE_FORMAT_TWO);
 		return isGameOver;
 	}
 
@@ -385,9 +364,8 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 
 		isGameOver = true;
 		if (isPlayer1)
-			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
+			game.setGameOver(2, WRONG_FILE_FORMAT_ONE);
 		else
-
 			game.setGameOver(0, WRONG_FILE_FORMAT_TWO);
 		return isGameOver;
 	}
@@ -401,7 +379,7 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 		if (isPlayer1)
 			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
 		else
-			game.setGameOver(0, WRONG_FILE_FORMAT_TWO);
+			game.setGameOver(2, WRONG_FILE_FORMAT_TWO);
 		return isGameOver;
 	}
 
@@ -410,33 +388,38 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 	if (s[posJoker + 1] != '/s' || s[posJoker + 3] != '/s')
 	{
 		cout << "Error: Bad format - should be space" << endl;
-		isWinner = false;
-		return isWinner;
+		isGameOver = true;
+		if (isPlayer1)
+			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
+		else
+			game.setGameOver(0, WRONG_FILE_FORMAT_TWO);
+		return isGameOver;
 	}
+
 	if (game.board[x_joker][y_joker].getIsJoker() == false) { //if the original peice is not a joker
 		cout << "Error: Piece specified is not joker" << endl;
-		isWinner = false;
-		return isWinner;
+		isGameOver = true;
+		if (isPlayer1)
+			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
+		else
+			game.setGameOver(2, WRONG_FILE_FORMAT_TWO);
+		return isGameOver;
 	}
 
 	char new_rep = s[8];
 
-	if (game.board[x_joker][y_joker].getPiece() == (new_rep)) {
-//joker representation did not change
-		return isWinner;
-	}
 	if (new_rep == ROCK || new_rep == PAPER || new_rep == SCISSOR
 			|| new_rep == BOMB) {
 		Cell::updateCell(game.board[x_joker][y_joker], new_rep, true);
-		return isWinner;
-	} else
+	} else {
 		cout << "Error: illegal NEW_REP " << endl;
-	isWinner = false;
-
-
-
-
-
+		isGameOver = true;
+		if (isPlayer1)
+			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
+		else
+			game.setGameOver(0, WRONG_FILE_FORMAT_TWO);
+		return isGameOver;
+	}
 
 	if (isLegalMove(from_x_int, from_y_int, to_x_int, to_y_int, isPlayer1)) {
 		if (game.board[to_x_int][to_y_int].getPiece() == 0) {
@@ -445,10 +428,18 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 					game.board[from_x_int][from_y_int].getIsJoker());
 			Cell::updateCell(game.board[from_x_int][from_y_int], 0, false);
 			isGameOver = game.checkGameOver();
-		} else
+			return isGameOver;
+		} else {
 			isGameOver = game.fight(to_x_int, to_y_int,
 					game.board[from_x_int][from_y_int].getPiece(),
 					game.board[from_x_int][from_y_int].getIsJoker());
-	} else
-		isGameOver = true;
+			return isGameOver;
+		}
+	}
+	isGameOver = true;
+	if (isPlayer1)
+		game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
+	else
+		game.setGameOver(2, WRONG_FILE_FORMAT_TWO);
+	return isGameOver;
 }
