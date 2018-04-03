@@ -151,6 +151,9 @@ bool RCPgameManager::checkPositioningInputFiles(const string &player1PositionFil
 {
   // Case 1: check if the file exist
   // TODO : check file name - depends how we will get the input files - its not clear!
+  if(!player1PositionFile.compare("player1.rps_board") ||!player2PositionFile.compare("player2.rps_board")) {
+    return false;
+  }
   ifstream player1File(player1PositionFile);
   ifstream player2File(player2PositionFile);
   if (!player1File.is_open())
