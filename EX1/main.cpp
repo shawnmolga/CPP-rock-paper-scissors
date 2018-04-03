@@ -38,5 +38,6 @@ int main(int argc, char *argv[])
 
   //start game
   mgmtGame.Move(moveFile1,moveFile2);
+  mgmtGame.printOutputFile(outputFile);
   return 0;
 }

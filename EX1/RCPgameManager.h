@@ -27,7 +27,6 @@ class RCPgameManager{
 		RCPgame game;
 
 		bool checkPositioningFormat(const string &line, int numOfPieces[], int &row, int &col, bool& isJoker, char& jokerPiece);
-		bool checkPieceOverFlow(int numOfPieces[]);
 		bool checkInsertPlayerPosition(int playerNum, ifstream & playerPositionFile);
 		bool checkPositioningInputFiles(const string &player1PositionFile, const string &player2PositionFile);
 		void printOutputFile(string &outputFile);

@@ -24,7 +24,8 @@ class Player
 	void setScore(int updateScore);
 	bool isLeftMovingPieces()const;
 	void setIsPlayerTurn(bool turn );
-	
+	bool checkPieceOverFlow();
+
 private:
 	int playerNum;
 	int score;

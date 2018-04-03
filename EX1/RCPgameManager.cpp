@@ -21,7 +21,7 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
                                             char &jokerPiece)
 {
   //TODO: ask in forum if we have space or other char in end of input line
-  if (line.length < 5)
+  if (line.length() < 5)
   {
     cout << "Error: Bad format - line length is smaller than 5 characters"
          << endl;
@@ -54,7 +54,7 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
     return false;
   }
 
-  if (line[1] != '\s' || line[3] != '\s')
+  if (line[1] != ' ' || line[3] != ' ')
   {
     cout << "Error: Bad format - should be space" << endl;
     return false;
@@ -68,14 +68,14 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
   }
   if (isJoker)
   {
-    if (line.length < 7)
+    if (line.length() < 7)
     {
       cout
           << "Error: Bad format - line length is smaller than 5 characters"
           << endl;
       return false;
     }
-    if (line[5] != '\s')
+    if (line[5] != ' ')
     {
       cout << "Error: Bad format - should be space" << endl;
       return false;
@@ -90,18 +90,7 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
   return true;
 }
 
-bool RCPgameManager::checkPieceOverFlow(int numOfPieces[])
-{
-  if (numOfPieces[0] > ROCKS_NUM || numOfPieces[1] > PAPERS_NUM || numOfPieces[2] > SCISSORS_NUM || numOfPieces[3] > BOMBS_NUM || numOfPieces[4] > JOKERS_NUM || numOfPieces[5] > FLAGS_NUM)
-  {
-    cout << "Error: a piece type appears in file more than its number"
-         << endl;
-    return true;
-  }
-  return false;
-}
-bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
-                                               ifstream &playerPositionFile)
+bool RCPgameManager::checkInsertPlayerPosition(int playerNum, ifstream &playerPositionFile)
 {
   //by order of pieces in constans file
   int numOfPieces[6] = {0};
@@ -159,9 +148,13 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
     cout << "Error: flag of player 1 is not positioned on board" << endl;
     return false;
   }
-  if (checkPieceOverFlow)
+  if (game.getPlayerOne.checkPieceOverFlow())
   {
     return false;
+  }
+  if (game.getPlayerTwo.checkPieceOverFlow())
+  {
+    return true;
   }
 }
 
@@ -198,7 +191,7 @@ bool RCPgameManager::checkPositioningInputFiles(const string &player1PositionFil
 void RCPgameManager::printOutputFile(string &outputFile)
 {
   ofstream output;
-  output.open("outputFile",ios::trunc);
+  output.open(outputFile, ios::trunc);
   //player 1 is thw winner
   if (game.getPlayerOne().getIsWinner())
   {
@@ -287,45 +280,54 @@ void RCPgameManager::printBoardToFile(ofstream &output)
 }
 
 void RCPgameManager::Move(const string &player1MoveFile,
-		const string &player2MoveFile) {
+                          const string &player2MoveFile)
+{
 
-	ifstream player1Move(player1MoveFile);
-	ifstream player2Move(player2MoveFile);
-	if (!player1Move.is_open()) {
-		if (!player2Move.is_open())
-			game.setGameOver(0, WRONG_FILE_FORMAT_BOTH);
-	}
+  ifstream player1Move(player1MoveFile);
+  ifstream player2Move(player2MoveFile);
+  if (!player1Move.is_open())
+  {
+    if (!player2Move.is_open())
+      game.setGameOver(0, WRONG_FILE_FORMAT_BOTH);
+  }
 
-	string line1;
-	string line2;
+  string line1;
+  string line2;
 
-	while (getline(player1Move, line1)) {
-		if (makeMove(line1, true))
-			break;
-		if (getline(player2Move, line2)) {
-			if(makeMove(line2, false))
-				break;
-		}
-		else
-			break;
-	}
+  while (getline(player1Move, line1))
+  {
+    if (makeMove(line1, true))
+      break;
+    if (getline(player2Move, line2))
+    {
+      if (makeMove(line2, false))
+        break;
+    }
+    else
+      break;
+  }
 
-	//one move file is over
-	if (player1Move.eof()) {
-		while (getline(player2Move, line2)) {
-			if (makeMove(line2, false))
-				break;
-		}
-	} else if (player2Move.eof()) {
-		while (getline(player1Move, line1)) {
-			if(makeMove(line1, true))
-				break;
-		}
-	}
+  //one move file is over
+  if (player1Move.eof())
+  {
+    while (getline(player2Move, line2))
+    {
+      if (makeMove(line2, false))
+        break;
+    }
+  }
+  else if (player2Move.eof())
+  {
+    while (getline(player1Move, line1))
+    {
+      if (makeMove(line1, true))
+        break;
+    }
+  }
 
-	player1Move.close();
-	player2Move.close();
-	return;
+  player1Move.close();
+  player2Move.close();
+  return;
 }
 
 bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
@@ -409,7 +411,7 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1)
   int to_x_int = s[4] - '0';
   int to_y_int = s[6] - '0';
 
-  if (s[1] != '/s' || s[3] != '/s' || s[5] != '/s' || s[7] != '/s')
+  if (s[1] != ' ' || s[3] != ' ' || s[5] != ' ' || s[7] != ' ')
   {
     cout << "Error: Bad format - should be space" << endl;
     isGameOver = true;
@@ -461,7 +463,7 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1)
 
   int x_joker = s[posJoker] - '0';
   int y_joker = s[posJoker + 2] - '0';
-  if (s[posJoker + 1] != '/s' || s[posJoker + 3] != '/s')
+  if (s[posJoker + 1] != ' ' || s[posJoker + 3] != ' ')
   {
     cout << "Error: Bad format - should be space" << endl;
     isGameOver = true;
