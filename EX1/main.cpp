@@ -26,26 +26,17 @@ int main(int argc, char *argv[])
 
   //check if all files exist and named correctly 
   //TODO: figure out if files are in argv[1] or in current directory and change checks 
-  if(!mgmtGame.checkPositioningInputFiles(argv[1],argv[2])){
+  if(!mgmtGame.checkPositioningInputFiles(positionFile1,positionFile2)){
+    return -1;
+  }
+  //check if game already over - bad format or fight result
+  //check if file format of possition files is ok and insert possitions to board
+  if (mgmtGame.checkBadFormat(positionFile1,positionFile2) || mgmtGame.game.checkGameOver()){
+    mgmtGame.printOutputFile(outputFile);
     return -1;
   }
 
-  //check if file format of possition files is ok and insert possitions to board
-  ifstream posFile1(positionFile1);
-  ifstream posFile2(positionFile2);
-  bool isPlayerOneLegalFormat = mgmtGame.checkInsertPlayerPosition(1,posFile1);
-  bool isPlayerTwoLegalFormat = mgmtGame.checkInsertPlayerPosition(2,posFile2);
-  if (!isPlayerOneLegalFormat && !isPlayerTwoLegalFormat){
-   mgmtGame.game.setGameOver(0,WRONG_FILE_FORMAT_BOTH);
-  }
-  else if (!isPlayerOneLegalFormat){
-mgmtGame.game.setGameOver(2,WRONG_FILE_FORMAT_ONE);
-  }
-
-  else if (!isPlayerTwoLegalFormat){
-mgmtGame.game.setGameOver(1,WRONG_FILE_FORMAT_TWO);
-  }
-  posFile1.ifstream::close();
-  posFile2.ifstream::close();
+  //start game
+  mgmtGame.Move(moveFile1,moveFile2);
   return 0;
 }

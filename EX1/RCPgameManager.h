@@ -35,7 +35,8 @@ class RCPgameManager{
 		void Move(const string &player1MoveFile, const string &player2MoveFile);
 		bool makeMove(string s, bool isPlayer1);
 		bool isLegalMove(int from_x, int from_y, int to_x, int to_y, bool isPlayer1);
-		
+		bool checkBadFormat(string & positionFile1,string & positionFile2);
+
 private:
 	string posFileP1;
 	string posFileP2;

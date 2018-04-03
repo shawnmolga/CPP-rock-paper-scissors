@@ -44,7 +44,6 @@ class RCPgame
 	bool fight(int row, int col, char piece, bool isJoker);
 	bool checkGameOver();
 	void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
-	bool checkBadFormat();
 	string ToString(GAME_OVER_TYPE typeGame);
 
   private:
