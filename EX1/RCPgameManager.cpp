@@ -160,14 +160,20 @@ bool RCPgameManager::checkPositioningInputFiles(const string &player1PositionFil
   if (!player1File.is_open())
   {
     cout << "Error: Player1 position file doesnt exist" << endl;
+    player1File.ifstream::close();
+    player2File.ifstream::close();
     return false;
   }
   if (!player2File.is_open())
   {
+    player1File.ifstream::close();
+    player2File.ifstream::close();
     cout << "Error: Player2 position file doesnt exist" << endl;
     return false;
   }
   // Case 2: the files do exists
+  player1File.ifstream::close();
+  player2File.ifstream::close();
   return true;
 }
 
@@ -189,6 +195,7 @@ void RCPgameManager::printOutputFile(string &outputFile)
   {
     output << "Winner : 0" << endl;
   }
+  output << endl; // the third line must be en empty line!
   output << game.ToString(game.getGameOverReason()) << endl;
   printBoardToFile(output);
 }
@@ -209,6 +216,11 @@ void RCPgameManager::printBoardToFile(ofstream &output)
         {
           output << "j";
         }
+      }
+      else if(game.board[i][j].getPiece() == 0)
+      {
+          output << " ";
+
       }
       else
       {
