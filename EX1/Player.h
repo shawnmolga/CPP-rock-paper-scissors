@@ -9,6 +9,7 @@ using namespace std;
 
 class Player
 {
+	public:
 	Player(int playerNum);
 	~Player();
 	Player& operator=(const Player& otherPlayer) = delete;	/* deletes the assignment operator - we want a player to be a Non Copyable object */
@@ -18,12 +19,15 @@ class Player
 	int getPlayerNum()const;
 	int getScore()const;
 	bool getIsWinner() const;
+	bool getIsPlayerTurn() const;
 	void setIsWinner(bool isWinner);
 	void setScore(int updateScore);
 	bool isLeftMovingPieces()const;
-
+	void setIsPlayerTurn(bool turn );
+	
 private:
 	int playerNum;
 	int score;
+	bool isPlayerTurn;
 	bool isWinner;
 };

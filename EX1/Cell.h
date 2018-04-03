@@ -16,13 +16,14 @@ using namespace std;
 
 class Cell
 {
-	Cell(char piece , bool isJoker);
-	Cell();
+	public:
+		Cell(char piece , bool isJoker);
+		Cell();
+		static void cleanCell(Cell& cell);
+		char getPiece() const;
+		bool getIsJoker() const;
 
-	char getPiece() const;
-	bool getIsJoker() const;
-
-	static void updateCell(Cell& cell, char piece, bool isJoker);
+		static void updateCell(Cell& cell, char piece, bool isJoker);
 
 private:
 	char piece;

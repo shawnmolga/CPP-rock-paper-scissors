@@ -9,9 +9,12 @@
 Cell::Cell(char playerPiece , bool isPieceJoker) : piece(playerPiece), isJoker(isPieceJoker){}
 Cell::Cell() : piece(0), isJoker(false){}
 
-static void Cell::updateCell(Cell& cell, char piece, bool isJoker){
-		delete cell;
-		cell = new Cell(piece, isJoker);
+ void Cell::updateCell(Cell& cell, char piece, bool isJoker){
+	 cell.piece=piece;
+	 cell.isJoker=isJoker;
+}
+ void Cell::cleanCell(Cell& cell){
+	updateCell(cell,0,false);
 }
 char Cell::getPiece() const{
 	return piece;

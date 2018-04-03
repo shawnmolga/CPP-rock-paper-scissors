@@ -4,6 +4,7 @@ Player::Player(int num) : playerNum(num), score(0), isWinner(false)
 {
     numOfPieces = new int(6);
     numOfPieces={0}; //does it work?
+	isPlayerTurn = (num == 1 ? true : false);
 }
 bool Player::getIsWinner() const
 {
@@ -34,6 +35,15 @@ int Player::getPlayerNum() const
 int Player::getScore() const
 {
     return score;
+}
+
+bool Player::getIsPlayerTurn() const
+{
+	return isPlayerTurn;
+}
+void Player::setIsPlayerTurn(bool turn)
+{
+	isPlayerTurn=turn;
 }
 
 Player::~Player()

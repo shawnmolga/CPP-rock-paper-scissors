@@ -7,7 +7,7 @@
 #include "RCPgameManager.h"
 
 RCPgameManager::RCPgameManager(string PositionFileP1, string PositionFileP2, string moveFilePlayer1, string moveFilePlayer2,string gameOutputFile)
-: game(new RCPgame()), posFileP1(PositionFileP1), posFileP2(PositionFileP2), moveFileP1(moveFilePlayer1), moveFileP2(moveFilePlayer2), outputFile(gameOutputFile)){}
+: game(RCPgame()), posFileP1(PositionFileP1), posFileP2(PositionFileP2), moveFileP1(moveFilePlayer1), moveFileP2(moveFilePlayer2), outputFile(gameOutputFile){}
 
 RCPgameManager::~RCPgameManager()
 {
@@ -171,19 +171,19 @@ void RCPgameManager::printOutputFile(string &outputFile)
 {
   ofstream output("outputFile");
   //player 1 is thw winner
-  if(game.playerOne.isWinner())
+  if(game.getPlayerOne.isWinner())
   {
     output << "Winner : 1" <<endl;
   }
   //player 2 is the winner
-  else if(game.playerTwo.isWinner()){
+  else if(game.getPlayerTwo.isWinner()){
     output << "Winner : 2" <<endl;
   }
   //tie
   else {
     output << "Winner : 0" <<endl;
   }
-  output <<game.ToString(game.gameOverReason)<< endl;
+  output <<game.ToString(game.getGameOverReason())<< endl;
 }
 void printBoardToFile(ofstream &outFile)
 {
@@ -281,16 +281,16 @@ bool RCPgameManager::Move(const string &player1MoveFile, const string &player2Mo
   //end of game
 }
 
-bool RCPgameManager::islegalMove(int from_x, int from_y, int to_x, int to_y, bool isPlayer1)
+bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y, bool isPlayer1)
 {
   if (isupper(game.board[from_x][from_y].getPiece()) == true && isPlayer1 == true)
   {
-    if (isupper(board(to_x, to_y).getPiece()) == false)
+    if (isupper(game.board[to_x][to_y].getPiece()) == false)
     {
       return true;
     }
   }
-  if (isupper(game.board[from_x][from_y].getPiece()) == false && isPlayer2 == false)
+  if (isupper(game.board[from_x][from_y].getPiece()) == false && isPlayer1 == false)
   {
     if (isupper(game.board[to_x][to_y].getPiece()) == true)
     {
@@ -307,7 +307,7 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1)
   int from_y_int = s[2] - '0';
   int to_x_int = s[4] - '0';
   int to_y_int = s[6] - '0';
-  if ((from_x_int < 1 || from_x_int > 1 - ROWS) || (to_x_int < 1 || to_x_int > 1 - ROWS) || (from_y_int < 1 || from_y_int > 1 - COLS) || (to_y_int < 1 || to_y_int > 1 - COLS) {
+  if ((from_x_int < 1 || from_x_int > 1 - ROWS) || (to_x_int < 1 || to_x_int > 1 - ROWS) || (from_y_int < 1 || from_y_int > 1 - COLS) || (to_y_int < 1 || to_y_int > 1 - COLS)) {
     cout << "Error: illegal location on board" << endl;
     isWinner = false;
     return isWinner;
@@ -324,18 +324,18 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1)
 	}
 
 	// check : if there is a player1 peice in (to_x_int, to_y_int) return false
-	if (isLegalMove(from_x_int, from_y_int, to_x_int, to_y_int)) {
-    fight(from_x_int, from_y_int, game.board[to_x_int][to_y_int].getPiece(), game.board[to_x_int][to_y_int].getIsJoker() ))
-    {
+	if (isLegalMove(from_x_int, from_y_int, to_x_int, to_y_int,isPlayer1)) { //ASK!
+		game.fight(from_x_int, from_y_int, game.board[to_x_int][to_y_int].getPiece(), game.board[to_x_int][to_y_int].getIsJoker() );
     }
     else
     {
-      isWinner = false return isWinner;
+      isWinner = false;
+      return isWinner;
     }
 
     //CHECK JOKER REPOSITION
     size_t pos = s.find("[J: ");
-    if (pos == npos)
+    if (pos == string::npos)
     {
       return isWinner;
     }
@@ -345,8 +345,8 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1)
       isWinner = false;
       return isWinner;
     }
-    size_t posJoker = find_first_not_of(" ", pos);
-    if (pos == npos)
+    size_t posJoker = s.find_first_not_of(" ", pos);
+    if (pos == string::npos)
     {
       cout << "Error: Bad format - Joker information not placed correctly" << endl;
       isWinner = false;
@@ -367,15 +367,16 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1)
       return isWinner;
     }
 
-    string new_rep = s.substr(8, " ");
-    if (game.board[x_joker][y_joker].getPiece().compare(new_rep) == true)
+    char new_rep = s[8];
+    
+    if (game.board[x_joker][y_joker].getPiece()==(new_rep))
     {
       //joker representation did not change
       return isWinner;
     }
-    if (new_rep.compare(ROCK) || new_rep.compare(PAPER) || new_rep.compare(SCISSOR) || new_rep.compare(BOMB))
+    if (new_rep == ROCK || new_rep == PAPER || new_rep == SCISSOR || new_rep == BOMB )
     {
-      updateCell(board(x_joker, y_joker), new_rep, true);
+      game.board[x_joker][y_joker].updateCell(game.board[x_joker][y_joker], new_rep, true);
       return isWinner;
     }
     else
