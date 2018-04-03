@@ -24,6 +24,7 @@ class RCPgameManager{
 		~RCPgameManager();
 		RCPgameManager(const RCPgameManager& manager) = delete;
 		RCPgameManager& operator=(const RCPgameManager& manager) = delete;
+		RCPgame game;
 
 		bool checkPositioningFormat(const string &line, int numOfPieces[], int &row, int &col, bool& isJoker, char& jokerPiece);
 		bool checkPieceOverFlow(int numOfPieces[]);
@@ -36,7 +37,6 @@ class RCPgameManager{
 		bool isLegalMove(int from_x, int from_y, int to_x, int to_y, bool isPlayer1);
 		
 private:
-	RCPgame game;
 	string posFileP1;
 	string posFileP2;
 	string moveFileP1;

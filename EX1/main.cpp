@@ -34,11 +34,17 @@ int main(int argc, char *argv[])
   ifstream posFile1(positionFile1);
   ifstream posFile2(positionFile2);
   bool isPlayerOneLegalFormat = mgmtGame.checkInsertPlayerPosition(1,posFile1);
-  bool isPlayerOneLegalFormat = mgmtGame.checkInsertPlayerPosition(2,posFile2);
-  if (!isPlayerOneLegalFormat && !isPlayerOneLegalFormat){
+  bool isPlayerTwoLegalFormat = mgmtGame.checkInsertPlayerPosition(2,posFile2);
+  if (!isPlayerOneLegalFormat && !isPlayerTwoLegalFormat){
    mgmtGame.game.setGameOver(0,WRONG_FILE_FORMAT_BOTH);
   }
+  else if (!isPlayerOneLegalFormat){
+mgmtGame.game.setGameOver(2,WRONG_FILE_FORMAT_ONE);
+  }
 
+  else if (!isPlayerTwoLegalFormat){
+mgmtGame.game.setGameOver(1,WRONG_FILE_FORMAT_TWO);
+  }
   posFile1.ifstream::close();
   posFile2.ifstream::close();
   return 0;

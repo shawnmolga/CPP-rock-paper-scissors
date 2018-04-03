@@ -199,12 +199,12 @@ void RCPgameManager::printOutputFile(string &outputFile)
 {
   ofstream output("outputFile");
   //player 1 is thw winner
-  if (game.getPlayerOne.isWinner())
+  if (game.getPlayerOne().getIsWinner())
   {
     output << "Winner : 1" << endl;
   }
   //player 2 is the winner
-  else if (game.getPlayerTwo.isWinner())
+  else if (game.getPlayerTwo().getIsWinner())
   {
     output << "Winner : 2" << endl;
   }
