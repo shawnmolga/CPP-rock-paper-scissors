@@ -359,6 +359,7 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 		if (isPlayer1)
 			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
 		else
+
 			game.setGameOver(0, WRONG_FILE_FORMAT_TWO);
 		return isGameOver;
 	}
