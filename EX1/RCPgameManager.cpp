@@ -287,52 +287,45 @@ void RCPgameManager::printBoardToFile(ofstream &output)
 }
 
 void RCPgameManager::Move(const string &player1MoveFile,
-                          const string &player2MoveFile)
-{
+		const string &player2MoveFile) {
 
-  ifstream player1Move(player1MoveFile);
-  ifstream player2Move(player2MoveFile);
-  if (!player1Move.is_open())
-  {
-    if (!player2Move.is_open())
-      game.setGameOver(0, WRONG_FILE_FORMAT_BOTH);
-  }
+	ifstream player1Move(player1MoveFile);
+	ifstream player2Move(player2MoveFile);
+	if (!player1Move.is_open()) {
+		if (!player2Move.is_open())
+			game.setGameOver(0, WRONG_FILE_FORMAT_BOTH);
+	}
 
-  string line1;
-  string line2;
+	string line1;
+	string line2;
 
-  while (getline(player1Move, line1))
-  {
-    if (makeMove(line1, true))
-      break;
-    if (getline(player2Move, line2))
-    {
-      if (makeMove(line2, false))
-        break;
-    }
-    else
-      break;
-  }
+	while (getline(player1Move, line1)) {
+		if (makeMove(line1, true))
+			break;
+		if (getline(player2Move, line2)) {
+			if(makeMove(line2, false))
+				break;
+		}
+		else
+			break;
+	}
 
-  //one move file is over
-  if (player1Move.eof())
-  {
-    while (getline(player2Move, line2))
-    {
-      if (makeMove(line2, false))
-        break;
-    }
-  }
-  else if (player2Move.eof())
-  {
-    while (getline(player1Move, line1))
-    {
-      if (makeMove(line1, true))
-        break;
-    }
-  }
+	//one move file is over
+	if (player1Move.eof()) {
+		while (getline(player2Move, line2)) {
+			if (makeMove(line2, false))
+				break;
+		}
+	} else if (player2Move.eof()) {
+		while (getline(player1Move, line1)) {
+			if(makeMove(line1, true))
+				break;
+		}
+	}
 
-  return;
+	player1Move.close();
+	player2Move.close();
+	return;
 }
 
 bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
