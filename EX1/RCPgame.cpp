@@ -7,35 +7,30 @@
 
 #include "RCPgame.h"
 
-RCPgame::RCPgame() : isGameOver(false), playerOne(Player(1)), playerTwo(Player(2))
-{
+RCPgame::RCPgame() :
+		isGameOver(false), playerOne(Player(1)), playerTwo(Player(2)) {
 	board = new Cell *[ROWS];
-	for (int i = 0; i < ROWS; ++i)
-	{
+	for (int i = 0; i < ROWS; ++i) {
 		board[i] = new Cell[COLS];
 	}
 }
 
-RCPgame::~RCPgame()
-{
-	for (int i = 0; i < ROWS; ++i)
-	{
+RCPgame::~RCPgame() {
+	for (int i = 0; i < ROWS; ++i) {
 		delete[] board[i];
 	}
 	delete[] board;
 	delete &playerOne;
 	delete &playerTwo;
 }
-string RCPgame::ToString(GAME_OVER_TYPE typeGame)
-{
-	switch (typeGame)
-	{
+string RCPgame::ToString(GAME_OVER_TYPE typeGame) {
+	switch (typeGame) {
 	case ALL_FLAGS_CAPTURED:
 		return "All flags of the opponent are captured";
 	case ALL_PIECES_EATEN:
 		return "All moving PIECEs of the opponent are eaten";
 	case WRONG_FILE_FORMAT_ONE:
-		return "Bad Positioning input file for player 1 - line ";//TODO : line
+		return "Bad Positioning input file for player 1 - line "; //TODO : line
 	case WRONG_FILE_FORMAT_TWO:
 		return "Bad Positioning input file for player 2 - line "; //TODO : line
 	case WRONG_FILE_FORMAT_BOTH:
@@ -48,17 +43,16 @@ string RCPgame::ToString(GAME_OVER_TYPE typeGame)
 		return "[Unknown GAME_OVER_TYPE]";
 	}
 }
-bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker)
-{
+bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker) {
 	//TODO: ask if we can position flag on flag and who is loosing
 	Player* currPlayer = &playerOne;
 	Player* nextPlayer = &playerTwo;
 
-	if(!playerOne.getIsPlayerTurn()){
+	if (!playerOne.getIsPlayerTurn()) {
 		currPlayer = &playerTwo;
 		nextPlayer = &playerOne;
 	}
-	
+
 	char currPlayerPiece = toupper(currPiece);
 	char nextPlayerPiece = toupper(board[row][col].getPiece());
 	//Case 1: 2 players in the same type.
@@ -68,9 +62,7 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker)
 		{
 			currPlayer->numOfPieces[4]--;
 			nextPlayer->numOfPieces[4]--;
-		}
-		else
-		{
+		} else {
 
 			switch (nextPlayerPiece)
 			{
@@ -105,19 +97,15 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker)
 		if (board[row][col].getIsJoker())
 		{
 			nextPlayer->numOfPieces[4]--;
-		}
-		else
-		{
+		} else {
 			nextPlayer->numOfPieces[5]--;
 		}
 		Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
 	}
 
 	//case 3: player 2 is flag and player 1 another piece
-	else if (currPlayerPiece == FLAG)
-	{
-		if (board[row][col].getIsJoker())
-		{
+	else if (currPlayerPiece == FLAG) {
+		if (board[row][col].getIsJoker()) {
 			playerTwo.numOfPieces[4]--;
 		}
 		playerTwo.numOfPieces[5]--;
@@ -129,11 +117,8 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker)
 		if (isCurrPieceJoker)
 		{
 			playerTwo.numOfPieces[4]--;
-		}
-		else
-		{
-			switch (currPlayerPiece)
-			{
+		} else {
+			switch (currPlayerPiece) {
 			case ROCK:
 				playerTwo.numOfPieces[0]--;
 				break;
@@ -148,10 +133,8 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker)
 	}
 
 	//case 5: player 2 is bomb and player 1 another piece
-	else if (currPlayerPiece == BOMB)
-	{
-		if (isCurrPieceJoker)
-		{
+	else if (currPlayerPiece == BOMB) {
+		if (isCurrPieceJoker) {
 			nextPlayer->numOfPieces[4]--;
 		}
 		else
@@ -180,20 +163,13 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker)
 			if (isCurrPieceJoker)
 			{
 				playerTwo.numOfPieces[4]--;
-			}
-			else
-			{
+			} else {
 				playerTwo.numOfPieces[0]--;
 			}
-		}
-		else if (currPlayerPiece == SCISSOR)
-		{
-			if (board[row][col].getIsJoker())
-			{
+		} else if (currPlayerPiece == SCISSOR) {
+			if (board[row][col].getIsJoker()) {
 				nextPlayer->numOfPieces[4]--;
-			}
-			else
-			{
+			} else {
 				nextPlayer->numOfPieces[1]--;
 			}
 			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
@@ -207,9 +183,7 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker)
 			if (board[row][col].getIsJoker())
 			{
 				nextPlayer->numOfPieces[4]--;
-			}
-			else
-			{
+			} else {
 				nextPlayer->numOfPieces[0]--;
 			}
 			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
@@ -219,9 +193,7 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker)
 			if (isCurrPieceJoker)
 			{
 				playerTwo.numOfPieces[4]--;
-			}
-			else
-			{
+			} else {
 				playerTwo.numOfPieces[2]--;
 			}
 		}
@@ -232,15 +204,10 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker)
 		if (currPlayerPiece == PAPER)
 		{
 			playerTwo.numOfPieces[1]--;
-		}
-		else if (currPlayerPiece == ROCK)
-		{
-			if (board[row][col].getIsJoker())
-			{
+		} else if (currPlayerPiece == ROCK) {
+			if (board[row][col].getIsJoker()) {
 				nextPlayer->numOfPieces[4]--;
-			}
-			else
-			{
+			} else {
 				nextPlayer->numOfPieces[0]--;
 			}
 			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
@@ -249,44 +216,52 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker)
 	return checkGameOver();
 }
 
-bool RCPgame::checkGameOver()
-{
-	if (playerOne.numOfPieces[5] == 0 && playerTwo.numOfPieces[5] == 0)
-	{
+void RCPgame::setGameOver(int winnerNumber, GAME_OVER_TYPE type) {
+	isGameOver = true;
+	gameOverReason = type;
+	if (winnerNumber == playerOne.getPlayerNum()) {
+		playerOne.setIsWinner(true);
+		playerOne.setScore(playerOne.getScore() + 1);
+		return;
+	}
+
+	playerTwo.setIsWinner(true);
+	playerTwo.setScore(playerTwo.getScore() + 1);
+	return;
+}
+
+bool RCPgame::checkGameOver() {
+	if (playerOne.numOfPieces[5] == 0 && playerTwo.numOfPieces[5] == 0) {
 		isGameOver = true;
 		gameOverReason = ALL_FLAGS_CAPTURED;
 		return true;
 	}
 	//check if all of player one's flags are taken
-	if (playerOne.numOfPieces[5] == 0)
-	{
+	if (playerOne.numOfPieces[5] == 0) {
 		playerTwo.setIsWinner(true);
-		playerTwo.setScore(playerTwo.getScore()+1);
+		playerTwo.setScore(playerTwo.getScore() + 1);
 		isGameOver = true;
 		gameOverReason = ALL_FLAGS_CAPTURED;
 	}
 	//check if all of player one's moving pieces are eaten
-	if (!playerOne.isLeftMovingPieces())
-	{
+	if (!playerOne.isLeftMovingPieces()) {
 		playerTwo.setIsWinner(true);
-		playerTwo.setScore(playerTwo.getScore()+1);
+		playerTwo.setScore(playerTwo.getScore() + 1);
 		isGameOver = true;
 		gameOverReason = ALL_PIECES_EATEN;
 	}
 	//check if all of player two's flags are taken
-	if (playerTwo.numOfPieces[5] == 0)
-	{
+	if (playerTwo.numOfPieces[5] == 0) {
 		playerOne.setIsWinner(true);
-		playerOne.setScore(playerOne.getScore()+1);
+		playerOne.setScore(playerOne.getScore() + 1);
 		isGameOver = true;
 		gameOverReason = ALL_FLAGS_CAPTURED;
 	}
 
 	//check if all of player two's moving pieces are eaten
-	if (!playerTwo.isLeftMovingPieces())
-	{
+	if (!playerTwo.isLeftMovingPieces()) {
 		playerOne.setIsWinner(true);
-		playerOne.setScore(playerOne.getScore()+1);
+		playerOne.setScore(playerOne.getScore() + 1);
 		isGameOver = true;
 		gameOverReason = ALL_PIECES_EATEN;
 	}
@@ -294,17 +269,14 @@ bool RCPgame::checkGameOver()
 	return false;
 }
 
-Player RCPgame::getPlayerOne() const
-{
+Player RCPgame::getPlayerOne() const {
 	return playerOne;
 }
 
-Player RCPgame::getPlayerTwo() const
-{
+Player RCPgame::getPlayerTwo() const {
 	return playerTwo;
 }
 
-GAME_OVER_TYPE RCPgame::getGameOverReason() const
-{
+GAME_OVER_TYPE RCPgame::getGameOverReason() const {
 	return gameOverReason;
 }
