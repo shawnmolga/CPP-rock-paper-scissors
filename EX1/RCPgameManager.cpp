@@ -199,12 +199,12 @@ void RCPgameManager::printOutputFile(string &outputFile)
 {
   ofstream output("outputFile");
   //player 1 is thw winner
-  if (game.getPlayerOne.isWinner())
+  if (game.getPlayerOne().isWinner())
   {
     output << "Winner : 1" << endl;
   }
   //player 2 is the winner
-  else if (game.getPlayerTwo.isWinner())
+  else if (game.getPlayerTwo().isWinner())
   {
     output << "Winner : 2" << endl;
   }
@@ -376,9 +376,9 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 		cout << "Error: Bad format - should be space" << endl;
 		isGameOver = true;
 		if (isPlayer1)
-			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
+			game.setGameOver(2, WRONG_FILE_FORMAT_ONE);
 		else
-			game.setGameOver(2, WRONG_FILE_FORMAT_TWO);
+			game.setGameOver(1, WRONG_FILE_FORMAT_TWO);
 		return isGameOver;
 	}
 
@@ -387,9 +387,9 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 	if (pos == string::npos) {
 		isGameOver = true;
 		if (isPlayer1)
-			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
+			game.setGameOver(2, WRONG_FILE_FORMAT_ONE);
 		else
-			game.setGameOver(2, WRONG_FILE_FORMAT_TWO);
+			game.setGameOver(1, WRONG_FILE_FORMAT_TWO);
 		return isGameOver;
 	}
 
@@ -401,7 +401,7 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 		if (isPlayer1)
 			game.setGameOver(2, WRONG_FILE_FORMAT_ONE);
 		else
-			game.setGameOver(0, WRONG_FILE_FORMAT_TWO);
+			game.setGameOver(1, WRONG_FILE_FORMAT_TWO);
 		return isGameOver;
 	}
 
@@ -412,9 +412,9 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 				<< endl;
 		isGameOver = true;
 		if (isPlayer1)
-			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
+			game.setGameOver(2, WRONG_FILE_FORMAT_ONE);
 		else
-			game.setGameOver(2, WRONG_FILE_FORMAT_TWO);
+			game.setGameOver(1, WRONG_FILE_FORMAT_TWO);
 		return isGameOver;
 	}
 
@@ -425,9 +425,9 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 		cout << "Error: Bad format - should be space" << endl;
 		isGameOver = true;
 		if (isPlayer1)
-			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
+			game.setGameOver(2, WRONG_FILE_FORMAT_ONE);
 		else
-			game.setGameOver(0, WRONG_FILE_FORMAT_TWO);
+			game.setGameOver(1, WRONG_FILE_FORMAT_TWO);
 		return isGameOver;
 	}
 
@@ -435,9 +435,9 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 		cout << "Error: Piece specified is not joker" << endl;
 		isGameOver = true;
 		if (isPlayer1)
-			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
+			game.setGameOver(2, WRONG_FILE_FORMAT_ONE);
 		else
-			game.setGameOver(2, WRONG_FILE_FORMAT_TWO);
+			game.setGameOver(1, WRONG_FILE_FORMAT_TWO);
 		return isGameOver;
 	}
 
@@ -450,9 +450,9 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 		cout << "Error: illegal NEW_REP " << endl;
 		isGameOver = true;
 		if (isPlayer1)
-			game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
+			game.setGameOver(2, WRONG_FILE_FORMAT_ONE);
 		else
-			game.setGameOver(0, WRONG_FILE_FORMAT_TWO);
+			game.setGameOver(1, WRONG_FILE_FORMAT_TWO);
 		return isGameOver;
 	}
 
@@ -473,8 +473,8 @@ bool RCPgameManager::makeMove(string s, bool isPlayer1) {
 	}
 	isGameOver = true;
 	if (isPlayer1)
-		game.setGameOver(1, WRONG_FILE_FORMAT_ONE);
+		game.setGameOver(2, WRONG_FILE_FORMAT_ONE);
 	else
-		game.setGameOver(2, WRONG_FILE_FORMAT_TWO);
+		game.setGameOver(1, WRONG_FILE_FORMAT_TWO);
 	return isGameOver;
 }
