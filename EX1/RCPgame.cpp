@@ -219,14 +219,20 @@ bool RCPgame::fight(int row, int col, char currPiece, bool isCurrPieceJoker) {
 void RCPgame::setGameOver(int winnerNumber, GAME_OVER_TYPE type) {
 	isGameOver = true;
 	gameOverReason = type;
-	if (winnerNumber == playerOne.getPlayerNum()) {
+	if (winnerNumber == 0){
+		return;
+	}
+
+	else if (winnerNumber == playerOne.getPlayerNum()) {
 		playerOne.setIsWinner(true);
 		playerOne.setScore(playerOne.getScore() + 1);
 		return;
 	}
-
+	else{
 	playerTwo.setIsWinner(true);
 	playerTwo.setScore(playerTwo.getScore() + 1);
+	}
+	
 	return;
 }
 
@@ -275,6 +281,10 @@ Player RCPgame::getPlayerOne() const {
 
 Player RCPgame::getPlayerTwo() const {
 	return playerTwo;
+}
+
+bool RCPgame::getIsGameOver() const{
+	return isGameOver;
 }
 
 GAME_OVER_TYPE RCPgame::getGameOverReason() const {

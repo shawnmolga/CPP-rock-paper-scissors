@@ -24,14 +24,22 @@ int main(int argc, char *argv[])
   // string PositionFileP1, string PositionFileP2, string moveFilePlayer1, string moveFilePlayer2,string gameOutputFile
   RCPgameManager mgmtGame(positionFile1,positionFile2,moveFile1,moveFile2,outputFile);
 
-  //check if all files exist and 
+  //check if all files exist and named correctly 
+  //TODO: figure out if files are in argv[1] or in current directory and change checks 
   if(!mgmtGame.checkPositioningInputFiles(argv[1],argv[2])){
     return -1;
   }
+
+  //check if file format of possition files is ok and insert possitions to board
   ifstream posFile1(positionFile1);
   ifstream posFile2(positionFile2);
-  mgmtGame.checkInsertPlayerPosition(1,posFile1);
-  mgmtGame.checkInsertPlayerPosition(2,posFile2);
-  close(posFile1);
+  bool isPlayerOneLegalFormat = mgmtGame.checkInsertPlayerPosition(1,posFile1);
+  bool isPlayerOneLegalFormat = mgmtGame.checkInsertPlayerPosition(2,posFile2);
+  if (!isPlayerOneLegalFormat && !isPlayerOneLegalFormat){
+   mgmtGame.game.setGameOver(0,WRONG_FILE_FORMAT_BOTH);
+  }
+
+  posFile1.ifstream::close();
+  posFile2.ifstream::close();
   return 0;
 }

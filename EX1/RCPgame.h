@@ -39,7 +39,7 @@ class RCPgame
 
 	Player getPlayerOne() const;
 	Player getPlayerTwo() const;
-
+	bool getIsGameOver() const;
 	GAME_OVER_TYPE getGameOverReason() const;
 	bool fight(int row, int col, char piece, bool isJoker);
 	bool checkGameOver();
