@@ -148,11 +148,11 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum, ifstream &playerPo
     cout << "Error: flag of player 1 is not positioned on board" << endl;
     return false;
   }
-  if (game.getPlayerOne.checkPieceOverFlow())
+  if (game.getPlayerOne().checkPieceOverFlow())
   {
     return false;
   }
-  if (game.getPlayerTwo.checkPieceOverFlow())
+  if (game.getPlayerTwo().checkPieceOverFlow())
   {
     return true;
   }
