@@ -28,13 +28,16 @@ class RCPgameManager{
 
 		bool checkPositioningFormat(const string &line, int numOfPieces[], int &row, int &col, bool& isJoker, char& jokerPiece);
 		bool checkInsertPlayerPosition(int playerNum, ifstream & playerPositionFile);
-		bool checkPositioningInputFiles(const string &player1PositionFile, const string &player2PositionFile);
+		bool checkInputFiles();
 		void printOutputFile(string &outputFile);
 		void printBoardToFile(ofstream &output);
-		void Move(const string &player1MoveFile, const string &player2MoveFile);
+		void startGame();
 		bool makeMove(string s, bool isPlayer1);
 		bool isLegalMove(int from_x, int from_y, int to_x, int to_y, bool isPlayer1);
-		bool checkBadFormat(string & positionFile1,string & positionFile2);
+		bool checkBadFormat();
+		int getPieceFromLine(int start, const string &line);
+		int getPositionFromLine(int start, const string &line, int &row, int &col);
+		bool checkEmptyLine(int start, const string &line);
 
 private:
 	string posFileP1;

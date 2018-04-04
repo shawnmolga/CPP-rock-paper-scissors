@@ -24,13 +24,15 @@ enum GAME_OVER_TYPE
 	WRONG_FILE_FORMAT_ONE,
 	WRONG_FILE_FORMAT_TWO,
 	WRONG_FILE_FORMAT_BOTH,
+	WRONG_MOVE_FILE_FORMAT_ONE,
+	WRONG_MOVE_FILE_FORMAT_TWO,
 	TIE_NO_WINNER,
 	TIE_ALL_FLAGS_EATEN
 };
 
 class RCPgame
 {
-  public:
+public:
 	RCPgame();
 	~RCPgame();
 	Cell **board;
@@ -46,7 +48,7 @@ class RCPgame
 	void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
 	string ToString(GAME_OVER_TYPE typeGame);
 
-  private:
+private:
 	//TODO : ask what we should do in case of wrong output file.
 	//enum GAME_OVER_TYPE {ALL_FLAGS_CAPTURED,ALL_PIECES_EATEN,WRONG_FILE_FORMAT,TIE};
 	bool isGameOver;
