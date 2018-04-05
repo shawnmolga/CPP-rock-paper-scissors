@@ -26,6 +26,16 @@ RCPgame::~RCPgame()
 	delete &playerOne;
 	delete &playerTwo;
 }
+
+Player RCPgame::getPlayer1(){
+	return playerOne;
+}
+
+Player RCPgame::getPlayer2(){
+	return playerTwo;
+}
+
+
 string RCPgame::ToString(GAME_OVER_TYPE typeGame)
 {
 	switch (typeGame)

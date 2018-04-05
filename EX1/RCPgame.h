@@ -47,6 +47,9 @@ public:
 	bool checkGameOver();
 	void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
 	string ToString(GAME_OVER_TYPE typeGame);
+	Player getPlayer1();
+	Player getPlayer2();
+
 
 private:
 	//TODO : ask what we should do in case of wrong output file.

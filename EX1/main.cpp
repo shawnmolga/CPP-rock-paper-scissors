@@ -7,7 +7,7 @@
 using namespace std;
 
 
-int main(int argc, char *argv[])
+int main(int argc, char* [])
 {
 	// check number of args
 	if (argc > 1)
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 	RCPgameManager mgmtGame(positionFile1,positionFile2,moveFile1,moveFile2,outputFile);
 
 	//check if all files exist and named correctly
-	if(!mgmtGame.checkInputFiles(positionFile1,positionFile2,,moveFile1,moveFile2)){
+	if(!mgmtGame.checkInputFiles()){
 		return -1;
 	}
 	//check if game already over - bad format or fight result
@@ -35,7 +35,8 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+	string output_file = "output.txt";
 	mgmtGame.startGame();
-	mgmtGame.printOutputFile();
+	mgmtGame.printOutputFile(output_file);
 	return 0;
 }
