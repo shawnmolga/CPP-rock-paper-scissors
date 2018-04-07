@@ -6,584 +6,736 @@
  */
 #include "RCPgameManager.h"
 
-RCPgameManager::RCPgameManager(string PositionFileP1, string PositionFileP2,
-		string moveFilePlayer1, string moveFilePlayer2, string gameOutputFile) :
-		game(RCPgame()), posFileP1(PositionFileP1), posFileP2(PositionFileP2), moveFileP1(
-				moveFilePlayer1), moveFileP2(moveFilePlayer2), outputFile(
-				gameOutputFile) {
+RCPgameManager::RCPgameManager() : game(RCPgame())
+{
 }
 
-RCPgameManager::~RCPgameManager() {
-	delete &game;
+RCPgameManager::~RCPgameManager()
+{
+  delete &game;
 }
-int RCPgameManager::getPieceFromLine(int start, const string &line) {
+int RCPgameManager::getPieceFromLine(int start, const string &line)
+{
 
-	int end = start;
+  int end = start;
 
-	while (line[end] == ' ') {
-		end++;
-	}
+  while (line[end] == ' ')
+  {
+    end++;
+  }
 
-	if ((size_t) end > line.length()) {
-		return -1;
-	}
+  if ((size_t)end > line.length())
+  {
+    return -1;
+  }
 
-	return end;
+  return end;
+}
+
+bool RCPgameManager::isAllGameFilesExists()
+{
+  bool PositionP1Exists = false, PositioP2Exists = false, moveP1Exists = false, moveP2Exists = false;
+  std::string currentFilename;
+  DIR *dir;
+  struct dirent *ent;
+  if ((dir = opendir(".")) != NULL)
+  {
+    /* print all the files and directories within directory */
+    while ((ent = readdir(dir)) != NULL)
+    {
+      currentFilename = ent->d_name;
+      if (!PositionP1Exists && currentFilename.compare("player1.rps_board") == 0)
+      {
+        PositionP1Exists = true;
+      }
+      else if (!PositioP2Exists && currentFilename.compare("player2.rps_board") == 0)
+      {
+        PositioP2Exists = true;
+      }
+      else if (!moveP1Exists && currentFilename.compare("player1.rps_moves") == 0)
+      {
+        moveP1Exists = true;
+      }
+      else if (!moveP2Exists && currentFilename.compare("player2.rps_moves") == 0)
+      {
+        moveP2Exists = true;
+      }
+    } //while
+    closedir(dir);
+    if (!PositionP1Exists || !PositioP2Exists || !moveP1Exists || !moveP2Exists)
+    { //some problem with the getline funcion - exit
+      std::cout << "Error reading temp dirList file in working directory, Exit from Game." << std::endl;
+      return false;
+    }
+    return true;
+  }
+  else
+  {
+    std::cout << "Unable to open temp dirList file in working directory, Exit from Game." << std::endl;
+    closedir(dir);
+    return false;
+  }
+  closedir(dir);
+  return false;
 }
 
 int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
-		int &col) {
-
-	int end = start;
-
-	while (line[end] == ' ') {
-		end++;
-	}
-
-	row = line[end] - '0';
-	end++;
-
-	while (line[end] == ' ') {
-		end++;
-	}
-	col = line[end] - '0';
-
-	return end;
+                                        int &col)
+{
+  int end = start;
+  while (line[end] == ' ')
+  {
+    end = end + 1;
+  }
+  row = int(line[end] - '0');
+  end++;
+  while (line[end] == ' ')
+  {
+    end = end + 1;
+  }
+  col = int(line[end] - '0');
+  return end;
 }
 
-bool RCPgameManager::checkEmptyLine(int start, const string &line) {
+bool RCPgameManager::checkEmptyLine(int start, const string &line)
+{
 
-	for (int i = start; i < (int) line.length(); ++i) {
-		if (line[i] != ' ' && line[i] != '\n')
-			return false;
-	}
+  for (int i = start; i < (int)line.length(); ++i)
+  {
+    if (line[i] != ' ' && line[i] != '\n')
+      return false;
+  }
 
-	return true;
+  return true;
 }
 
 bool RCPgameManager::checkPositioningFormat(const string &line,
-		int numOfPositionedPieces[], int playerNum, int &row, int &col,
-		bool &isJoker, char &piece) {
-	//TODO: ask in forum if we have space or other char in end of input line
-	if (line.length() < 5) {
-		cout << "Error: Bad format - line length is smaller than 5 characters"
-				<< endl;
-		return false;
-	}
-	int pieceIndex = getPieceFromLine(0, line);
-	piece = line[pieceIndex];
+                                            int numOfPositionedPieces[], int playerNum, int &row, int &col,
+                                            bool &isJoker, char &piece)
+{
+  //TODO: ask in forum if we have space or other char in end of input line
+  if (line.length() < 5)
+  {
+    cout << "Error: Bad format - line length is smaller than 5 characters"
+         << endl;
+    return false;
+  }
+  int pieceIndex = getPieceFromLine(0, line);
+  piece = line[pieceIndex];
+  switch (piece)
+  {
+  case ROCK:
+    numOfPositionedPieces[0]++;
+    playerNum == 1 ? game.playerOne.setNumOfPieces(0, game.playerOne.numOfPieces[0] + 1) : game.playerTwo.setNumOfPieces(0, game.playerTwo.numOfPieces[0] + 1);
+    break;
+  case PAPER:
+    numOfPositionedPieces[1]++;
+    playerNum == 1 ? game.playerOne.setNumOfPieces(1, game.playerOne.numOfPieces[1] + 1) : game.playerTwo.setNumOfPieces(1, game.playerTwo.numOfPieces[1] + 1);
+    break;
+  case SCISSOR:
+    numOfPositionedPieces[2]++;
+    playerNum == 1 ? game.playerOne.setNumOfPieces(2, game.playerOne.numOfPieces[2] + 1) : game.playerTwo.setNumOfPieces(2, game.playerTwo.numOfPieces[2] + 1);
+    break;
+  case BOMB:
+    numOfPositionedPieces[3]++;
+    playerNum == 1 ? game.playerOne.setNumOfPieces(3, game.playerOne.numOfPieces[3] + 1) : game.playerTwo.setNumOfPieces(3, game.playerTwo.numOfPieces[3] + 1);
+    break;
+  case JOKER:
+    numOfPositionedPieces[4]++;
+    playerNum == 1 ? game.playerOne.setNumOfPieces(4, game.playerOne.numOfPieces[4] + 1) : game.playerTwo.setNumOfPieces(4, game.playerTwo.numOfPieces[4] + 1);
+    isJoker = true;
+    break;
+  case FLAG:
+    numOfPositionedPieces[5]++;
+    playerNum == 1 ? game.playerOne.setNumOfPieces(5, game.playerOne.numOfPieces[5] + 1) : game.playerTwo.setNumOfPieces(5, game.playerTwo.numOfPieces[5] + 1);
+    break;
+  default:
+    cout << "Error: Bad format - illegal piece" << endl;
+    return false;
+  }
+  int nextIndex = getPositionFromLine(pieceIndex + 1, line, row, col) + 1;
+  //check if position is legal
+  if ((row < 1 || row > ROWS - 1) || (col < 1 || col > COLS - 1))
+  {
+    cout << "Error: illegal location on board" << endl;
+    return false;
+  }
+  if (isJoker)
+  {
+    nextIndex = getPieceFromLine(nextIndex, line) + 1;
+    if (nextIndex == -1)
+    {
+      cout << "Error: Bad format - no piece to position as joker" << endl;
+      return false;
+    }
+    char jokerPiece = line[nextIndex - 1];
 
-	switch (piece) {
-	case ROCK:
-		numOfPositionedPieces[0]++;
-		playerNum == 1 ?
-				game.getPlayer1().numOfPieces[0]++ :
-				game.getPlayer2().numOfPieces[0]++;
-		break;
-	case PAPER:
-		numOfPositionedPieces[1]++;
-		playerNum == 1 ?
-				game.getPlayer1().numOfPieces[1]++ :
-				game.getPlayer2().numOfPieces[1]++;
-		break;
-	case SCISSOR:
-		numOfPositionedPieces[2]++;
-		playerNum == 1 ?
-				game.getPlayer1().numOfPieces[2]++ :
-				game.getPlayer2().numOfPieces[2]++;
-		break;
-	case BOMB:
-		numOfPositionedPieces[3]++;
-		playerNum == 1 ?
-				game.getPlayer1().numOfPieces[3]++ :
-				game.getPlayer2().numOfPieces[3]++;
-		break;
-	case JOKER:
-		numOfPositionedPieces[4]++;
-		playerNum == 1 ?
-				game.getPlayer1().numOfPieces[4]++ :
-				game.getPlayer2().numOfPieces[4]++;
-		isJoker = true;
-		break;
-	case FLAG:
-		numOfPositionedPieces[5]++;
-		playerNum == 1 ?
-				game.getPlayer1().numOfPieces[5]++ :
-				game.getPlayer2().numOfPieces[5]++;
-		break;
-	default:
-		cout << "Error: Bad format - illegal piece" << endl;
-		return false;
-	}
+    if (jokerPiece != ROCK || jokerPiece != PAPER || jokerPiece != SCISSOR || jokerPiece != BOMB)
+    {
+      cout << "Error: Bad format - illegal piece for joker" << endl;
+      return false;
+    }
 
-	int nextIndex = getPositionFromLine(pieceIndex++, line, row, col) + 1;
-	//check if position is legal
-	if ((row < 1 || row > ROWS - 1) || (col < 1 || col > COLS - 1)) {
-		cout << "Error: illegal location on board" << endl;
-		return false;
-	}
-
-	if (isJoker) {
-		nextIndex = getPieceFromLine(nextIndex, line) + 1;
-		if (nextIndex == -1) {
-			cout << "Error: Bad format - no piece to position as joker" << endl;
-			return false;
-		}
-		char jokerPiece = line[nextIndex - 1];
-
-		if (jokerPiece != ROCK || jokerPiece != PAPER || jokerPiece != SCISSOR
-				|| jokerPiece != BOMB) {
-			cout << "Error: Bad format - illegal piece for joker" << endl;
-			return false;
-		}
-
-		piece = jokerPiece;
-
-	}
-	//check that after position line is empty
-	if (!checkEmptyLine(nextIndex, line)) {
-		cout << "Error: Bad format - junk characters after position" << endl;
-		return false;
-	}
-	return true;
+    piece = jokerPiece;
+  }
+  //check that after position line is empty
+  if (!checkEmptyLine(nextIndex, line))
+  {
+    cout << "Error: Bad format - junk characters after position" << endl;
+    return false;
+  }
+  return true;
 }
 
 bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
-		ifstream &playerPositionFile) {
-	//by order of pieces in constans file
-	//for checking that there are no more than number of pieces allowed
-	int numOfPositionedPieces[6] = { 0 };
-	string line;
-	int row;
-	int col;
-	char piece = 0;
-	bool isJoker = false;
-	int flagCnt = 0;
-	//initialize temporary board to check player's positions do not collide
-	char board[ROWS][COLS] = { 0 };
+                                               ifstream &playerPositionFile)
+{
+  //by order of pieces in constans file
+  //for checking that there are no more than number of pieces allowed
+  int numOfPositionedPieces[6] = {0};
+  string line;
+  int row;
+  int col;
+  char piece = 0;
+  bool isJoker = false;
+  int flagCnt = 0;
+  //initialize temporary board to check player's positions do not collide
+  char board[ROWS][COLS] = {0};
+  while (getline(playerPositionFile, line))
+  {
+    //skip empty lines
+    if (checkEmptyLine(0, line))
+      continue;
+    isJoker = false;
+    if (!checkPositioningFormat(line, numOfPositionedPieces, playerNum, row,
+                                col, isJoker, piece))
+    {
+      return false;
+    }
+    
+    //position is illegal - tried to locate 2 pieces of same player in same position
+    if (board[row][col] != 0)
+    {
+      cout
+          << "Error: two or more pieces are positioned on the same location"
+          << endl;
+      return false;
+    }
 
-	while (getline(playerPositionFile, line)) {
-		//skip empty lines
-		if (checkEmptyLine(0, line))
-			continue;
+    //position on current player temp board
+    if (playerNum == 1)
+    {
+      board[row][col] = piece;
+    }
+    else
+    {
+      board[row][col] = tolower(piece);
+    }
+    if (toupper(piece) == FLAG)
+    {
+      flagCnt++;
+    }
 
-		isJoker = false;
-		if (!checkPositioningFormat(line, numOfPositionedPieces, playerNum, row,
-				col, isJoker, piece)) {
-			return false;
-		}
+    //check if there is a fight in game board
+    if (game.board[row][col].getPiece() != 0)
+    {
+      if (playerNum == 1) //If it is player one - big letters
+      {
+        game.fight(true, row, col, piece, isJoker);
+      }
+      else //If it is player two -  small letters
+      {
+        game.fight(false, row, col, tolower(piece), isJoker);
+      }
+    }
+    else //no fight
+    {
+      if (playerNum == 1)
+      {
+        Cell::updateCell(game.board[row][col], piece, isJoker);
+      }
+      else
+      {
+        Cell::updateCell(game.board[row][col], tolower(piece), isJoker);
+      }
+    }
+  }
+  //check if there are not enough flags positioned on board
+  if (flagCnt < FLAGS_NUM)
+  {
+    cout << "Error: Missing flags - not all flags are positioned on board"
+         << endl;
+    return false;
+  }
 
-		//position is illegal - tried to locate 2 pieces of same player in same position
-		if (board[row][col] != 0) {
-			cout
-					<< "Error: two or more pieces are positioned on the same location"
-					<< endl;
-			return false;
-		}
+  //check if there are too many pieces positioned on board
+  if (checkPieceOverflow(numOfPositionedPieces))
+    return false;
 
-		//position on current player temp board
-		board[row][col] = piece;
+  //after checking no overflow of initial positions on board - add jokers moving pieces to each player's array
+  updateJokerMovingPieces();
 
-		if (toupper(piece) == FLAG) {
-			flagCnt++;
-		}
-
-		//check if there is a fight in game board
-		if (game.board[row][col].getPiece() != 0) {
-			game.fight(row, col, piece, isJoker);
-		} else //no fight
-		{
-			Cell::updateCell(game.board[row][col], piece, isJoker);
-		}
-	}
-
-	//check if there are not enough flags positioned on board
-	if (flagCnt < FLAGS_NUM) {
-		cout << "Error: Missing flags - not all flags are positioned on board"
-				<< endl;
-		return false;
-	}
-
-	//check if there are too many pieces positioned on board
-	if (checkPieceOverflow(numOfPositionedPieces))
-		return false;
-
-	//after checking no overflow of initial positions on board - add jokers moving pieces to each player's array
-	updateJokerMovingPieces();
-
-	return true;
+  return true;
 }
 
-bool RCPgameManager::checkPieceOverflow(int numOfPieces[]) {
+bool RCPgameManager::checkPieceOverflow(int numOfPieces[])
+{
 
-	if (numOfPieces[0] > ROCKS_NUM || numOfPieces[1] > PAPERS_NUM
-			|| numOfPieces[2] > SCISSORS_NUM || numOfPieces[3] > BOMBS_NUM
-			|| numOfPieces[4] > JOKERS_NUM || numOfPieces[5] > FLAGS_NUM) {
-		cout << "Error: a piece type appears in file more than its number"
-				<< endl;
-		return true;
-	}
-	return false;
-
+  if (numOfPieces[0] > ROCKS_NUM || numOfPieces[1] > PAPERS_NUM || numOfPieces[2] > SCISSORS_NUM || numOfPieces[3] > BOMBS_NUM || numOfPieces[4] > JOKERS_NUM || numOfPieces[5] > FLAGS_NUM)
+  {
+    cout << "Error: a piece type appears in file more than its number"
+         << endl;
+    return true;
+  }
+  return false;
 }
 
-void RCPgameManager::updateJokerMovingPieces() {
-	for (int i = 0; i < ROWS; ++i) {
-		for (int j = 0; j < COLS; ++j) {
-			if (game.board[i][j].getIsJoker()) {
-				int pieceIndex;
-				switch (toupper(game.board[i][j].getPiece())) {
-				case ROCK:
-					pieceIndex = 0;
-					break;
-				case PAPER:
-					pieceIndex = 1;
-					break;
-				case SCISSOR:
-					pieceIndex = 2;
-					break;
-				case BOMB:
-					pieceIndex = 3;
-					break;
-				}
-				isupper(game.board[i][j].getPiece()) ?
-						game.getPlayerOne().numOfPieces[pieceIndex]++ :
-						game.getPlayerTwo().numOfPieces[pieceIndex]++;
-			}
-		}
-	}
+void RCPgameManager::updateJokerMovingPieces()
+{
+  for (int i = 0; i < ROWS; ++i)
+  {
+    for (int j = 0; j < COLS; ++j)
+    {
+      if (game.board[i][j].getIsJoker())
+      {
+        int pieceIndex;
+        switch (toupper(game.board[i][j].getPiece()))
+        {
+        case ROCK:
+          pieceIndex = 0;
+          break;
+        case PAPER:
+          pieceIndex = 1;
+          break;
+        case SCISSOR:
+          pieceIndex = 2;
+          break;
+        case BOMB:
+          pieceIndex = 3;
+          break;
+        }
+        isupper(game.board[i][j].getPiece()) ? game.playerOne.setNumOfPieces(pieceIndex, game.playerOne.numOfPieces[pieceIndex] + 1) : game.playerTwo.setNumOfPieces(pieceIndex, game.playerTwo.numOfPieces[pieceIndex] + 1);
+      }
+    }
+  }
 }
 
-bool RCPgameManager::checkInputFiles() {
-// Case 1: check if the file exist
-	ifstream player1File(posFileP1);
-	ifstream player2File(posFileP2);
-	ifstream player1MovesFile(moveFileP1);
-	ifstream player2MovesFile(moveFileP2);
+bool RCPgameManager::checkInputFiles()
+{
+  // Case 1: check if the file exist
+  ifstream player1File(PLAYER_ONE_POSITION_FILENAME);
+  ifstream player2File(PLAYER_TWO_POSITION_FILENAME);
+  ifstream player1MovesFile(PLAYER_ONE_MOVE_FILENAME);
+  ifstream player2MovesFile(PLAYER_TWO_MOVE_FILENAME);
+  if (!player1File.is_open())
+  {
+    cout << "Error: Player1 position file doesnt exist" << endl;
+    player1File.ifstream::close();
+    player2File.ifstream::close();
+    player1MovesFile.ifstream::close();
+    player2MovesFile.ifstream::close();
+    return false;
+  }
+  if (!player2File.is_open())
+  {
+    player1File.ifstream::close();
+    player2File.ifstream::close();
+    player1MovesFile.ifstream::close();
+    player2MovesFile.ifstream::close();
+    cout << "Error: Player2 position file doesnt exist" << endl;
+    return false;
+  }
+  // Case 2: the files do exists
+  player1File.ifstream::close();
+  player2File.ifstream::close();
+  player1MovesFile.ifstream::close();
+  player2MovesFile.ifstream::close();
 
-	if (!player1File.is_open()) {
-		cout << "Error: Player1 position file doesnt exist" << endl;
-		player1File.ifstream::close();
-		player2File.ifstream::close();
-		player1MovesFile.ifstream::close();
-		player2MovesFile.ifstream::close();
-		return false;
-	}
-	if (!player2File.is_open()) {
-		player1File.ifstream::close();
-		player2File.ifstream::close();
-		player1MovesFile.ifstream::close();
-		player2MovesFile.ifstream::close();
-		cout << "Error: Player2 position file doesnt exist" << endl;
-		return false;
-	}
-// Case 2: the files do exists
-	player1File.ifstream::close();
-	player2File.ifstream::close();
-	player1MovesFile.ifstream::close();
-	player2MovesFile.ifstream::close();
-
-	return true;
+  return true;
 }
 
-void RCPgameManager::printOutputFile(const string &outputFile) {
-	ofstream output;
-	output.open(outputFile, ios::trunc);
-//player 1 is thw winner
-	if (game.getPlayerOne().getIsWinner()) {
-		output << "Winner : 1" << endl;
-	}
-//player 2 is the winner
-	else if (game.getPlayerTwo().getIsWinner()) {
-		output << "Winner : 2" << endl;
-	}
-//tie
-	else {
-		output << "Winner : 0" << endl;
-	}
-	output << endl; // the third line must be en empty line!
-	output << game.ToString(game.getGameOverReason()) << endl;
-	printBoardToFile(output);
-	output.ofstream::close();
+void RCPgameManager::printOutputFile(const string &outputFile)
+{
+  ofstream output;
+  output.open(outputFile, ios::trunc);
+  //player 1 is thw winner
+  if (game.getPlayerOne().getIsWinner())
+  {
+    output << "Winner : 1" << endl;
+  }
+  //player 2 is the winner
+  else if (game.getPlayerTwo().getIsWinner())
+  {
+    output << "Winner : 2" << endl;
+  }
+  //tie
+  else
+  {
+    output << "Winner : 0" << endl;
+  }
+  output << endl; // the third line must be en empty line!
+  output << game.ToString(game.getGameOverReason()) << endl;
+  printBoardToFile(output);
+  output.ofstream::close();
 }
 
-bool RCPgameManager::checkBadFormat() {
-	ifstream positionFile1(posFileP1);
-	ifstream positionFile2(posFileP2);
-	bool isPlayerOneLegalFormat = checkInsertPlayerPosition(1, positionFile1);
-	bool isPlayerTwoLegalFormat = checkInsertPlayerPosition(2, positionFile2);
-	if (!isPlayerOneLegalFormat && !isPlayerTwoLegalFormat) {
-		game.setGameOver(0, WRONG_FILE_FORMAT_BOTH);
-		positionFile1.ifstream::close();
-		positionFile2.ifstream::close();
-		return true;
-	} else if (!isPlayerOneLegalFormat) {
-		game.setGameOver(2, WRONG_FILE_FORMAT_ONE);
-		positionFile1.ifstream::close();
-		positionFile2.ifstream::close();
-		return true;
-	}
+bool RCPgameManager::checkBadFormat()
+{
+  ifstream positionFile1(PLAYER_ONE_POSITION_FILENAME);
+  ifstream positionFile2(PLAYER_TWO_POSITION_FILENAME);
+  bool isPlayerOneLegalFormat = checkInsertPlayerPosition(1, positionFile1);
+  bool isPlayerTwoLegalFormat = checkInsertPlayerPosition(2, positionFile2);
+  if (!isPlayerOneLegalFormat && !isPlayerTwoLegalFormat)
+  {
+    game.setGameOver(0, WRONG_FILE_FORMAT_BOTH);
+    positionFile1.ifstream::close();
+    positionFile2.ifstream::close();
+    return true;
+  }
+  else if (!isPlayerOneLegalFormat)
+  {
+    game.setGameOver(2, WRONG_FILE_FORMAT_ONE);
+    positionFile1.ifstream::close();
+    positionFile2.ifstream::close();
+    return true;
+  }
 
-	else if (!isPlayerTwoLegalFormat) {
-		game.setGameOver(1, WRONG_FILE_FORMAT_TWO);
-		positionFile1.ifstream::close();
-		positionFile2.ifstream::close();
-		return true;
-	}
-	positionFile1.ifstream::close();
-	positionFile2.ifstream::close();
-	return false;
+  else if (!isPlayerTwoLegalFormat)
+  {
+    game.setGameOver(1, WRONG_FILE_FORMAT_TWO);
+    positionFile1.ifstream::close();
+    positionFile2.ifstream::close();
+    return true;
+  }
+  positionFile1.ifstream::close();
+  positionFile2.ifstream::close();
+  return false;
 }
 
-void RCPgameManager::printBoardToFile() {
-	ofstream output(outputFile);
+void RCPgameManager::printBoardToFile(ofstream &output)
+{
+  for (int i = 0; i < ROWS; i++)
+  {
+    for (int j = 0; j < COLS; j++)
+    {
+      if (game.board[i][j].getIsJoker())
+      {
+        if (Cell::isPlayerOnePiece(game.board[i][j]))
+        {
+          output << "J";
+        }
+        else
+        {
+          output << "j";
+        }
+      }
+      else if (game.board[i][j].getPiece() == 0)
+      {
+        output << " ";
+      }
+      else
+      {
+        output << game.board[i][j].getPiece();
+      }
+    }
+    if (i != ROWS - 1)
+    {
+      output << endl;
+    }
+  }
 
-	for (int i = 0; i < ROWS; i++) {
-		for (int j = 0; j < COLS; j++) {
-			if (game.board[i][j].getIsJoker()) {
-				if (Cell::isPlayerOnePiece(game.board[i][j])) {
-					output << "J";
-				} else {
-					output << "j";
-				}
-			} else if (game.board[i][j].getPiece() == 0) {
-				output << " ";
-			} else {
-				output << game.board[i][j].getPiece();
-			}
-		}
-		if (i != ROWS - 1) {
-			output << endl;
-		}
-	}
-
-	output.ofstream::close();
+  output.ofstream::close();
 }
 
-void RCPgameManager::startGame() {
+void RCPgameManager::startGame()
+{
+  //check if game already over due to first positions
+  if (game.checkGameOver())
+  {
+    cout << game.getGameOverReason() << endl;
+    return;
+  }
 
-//check if game already over due to first positions
-	if (game.checkGameOver()) {
-		return;
-	}
+  //start playing by move files
+  ifstream player1Move(PLAYER_ONE_MOVE_FILENAME);
+  ifstream player2Move(PLAYER_TWO_MOVE_FILENAME);
 
-//start playing by move files
-	ifstream player1Move(moveFileP1);
-	ifstream player2Move(moveFileP2);
-
-//shouldnt happen - checked before game starts
-	/*if (!player1Move.is_open()) {
-	 if (!player2Move.is_open())
-	 game.setGameOver(0, WRONG_FILE_FORMAT_BOTH);
-	 }*/
-
-	string line1;
-	string line2;
-
-	while (getline(player1Move, line1)) {
-		if (!checkEmptyLine(0, line1) && makeMove(line1, true))
-			break;
-		if (getline(player2Move, line2)) {
-			if (!checkEmptyLine(0, line2) && makeMove(line2, false))
-				break;
-		} else
-			break;
-	}
-
-//one move file is over
-	if (player1Move.eof()) {
-		while (getline(player2Move, line2)) {
-			if (!checkEmptyLine(0, line2) && makeMove(line2, false))
-				break;
-		}
-	} else if (player2Move.eof()) {
-		while (getline(player1Move, line1)) {
-			if (!checkEmptyLine(0, line1) && makeMove(line1, true))
-				break;
-		}
-	}
-
-	player1Move.close();
-	player2Move.close();
-	return;
+  string line1;
+  string line2;
+  while (getline(player1Move, line1))
+  {
+    if (!checkEmptyLine(0, line1) && makeMove(line1, true))
+      break;
+    if (getline(player2Move, line2))
+    {
+      if (!checkEmptyLine(0, line2) && makeMove(line2, false))
+        break;
+    }
+    else
+      break;
+  }
+  //one move file is over
+  if (player1Move.eof())
+  {
+    while (getline(player2Move, line2))
+    {
+      if (!checkEmptyLine(0, line2) && makeMove(line2, false))
+        break;
+    }
+  }
+  else if (player2Move.eof())
+  {
+    while (getline(player1Move, line1))
+    {
+      if (!checkEmptyLine(0, line1) && makeMove(line1, true))
+        break;
+    }
+  }
+  player1Move.close();
+  player2Move.close();
+  return;
 }
 
 bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
-		bool isPlayer1) {
+                                 bool isPlayer1)
+{
 
-	if ((from_x < 1 || from_x > ROWS - 1) || (to_x < 1 || to_x > ROWS - 1)
-			|| (from_y < 1 || from_y > COLS - 1)
-			|| (to_y < 1 || to_y > COLS - 1)) {
-		cout << "Error: illegal location on board" << endl;
-		return false;
-	}
+  if ((from_x < 1 || from_x > ROWS - 1) || (to_x < 1 || to_x > ROWS - 1) || (from_y < 1 || from_y > COLS - 1) || (to_y < 1 || to_y > COLS - 1))
+  {
+    cout << "Error: illegal location on board" << endl;
+    return false;
+  }
 
-	if (from_x == to_x && from_y == to_y) {
-		cout << "Error: user MUST move one piece" << endl;
-		return false;
-	}
+  if (from_x == to_x && from_y == to_y)
+  {
+    cout << "Error: user MUST move one piece" << endl;
+    return false;
+  }
 
-	if (game.board[to_x][to_y].getPiece() == 0) {
-		cout << "Error: there is no piece in this position" << endl;
-		return false;
-	} else if ((isPlayer1 && islower(game.board[to_x][to_y].getPiece()))
-			|| (!isPlayer1 && isupper(game.board[to_x][to_y].getPiece()))) {
-		cout << "Error: trying to move the opponent piece" << endl;
-		return false;
-	}
+  if (game.board[to_x][to_y].getPiece() == 0)
+  {
+    cout << "Error: there is no piece in this position" << endl;
+    return false;
+  }
+  else if ((isPlayer1 && islower(game.board[to_x][to_y].getPiece() != 0)) || (!isPlayer1 && isupper(game.board[to_x][to_y].getPiece())))
+  {
+    cout << "Error: trying to move the opponent piece" << endl;
+    return false;
+  }
 
-	if (game.board[from_x][from_y].getPiece() == BOMB
-			|| game.board[from_x][from_y].getPiece() == FLAG) {
-		cout << "Error: flag/bomb piece is not allowed to move" << endl;
-		return false;
-	}
+  if (game.board[from_x][from_y].getPiece() == BOMB || game.board[from_x][from_y].getPiece() == FLAG)
+  {
+    cout << "Error: flag/bomb piece is not allowed to move" << endl;
+    return false;
+  }
 
-	if (to_x == from_x + 1 || to_x == from_x - 1) {
-		if (to_y != from_y) {
-			cout << "Error: illegal move " << endl;
-			return false;
-		}
-	} else if (to_y == from_y + 1 || to_y == from_y - 1) {
-		if (to_x != from_x) {
-			cout << "Error: illegal move" << endl;
-			return false;
-		}
-	} else {
-		cout << "Error: illegal move" << endl;
-		return false;
-	}
+  if (to_x == from_x + 1 || to_x == from_x - 1)
+  {
+    if (to_y != from_y)
+    {
+      cout << "Error: illegal move " << endl;
+      return false;
+    }
+  }
+  else if (to_y == from_y + 1 || to_y == from_y - 1)
+  {
+    if (to_x != from_x)
+    {
+      cout << "Error: illegal move" << endl;
+      return false;
+    }
+  }
+  else
+  {
+    cout << "Error: illegal move" << endl;
+    return false;
+  }
 
-	if (game.board[to_x][to_y].getPiece() != 0) {
-		if (isPlayer1) {
-			if (isupper(game.board[to_x][to_y].getPiece())) {
-				cout
-						<< "Error: you are trying to move to a cell taken by your own piece"
-						<< endl;
-				return false;
-			}
-		} else if (!isPlayer1) {
-			if (islower(game.board[to_x][to_y].getPiece())) {
-				cout
-						<< "Error: you are trying to move to a cell taken by your own piece"
-						<< endl;
-				return false;
-			}
-		}
-	}
+  if (game.board[to_x][to_y].getPiece() != 0)
+  {
+    if (isPlayer1)
+    {
+      if (isupper(game.board[to_x][to_y].getPiece()))
+      {
+        cout
+            << "Error: you are trying to move to a cell taken by your own piece"
+            << endl;
+        return false;
+      }
+    }
+    else if (!isPlayer1)
+    {
+      if (islower(game.board[to_x][to_y].getPiece()))
+      {
+        cout
+            << "Error: you are trying to move to a cell taken by your own piece"
+            << endl;
+        return false;
+      }
+    }
+  }
 
-	return true;
+  return true;
 }
 
-bool RCPgameManager::makeMove(const string &s, bool isPlayer1) {
-	bool isGameOver = false;
+bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
+{
+  bool isGameOver = false;
 
-	int from_x;
-	int from_y;
-	int to_x = 0;
-	int to_y = 0;
-	bool isJokerChanged = false;
-	int x_joker = 0;
-	int y_joker = 0;
-	char new_rep = '0';
-	int nextIndex = getPositionFromLine(0, s, from_x, from_y) + 1;
+  int from_x;
+  int from_y;
+  int to_x = 0;
+  int to_y = 0;
+  bool isJokerChanged = false;
+  int x_joker = 0;
+  int y_joker = 0;
+  char new_rep = '0';
+  int nextIndex = getPositionFromLine(0, s, from_x, from_y) + 1;
 
-	nextIndex = getPositionFromLine(nextIndex, s, from_x, from_y) + 1;
+  nextIndex = getPositionFromLine(nextIndex, s, to_x, to_y) + 1;
+  if (!isLegalMove(from_x, from_y, to_x, to_y, isPlayer1))
+  {
+    isGameOver = true;
+    if (isPlayer1)
+      game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
+    else
+      game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+    return isGameOver;
+  }
 
-	if (!isLegalMove(from_x, from_y, to_x, to_y, isPlayer1)) {
-		isGameOver = true;
-		if (isPlayer1)
-			game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-		else
-			game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
-		return isGameOver;
-	}
+  //TODO: from what i understood joker change is optional..
+  //no joker change
+  if (!checkEmptyLine(nextIndex, s))
+  {
+    isJokerChanged = true;
 
-//TODO: from what i understood joker change is optional..
-//no joker change
-	if (!checkEmptyLine(nextIndex, s)) {
-		isJokerChanged = true;
+    //skip all spaces until next char
+    nextIndex = 1 + getPieceFromLine(nextIndex, s);
+    if (s[nextIndex - 1] != JOKER)
+    {
+      cout << "Error: Bad format - Joker information not placed correctly"
+           << endl;
+      isGameOver = true;
+      if (isPlayer1)
+        game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
+      else
+        game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+      return isGameOver;
+    }
 
-		//skip all spaces until next char
-		nextIndex = 1 + getPieceFromLine(nextIndex, s);
-		if (s[nextIndex - 1] != JOKER) {
-			cout << "Error: Bad format - Joker information not placed correctly"
-					<< endl;
-			isGameOver = true;
-			if (isPlayer1)
-				game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-			else
-				game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
-			return isGameOver;
-		}
+    nextIndex = 1 + getPieceFromLine(nextIndex, s);
+    if (s[nextIndex - 1] != ':')
+    {
+      cout << "Error: Bad format - Joker information not placed correctly"
+           << endl;
+      isGameOver = true;
+      if (isPlayer1)
+        game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
+      else
+        game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+      return isGameOver;
+    }
 
-		nextIndex = 1 + getPieceFromLine(nextIndex, s);
-		if (s[nextIndex - 1] != ':') {
-			cout << "Error: Bad format - Joker information not placed correctly"
-					<< endl;
-			isGameOver = true;
-			if (isPlayer1)
-				game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-			else
-				game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
-			return isGameOver;
-		}
+    nextIndex = getPositionFromLine(nextIndex, s, x_joker, y_joker) + 1;
 
-		nextIndex = getPositionFromLine(nextIndex, s, x_joker, y_joker) + 1;
+    nextIndex = 1 + getPieceFromLine(nextIndex, s);
+    new_rep = s[nextIndex - 1];
+    if (!checkEmptyLine(nextIndex, s))
+    {
+      cout << "Error: Bad format - rest of line is not empty" << endl;
+      isGameOver = true;
+      if (isPlayer1)
+        game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
+      else
+        game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+      return isGameOver;
+    }
 
-		nextIndex = 1 + getPieceFromLine(nextIndex, s);
-		new_rep = s[nextIndex - 1];
-		if (!checkEmptyLine(nextIndex, s)) {
-			cout << "Error: Bad format - rest of line is not empty" << endl;
-			isGameOver = true;
-			if (isPlayer1)
-				game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-			else
-				game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
-			return isGameOver;
-		}
+    if (!game.board[x_joker][y_joker].getIsJoker())
+    { //if the original peice is not a joker
+      cout << "Error: Piece specified is not joker" << endl;
+      isGameOver = true;
+      if (isPlayer1)
+        game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
+      else
+        game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+      return isGameOver;
+    }
 
-		if (!game.board[x_joker][y_joker].getIsJoker()) { //if the original peice is not a joker
-			cout << "Error: Piece specified is not joker" << endl;
-			isGameOver = true;
-			if (isPlayer1)
-				game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-			else
-				game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
-			return isGameOver;
-		}
+    if (new_rep != ROCK && new_rep != PAPER && new_rep != SCISSOR && new_rep != BOMB)
+    {
+      cout << "Error: illegal NEW_REP " << endl;
+      isGameOver = true;
+      if (isPlayer1)
+        game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
+      else
+        game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+      return isGameOver;
+    }
+  }
 
-		if (new_rep != ROCK && new_rep != PAPER && new_rep != SCISSOR
-				&& new_rep != BOMB) {
-			cout << "Error: illegal NEW_REP " << endl;
-			isGameOver = true;
-			if (isPlayer1)
-				game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-			else
-				game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
-			return isGameOver;
-		}
+  //i moved the check if move is legal to be before the joker check
 
-	}
+  //do move
+  if (game.board[to_x][to_y].getPiece() == 0)
+  {
+    Cell::updateCell(game.board[to_x][to_y],
+                     game.board[from_x][from_y].getPiece(),
+                     game.board[from_x][from_y].getIsJoker());
+    Cell::updateCell(game.board[from_x][from_y], 0, false);
 
-//i moved the check if move is legal to be before the joker check
+    isGameOver = game.checkGameOver();
+  }
+  else
+  {
+    isGameOver = game.fight(isPlayer1, to_x, to_y,
+                            game.board[from_x][from_y].getPiece(),
+                            game.board[from_x][from_y].getIsJoker());
+  }
 
-//do move
-	if (game.board[to_x][to_y].getPiece() == 0) {
-		Cell::updateCell(game.board[to_x][to_y],
-				game.board[from_x][from_y].getPiece(),
-				game.board[from_x][from_y].getIsJoker());
-		Cell::updateCell(game.board[from_x][from_y], 0, false);
-		isGameOver = game.checkGameOver();
-	} else {
-		isGameOver = game.fight(to_x, to_y,
-				game.board[from_x][from_y].getPiece(),
-				game.board[from_x][from_y].getIsJoker());
-	}
-
-//change joker if needed
-	if (isJokerChanged) {
-		Cell::updateCell(game.board[x_joker][y_joker], new_rep, true);
-	}
-
-	return isGameOver;
+  //change joker if needed
+  if (isJokerChanged)
+  {
+    updateJokerChange(game.board[x_joker][y_joker].getPiece(), new_rep, isPlayer1);
+    Cell::updateCell(game.board[x_joker][y_joker], new_rep, true);
+  }
+  return isGameOver;
+}
+void RCPgameManager::updateJokerChange(char prevJokerRep, char newRep, bool isPlayerOne)
+{
+  //remove one piece from number of prev piece
+  switch (prevJokerRep)
+  {
+  case ROCK:
+    isPlayerOne ? game.playerOne.setNumOfPieces(0, game.playerOne.numOfPieces[0] - 1) : game.playerTwo.setNumOfPieces(0, game.playerTwo.numOfPieces[0] - 1);
+    break;
+  case PAPER:
+    isPlayerOne ? game.playerOne.setNumOfPieces(1, game.playerOne.numOfPieces[1] - 1) : game.playerTwo.setNumOfPieces(1, game.playerTwo.numOfPieces[1] - 1);
+    break;
+  case SCISSOR:
+    isPlayerOne ? game.playerOne.setNumOfPieces(2, game.playerOne.numOfPieces[2] - 1) : game.playerTwo.setNumOfPieces(2, game.playerTwo.numOfPieces[2] - 1);
+    break;
+  case BOMB:
+    isPlayerOne ? game.playerOne.setNumOfPieces(3, game.playerOne.numOfPieces[3] - 1) : game.playerTwo.setNumOfPieces(3, game.playerTwo.numOfPieces[3] - 1);
+    break;
+    break;
+  }
+  //add new piece to number of curr joker piece
+  switch (newRep)
+  {
+  case ROCK:
+    isPlayerOne ? game.playerOne.setNumOfPieces(0, game.playerOne.numOfPieces[0] + 1) : game.playerTwo.setNumOfPieces(0, game.playerTwo.numOfPieces[0] + 1);
+    ;
+    break;
+  case PAPER:
+    isPlayerOne ? game.playerOne.setNumOfPieces(1, game.playerOne.numOfPieces[1] + 1) : game.playerTwo.setNumOfPieces(1, game.playerTwo.numOfPieces[1] + 1);
+    break;
+  case SCISSOR:
+    isPlayerOne ? game.playerOne.setNumOfPieces(2, game.playerOne.numOfPieces[2] + 1) : game.playerTwo.setNumOfPieces(2, game.playerTwo.numOfPieces[2] + 1);
+    break;
+  case BOMB:
+    isPlayerOne ? game.playerOne.setNumOfPieces(3, game.playerOne.numOfPieces[3] + 1) : game.playerTwo.setNumOfPieces(3, game.playerTwo.numOfPieces[3] + 1);
+    break;
+    break;
+  }
 }

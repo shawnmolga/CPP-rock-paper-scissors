@@ -36,6 +36,8 @@ public:
 	RCPgame();
 	~RCPgame();
 	Cell **board;
+	Player playerOne;
+	Player playerTwo;
 	//RCPgame(const RCPgame &game) = delete;
 	RCPgame &operator=(RCPgame &game) = delete;
 
@@ -43,20 +45,16 @@ public:
 	Player getPlayerTwo() const;
 	bool getIsGameOver() const;
 	GAME_OVER_TYPE getGameOverReason() const;
-	bool fight(int row, int col, char piece, bool isJoker);
+	bool fight(bool isPlayerOneTurn,int row, int col, char piece, bool isJoker);
 	bool checkGameOver();
 	void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
 	string ToString(GAME_OVER_TYPE typeGame);
-	Player getPlayer1();
-	Player getPlayer2();
 
 
 private:
 	//TODO : ask what we should do in case of wrong output file.
 	//enum GAME_OVER_TYPE {ALL_FLAGS_CAPTURED,ALL_PIECES_EATEN,WRONG_FILE_FORMAT,TIE};
 	bool isGameOver;
-	Player playerOne;
-	Player playerTwo;
 	GAME_OVER_TYPE gameOverReason;
 };
 

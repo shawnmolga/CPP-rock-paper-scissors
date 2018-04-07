@@ -2,39 +2,56 @@
 
 Player::Player(int num) : playerNum(num), score(0), isWinner(false)
 {
-    numOfPieces = new int(6);
-    numOfPieces={0}; //does it work?
+	numOfPieces = new int[6];
+	//numOfPieces={0}; //does it work?
+	//erased- noy added
+	for (int i = 0; i < 6; i++)
+	{
+		numOfPieces[i] = 0;
+	}
+	//erased- noy added
 	isPlayerTurn = (num == 1 ? true : false);
 }
 bool Player::getIsWinner() const
 {
-    return isWinner;
+	return isWinner;
 }
 
-void Player::setIsWinner(bool win){
+void Player::setIsWinner(bool win)
+{
 	isWinner = win;
 }
 
-bool Player::isLeftMovingPieces()const
+bool Player::isLeftMovingPieces() const
 {
-	for(int i=0;i<6;++i){
-		if (i==3 || i==5)
+	for (int i = 0; i < 6; ++i)
+	{
+		if (i == 3 || i == 5)
 			continue;
-		if(numOfPieces[i]!=0){
+		if (numOfPieces[i] != 0)
+		{
 			return false;
 		}
 	}
 	return true;
 }
 
+void Player::setNumOfPieces(int index, int value)
+{
+	if (index < 6)
+	{
+		numOfPieces[index] = value;
+	}
+}
+
 int Player::getPlayerNum() const
 {
-    return playerNum;
+	return playerNum;
 }
 
 int Player::getScore() const
 {
-    return score;
+	return score;
 }
 
 bool Player::getIsPlayerTurn() const
@@ -43,16 +60,15 @@ bool Player::getIsPlayerTurn() const
 }
 void Player::setIsPlayerTurn(bool turn)
 {
-	isPlayerTurn=turn;
+	isPlayerTurn = turn;
 }
 
 Player::~Player()
 {
 	delete[] numOfPieces;
-	return;
 }
 
 void Player::setScore(int updateScore)
 {
-    score = updateScore;
+	score = updateScore;
 }

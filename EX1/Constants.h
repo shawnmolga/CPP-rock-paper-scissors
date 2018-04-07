@@ -25,3 +25,8 @@ using namespace std;
 #define PLAYER_ONE 1
 #define PLAYER_TWO 2
 
+#define PLAYER_ONE_POSITION_FILENAME "player1.rps_board"
+#define PLAYER_TWO_POSITION_FILENAME "player2.rps_board"
+#define PLAYER_ONE_MOVE_FILENAME "player1.rps_moves"
+#define PLAYER_TWO_MOVE_FILENAME "player2.rps_moves"
+#define OUTPUT_FILENAME "rps.output"
