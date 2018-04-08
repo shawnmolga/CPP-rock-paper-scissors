@@ -43,6 +43,8 @@ class RCPgameManager{
 		bool makeMove(const string &s, bool isPlayer1);
 		bool isAllGameFilesExists();
 		void updateJokerChange(char prevJokerRep, char newRep, bool isPlayerOne);
+		void printBoardToCout();//todo  delete this
+
 };
 
 #endif /* EX1_RCPGAMEMANAGER_H_ */

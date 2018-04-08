@@ -10,7 +10,7 @@
 RCPgame::RCPgame() :playerOne(Player(1)), playerTwo(Player(2)), isGameOver(false)
 {
 	board = new Cell *[ROWS];
-	for (int i = 0; i < ROWS; ++i)
+	for (int i = 1; i <= ROWS; ++i)
 	{
 		board[i] = new Cell[COLS];
 	}
@@ -18,13 +18,16 @@ RCPgame::RCPgame() :playerOne(Player(1)), playerTwo(Player(2)), isGameOver(false
 
 RCPgame::~RCPgame()
 {
-	for (int i = 0; i < ROWS; ++i)
+	cout << "in delete game" << endl;
+	for (int i = 1; i <= ROWS; ++i)
 	{
 		delete[] board[i];
 	}
 	delete[] board;
-	delete &playerOne;
-	delete &playerTwo;
+
+	//shawn removed - playerOne playerTwo were not created with "new" therefore on stack
+	//delete &playerOne;
+	//delete &playerTwo;
 }
 
 Player RCPgame::getPlayerOne() const{
@@ -53,12 +56,20 @@ string RCPgame::ToString(GAME_OVER_TYPE typeGame)
 		return "A tie - both Moves input files done without a winner";
 	case TIE_ALL_FLAGS_EATEN:
 		return "A tie - all flags are eaten by both players in the position files";
+	case WRONG_MOVE_FILE_FORMAT_TWO://added by shawn TODO
+		return "Bad Move File input file for player 2 - line ";
+	case WRONG_MOVE_FILE_FORMAT_ONE://added by shawn TODO
+		return "Bad Move File input file for player 1 - line ";
 	default:
 		return "[Unknown GAME_OVER_TYPE]";
 	}
 }
+
+
+
 bool RCPgame::fight(bool isPlayerOneTurn,int row, int col, char currPiece, bool isCurrPieceJoker)
 {
+
 	//TODO: ask if we can position flag on flag and who is loosing
 	Player *currPlayer = &playerOne;
 	Player *nextPlayer = &playerTwo;
@@ -67,8 +78,10 @@ bool RCPgame::fight(bool isPlayerOneTurn,int row, int col, char currPiece, bool 
 		currPlayer = &playerTwo;
 		nextPlayer = &playerOne;
 	}
+
 	char currPlayerPiece = toupper(currPiece);
 	char nextPlayerPiece = toupper(board[row][col].getPiece());
+
 	//Case 1: 2 players in the same type.
 	if (nextPlayerPiece == currPlayerPiece)
 	{
@@ -135,7 +148,7 @@ bool RCPgame::fight(bool isPlayerOneTurn,int row, int col, char currPiece, bool 
 		}
 	}
 
-	//case 4: player 1 is bomb and player 2 another piece
+	//case 4: nextPlayer is bomb and player 2 another piece
 	else if (nextPlayerPiece == BOMB)
 	{
 		cout<<"case4"<<endl;
@@ -158,6 +171,7 @@ bool RCPgame::fight(bool isPlayerOneTurn,int row, int col, char currPiece, bool 
 				break;
 			}
 		}
+		
 	}
 
 	//case 5: player 2 is bomb and player 1 another piece
@@ -214,7 +228,7 @@ bool RCPgame::fight(bool isPlayerOneTurn,int row, int col, char currPiece, bool 
 			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
 		}
 	}
-	//case 7: player 1 is ROCK and player 2 another piece
+	//case 7: nextPlayer is ROCK and currPlayer another piece
 	else if (nextPlayerPiece == ROCK)
 	{
 		cout<<"case7"<<endl;
@@ -263,6 +277,8 @@ bool RCPgame::fight(bool isPlayerOneTurn,int row, int col, char currPiece, bool 
 			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
 		}
 	}
+
+
 	return checkGameOver();
 }
 

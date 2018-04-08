@@ -12,6 +12,7 @@ Player::Player(int num) : playerNum(num), score(0), isWinner(false)
 	//erased- noy added
 	isPlayerTurn = (num == 1 ? true : false);
 }
+
 bool Player::getIsWinner() const
 {
 	return isWinner;
@@ -30,10 +31,10 @@ bool Player::isLeftMovingPieces() const
 			continue;
 		if (numOfPieces[i] != 0)
 		{
-			return false;
+			return true;
 		}
 	}
-	return true;
+	return false;
 }
 
 void Player::setNumOfPieces(int index, int value)
