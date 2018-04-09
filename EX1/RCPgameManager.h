@@ -42,6 +42,7 @@ class RCPgameManager{
 		int getPositionFromLine(int start, const string &line, int &row, int &col);
 		bool makeMove(const string &s, bool isPlayer1);
 		bool isAllGameFilesExists();
+		bool checkIfDigit(char c);
 		void updateJokerChange(char prevJokerRep, char newRep, bool isPlayerOne);
 		void printBoardToCout();//todo  delete this
 
