@@ -25,7 +25,7 @@ class RCPgameManager{
 		~RCPgameManager();
 		RCPgameManager(const RCPgameManager& manager) = delete;
 		RCPgameManager& operator=(const RCPgameManager& manager) = delete;
-		RCPgame game;
+		RCPgame * game;
 		bool checkInsertPlayerPosition(int playerNum, ifstream & playerPositionFile);
 		bool checkInputFiles();
 		void printOutputFile(const string &outputFile);

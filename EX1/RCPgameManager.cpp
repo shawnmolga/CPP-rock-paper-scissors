@@ -7,7 +7,7 @@
 #include "RCPgameManager.h"
 
 RCPgameManager::RCPgameManager() :
-		game(RCPgame()) {
+		game (new RCPgame()) {
 }
 
 RCPgameManager::~RCPgameManager() {
