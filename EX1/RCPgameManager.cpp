@@ -11,7 +11,7 @@ RCPgameManager::RCPgameManager() :
 }
 
 RCPgameManager::~RCPgameManager() {
-	delete &game;
+	delete game;
 }
 int RCPgameManager::getPieceFromLine(int start, const string &line) {
 	int end = start;
