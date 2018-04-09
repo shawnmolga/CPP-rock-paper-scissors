@@ -827,11 +827,11 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 		isGameOver = true;
 		if (isPlayer1)
 		{
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+			game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 		}
 		else
 		{
-			game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
+			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 		}
 		return isGameOver;
 	}
@@ -842,11 +842,11 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 		isGameOver = true;
 		if (isPlayer1)
 		{
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+			game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 		}
 		else
 		{
-			game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
+			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 		}
 		return isGameOver;
 	}
@@ -864,11 +864,11 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 			isGameOver = true;
 			if (isPlayer1)
 			{
-				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			}
 			else
 			{
-				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			}
 			return isGameOver;
 		}
@@ -901,11 +901,11 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 			isGameOver = true;
 			if (isPlayer1)
 			{
-				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			}
 			else
 			{
-				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			}
 			return isGameOver;
 		}
@@ -938,11 +938,11 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 			isGameOver = true;
 			if (isPlayer1)
 			{
-				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			}
 			else
 			{
-				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			}
 			return isGameOver;
 		}
@@ -952,11 +952,11 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 			isGameOver = true;
 			if (isPlayer1)
 			{
-				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			}
 			else
 			{
-				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			}
 			return isGameOver;
 		}
