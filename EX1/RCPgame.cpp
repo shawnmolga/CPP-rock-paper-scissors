@@ -277,9 +277,7 @@ bool RCPgame::fight(bool isPlayerOneTurn,int row, int col, char currPiece, bool 
 			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
 		}
 	}
-
-
-	return checkGameOver();
+	return checkGameOver(isPlayerOneTurn);
 }
 
 void RCPgame::setGameOver(int winnerNumber, GAME_OVER_TYPE type)
@@ -306,51 +304,67 @@ void RCPgame::setGameOver(int winnerNumber, GAME_OVER_TYPE type)
 	return;
 }
 
-bool RCPgame::checkGameOver()
+bool RCPgame::checkGameOver(bool isPlayerOneTurn)
 {
-	if (playerOne.numOfPieces[5] == 0 && playerTwo.numOfPieces[5] == 0)
+	Player *currPlayer = &playerOne;
+	Player *nextPlayer = &playerTwo;
+	if(!isPlayerOneTurn){
+		currPlayer=&playerTwo;
+		nextPlayer=&playerOne;
+	}
+	if (currPlayer->numOfPieces[5] == 0 && nextPlayer->numOfPieces[5] == 0)
 	{
 		cout<<"1?"<<endl;
 		isGameOver = true;
+		currPlayer->setIsWinner(false);
+		nextPlayer->setIsWinner(false);
 		gameOverReason = TIE_ALL_FLAGS_EATEN;
 		return true;
 	}
 	//check if all of player one's flags are taken
-	if (playerOne.numOfPieces[5] == 0)
+	if (currPlayer->numOfPieces[5] == 0)
 	{
 		cout<<"2?"<<endl;
-		playerTwo.setIsWinner(true);
-		playerTwo.setScore(playerTwo.getScore() + 1);
+		nextPlayer->setIsWinner(true);
+		currPlayer->setIsWinner(false);
+		nextPlayer->setScore(nextPlayer->getScore() + 1);
 		isGameOver = true;
 		gameOverReason = ALL_FLAGS_CAPTURED;
-	}
-	//check if all of player one's moving pieces are eaten
-	if (!playerOne.isLeftMovingPieces())
-	{
-		cout<<"3?"<<endl;
-		playerTwo.setIsWinner(true);
-		playerTwo.setScore(playerTwo.getScore() + 1);
-		isGameOver = true;
-		gameOverReason = ALL_PIECES_EATEN;
+		return true;
 	}
 	//check if all of player two's flags are taken
-	if (playerTwo.numOfPieces[5] == 0)
+	if (nextPlayer->numOfPieces[5] == 0)
 	{
 		cout<<"4?"<<endl;
-		playerOne.setIsWinner(true);
-		playerOne.setScore(playerOne.getScore() + 1);
+		currPlayer->setIsWinner(true);
+		nextPlayer->setIsWinner(false);
+		currPlayer->setScore(currPlayer->getScore() + 1);
 		isGameOver = true;
 		gameOverReason = ALL_FLAGS_CAPTURED;
+		return true;
+	}
+	//check if all of player one's moving pieces are eaten
+	if (!currPlayer->isLeftMovingPieces())
+	{
+		cout<<"3?"<<endl;
+		nextPlayer->setIsWinner(true);
+		currPlayer->setIsWinner(false);
+		nextPlayer->setScore(nextPlayer->getScore() + 1);
+		isGameOver = true;
+		gameOverReason = ALL_PIECES_EATEN;
+		return true;
 	}
 
 	//check if all of player two's moving pieces are eaten
-	if (!playerTwo.isLeftMovingPieces())
+	if (!nextPlayer->isLeftMovingPieces())
 	{
 		cout<<"5?"<<endl;
-		playerOne.setIsWinner(true);
-		playerOne.setScore(playerOne.getScore() + 1);
+		currPlayer->setIsWinner(true);
+		nextPlayer->setIsWinner(false);
+		currPlayer->setScore(currPlayer->getScore() + 1);
 		isGameOver = true;
 		gameOverReason = ALL_PIECES_EATEN;
+		return true;
 	}
 	return false;
 }

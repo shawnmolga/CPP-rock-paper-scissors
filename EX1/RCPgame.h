@@ -46,7 +46,7 @@ public:
 	bool getIsGameOver() const;
 	GAME_OVER_TYPE getGameOverReason() const;
 	bool fight(bool isPlayerOneTurn,int row, int col, char piece, bool isJoker);
-	bool checkGameOver();
+	bool checkGameOver(bool isPlayerOneTurn);
 	void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
 	string ToString(GAME_OVER_TYPE typeGame);
 

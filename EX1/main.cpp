@@ -16,7 +16,6 @@ int main(int argc, char*[]) {
 	}
 	// string PositionFileP1, string PositionFileP2, string moveFilePlayer1, string moveFilePlayer2,string gameOutputFile
 	RCPgameManager * mgmtGame = new RCPgameManager();
-
 	//check if all files exist and named correctly
 	if (!mgmtGame->isAllGameFilesExists()) {
 		delete (mgmtGame);

@@ -64,10 +64,8 @@ bool RCPgameManager::isAllGameFilesExists() {
 		std::cout
 				<< "Unable to open temp dirList file in working directory, Exit from Game."
 				<< std::endl;
-		closedir(dir);
 		return false;
 	}
-	closedir(dir);
 	return false;
 }
 
@@ -355,18 +353,18 @@ void RCPgameManager::printOutputFile(const string &outputFile) {
 	output.open(outputFile, ios::trunc);
 	//player 1 is thw winner
 	if (game.getPlayerOne().getIsWinner()) {
-		output << "Winner : 1" << endl;
+		output << "Winner : 1"<<endl;
 	}
 	//player 2 is the winner
 	else if (game.getPlayerTwo().getIsWinner()) {
-		output << "Winner : 2" << endl;
+		output << "Winner : 2"<<endl;
 	}
 	//tie
 	else {
-		output << "Winner : 0" << endl;
+		output << "Winner : 0"<<endl;
 	}
-	output << endl; // the third line must be en empty line!
 	output << game.ToString(game.getGameOverReason()) << endl;
+	output << endl; // the third line must be en empty line!
 	printBoardToFile(output);
 	output.close();
 	return;
@@ -391,6 +389,7 @@ bool RCPgameManager::checkBadFormat() {
 	}
 
 	else if (!isPlayerTwoLegalFormat) {
+		cout << "we think its wrong format" << endl;
 		game.setGameOver(1, WRONG_FILE_FORMAT_TWO);
 		positionFile1.ifstream::close();
 		positionFile2.ifstream::close();
@@ -451,8 +450,8 @@ void RCPgameManager::printBoardToCout() //todo  delete this
 void RCPgameManager::startGame() {
 	//check if game already over due to first positions
 	bool isGameOver = false;
-
-	if (game.checkGameOver()) {
+	bool isPlayerOneTurn = true;
+	if (game.checkGameOver(true)) {
 		cout << game.getGameOverReason() << endl;
 		return;
 	}
@@ -466,6 +465,7 @@ void RCPgameManager::startGame() {
 	printBoardToCout(); //todo delete this
 	while (getline(player1Move, line1)) {
 		if (!checkEmptyLine(0, line1)) {
+			isPlayerOneTurn = true;
 			isGameOver = makeMove(line1, true);
 			if (isGameOver)
 				break;
@@ -474,6 +474,7 @@ void RCPgameManager::startGame() {
 		printBoardToCout(); // todo delete this
 		if (getline(player2Move, line2)) {
 			if (!checkEmptyLine(0, line2)) {
+				isPlayerOneTurn = false;
 				isGameOver = makeMove(line2, false);
 				if (isGameOver)
 					break;
@@ -490,6 +491,7 @@ void RCPgameManager::startGame() {
 			cout << "player 1 move file ended" << endl; //todo deletee this
 			while (getline(player2Move, line2)) {
 				if (!checkEmptyLine(0, line2)) {
+					isPlayerOneTurn = false;
 					isGameOver = makeMove(line2, false);
 					if (isGameOver)
 						break;
@@ -499,6 +501,7 @@ void RCPgameManager::startGame() {
 			cout << "player 2 move file ended" << endl; //todo deletee this
 			while (getline(player1Move, line1)) {
 				if (!checkEmptyLine(0, line1)) {
+					isPlayerOneTurn = true;
 					isGameOver = makeMove(line1, true);
 					if (isGameOver)
 						break;
@@ -509,10 +512,9 @@ void RCPgameManager::startGame() {
 
 	player1Move.close();
 	player2Move.close();
-	if (!isGameOver && !game.checkGameOver()) {
+	if (!game.getIsGameOver() && !game.checkGameOver(isPlayerOneTurn)) {
 		game.setGameOver(0, TIE_NO_WINNER);
 	}
-
 	return;
 }
 
@@ -600,6 +602,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1) {
 	if (!isLegalMove(from_x, from_y, to_x, to_y, isPlayer1)) {
 		isGameOver = true;
 		if (isPlayer1) {
+			cout << "we think its wrong format" << endl;
 			game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
 		} else {
 			game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
@@ -621,6 +624,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1) {
 			if (isPlayer1)
 				game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			else
+			cout << "we think its wrong format" << endl;
 				game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
@@ -633,6 +637,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1) {
 			if (isPlayer1)
 				game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			else
+			cout << "we think its wrong format" << endl;
 				game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
@@ -647,6 +652,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1) {
 			if (isPlayer1)
 				game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			else
+			cout << "we think its wrong format" << endl;
 				game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
@@ -657,6 +663,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1) {
 			if (isPlayer1)
 				game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			else
+			cout << "we think its wrong format" << endl;
 				game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
@@ -668,6 +675,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1) {
 			if (isPlayer1)
 				game.setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			else
+			cout << "we think its wrong format" << endl;
 				game.setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
@@ -681,7 +689,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1) {
 				game.board[from_x][from_y].getPiece(),
 				game.board[from_x][from_y].getIsJoker());
 		Cell::cleanCell(game.board[from_x][from_y]);
-		isGameOver = game.checkGameOver();
+		isGameOver = game.checkGameOver(isPlayer1);
 	} else {
 		isGameOver = game.fight(isPlayer1, to_x, to_y,
 				game.board[from_x][from_y].getPiece(),
