@@ -508,6 +508,7 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	if (isBeforeMove && !currPlayer->isLeftMovingPieces())
 	{
 		cout<<"3?"<<endl;
+		cout<<isBeforeMove<<endl;
 		nextPlayer->setIsWinner(true);
 		currPlayer->setIsWinner(false);
 		nextPlayer->setScore(nextPlayer->getScore() + 1);

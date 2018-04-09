@@ -709,6 +709,7 @@ void RCPgameManager::startGame()
 
 	player1Move.close();
 	player2Move.close();
+	isPlayerOneTurn = !isPlayerOneTurn;
 	cout << game->getIsGameOver() << endl;
 	cout << game->checkGameOver(isAboutToMove, isPlayerOneTurn) << endl;
 	if (!isGameOver && !game->getIsGameOver() && !game->checkGameOver(isAboutToMove, isPlayerOneTurn))
