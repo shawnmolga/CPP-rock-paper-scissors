@@ -512,7 +512,11 @@ void RCPgameManager::startGame() {
 
 	player1Move.close();
 	player2Move.close();
+	cout<<"*********************"<<endl;
+	cout<<game->getIsGameOver() <<endl;
+	cout<<game->checkGameOver(isPlayerOneTurn)<<endl;
 	if (!game->getIsGameOver() && !game->checkGameOver(isPlayerOneTurn)) {
+		cout<<"did i enter here??"<<endl;
 		game->setGameOver(0, TIE_NO_WINNER);
 	}
 	return;
