@@ -854,6 +854,27 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 		return isGameOver;
 	}
 
+	//do move
+	if (game->board[to_x][to_y].getPiece() == 0)
+	{
+		Cell::updateCell(game->board[to_x][to_y],
+				game->board[from_x][from_y].getPiece(),
+				game->board[from_x][from_y].getIsJoker());
+		Cell::cleanCell(game->board[from_x][from_y]);
+		isGameOver = game->checkGameOver(isPlayer1);
+	}
+	else
+	{
+		isGameOver = game->fight(isPlayer1, to_x, to_y,
+				game->board[from_x][from_y].getPiece(),
+				game->board[from_x][from_y].getIsJoker());
+
+		//if the cell we are fighting is a bomb, the cell needs to get wiped from the board as well
+		if (toupper(game->board[to_x][to_y].getPiece()) == 'B')
+			Cell::cleanCell(game->board[to_x][to_y]);
+		Cell::cleanCell(game->board[from_x][from_y]);
+	}
+
 	//TODO: from what i understood joker change is optional..
 	//no joker change
 	if (!checkEmptyLine(nextIndex, s))
@@ -1008,27 +1029,6 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 	}
 
 	//i moved the check if move is legal to be before the joker check
-
-	//do move
-	if (game->board[to_x][to_y].getPiece() == 0)
-	{
-		Cell::updateCell(game->board[to_x][to_y],
-				game->board[from_x][from_y].getPiece(),
-				game->board[from_x][from_y].getIsJoker());
-		Cell::cleanCell(game->board[from_x][from_y]);
-		isGameOver = game->checkGameOver(isPlayer1);
-	}
-	else
-	{
-		isGameOver = game->fight(isPlayer1, to_x, to_y,
-				game->board[from_x][from_y].getPiece(),
-				game->board[from_x][from_y].getIsJoker());
-
-		//if the cell we are fighting is a bomb, the cell needs to get wiped from the board as well
-		if (toupper(game->board[to_x][to_y].getPiece()) == 'B')
-			Cell::cleanCell(game->board[to_x][to_y]);
-		Cell::cleanCell(game->board[from_x][from_y]);
-	}
 
 	//change joker if needed
 	if (isJokerChanged)
