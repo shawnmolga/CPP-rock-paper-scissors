@@ -874,8 +874,8 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 				game->board[from_x][from_y].getIsJoker());
 
 		//if the cell we are fighting is a bomb, the cell needs to get wiped from the board as well
-		if (toupper(game->board[to_x][to_y].getPiece()) == 'B')
-			Cell::cleanCell(game->board[to_x][to_y]);
+		//if (toupper(game->board[to_x][to_y].getPiece()) == 'B')
+			//Cell::cleanCell(game->board[to_x][to_y]);
 		Cell::cleanCell(game->board[from_x][from_y]);
 	}
 
