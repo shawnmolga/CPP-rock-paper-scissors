@@ -905,34 +905,9 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 			}
 			return isGameOver;
 		}
-		//check there was minimum one space before joker change
-		if (s[nextIndex -2] != ' '){
-			cout<<"Bad Format - missing space before joker change"<<endl;
-			isGameOver = true;
-			if (isPlayer1)
-				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-			else
-				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
-			return isGameOver;
-		}
-
-		nextIndex = 1 + getPieceFromLine(nextIndex, s);
-		if (nextIndex == 0)
+		if (s[nextIndex] != ':')
 		{
-			isGameOver = true;
-			if (isPlayer1)
-			{
-				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-			}
-			else
-			{
-				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
-			}
-			return isGameOver;
-		}
-		if (s[nextIndex - 1] != ':')
-		{
-			cout << "Error: Bad format - Joker information not placed correctly"
+			cout << "Error: Bad format - Joker  hard coded information not placed correctly - need to be followed by colon"
 					<< endl;
 			isGameOver = true;
 			if (isPlayer1)
@@ -941,6 +916,8 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
+
+		nextIndex++;
 
 		if (s[nextIndex] != ' '){
 			cout<<"Bad Format - missing space before joker change"<<endl;
