@@ -633,7 +633,8 @@ void RCPgameManager::startGame()
 	cout<<"starting the game..."<<endl;
 	bool isGameOver = false;
 	bool isPlayerOneTurn = true;
-	if (game->checkGameOver(true))
+	bool isAboutToMove = true;
+	if (game->checkGameOver(isAboutToMove, isPlayerOneTurn))
 	{
 		cout << game->getGameOverReason() << endl;
 		return;
@@ -708,8 +709,8 @@ void RCPgameManager::startGame()
 	player1Move.close();
 	player2Move.close();
 	cout << game->getIsGameOver() << endl;
-	cout << game->checkGameOver(isPlayerOneTurn) << endl;
-	if (!game->getIsGameOver() && !game->checkGameOver(isPlayerOneTurn))
+	cout << game->checkGameOver(isAboutToMove, isPlayerOneTurn) << endl;
+	if (!game->getIsGameOver() && !game->checkGameOver(isAboutToMove, isPlayerOneTurn))
 	{
 		cout << "did i enter here??" << endl;
 		game->setGameOver(0, TIE_NO_WINNER);
@@ -744,6 +745,8 @@ bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
 		return false;
 	}
 
+	cout <<"AM I NOT A BOMB ??????????" << endl;
+	cout << toupper(game->board[from_x][from_y].getPiece()) << endl;
 	if (toupper(game->board[from_x][from_y].getPiece()) == BOMB || toupper(game->board[from_x][from_y].getPiece()) == FLAG)
 	{
 		cout << "Error: flag/bomb piece is not allowed to move" << endl;
@@ -865,7 +868,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 				game->board[from_x][from_y].getPiece(),
 				game->board[from_x][from_y].getIsJoker());
 		Cell::cleanCell(game->board[from_x][from_y]);
-		isGameOver = game->checkGameOver(isPlayer1);
+		//isGameOver = game->checkGameOver(isPlayer1);
 	}
 	else
 	{

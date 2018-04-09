@@ -225,7 +225,7 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 		}
 	}
 
-	return checkGameOver(isPlayerOneTurn);
+	return checkGameOver(false, isPlayerOneTurn);
 }
 
 //bool RCPgame::fight(bool isPlayerOneTurn,int row, int col, char currPiece, bool isCurrPieceJoker)
@@ -465,7 +465,7 @@ void RCPgame::setGameOver(int winnerNumber, GAME_OVER_TYPE type)
 	return;
 }
 
-bool RCPgame::checkGameOver(bool isPlayerOneTurn)
+bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 {
 	Player *currPlayer = &playerOne;
 	Player *nextPlayer = &playerTwo;
@@ -505,7 +505,7 @@ bool RCPgame::checkGameOver(bool isPlayerOneTurn)
 		return true;
 	}
 	//check if all of player one's moving pieces are eaten
-	if (!currPlayer->isLeftMovingPieces())
+	if (isBeforeMove && !currPlayer->isLeftMovingPieces())
 	{
 		cout<<"3?"<<endl;
 		nextPlayer->setIsWinner(true);
@@ -517,7 +517,7 @@ bool RCPgame::checkGameOver(bool isPlayerOneTurn)
 	}
 
 	//check if all of player two's moving pieces are eaten
-	if (!nextPlayer->isLeftMovingPieces())
+	/*if (!nextPlayer->isLeftMovingPieces())
 	{
 		cout<<"5?"<<endl;
 		currPlayer->setIsWinner(true);
@@ -526,7 +526,7 @@ bool RCPgame::checkGameOver(bool isPlayerOneTurn)
 		isGameOver = true;
 		gameOverReason = ALL_PIECES_EATEN;
 		return true;
-	}
+	}*/
 
 	return false;
 }
