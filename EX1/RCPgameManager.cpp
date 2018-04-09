@@ -280,7 +280,6 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
 	}
 	int nextIndex = getPositionFromLine(pieceIndex + 1, line, row, col);
 	if (nextIndex == -1) return false;
-	cout<<"got here??"<<endl;
 	//check if position is legal
 	if ((row < 1 || row > ROWS) || (col < 1 || col > COLS))
 	{
@@ -305,12 +304,8 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
 			return false;
 		}
 		char jokerPiece = line[nextIndex - 1];
-		cout<<"$$$$$$$$$$$$$$"<<endl;
-		cout<<line<<endl;
-		cout<<jokerPiece<<endl;
 		if (jokerPiece != ROCK && jokerPiece != PAPER && jokerPiece != SCISSOR && jokerPiece != BOMB)
 		{
-			cout<<"i am in"<<endl;
 			cout << "Error: Bad format - illegal piece for joker" << endl;
 			return false;
 		}
@@ -630,12 +625,13 @@ void RCPgameManager::printBoardToCout() //todo  delete this
 void RCPgameManager::startGame()
 {
 	//check if game already over due to first positions
-	cout<<"starting the game..."<<endl;
+	cout<<"starting the game..."<<endl; //todo delete
 	bool isGameOver = false;
 	bool isPlayerOneTurn = true;
 	bool isAboutToMove = true;
 	if (game->checkGameOver(isAboutToMove, isPlayerOneTurn))
 	{
+		cout << "game->checkGameOver return true" << endl;
 		cout << game->getGameOverReason() << endl;
 		return;
 	}
@@ -653,17 +649,19 @@ void RCPgameManager::startGame()
 		{
 			isPlayerOneTurn = true;
 			isGameOver = makeMove(line1, true);
+			printBoardToCout();				// todo delete this
 			if (isGameOver)
 				break;
 		}
 		cout << "player1 move" << endl; // todo delete this
-		printBoardToCout();				// todo delete this
+		//printBoardToCout();				// todo delete this
 		if (getline(player2Move, line2))
 		{
 			if (!checkEmptyLine(0, line2))
 			{
 				isPlayerOneTurn = false;
 				isGameOver = makeMove(line2, false);
+				printBoardToCout();				// todo delete this
 				if (isGameOver)
 					break;
 			}
@@ -685,6 +683,7 @@ void RCPgameManager::startGame()
 				{
 					isPlayerOneTurn = false;
 					isGameOver = makeMove(line2, false);
+					printBoardToCout();				// todo delete this
 					if (isGameOver)
 						break;
 				}
@@ -699,6 +698,8 @@ void RCPgameManager::startGame()
 				{
 					isPlayerOneTurn = true;
 					isGameOver = makeMove(line1, true);
+					printBoardToCout();				// todo delete this
+
 					if (isGameOver)
 						break;
 				}
@@ -710,8 +711,23 @@ void RCPgameManager::startGame()
 	player2Move.close();
 	cout << game->getIsGameOver() << endl;
 	cout << game->checkGameOver(isAboutToMove, isPlayerOneTurn) << endl;
-	if (!game->getIsGameOver() && !game->checkGameOver(isAboutToMove, isPlayerOneTurn))
+	if (!isGameOver && !game->getIsGameOver() && !game->checkGameOver(isAboutToMove, isPlayerOneTurn))
 	{
+		if(isPlayerOneTurn){
+			cout << "Player1 Turn " << endl;//todo delete
+			if (!game->playerTwo.isLeftMovingPieces()){
+				cout << "game->playerTwo.isLeftMovingPieces() = " << game->playerTwo.isLeftMovingPieces() << endl;
+				game->setGameOver(1, ALL_PIECES_EATEN);
+				return;
+			}
+		}
+		else {
+			if (!game->playerOne.isLeftMovingPieces()){
+				game->setGameOver(2, ALL_PIECES_EATEN);
+				return;
+			}
+		}
+
 		cout << "did i enter here??" << endl;
 		game->setGameOver(0, TIE_NO_WINNER);
 	}
