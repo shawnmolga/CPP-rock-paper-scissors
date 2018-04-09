@@ -39,7 +39,7 @@ int RCPgameManager::getPieceFromLine(int start, const string &line)
 bool RCPgameManager::isAllGameFilesExists()
 {
 	bool PositionP1Exists = false, PositioP2Exists = false,
-		 moveP1Exists = false, moveP2Exists = false;
+			moveP1Exists = false, moveP2Exists = false;
 	std::string currentFilename;
 	DIR *dir;
 	struct dirent *ent;
@@ -70,8 +70,8 @@ bool RCPgameManager::isAllGameFilesExists()
 		if (!PositionP1Exists || !PositioP2Exists || !moveP1Exists || !moveP2Exists)
 		{ //some problem with the getline funcion - exit
 			std::cout
-				<< "Error reading temp dirList file in working directory, Exit from Game."
-				<< std::endl;
+			<< "Error reading temp dirList file in working directory, Exit from Game."
+			<< std::endl;
 			return false;
 		}
 		return true;
@@ -79,8 +79,8 @@ bool RCPgameManager::isAllGameFilesExists()
 	else
 	{
 		std::cout
-			<< "Unable to open temp dirList file in working directory, Exit from Game."
-			<< std::endl;
+		<< "Unable to open temp dirList file in working directory, Exit from Game."
+		<< std::endl;
 		return false;
 	}
 	return false;
@@ -97,7 +97,7 @@ bool RCPgameManager::checkIfDigit(char c)
 }
 
 int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
-										int &col)
+		int &col)
 {
 	int size = 1;
 	if ((size_t)start >= line.length())
@@ -109,11 +109,11 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 	while (line[start] == ' ')
 	{
 		start = start + 1;
-			if ((size_t)start >= line.length())
-	{
-		cout << "Error - bad format - missing position in line" << endl;
-		return -1;
-	}
+		if ((size_t)start >= line.length())
+		{
+			cout << "Error - bad format - missing position in line" << endl;
+			return -1;
+		}
 	}
 	if (!checkIfDigit(line[start]))
 	{
@@ -121,7 +121,7 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 		return -1;
 	}
 	int end = start + 1;
-		if ((size_t)end >= line.length())
+	if ((size_t)end >= line.length())
 	{
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
@@ -135,10 +135,10 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 		}
 		end = end + 1;
 		if ((size_t)end >= line.length())
-	{
-		cout << "Error - bad format - missing position in line" << endl;
-		return -1;
-	}
+		{
+			cout << "Error - bad format - missing position in line" << endl;
+			return -1;
+		}
 		size++;
 	}
 	//get row - row format was legal
@@ -161,10 +161,10 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 	{
 		start = start + 1;
 		if ((size_t)start >= line.length())
-	{
-		cout << "Error - bad format - missing position in line" << endl;
-		return -1;
-	}
+		{
+			cout << "Error - bad format - missing position in line" << endl;
+			return -1;
+		}
 	}
 	if (!checkIfDigit(line[start]))
 	{
@@ -202,73 +202,76 @@ bool RCPgameManager::checkEmptyLine(int start, const string &line)
 }
 
 bool RCPgameManager::checkPositioningFormat(const string &line,
-											int numOfPositionedPieces[], int playerNum, int &row, int &col,
-											bool &isJoker, char &piece)
+		int numOfPositionedPieces[], int playerNum, int &row, int &col,
+		bool &isJoker, char &piece)
 {
 	//TODO: ask in forum if we have space or other char in end of input line
 	if (line.length() < 5)
 	{
 		cout << "Error: Bad format - line length is smaller than 5 characters"
-			 << endl;
+				<< endl;
 		return false;
 	}
 	int pieceIndex = getPieceFromLine(0, line);
-	if ((size_t) pieceIndex+1 >= line.length()){
-		cout << "Error - bad format: missing position of piece" << endl;
-		return false;
-	}
-	if (line[pieceIndex+1] != ' '){
-		cout << "Error - bad format: missing space after piece" << endl;
-		return false;
-	}
+
 	piece = line[pieceIndex];
 	switch (piece)
 	{
 	case ROCK:
 		numOfPositionedPieces[0]++;
 		playerNum == 1 ? game->playerOne.setNumOfPieces(0,
-														game->playerOne.numOfPieces[0] + 1)
-					   : game->playerTwo.setNumOfPieces(0,
-														game->playerTwo.numOfPieces[0] + 1);
+				game->playerOne.numOfPieces[0] + 1)
+				: game->playerTwo.setNumOfPieces(0,
+						game->playerTwo.numOfPieces[0] + 1);
 		break;
 	case PAPER:
 		numOfPositionedPieces[1]++;
 		playerNum == 1 ? game->playerOne.setNumOfPieces(1,
-														game->playerOne.numOfPieces[1] + 1)
-					   : game->playerTwo.setNumOfPieces(1,
-														game->playerTwo.numOfPieces[1] + 1);
+				game->playerOne.numOfPieces[1] + 1)
+				: game->playerTwo.setNumOfPieces(1,
+						game->playerTwo.numOfPieces[1] + 1);
 		break;
 	case SCISSOR:
 		numOfPositionedPieces[2]++;
 		playerNum == 1 ? game->playerOne.setNumOfPieces(2,
-														game->playerOne.numOfPieces[2] + 1)
-					   : game->playerTwo.setNumOfPieces(2,
-														game->playerTwo.numOfPieces[2] + 1);
+				game->playerOne.numOfPieces[2] + 1)
+				: game->playerTwo.setNumOfPieces(2,
+						game->playerTwo.numOfPieces[2] + 1);
 		break;
 	case BOMB:
 		numOfPositionedPieces[3]++;
 		playerNum == 1 ? game->playerOne.setNumOfPieces(3,
-														game->playerOne.numOfPieces[3] + 1)
-					   : game->playerTwo.setNumOfPieces(3,
-														game->playerTwo.numOfPieces[3] + 1);
+				game->playerOne.numOfPieces[3] + 1)
+				: game->playerTwo.setNumOfPieces(3,
+						game->playerTwo.numOfPieces[3] + 1);
 		break;
 	case JOKER:
 		numOfPositionedPieces[4]++;
 		playerNum == 1 ? game->playerOne.setNumOfPieces(4,
-														game->playerOne.numOfPieces[4] + 1)
-					   : game->playerTwo.setNumOfPieces(4,
-														game->playerTwo.numOfPieces[4] + 1);
+				game->playerOne.numOfPieces[4] + 1)
+				: game->playerTwo.setNumOfPieces(4,
+						game->playerTwo.numOfPieces[4] + 1);
 		isJoker = true;
 		break;
 	case FLAG:
 		numOfPositionedPieces[5]++;
 		playerNum == 1 ? game->playerOne.setNumOfPieces(5,
-														game->playerOne.numOfPieces[5] + 1)
-					   : game->playerTwo.setNumOfPieces(5,
-														game->playerTwo.numOfPieces[5] + 1);
+				game->playerOne.numOfPieces[5] + 1)
+				: game->playerTwo.setNumOfPieces(5,
+						game->playerTwo.numOfPieces[5] + 1);
 		break;
 	default:
 		cout << "Error: Bad format - illegal piece" << endl;
+		cout << "going to RETURN!!!!!!!!!!!!!!!!1" << endl;
+		return false;
+
+	}
+	if ((size_t) pieceIndex+1 >= line.length()){
+		cout << "Error - bad format: missing position of piece" << endl;
+		return false;
+	}
+	if (line[pieceIndex+1] != ' '){
+		cout << "Error - bad format: missing space after piece" << endl;
 		return false;
 	}
 	int nextIndex = getPositionFromLine(pieceIndex + 1, line, row, col);
@@ -283,14 +286,14 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
 	if (isJoker)
 	{
 		if ((size_t) nextIndex >= line.length()){
-		cout << "Error - bad format: missing joker rep piece" << endl;
-		return false;
-	}
+			cout << "Error - bad format: missing joker rep piece" << endl;
+			return false;
+		}
 
-	if (line[nextIndex] != ' '){
-		cout << "Error - bad format: missing space after positions in joker position" << endl;
-		return false;
-	}
+		if (line[nextIndex] != ' '){
+			cout << "Error - bad format: missing space after positions in joker position" << endl;
+			return false;
+		}
 		nextIndex = getPieceFromLine(nextIndex, line) + 1;
 		if (nextIndex == 0)
 		{
@@ -321,7 +324,7 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
 }
 
 bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
-											   ifstream &playerPositionFile)
+		ifstream &playerPositionFile)
 {
 	//by order of pieces in constans file
 	//for checking that there are no more than number of pieces allowed
@@ -342,7 +345,7 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 			continue;
 		isJoker = false;
 		if (!checkPositioningFormat(line, numOfPositionedPieces, playerNum, row,
-									col, isJoker, piece))
+				col, isJoker, piece))
 		{
 			return false;
 		}
@@ -351,8 +354,8 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 		if (board[row - 1][col - 1] != 0)
 		{
 			cout
-				<< "Error: two or more pieces are positioned on the same location"
-				<< endl;
+			<< "Error: two or more pieces are positioned on the same location"
+			<< endl;
 			return false;
 		}
 
@@ -398,7 +401,7 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 	if (flagCnt < FLAGS_NUM)
 	{
 		cout << "Error: Missing flags - not all flags are positioned on board"
-			 << endl;
+				<< endl;
 		return false;
 	}
 
@@ -417,7 +420,7 @@ bool RCPgameManager::checkPieceOverflow(int numOfPieces[])
 	if (numOfPieces[0] > ROCKS_NUM || numOfPieces[1] > PAPERS_NUM || numOfPieces[2] > SCISSORS_NUM || numOfPieces[3] > BOMBS_NUM || numOfPieces[4] > JOKERS_NUM || numOfPieces[5] > FLAGS_NUM)
 	{
 		cout << "Error: a piece type appears in file more than its number"
-			 << endl;
+				<< endl;
 		return true;
 	}
 	return false;
@@ -448,9 +451,9 @@ void RCPgameManager::updateJokerMovingPieces()
 					break;
 				}
 				isupper(game->board[i][j].getPiece()) ? game->playerOne.setNumOfPieces(pieceIndex,
-																					   game->playerOne.numOfPieces[pieceIndex] + 1)
-													  : game->playerTwo.setNumOfPieces(pieceIndex,
-																					   game->playerTwo.numOfPieces[pieceIndex] + 1);
+						game->playerOne.numOfPieces[pieceIndex] + 1)
+						: game->playerTwo.setNumOfPieces(pieceIndex,
+								game->playerTwo.numOfPieces[pieceIndex] + 1);
 			}
 		}
 	}
@@ -522,6 +525,7 @@ bool RCPgameManager::checkBadFormat()
 	ifstream positionFile2(PLAYER_TWO_POSITION_FILENAME);
 	bool isPlayerOneLegalFormat = checkInsertPlayerPosition(1, positionFile1);
 	bool isPlayerTwoLegalFormat = checkInsertPlayerPosition(2, positionFile2);
+	game->resetGameResults();
 
 	if (!isPlayerOneLegalFormat && !isPlayerTwoLegalFormat)
 	{
@@ -621,7 +625,6 @@ void RCPgameManager::printBoardToCout() //todo  delete this
 
 void RCPgameManager::startGame()
 {
-	game->resetGameResults();
 	//check if game already over due to first positions
 	bool isGameOver = false;
 	bool isPlayerOneTurn = true;
@@ -710,7 +713,7 @@ void RCPgameManager::startGame()
 }
 
 bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
-								 bool isPlayer1)
+		bool isPlayer1)
 {
 
 	if ((from_x < 1 || from_x > ROWS) || (to_x < 1 || to_x > ROWS) || (from_y < 1 || from_y > COLS) || (to_y < 1 || to_y > COLS))
@@ -779,8 +782,8 @@ bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
 			if (isupper(game->board[to_x][to_y].getPiece()))
 			{
 				cout
-					<< "Error: you are trying to move to a cell taken by your own piece"
-					<< endl;
+				<< "Error: you are trying to move to a cell taken by your own piece"
+				<< endl;
 				return false;
 			}
 		}
@@ -791,8 +794,8 @@ bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
 				cout << game->board[from_x][from_y].getPiece() << endl;
 				cout << game->board[to_x][to_y].getPiece() << endl;
 				cout
-					<< "Error: you are trying to move to a cell taken by your own piece"
-					<< endl;
+				<< "Error: you are trying to move to a cell taken by your own piece"
+				<< endl;
 				return false;
 			}
 		}
@@ -853,26 +856,26 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 	if (!checkEmptyLine(nextIndex, s))
 	{
 		isJokerChanged = true;
-	
+
 		//skip all spaces until next char
 		nextIndex = getPieceFromLine(nextIndex, s) + 1 ;
 		if (nextIndex == 0)
-	{
-		isGameOver = true;
-		if (isPlayer1)
 		{
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+			isGameOver = true;
+			if (isPlayer1)
+			{
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+			}
+			else
+			{
+				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
+			}
+			return isGameOver;
 		}
-		else
-		{
-			game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
-		}
-		return isGameOver;
-	}
 		if (s[nextIndex - 1] != JOKER)
 		{
 			cout << "Error: Bad format - Junk characters in line"
-				 << endl;
+					<< endl;
 			isGameOver = true;
 			if (isPlayer1)
 				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
@@ -894,27 +897,27 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 
 		nextIndex = 1 + getPieceFromLine(nextIndex, s);
 		if (nextIndex == 0)
-	{
-		isGameOver = true;
-		if (isPlayer1)
 		{
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+			isGameOver = true;
+			if (isPlayer1)
+			{
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+			}
+			else
+			{
+				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
+			}
+			return isGameOver;
 		}
-		else
-		{
-			game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
-		}
-		return isGameOver;
-	}
 		if (s[nextIndex - 1] != ':')
 		{
 			cout << "Error: Bad format - Joker information not placed correctly"
-				 << endl;
+					<< endl;
 			isGameOver = true;
 			if (isPlayer1)
 				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			else
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
 
@@ -924,46 +927,46 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 			if (isPlayer1)
 				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			else
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
 
 		nextIndex = getPositionFromLine(nextIndex, s, x_joker, y_joker);
-			cout<<"next index4"<<endl;
-	if (nextIndex == -1)
-	{
-		isGameOver = true;
-		if (isPlayer1)
+		cout<<"next index4"<<endl;
+		if (nextIndex == -1)
 		{
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+			isGameOver = true;
+			if (isPlayer1)
+			{
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+			}
+			else
+			{
+				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
+			}
+			return isGameOver;
 		}
-		else
-		{
-			game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
-		}
-		return isGameOver;
-	}
 		nextIndex = 1 + getPieceFromLine(nextIndex, s);
 		if (nextIndex == 0)
-	{
-		isGameOver = true;
-		if (isPlayer1)
 		{
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+			isGameOver = true;
+			if (isPlayer1)
+			{
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
+			}
+			else
+			{
+				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
+			}
+			return isGameOver;
 		}
-		else
-		{
-			game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_TWO);
-		}
-		return isGameOver;
-	}
 		if (s[nextIndex-2] != ' '){
 			cout<<"Bad Format - missing space before joker translation piece"<<endl;
 			isGameOver = true;
 			if (isPlayer1)
 				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			else
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
 		new_rep = s[nextIndex - 1];
@@ -1007,16 +1010,16 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 	if (game->board[to_x][to_y].getPiece() == 0)
 	{
 		Cell::updateCell(game->board[to_x][to_y],
-						 game->board[from_x][from_y].getPiece(),
-						 game->board[from_x][from_y].getIsJoker());
+				game->board[from_x][from_y].getPiece(),
+				game->board[from_x][from_y].getIsJoker());
 		Cell::cleanCell(game->board[from_x][from_y]);
 		isGameOver = game->checkGameOver(isPlayer1);
 	}
 	else
 	{
 		isGameOver = game->fight(isPlayer1, to_x, to_y,
-								 game->board[from_x][from_y].getPiece(),
-								 game->board[from_x][from_y].getIsJoker());
+				game->board[from_x][from_y].getPiece(),
+				game->board[from_x][from_y].getIsJoker());
 
 		//if the cell we are fighting is a bomb, the cell needs to get wiped from the board as well
 		if (toupper(game->board[to_x][to_y].getPiece()) == 'B')
@@ -1028,41 +1031,41 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 	if (isJokerChanged)
 	{
 		updateJokerChange(game->board[x_joker][y_joker].getPiece(), new_rep,
-						  isPlayer1);
+				isPlayer1);
 		Cell::updateCell(game->board[x_joker][y_joker], new_rep, true);
 	}
 	return isGameOver;
 }
 
 void RCPgameManager::updateJokerChange(char prevJokerRep, char newRep,
-									   bool isPlayerOne)
+		bool isPlayerOne)
 {
 	//remove one piece from number of prev piece
 	switch (prevJokerRep)
 	{
 	case ROCK:
 		isPlayerOne ? game->playerOne.setNumOfPieces(0,
-													 game->playerOne.numOfPieces[0] - 1)
-					: game->playerTwo.setNumOfPieces(0,
-													 game->playerTwo.numOfPieces[0] - 1);
+				game->playerOne.numOfPieces[0] - 1)
+				: game->playerTwo.setNumOfPieces(0,
+						game->playerTwo.numOfPieces[0] - 1);
 		break;
 	case PAPER:
 		isPlayerOne ? game->playerOne.setNumOfPieces(1,
-													 game->playerOne.numOfPieces[1] - 1)
-					: game->playerTwo.setNumOfPieces(1,
-													 game->playerTwo.numOfPieces[1] - 1);
+				game->playerOne.numOfPieces[1] - 1)
+				: game->playerTwo.setNumOfPieces(1,
+						game->playerTwo.numOfPieces[1] - 1);
 		break;
 	case SCISSOR:
 		isPlayerOne ? game->playerOne.setNumOfPieces(2,
-													 game->playerOne.numOfPieces[2] - 1)
-					: game->playerTwo.setNumOfPieces(2,
-													 game->playerTwo.numOfPieces[2] - 1);
+				game->playerOne.numOfPieces[2] - 1)
+				: game->playerTwo.setNumOfPieces(2,
+						game->playerTwo.numOfPieces[2] - 1);
 		break;
 	case BOMB:
 		isPlayerOne ? game->playerOne.setNumOfPieces(3,
-													 game->playerOne.numOfPieces[3] - 1)
-					: game->playerTwo.setNumOfPieces(3,
-													 game->playerTwo.numOfPieces[3] - 1);
+				game->playerOne.numOfPieces[3] - 1)
+				: game->playerTwo.setNumOfPieces(3,
+						game->playerTwo.numOfPieces[3] - 1);
 		break;
 		break;
 	}
@@ -1071,28 +1074,28 @@ void RCPgameManager::updateJokerChange(char prevJokerRep, char newRep,
 	{
 	case ROCK:
 		isPlayerOne ? game->playerOne.setNumOfPieces(0,
-													 game->playerOne.numOfPieces[0] + 1)
-					: game->playerTwo.setNumOfPieces(0,
-													 game->playerTwo.numOfPieces[0] + 1);
+				game->playerOne.numOfPieces[0] + 1)
+				: game->playerTwo.setNumOfPieces(0,
+						game->playerTwo.numOfPieces[0] + 1);
 		;
 		break;
 	case PAPER:
 		isPlayerOne ? game->playerOne.setNumOfPieces(1,
-													 game->playerOne.numOfPieces[1] + 1)
-					: game->playerTwo.setNumOfPieces(1,
-													 game->playerTwo.numOfPieces[1] + 1);
+				game->playerOne.numOfPieces[1] + 1)
+				: game->playerTwo.setNumOfPieces(1,
+						game->playerTwo.numOfPieces[1] + 1);
 		break;
 	case SCISSOR:
 		isPlayerOne ? game->playerOne.setNumOfPieces(2,
-													 game->playerOne.numOfPieces[2] + 1)
-					: game->playerTwo.setNumOfPieces(2,
-													 game->playerTwo.numOfPieces[2] + 1);
+				game->playerOne.numOfPieces[2] + 1)
+				: game->playerTwo.setNumOfPieces(2,
+						game->playerTwo.numOfPieces[2] + 1);
 		break;
 	case BOMB:
 		isPlayerOne ? game->playerOne.setNumOfPieces(3,
-													 game->playerOne.numOfPieces[3] + 1)
-					: game->playerTwo.setNumOfPieces(3,
-													 game->playerTwo.numOfPieces[3] + 1);
+				game->playerOne.numOfPieces[3] + 1)
+				: game->playerTwo.setNumOfPieces(3,
+						game->playerTwo.numOfPieces[3] + 1);
 		break;
 		break;
 	}
