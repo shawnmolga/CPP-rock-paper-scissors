@@ -626,6 +626,7 @@ void RCPgameManager::printBoardToCout() //todo  delete this
 void RCPgameManager::startGame()
 {
 	//check if game already over due to first positions
+	cout<<"starting the game..."<<endl;
 	bool isGameOver = false;
 	bool isPlayerOneTurn = true;
 	if (game->checkGameOver(true))
@@ -763,6 +764,8 @@ bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
 	{
 		if (to_x != from_x)
 		{
+			cout<<to_x;
+			cout<<from_x;
 			cout<<"3-move"<<endl;
 			cout << "Error: illegal move" << endl;
 			return false;
