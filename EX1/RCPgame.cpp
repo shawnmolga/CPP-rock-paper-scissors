@@ -171,7 +171,7 @@ bool RCPgame::fight(bool isPlayerOneTurn,int row, int col, char currPiece, bool 
 				break;
 			}
 		}
-
+		
 	}
 
 	//case 5: player 2 is bomb and player 1 another piece
@@ -354,7 +354,7 @@ bool RCPgame::checkGameOver(bool isPlayerOneTurn)
 		gameOverReason = ALL_PIECES_EATEN;
 		return true;
 	}
-
+	
 	//check if all of player two's moving pieces are eaten
 	if (!nextPlayer->isLeftMovingPieces())
 	{
@@ -366,18 +366,21 @@ bool RCPgame::checkGameOver(bool isPlayerOneTurn)
 		gameOverReason = ALL_PIECES_EATEN;
 		return true;
 	}
-	//reset game result after fights that have done due to positioning files
-	currPlayer->setIsWinner(false);
-	nextPlayer->setIsWinner(false);
-	currPlayer->setScore(0);
-	nextPlayer->setScore(0);
-	isGameOver = false;
+	
 	return false;
 }
 
 bool RCPgame::getIsGameOver() const
 {
 	return isGameOver;
+}
+void RCPgame::resetGameResults(){
+	//reset game result after fights that have done due to positioning files
+	playerOne.setIsWinner(false);
+	playerTwo.setIsWinner(false);
+	playerOne.setScore(0);
+	playerTwo.setScore(0);
+	isGameOver = false;
 }
 
 GAME_OVER_TYPE RCPgame::getGameOverReason() const

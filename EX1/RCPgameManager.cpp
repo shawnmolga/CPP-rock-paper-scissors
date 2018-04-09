@@ -622,6 +622,7 @@ void RCPgameManager::printBoardToCout() //todo  delete this
 
 void RCPgameManager::startGame()
 {
+	game->resetGameResults();
 	//check if game already over due to first positions
 	bool isGameOver = false;
 	bool isPlayerOneTurn = true;
@@ -880,9 +881,9 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 			isGameOver = true;
 			if (isPlayer1)
 				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-			else
-				cout << "we think its wrong format" << endl;
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+			else{
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+			}
 			return isGameOver;
 		}
 		//check there was minimum one space before joker change
@@ -892,8 +893,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 			if (isPlayer1)
 				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			else
-				cout << "we think its wrong format" << endl;
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
 
@@ -979,8 +979,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 			if (isPlayer1)
 				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			else
-				cout << "we think its wrong format" << endl;
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
 
@@ -991,8 +990,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 			if (isPlayer1)
 				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			else
-				cout << "we think its wrong format" << endl;
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
 

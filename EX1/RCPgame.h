@@ -49,6 +49,7 @@ public:
 	bool checkGameOver(bool isPlayerOneTurn);
 	void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
 	string ToString(GAME_OVER_TYPE typeGame);
+	void resetGameResults();
 
 
 private:
