@@ -142,8 +142,8 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 		size++;
 	}
 	//get row - row format was legal
-	string row_string = line.substr(start, size);
-	row = std::stoi(row_string);
+	string col_string = line.substr(start, size);
+	col = std::stoi(col_string);
 	//try to get col
 	size = 1;
 	if (line[end] != ' ')
@@ -184,8 +184,8 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 		end = end + 1;
 	}
 	//col is legal
-	const string col_string = line.substr(start, size);
-	col = std::stoi(col_string);
+	const string row_string = line.substr(start, size);
+	row = std::stoi(row_string);
 	return end;
 }
 
@@ -540,7 +540,6 @@ bool RCPgameManager::checkBadFormat()
 
 	else if (!isPlayerTwoLegalFormat)
 	{
-		cout << "we think its wrong format" << endl;
 		game->setGameOver(1, WRONG_FILE_FORMAT_TWO);
 		positionFile1.ifstream::close();
 		positionFile2.ifstream::close();
@@ -700,7 +699,6 @@ void RCPgameManager::startGame()
 
 	player1Move.close();
 	player2Move.close();
-	cout << "*********************" << endl;
 	cout << game->getIsGameOver() << endl;
 	cout << game->checkGameOver(isPlayerOneTurn) << endl;
 	if (!game->getIsGameOver() && !game->checkGameOver(isPlayerOneTurn))
@@ -826,7 +824,6 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 		isGameOver = true;
 		if (isPlayer1)
 		{
-			cout << "we think its wrong format" << endl;
 			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
 		}
 		else
@@ -842,7 +839,6 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 		isGameOver = true;
 		if (isPlayer1)
 		{
-			cout << "we think its wrong format" << endl;
 			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
 		}
 		else
@@ -865,7 +861,6 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 		isGameOver = true;
 		if (isPlayer1)
 		{
-			cout << "we think its wrong format" << endl;
 			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
 		}
 		else
@@ -1001,8 +996,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 			if (isPlayer1)
 				game->setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 			else
-				cout << "we think its wrong format" << endl;
-			game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+				game->setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 			return isGameOver;
 		}
 	}
