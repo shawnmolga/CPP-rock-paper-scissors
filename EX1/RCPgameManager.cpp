@@ -733,7 +733,7 @@ bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
 		cout << "Error: there is no piece in this position" << endl;
 		return false;
 	}
-	else if ((isPlayer1 && islower(game->board[from_x][from_y].getPiece() != 0)) || (!isPlayer1 && isupper(game->board[from_x][from_y].getPiece())))
+	else if ((isPlayer1 && islower(game->board[from_x][from_y].getPiece())) || (!isPlayer1 && isupper(game->board[from_x][from_y].getPiece())))
 	{
 		cout << "Error: trying to move the opponent piece" << endl;
 		return false;
@@ -755,7 +755,7 @@ bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
 		if (to_y != from_y)
 		{
 			cout<<"1-move"<<endl;
-			cout << "Error: illegal move " << endl;
+			cout << "Error: illegal move - can move only one cell up/down/left/right " << endl;
 			return false;
 		}
 	}
@@ -764,14 +764,14 @@ bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
 		if (to_x != from_x)
 		{
 			cout<<"3-move"<<endl;
-			cout << "Error: illegal move" << endl;
+			cout << "Error: illegal move - can move only one cell up/down/left/right" << endl;
 			return false;
 		}
 	}
 	else
 	{
 		cout<<"2-move"<<endl;
-		cout << "Error: illegal move" << endl;
+		cout << "Error: illegal move - can move only one cell up/down/left/right" << endl;
 		return false;
 	}
 
