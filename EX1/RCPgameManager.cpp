@@ -117,6 +117,7 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 	}
 	if (!checkIfDigit(line[start]))
 	{
+		cout<<"1- error"<<endl;
 		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
@@ -130,6 +131,7 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 	{
 		if (!checkIfDigit(line[end]))
 		{
+					cout<<"2- error"<<endl;
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}
@@ -168,6 +170,7 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 	}
 	if (!checkIfDigit(line[start]))
 	{
+				cout<<"3- error"<<endl;
 		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
@@ -177,6 +180,7 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 
 		if (!checkIfDigit(line[end]))
 		{
+					cout<<"4- error"<<endl;
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}
@@ -275,8 +279,8 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
 		return false;
 	}
 	int nextIndex = getPositionFromLine(pieceIndex + 1, line, row, col);
-	cout<<"next index1"<<endl;
-	if (nextIndex == 0) return false;
+	if (nextIndex == -1) return false;
+	cout<<"got here??"<<endl;
 	//check if position is legal
 	if ((row < 1 || row > ROWS) || (col < 1 || col > COLS))
 	{
@@ -626,6 +630,7 @@ void RCPgameManager::printBoardToCout() //todo  delete this
 void RCPgameManager::startGame()
 {
 	//check if game already over due to first positions
+	cout<<"starting the game..."<<endl;
 	bool isGameOver = false;
 	bool isPlayerOneTurn = true;
 	if (game->checkGameOver(true))
@@ -763,6 +768,8 @@ bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
 	{
 		if (to_x != from_x)
 		{
+			cout<<to_x;
+			cout<<from_x;
 			cout<<"3-move"<<endl;
 			cout << "Error: illegal move - can move only one cell up/down/left/right" << endl;
 			return false;
