@@ -28,7 +28,7 @@ bool Cell::getIsJoker() const
 }
 bool Cell::isPlayerOnePiece(Cell &cell)
 {
-	if(cell.getPiece() == isupper(cell.getPiece())){
+	if(cell.getPiece() == toupper(cell.getPiece())){
 		return true;
 	}
 	return false;
