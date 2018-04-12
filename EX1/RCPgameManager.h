@@ -45,7 +45,9 @@ class RCPgameManager{
 		bool checkIfDigit(char c);
 		void updateJokerChange(char prevJokerRep, char newRep, bool isPlayerOne);
 		void printBoardToCout();//todo  delete this
-
+	private:
+	int indexErrorPosOne;
+	int indexErrorPosTwo;
 };
 
 #endif /* EX1_RCPGAMEMANAGER_H_ */
