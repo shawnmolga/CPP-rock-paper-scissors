@@ -596,7 +596,7 @@ void RCPgameManager::printOutputFile(const string &outputFile)
 	{
 		output << "Winner : 0" << endl;
 	}
-	output << game->ToString(game->getGameOverReason(), indexErrorPosOne, indexErrorPosTwo, indexErrorMoveOne, indexErrorMoveTwo) << endl;
+	output << Reason: << game->ToString(game->getGameOverReason(), indexErrorPosOne, indexErrorPosTwo, indexErrorMoveOne, indexErrorMoveTwo) << endl;
 	output << endl; // the third line must be en empty line!
 	printBoardToFile(output);
 	output.close();
@@ -665,10 +665,10 @@ void RCPgameManager::printBoardToFile(ofstream &output)
 				output << game->board[i][j].getPiece();
 			}
 		}
-		if (i != ROWS)
-		{
-			output << endl;
-		}
+		//if (i != ROWS)
+		//{
+		output << endl;
+		//}
 	}
 	output.ofstream::close();
 	return;
