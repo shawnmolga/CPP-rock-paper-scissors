@@ -714,7 +714,8 @@ void RCPgameManager::startGame()
 	bool isGameOver = false;
 	bool isPlayerOneTurn = true;
 	bool isAboutToMove = true;
-	int indexLine = 1;
+	int indexLinePlayer1 = 1;
+	int indexLinePlayer2 = 1;
 	if (game->checkGameOver(isAboutToMove, isPlayerOneTurn))
 	{
 		cout << "game->checkGameOver return true" << endl;
@@ -736,7 +737,7 @@ void RCPgameManager::startGame()
 			isGameOver = makeMove(line1, true);
 			if (isGameOver)
 			{
-				indexErrorMoveOne = indexLine;
+				indexErrorMoveOne = indexLinePlayer1;
 				break;
 			}
 		}
@@ -746,7 +747,7 @@ void RCPgameManager::startGame()
 			{
 				isPlayerOneTurn = false;
 				isGameOver = makeMove(line2, false);
-				indexErrorMoveTwo = indexLine;
+				indexErrorMoveTwo = indexLinePlayer2;
 				if (isGameOver)
 					break;
 			}
@@ -760,7 +761,8 @@ void RCPgameManager::startGame()
 		}
 		else
 			break;
-		indexLine++;
+		indexLinePlayer1++;
+		indexLinePlayer2++;
 	}
 	if (player1Move.bad())
 	{
@@ -781,10 +783,11 @@ void RCPgameManager::startGame()
 				{
 					isPlayerOneTurn = false;
 					isGameOver = makeMove(line2, false);
-					indexErrorMoveTwo = indexLine;
+					indexErrorMoveTwo = indexLinePlayer2;
 					if (isGameOver)
 						break;
 				}
+				indexLinePlayer2++;
 			}
 			if (player2Move.bad())
 			{
@@ -802,10 +805,11 @@ void RCPgameManager::startGame()
 				{
 					isPlayerOneTurn = true;
 					isGameOver = makeMove(line1, true);
-					indexErrorMoveOne = indexLine;
+					indexErrorMoveOne = indexLinePlayer1;
 					if (isGameOver)
 						break;
 				}
+				indexLinePlayer1++;
 			}
 			if (player1Move.bad())
 			{
