@@ -952,6 +952,10 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 	int x_joker = 0;
 	int y_joker = 0;
 	char new_rep = '0';
+
+	if (game->checkGameOver(true,isPlayer1))
+		return true;
+
 	int nextIndex = getPositionFromLine(0, s, from_x, from_y);
 	bool isLackSpace = nextIndex != -1 ? (s[nextIndex] != ' ') : false;
 	if (nextIndex == -1 || isLackSpace)
