@@ -344,11 +344,15 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 	int indexLine = 1; //Counting the lines;
 	//initialize temporary board to check player's positions do not collide
 	char board[ROWS][COLS] = {0};
+	cout<<"player"<<endl;
 	while (getline(playerPositionFile, line))
 	{
+		cout<<indexLine<<endl;
 		//skip empty lines
-		if (checkEmptyLine(0, line))
+		if (checkEmptyLine(0, line)){
+			indexLine++;
 			continue;
+		}
 		isJoker = false;
 		if (!checkPositioningFormat(line, numOfPositionedPieces, playerNum, row,
 									col, isJoker, piece))
