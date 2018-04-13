@@ -344,12 +344,13 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 	int indexLine = 1; //Counting the lines;
 	//initialize temporary board to check player's positions do not collide
 	char board[ROWS][COLS] = {0};
-	cout<<"player"<<endl;
+	cout << "player" << endl;
 	while (getline(playerPositionFile, line))
 	{
-		cout<<indexLine<<endl;
+		cout << indexLine << endl;
 		//skip empty lines
-		if (checkEmptyLine(0, line)){
+		if (checkEmptyLine(0, line))
+		{
 			indexLine++;
 			continue;
 		}
@@ -372,6 +373,7 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 		//position is illegal - tried to locate 2 pieces of same player in same position
 		if (board[row - 1][col - 1] != 0)
 		{
+
 			if (playerNum == 1)
 			{
 				indexErrorPosOne = indexLine;
@@ -386,7 +388,19 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 				<< endl;
 			return false;
 		}
-
+		//check if there are too many pieces positioned on board
+		if (checkPieceOverflow(numOfPositionedPieces))
+		{
+			if (playerNum == 1)
+			{
+				indexErrorPosOne = indexLine;
+			}
+			else
+			{
+				indexErrorPosTwo = indexLine;
+			}
+			return false;
+		}
 		//position on current player temp board
 		if (playerNum == 1)
 		{
@@ -461,18 +475,18 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 	}
 
 	//check if there are too many pieces positioned on board
-	if (checkPieceOverflow(numOfPositionedPieces))
-	{
-		if (playerNum == 1)
-		{
-			indexErrorPosOne = indexLine;
-		}
-		else
-		{
-			indexErrorPosTwo = indexLine;
-		}
-		return false;
-	}
+	// if (checkPieceOverflow(numOfPositionedPieces))
+	// {
+	// 	if (playerNum == 1)
+	// 	{
+	// 		indexErrorPosOne = indexLine;
+	// 	}
+	// 	else
+	// 	{
+	// 		indexErrorPosTwo = indexLine;
+	// 	}
+	// 	return false;
+	// }
 
 	//after checking no overflow of initial positions on board - add jokers moving pieces to each player's array
 	updateJokerMovingPieces();
@@ -698,18 +712,6 @@ void RCPgameManager::startGame()
 {
 	//check if game already over due to first positions
 	cout << "starting the game" << endl;
-	cout<<"player1"<<endl;
-	for (int i = 0; i < 6; ++i)
-	{
-		cout << game->playerOne.numOfPieces[i];
-		cout << " ";
-	}
-		cout<<"player2"<<endl;
-	for (int i = 0; i < 6; ++i)
-	{
-		cout << game->playerTwo.numOfPieces[i];
-		cout << " ";
-	}
 	printBoardToCout();
 	bool isGameOver = false;
 	bool isPlayerOneTurn = true;
