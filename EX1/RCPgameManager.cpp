@@ -1145,9 +1145,9 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 	//change joker if needed
 	if (isJokerChanged)
 	{
-		updateJokerChange(game->board[x_joker][y_joker].getPiece(), new_rep,
+		updateJokerChange(toupper(game->board[x_joker][y_joker].getPiece()), toupper(new_rep),
 						  isPlayer1);
-		Cell::updateCell(game->board[x_joker][y_joker], new_rep, true);
+		Cell::updateCell(game->board[x_joker][y_joker], isPlayer1 ? new_rep : tolower(new_rep), true);
 	}
 	printBoardToCout();
 	return isGameOver;
