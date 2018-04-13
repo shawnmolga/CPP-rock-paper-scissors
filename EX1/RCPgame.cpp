@@ -7,7 +7,7 @@
 
 #include "RCPgame.h"
 
-RCPgame::RCPgame() :playerOne(Player(1)), playerTwo(Player(2)), isGameOver(false)
+RCPgame::RCPgame() : playerOne(Player(1)), playerTwo(Player(2)), isGameOver(false)
 {
 	board = new Cell *[ROWS];
 	for (int i = 1; i <= ROWS; ++i)
@@ -18,7 +18,6 @@ RCPgame::RCPgame() :playerOne(Player(1)), playerTwo(Player(2)), isGameOver(false
 
 RCPgame::~RCPgame()
 {
-	cout << "in delete game" << endl;
 	for (int i = 1; i <= ROWS; ++i)
 	{
 		delete[] board[i];
@@ -30,15 +29,17 @@ RCPgame::~RCPgame()
 	//delete &playerTwo;
 }
 
-Player RCPgame::getPlayerOne() const{
+Player RCPgame::getPlayerOne() const
+{
 	return playerOne;
 }
 
-Player RCPgame::getPlayerTwo() const{
+Player RCPgame::getPlayerTwo() const
+{
 	return playerTwo;
 }
 
-string RCPgame::ToString(GAME_OVER_TYPE typeGame)
+string RCPgame::ToString(GAME_OVER_TYPE typeGame, int indexErrorPosOne, int indexErrorPosTwo, int indexErrorMoveOne, int indexErrorMoveTwo)
 {
 	switch (typeGame)
 	{
@@ -47,19 +48,20 @@ string RCPgame::ToString(GAME_OVER_TYPE typeGame)
 	case ALL_PIECES_EATEN:
 		return "All moving PIECEs of the opponent are eaten";
 	case WRONG_FILE_FORMAT_ONE:
-		return "Bad Positioning input file for player 1 - line "; //TODO : line
+		return "Bad Positioning input file for player 1 - line " + to_string(indexErrorPosOne); //TODO : line
 	case WRONG_FILE_FORMAT_TWO:
-		return "Bad Positioning input file for player 2 - line "; //TODO : line
+		return "Bad Positioning input file for player 2 - line " + to_string(indexErrorPosTwo); //TODO : line
 	case WRONG_FILE_FORMAT_BOTH:
-		return "Bad Positioning input file for both players - player 1: line <X>, player 2: line <Y>";
+		return "Bad Positioning input file for both players - player 1: line " + to_string(indexErrorPosOne) + ", player 2: line " + to_string(indexErrorPosTwo);
 	case TIE_NO_WINNER:
 		return "A tie - both Moves input files done without a winner";
 	case TIE_ALL_FLAGS_EATEN:
 		return "A tie - all flags are eaten by both players in the position files";
-	case WRONG_MOVE_FILE_FORMAT_TWO://added by shawn TODO
-		return "Bad Move File input file for player 2 - line ";
-	case WRONG_MOVE_FILE_FORMAT_ONE://added by shawn TODO
-		return "Bad Move File input file for player 1 - line ";
+	case WRONG_MOVE_FILE_FORMAT_TWO:
+		return "Bad Move File input file for player 2 - line " + to_string(indexErrorMoveTwo);
+	case WRONG_MOVE_FILE_FORMAT_ONE:
+		return "Bad Move File input file for player 1 - line " + to_string(indexErrorMoveOne);
+		;
 	default:
 		return "[Unknown GAME_OVER_TYPE]";
 	}
@@ -83,7 +85,7 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	if (nextPlayerPiece == currPlayerPiece)
 	{
 		//TODO: dont know if we should update jokers number - this is not relevat anymore when we started to play the game
-
+		cout << "case1" << endl;
 		switch (nextPlayerPiece)
 		{
 		case FLAG:
@@ -114,14 +116,17 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//Case 2: there is flag and current player has another piece
 	else if (nextPlayerPiece == FLAG)
 	{
+		cout << "case2" << endl;
 		nextPlayer->numOfPieces[5]--;
 
-		if (currPlayerPiece == BOMB){
+		if (currPlayerPiece == BOMB)
+		{
 			//bomb exploded!
 			currPlayer->numOfPieces[3]--;
 			Cell::updateCell(board[row][col], 0, false);
 		}
-		else{
+		else
+		{
 			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
 		}
 	}
@@ -129,9 +134,11 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//case 3: current player's piece is flag and there is another piece on board
 	else if (currPlayerPiece == FLAG)
 	{
+		cout << "case3" << endl;
 		currPlayer->numOfPieces[5]--;
 
-		if (nextPlayerPiece == BOMB){
+		if (nextPlayerPiece == BOMB)
+		{
 			//bomb exploded!
 			nextPlayer->numOfPieces[3]--;
 			Cell::updateCell(board[row][col], 0, false);
@@ -140,6 +147,7 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//case 4: there is bomb and current player has another piece
 	else if (nextPlayerPiece == BOMB)
 	{
+		cout << "case4" << endl;
 		//bomb exploded!
 		nextPlayer->numOfPieces[3]--;
 		//piece is eaten
@@ -162,6 +170,7 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//case 5: current player piece is bomb and on board there is another piece
 	else if (currPlayerPiece == BOMB)
 	{
+		cout << "case5" << endl;
 		//bomb exploded!
 		currPlayer->numOfPieces[3]--;
 
@@ -184,10 +193,10 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//case 6: there is PAPER and current player has another piece
 	else if (nextPlayerPiece == PAPER)
 	{
+		cout << "case6" << endl;
 		if (currPlayerPiece == ROCK)
 		{
 			currPlayer->numOfPieces[0]--;
-
 		}
 		else if (currPlayerPiece == SCISSOR)
 		{
@@ -198,6 +207,7 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//case 7: player 1 is ROCK and player 2 another piece
 	else if (nextPlayerPiece == ROCK)
 	{
+		cout << "case7" << endl;
 		if (currPlayerPiece == PAPER)
 		{
 			nextPlayer->numOfPieces[0]--;
@@ -207,24 +217,23 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 		else if (currPlayerPiece == SCISSOR)
 		{
 			currPlayer->numOfPieces[2]--;
-
 		}
 	}
 
 	else if (nextPlayerPiece == SCISSOR)
 	{
+		cout << "case8" << endl;
 		if (currPlayerPiece == PAPER)
 		{
 			currPlayer->numOfPieces[1]--;
 		}
 		else if (currPlayerPiece == ROCK)
 		{
-			nextPlayer->numOfPieces[0]--;
+			nextPlayer->numOfPieces[2]--;
 
 			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
 		}
 	}
-
 	return checkGameOver(false, isPlayerOneTurn);
 }
 
@@ -469,13 +478,14 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 {
 	Player *currPlayer = &playerOne;
 	Player *nextPlayer = &playerTwo;
-	if(!isPlayerOneTurn){
-		currPlayer=&playerTwo;
-		nextPlayer=&playerOne;
+	if (!isPlayerOneTurn)
+	{
+		currPlayer = &playerTwo;
+		nextPlayer = &playerOne;
 	}
 	if (currPlayer->numOfPieces[5] == 0 && nextPlayer->numOfPieces[5] == 0)
 	{
-		cout<<"1?"<<endl;
+		cout << "1?" << endl;
 		isGameOver = true;
 		currPlayer->setIsWinner(false);
 		nextPlayer->setIsWinner(false);
@@ -485,7 +495,7 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	//check if all of player one's flags are taken
 	if (currPlayer->numOfPieces[5] == 0)
 	{
-		cout<<"2?"<<endl;
+		cout << "2?" << endl;
 		nextPlayer->setIsWinner(true);
 		currPlayer->setIsWinner(false);
 		nextPlayer->setScore(nextPlayer->getScore() + 1);
@@ -496,7 +506,7 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	//check if all of player two's flags are taken
 	if (nextPlayer->numOfPieces[5] == 0)
 	{
-		cout<<"4?"<<endl;
+		cout << "4?" << endl;
 		currPlayer->setIsWinner(true);
 		nextPlayer->setIsWinner(false);
 		currPlayer->setScore(currPlayer->getScore() + 1);
@@ -507,8 +517,7 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	//check if all of player one's moving pieces are eaten
 	if (isBeforeMove && !currPlayer->isLeftMovingPieces())
 	{
-		cout<<"3?"<<endl;
-		cout<<isBeforeMove<<endl;
+		cout << "3?" << endl;
 		nextPlayer->setIsWinner(true);
 		currPlayer->setIsWinner(false);
 		nextPlayer->setScore(nextPlayer->getScore() + 1);
@@ -516,18 +525,17 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 		gameOverReason = ALL_PIECES_EATEN;
 		return true;
 	}
-
 	//check if all of player two's moving pieces are eaten
-	/*if (!nextPlayer->isLeftMovingPieces())
-	{
-		cout<<"5?"<<endl;
-		currPlayer->setIsWinner(true);
-		nextPlayer->setIsWinner(false);
-		currPlayer->setScore(currPlayer->getScore() + 1);
-		isGameOver = true;
-		gameOverReason = ALL_PIECES_EATEN;
-		return true;
-	}*/
+	// if (!nextPlayer->isLeftMovingPieces())
+	// {
+	// 	cout<<"5?"<<endl;
+	// 	currPlayer->setIsWinner(true);
+	// 	nextPlayer->setIsWinner(false);
+	// 	currPlayer->setScore(currPlayer->getScore() + 1);
+	// 	isGameOver = true;
+	// 	gameOverReason = ALL_PIECES_EATEN;
+	// 	return true;
+	// }
 
 	return false;
 }
@@ -536,7 +544,8 @@ bool RCPgame::getIsGameOver() const
 {
 	return isGameOver;
 }
-void RCPgame::resetGameResults(){
+void RCPgame::resetGameResults()
+{
 	//reset game result after fights that have done due to positioning files
 	playerOne.setIsWinner(false);
 	playerTwo.setIsWinner(false);

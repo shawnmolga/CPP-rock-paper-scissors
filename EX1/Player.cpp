@@ -21,6 +21,11 @@ void Player::setIsWinner(bool win) {
 }
 
 bool Player::isLeftMovingPieces() const {
+	//ERASED! 
+	for(int i=0 ;i<6; ++i){
+		cout<<numOfPieces[i];
+		cout<<" ";
+	}
 	for (int i = 0; i < 6; ++i) {
 		if (i == 3 || i == 4 || i == 5)
 			continue;

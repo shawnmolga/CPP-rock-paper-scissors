@@ -48,7 +48,7 @@ public:
 	bool fight(bool isPlayerOneTurn,int row, int col, char piece, bool isJoker);
 	bool checkGameOver(bool isBeforeMove, bool isPlayerOneTurn);
 	void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
-	string ToString(GAME_OVER_TYPE typeGame);
+	string ToString(GAME_OVER_TYPE typeGame,int indexErrorPosOne, int indexErrorPosTwo,int indexErrorMoveOne, int indexErrorMoveTwo);
 	void resetGameResults();
 
 

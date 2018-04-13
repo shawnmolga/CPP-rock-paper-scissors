@@ -48,6 +48,9 @@ class RCPgameManager{
 	private:
 	int indexErrorPosOne;
 	int indexErrorPosTwo;
+	int indexErrorMoveOne;
+	int indexErrorMoveTwo;
+
 };
 
 #endif /* EX1_RCPGAMEMANAGER_H_ */
