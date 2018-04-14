@@ -438,7 +438,7 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 		}
 
 		playerPositionFile.close();
-		delete this;
+		return false;
 	}
 
 	//check if there are not enough flags positioned on board
@@ -549,7 +549,7 @@ void RCPgameManager::printOutputFile(const string &outputFile)
 	if (output.fail())
 	{
 		cout << "Error while opening output file. Exiting game" << endl;
-		delete this;
+		return;
 	}
 	//player 1 is thw winner
 	if (game->getPlayerOne().getIsWinner())
@@ -690,7 +690,6 @@ int RCPgameManager::startGame()
 			cout << "Error while reading move file. Exiting game" << endl;
 			player2Move.close();
 			player1Move.close();
-			delete this;
 			return -1;
 		}
 		else
@@ -703,7 +702,6 @@ int RCPgameManager::startGame()
 		player1Move.close();
 		player2Move.close();
 		cout << "Error while reading move file. Exiting game" << endl;
-		delete this;
 		return -1;
 	}
 
@@ -729,7 +727,6 @@ int RCPgameManager::startGame()
 				cout << "Error while reading move file. Exiting game" << endl;
 				player2Move.close();
 				player1Move.close();
-				delete this;
 				return -1;
 			}
 		}
@@ -752,7 +749,6 @@ int RCPgameManager::startGame()
 				cout << "Error while reading move file. Exiting game" << endl;
 				player2Move.close();
 				player1Move.close();
-				delete this;
 				return -1;
 			}
 		}

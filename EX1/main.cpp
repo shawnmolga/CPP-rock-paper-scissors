@@ -31,8 +31,12 @@ int main(int argc, char*[]) {
 	}
 	int isOK = 0;
 	isOK = mgmtGame->startGame();
-	if (isOK == -1)
+	if (isOK == -1){
+		cout << "startGame returned -1" << endl;
+		delete(mgmtGame);
 		return 1;
+	}
+
 	mgmtGame->printOutputFile(OUTPUT_FILENAME);
 	delete(mgmtGame);
 	return 0;
