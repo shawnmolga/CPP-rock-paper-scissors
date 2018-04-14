@@ -1,9 +1,3 @@
-/*
- * RCPgame.cpp
- *
- *  Created on: 27 ���� 2018
- *      Author: OR
- */
 
 #include "RCPgame.h"
 
@@ -23,10 +17,6 @@ RCPgame::~RCPgame()
 		delete[] board[i];
 	}
 	delete[] board;
-
-	//shawn removed - playerOne playerTwo were not created with "new" therefore on stack
-	//delete &playerOne;
-	//delete &playerTwo;
 }
 
 Player RCPgame::getPlayerOne() const
@@ -84,8 +74,6 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//Case 1: 2 players in the same type - both should be eaten
 	if (nextPlayerPiece == currPlayerPiece)
 	{
-		//TODO: dont know if we should update jokers number - this is not relevat anymore when we started to play the game
-		cout << "case1" << endl;
 		switch (nextPlayerPiece)
 		{
 		case FLAG:
@@ -116,7 +104,6 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//Case 2: there is flag and current player has another piece
 	else if (nextPlayerPiece == FLAG)
 	{
-		cout << "case2" << endl;
 		nextPlayer->numOfPieces[5]--;
 
 		if (currPlayerPiece == BOMB)
@@ -134,7 +121,6 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//case 3: current player's piece is flag and there is another piece on board
 	else if (currPlayerPiece == FLAG)
 	{
-		cout << "case3" << endl;
 		currPlayer->numOfPieces[5]--;
 
 		if (nextPlayerPiece == BOMB)
@@ -147,7 +133,6 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//case 4: there is bomb and current player has another piece
 	else if (nextPlayerPiece == BOMB)
 	{
-		cout << "case4" << endl;
 		//bomb exploded!
 		nextPlayer->numOfPieces[3]--;
 		//piece is eaten
@@ -170,7 +155,6 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//case 5: current player piece is bomb and on board there is another piece
 	else if (currPlayerPiece == BOMB)
 	{
-		cout << "case5" << endl;
 		//bomb exploded!
 		currPlayer->numOfPieces[3]--;
 
@@ -193,7 +177,6 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//case 6: there is PAPER and current player has another piece
 	else if (nextPlayerPiece == PAPER)
 	{
-		cout << "case6" << endl;
 		if (currPlayerPiece == ROCK)
 		{
 			currPlayer->numOfPieces[0]--;
@@ -207,7 +190,6 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	//case 7: player 1 is ROCK and player 2 another piece
 	else if (nextPlayerPiece == ROCK)
 	{
-		cout << "case7" << endl;
 		if (currPlayerPiece == PAPER)
 		{
 			nextPlayer->numOfPieces[0]--;
@@ -222,7 +204,6 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 
 	else if (nextPlayerPiece == SCISSOR)
 	{
-		cout << "case8" << endl;
 		if (currPlayerPiece == PAPER)
 		{
 			currPlayer->numOfPieces[1]--;
@@ -236,219 +217,6 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	}
 	return checkGameOver(false, isPlayerOneTurn);
 }
-
-//bool RCPgame::fight(bool isPlayerOneTurn,int row, int col, char currPiece, bool isCurrPieceJoker)
-//{
-//
-//	//TODO: ask if we can position flag on flag and who is loosing
-//	Player *currPlayer = &playerOne;
-//	Player *nextPlayer = &playerTwo;
-//	if (!isPlayerOneTurn)
-//	{
-//		currPlayer = &playerTwo;
-//		nextPlayer = &playerOne;
-//	}
-//
-//	char currPlayerPiece = toupper(currPiece);
-//	char nextPlayerPiece = toupper(board[row][col].getPiece());
-//
-//	//Case 1: 2 players in the same type - both should be eaten
-//	if (nextPlayerPiece == currPlayerPiece)
-//	{
-//		cout<<"case1"<<endl;
-//		if (board[row][col].getIsJoker())
-//		{
-//			currPlayer->numOfPieces[4]--;
-//			nextPlayer->numOfPieces[4]--;
-//		}
-//		else
-//		{
-//			switch (nextPlayerPiece)
-//			{
-//			case FLAG:
-//				currPlayer->numOfPieces[5]--;
-//				nextPlayer->numOfPieces[5]--;
-//			case ROCK:
-//				break;
-//				currPlayer->numOfPieces[0]--;
-//				nextPlayer->numOfPieces[0]--;
-//				break;
-//			case PAPER:
-//				currPlayer->numOfPieces[1]--;
-//				nextPlayer->numOfPieces[1]--;
-//				break;
-//			case SCISSOR:
-//				currPlayer->numOfPieces[2]--;
-//				nextPlayer->numOfPieces[2]--;
-//				break;
-//			case BOMB:
-//				currPlayer->numOfPieces[3]--;
-//				nextPlayer->numOfPieces[3]--;
-//				break;
-//			}
-//		}
-//		Cell::updateCell(board[row][col], 0, false);
-//	}
-//
-//	//Case 2: player 1 is flag and player 2 another piece
-//	else if (nextPlayerPiece == FLAG)
-//	{
-//		cout<<"case2"<<endl;
-//		if (board[row][col].getIsJoker())
-//		{
-//			nextPlayer->numOfPieces[4]--;
-//		}
-//		else
-//		{
-//			nextPlayer->numOfPieces[5]--;
-//		}
-//		Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
-//	}
-//
-//	//case 3: player 2 is flag and player 1 another piece
-//	else if (currPlayerPiece == FLAG)
-//	{
-//		cout<<"case3"<<endl;
-//		if (board[row][col].getIsJoker())
-//		{
-//			currPlayer->numOfPieces[4]--;
-//		}
-//		else{
-//			currPlayer->numOfPieces[5]--;
-//		}
-//	}
-//
-//	//case 4: nextPlayer is bomb and player 2 another piece
-//	else if (nextPlayerPiece == BOMB)
-//	{
-//		cout<<"case4"<<endl;
-//		if (isCurrPieceJoker)
-//		{
-//			currPlayer->numOfPieces[4]--;
-//		}
-//		else
-//		{
-//			switch (currPlayerPiece)
-//			{
-//			case ROCK:
-//				currPlayer->numOfPieces[0] = currPlayer->numOfPieces[0] -1 ;
-//				break;
-//			case PAPER:
-//				currPlayer->numOfPieces[1] = currPlayer->numOfPieces[1] -1;
-//				break;
-//			case SCISSOR:
-//				currPlayer->numOfPieces[2] =currPlayer->numOfPieces[2] -1;
-//				break;
-//			}
-//		}
-//
-//	}
-//
-//	//case 5: player 2 is bomb and player 1 another piece
-//	else if (currPlayerPiece == BOMB)
-//	{
-//		cout<<"case5"<<endl;
-//		if (isCurrPieceJoker)
-//		{
-//			nextPlayer->numOfPieces[4]--;
-//		}
-//		else
-//		{
-//			switch (nextPlayerPiece)
-//			{
-//			case ROCK:
-//				nextPlayer->numOfPieces[0]--;
-//				break;
-//			case PAPER:
-//				nextPlayer->numOfPieces[1]--;
-//				break;
-//			case SCISSOR:
-//				nextPlayer->numOfPieces[2]--;
-//				break;
-//			}
-//		}
-//		Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
-//	}
-//
-//	//case 6: player 1 is PAPER and player 2 another piece
-//	else if (nextPlayerPiece == PAPER)
-//	{
-//		cout<<"case6"<<endl;
-//		if (currPlayerPiece == ROCK)
-//		{
-//			if (isCurrPieceJoker)
-//			{
-//				currPlayer->numOfPieces[4]--;
-//			}
-//			else
-//			{
-//				currPlayer->numOfPieces[0]--;
-//			}
-//		}
-//		else if (currPlayerPiece == SCISSOR)
-//		{
-//			if (board[row][col].getIsJoker())
-//			{
-//				nextPlayer->numOfPieces[4]--;
-//			}
-//			else
-//			{
-//				nextPlayer->numOfPieces[1]--;
-//			}
-//			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
-//		}
-//	}
-//	//case 7: nextPlayer is ROCK and currPlayer another piece
-//	else if (nextPlayerPiece == ROCK)
-//	{
-//		cout<<"case7"<<endl;
-//		if (currPlayerPiece == PAPER)
-//		{
-//			if (board[row][col].getIsJoker())
-//			{
-//				nextPlayer->numOfPieces[4]--;
-//			}
-//			else
-//			{
-//				nextPlayer->numOfPieces[0]--;
-//			}
-//			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
-//		}
-//		else if (currPlayerPiece == SCISSOR)
-//		{
-//			if (isCurrPieceJoker)
-//			{
-//				currPlayer->numOfPieces[4]--;
-//			}
-//			else
-//			{
-//				currPlayer->numOfPieces[2]--;
-//			}
-//		}
-//	}
-//	//case 8: player 1 is ROCK and player 2 another piece
-//	else if (nextPlayerPiece == SCISSOR)
-//	{
-//		cout<<"case8"<<endl;
-//		if (currPlayerPiece == PAPER)
-//		{
-//			currPlayer->numOfPieces[1]--;
-//		}
-//		else if (currPlayerPiece == ROCK)
-//		{
-//			if (board[row][col].getIsJoker())
-//			{
-//				nextPlayer->numOfPieces[4]--;
-//			}
-//			else
-//			{
-//				nextPlayer->numOfPieces[2]--;
-//			}
-//			Cell::updateCell(board[row][col], currPiece, isCurrPieceJoker);
-//		}
-//	}
-//	return checkGameOver(isPlayerOneTurn);
-//}
 
 void RCPgame::setGameOver(int winnerNumber, GAME_OVER_TYPE type)
 {
@@ -485,7 +253,6 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	}
 	if (currPlayer->numOfPieces[5] == 0 && nextPlayer->numOfPieces[5] == 0)
 	{
-		cout << "1?" << endl;
 		isGameOver = true;
 		currPlayer->setIsWinner(false);
 		nextPlayer->setIsWinner(false);
@@ -495,7 +262,6 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	//check if all of player one's flags are taken
 	if (currPlayer->numOfPieces[5] == 0)
 	{
-		cout << "2?" << endl;
 		nextPlayer->setIsWinner(true);
 		currPlayer->setIsWinner(false);
 		nextPlayer->setScore(nextPlayer->getScore() + 1);
@@ -506,7 +272,6 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	//check if all of player two's flags are taken
 	if (nextPlayer->numOfPieces[5] == 0)
 	{
-		cout << "4?" << endl;
 		currPlayer->setIsWinner(true);
 		nextPlayer->setIsWinner(false);
 		currPlayer->setScore(currPlayer->getScore() + 1);
@@ -517,7 +282,6 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	//check if all of player one's moving pieces are eaten
 	if (isBeforeMove && !currPlayer->isLeftMovingPieces())
 	{
-		cout << "3?" << endl;
 		nextPlayer->setIsWinner(true);
 		currPlayer->setIsWinner(false);
 		nextPlayer->setScore(nextPlayer->getScore() + 1);
@@ -525,18 +289,6 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 		gameOverReason = ALL_PIECES_EATEN;
 		return true;
 	}
-	//check if all of player two's moving pieces are eaten
-//	 if (isBeforeMove && !nextPlayer->isLeftMovingPieces())
-//	 {
-//	 	cout<<"5?"<<endl;
-//	 	currPlayer->setIsWinner(true);
-//	 	nextPlayer->setIsWinner(false);
-//	 	currPlayer->setScore(currPlayer->getScore() + 1);
-//	 	isGameOver = true;
-//	 	gameOverReason = ALL_PIECES_EATEN;
-//	 	return true;
-//	 }
-
 	return false;
 }
 

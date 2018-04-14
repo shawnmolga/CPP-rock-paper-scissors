@@ -25,7 +25,6 @@ class Player
 	bool isLeftMovingPieces()const;
 	void setIsPlayerTurn(bool turn );
 	void setNumOfPieces(int index,int value);
-	//bool checkPieceOverFlow();
 
 private:
 	int playerNum;

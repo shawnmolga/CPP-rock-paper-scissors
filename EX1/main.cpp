@@ -14,7 +14,6 @@ int main(int argc, char*[]) {
 				<< endl;
 		return 0;
 	}
-	// string PositionFileP1, string PositionFileP2, string moveFilePlayer1, string moveFilePlayer2,string gameOutputFile
 	RCPgameManager * mgmtGame = new RCPgameManager();
 	//check if all files exist and named correctly
 	if (!mgmtGame->isAllGameFilesExists()) {
@@ -27,12 +26,14 @@ int main(int argc, char*[]) {
 
 	if (mgmtGame->checkBadFormat()) {
 		mgmtGame->printOutputFile(OUTPUT_FILENAME);
-		//shawn removed - already delete game in pritOutputFile
-		//delete (mgmtGame);
+		delete (mgmtGame);
 		return -1;
 	}
-	mgmtGame->startGame();
+	int isOK = 0;
+	isOK = mgmtGame->startGame();
+	if (isOK == -1)
+		return 1;
 	mgmtGame->printOutputFile(OUTPUT_FILENAME);
-	//delete(mgmtGame);
-	//return 0;
+	delete(mgmtGame);
+	return 0;
 }

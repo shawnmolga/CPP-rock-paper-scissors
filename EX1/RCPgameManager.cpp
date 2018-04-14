@@ -1,9 +1,3 @@
-/*
- * RCPgameManager.cpp
- *
- *  Created on: 27 ���� 2018
- *      Author: OR
- */
 #include "RCPgameManager.h"
 
 RCPgameManager::RCPgameManager() : game(new RCPgame()), indexErrorPosOne(0), indexErrorPosTwo(0), indexErrorMoveOne(0), indexErrorMoveTwo(0)
@@ -116,8 +110,7 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 		}
 	}
 	if (!checkIfDigit(line[start]))
-	{ //SHAWN CHANGED HERE
-		//todo here
+	{
 		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
@@ -131,7 +124,6 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 	{
 		if (!checkIfDigit(line[end]))
 		{
-			cout << "2- error" << endl;
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}
@@ -170,7 +162,6 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 	}
 	if (!checkIfDigit(line[start]))
 	{
-		cout << "3- error" << endl;
 		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
@@ -180,7 +171,6 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 
 		if (!checkIfDigit(line[end]))
 		{
-			cout << "4- error" << endl;
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}
@@ -209,7 +199,6 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
 											int numOfPositionedPieces[], int playerNum, int &row, int &col,
 											bool &isJoker, char &piece)
 {
-	//TODO: ask in forum if we have space or other char in end of input line
 	if (line.length() < 5)
 	{
 		cout << "Error: Bad format - line length is smaller than 5 characters"
@@ -266,7 +255,6 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
 		break;
 	default:
 		cout << "Error: Bad format - illegal piece" << endl;
-		cout << "going to RETURN!!!!!!!!!!!!!!!!1" << endl;
 		return false;
 	}
 	if ((size_t)pieceIndex + 1 >= line.length())
@@ -331,9 +319,7 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
 bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 											   ifstream &playerPositionFile)
 {
-	//by order of pieces in constans file
-	//for checking that there are no more than number of pieces allowed
-	//cout << "in checkInertPlayerposition" << endl;
+
 	int numOfPositionedPieces[6] = {0};
 	string line;
 	int row = -1;
@@ -344,10 +330,8 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 	int indexLine = 1; //Counting the lines;
 	//initialize temporary board to check player's positions do not collide
 	char board[ROWS][COLS] = {0};
-	cout << "player" << endl;
 	while (getline(playerPositionFile, line))
 	{
-		cout << indexLine << endl;
 		//skip empty lines
 		if (checkEmptyLine(0, line))
 		{
@@ -454,7 +438,7 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 		}
 
 		playerPositionFile.close();
-		//delete(this); //TODO
+		delete this;
 	}
 
 	//check if there are not enough flags positioned on board
@@ -473,20 +457,6 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 
 		return false;
 	}
-
-	//check if there are too many pieces positioned on board
-	// if (checkPieceOverflow(numOfPositionedPieces))
-	// {
-	// 	if (playerNum == 1)
-	// 	{
-	// 		indexErrorPosOne = indexLine;
-	// 	}
-	// 	else
-	// 	{
-	// 		indexErrorPosTwo = indexLine;
-	// 	}
-	// 	return false;
-	// }
 
 	//after checking no overflow of initial positions on board - add jokers moving pieces to each player's array
 	updateJokerMovingPieces();
@@ -584,19 +554,19 @@ void RCPgameManager::printOutputFile(const string &outputFile)
 	//player 1 is thw winner
 	if (game->getPlayerOne().getIsWinner())
 	{
-		output << "Winner : 1" << endl;
+		output << "Winner: 1" << endl;
 	}
 	//player 2 is the winner
 	else if (game->getPlayerTwo().getIsWinner())
 	{
-		output << "Winner : 2" << endl;
+		output << "Winner: 2" << endl;
 	}
 	//tie
 	else
 	{
-		output << "Winner : 0" << endl;
+		output << "Winner: 0" << endl;
 	}
-	output << "Reason:" << game->ToString(game->getGameOverReason(), indexErrorPosOne, indexErrorPosTwo, indexErrorMoveOne, indexErrorMoveTwo) << endl;
+	output << "Reason: " << game->ToString(game->getGameOverReason(), indexErrorPosOne, indexErrorPosTwo, indexErrorMoveOne, indexErrorMoveTwo) << endl;
 	output << endl; // the third line must be en empty line!
 	printBoardToFile(output);
 	output.close();
@@ -665,54 +635,16 @@ void RCPgameManager::printBoardToFile(ofstream &output)
 				output << game->board[i][j].getPiece();
 			}
 		}
-		//if (i != ROWS)
-		//{
 		output << endl;
-		//}
+
 	}
 	output.ofstream::close();
 	return;
 }
 
-void RCPgameManager::printBoardToCout() //todo  delete this
-{
-	for (int i = 1; i <= ROWS; i++)
-	{
-		for (int j = 1; j <= COLS; j++)
-		{
-			if (game->board[i][j].getIsJoker())
-			{
-				if (Cell::isPlayerOnePiece(game->board[i][j]))
-				{
-					cout << "J ";
-				}
-				else
-				{
-					cout << "j ";
-				}
-			}
-			else if (game->board[i][j].getPiece() == 0)
-			{
-				cout << "- ";
-			}
-			else
-			{
-				cout << game->board[i][j].getPiece() << " ";
-			}
-		}
-		if (i != ROWS)
-		{
-			cout << endl;
-		}
-	}
-	cout << endl;
-}
-
-void RCPgameManager::startGame()
+int RCPgameManager::startGame()
 {
 	//check if game already over due to first positions
-	cout << "starting the game" << endl;
-	printBoardToCout();
 	bool isGameOver = false;
 	bool isPlayerOneTurn = true;
 	bool isAboutToMove = true;
@@ -720,9 +652,8 @@ void RCPgameManager::startGame()
 	int indexLinePlayer2 = 1;
 	if (game->checkGameOver(isAboutToMove, isPlayerOneTurn))
 	{
-		cout << "game->checkGameOver return true" << endl;
 		cout << game->getGameOverReason() << endl;
-		return;
+		return 0;
 	}
 
 	//start playing by move files
@@ -760,6 +691,7 @@ void RCPgameManager::startGame()
 			player2Move.close();
 			player1Move.close();
 			delete this;
+			return -1;
 		}
 		else
 			break;
@@ -772,6 +704,7 @@ void RCPgameManager::startGame()
 		player2Move.close();
 		cout << "Error while reading move file. Exiting game" << endl;
 		delete this;
+		return -1;
 	}
 
 	//game stopped
@@ -797,6 +730,7 @@ void RCPgameManager::startGame()
 				player2Move.close();
 				player1Move.close();
 				delete this;
+				return -1;
 			}
 		}
 		else if (player2Move.eof())
@@ -819,6 +753,7 @@ void RCPgameManager::startGame()
 				player2Move.close();
 				player1Move.close();
 				delete this;
+				return -1;
 			}
 		}
 	}
@@ -833,7 +768,7 @@ void RCPgameManager::startGame()
 			if (!game->playerTwo.isLeftMovingPieces())
 			{
 				game->setGameOver(1, ALL_PIECES_EATEN);
-				return;
+				return 0;
 			}
 		}
 		else
@@ -841,12 +776,12 @@ void RCPgameManager::startGame()
 			if (!game->playerOne.isLeftMovingPieces())
 			{
 				game->setGameOver(2, ALL_PIECES_EATEN);
-				return;
+				return 0;
 			}
 		}
 		game->setGameOver(0, TIE_NO_WINNER);
 	}
-	return;
+	return 0;
 }
 
 bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
@@ -876,7 +811,6 @@ bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
 		return false;
 	}
 
-	cout << toupper(game->board[from_x][from_y].getPiece()) << endl;
 	if (toupper(game->board[from_x][from_y].getPiece()) == BOMB || toupper(game->board[from_x][from_y].getPiece()) == FLAG)
 	{
 		cout << "Error: flag/bomb piece is not allowed to move" << endl;
@@ -941,8 +875,6 @@ bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
 //returns true if game is over after move, false otherwise
 bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 {
-	cout << "board before move" << endl;
-	printBoardToCout();
 	bool isGameOver = false;
 	int from_x;
 	int from_y;
@@ -1002,13 +934,10 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 	}
 	else
 	{
-		cout << "go to fight!!" << endl;
 		isGameOver = game->fight(isPlayer1, to_x, to_y,
 								 game->board[from_x][from_y].getPiece(),
 								 game->board[from_x][from_y].getIsJoker());
 
-		//if the cell we are fighting is a bomb, the cell needs to get wiped from the board as well
-		//if (toupper(game->board[to_x][to_y].getPiece()) == 'B')
 		Cell::cleanCell(game->board[from_x][from_y]);
 	}
 
@@ -1144,7 +1073,6 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 		}
 	}
 
-	//i moved the check if move is legal to be before the joker check
 
 	//change joker if needed
 	if (isJokerChanged)
@@ -1153,7 +1081,6 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 						  isPlayer1);
 		Cell::updateCell(game->board[x_joker][y_joker], isPlayer1 ? new_rep : tolower(new_rep), true);
 	}
-	printBoardToCout();
 	return isGameOver;
 }
 

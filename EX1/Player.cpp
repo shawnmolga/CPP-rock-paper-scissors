@@ -3,12 +3,9 @@
 Player::Player(int num) :
 		playerNum(num), score(0), isWinner(false) {
 	numOfPieces = new int[6];
-	//numOfPieces={0}; //does it work?
-	//erased- noy added
 	for (int i = 0; i < 6; i++) {
 		numOfPieces[i] = 0;
 	}
-	//erased- noy added
 	isPlayerTurn = (num == 1 ? true : false);
 }
 
@@ -21,11 +18,6 @@ void Player::setIsWinner(bool win) {
 }
 
 bool Player::isLeftMovingPieces() const {
-	//ERASED! 
-	for(int i=0 ;i<6; ++i){
-		cout<<numOfPieces[i];
-		cout<<" ";
-	}
 	for (int i = 0; i < 6; ++i) {
 		if (i == 3 || i == 4 || i == 5)
 			continue;

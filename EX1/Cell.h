@@ -1,9 +1,4 @@
-/*
- * Cells.h
- *
- *  Created on: 27 ���� 2018
- *      Author: OR
- */
+
 
 #ifndef EX1_CELL_H_
 #define EX1_CELL_H_

@@ -38,7 +38,6 @@ public:
 	Cell **board;
 	Player playerOne;
 	Player playerTwo;
-	//RCPgame(const RCPgame &game) = delete;
 	RCPgame &operator=(RCPgame &game) = delete;
 
 	Player getPlayerOne() const;
@@ -53,8 +52,6 @@ public:
 
 
 private:
-	//TODO : ask what we should do in case of wrong output file.
-	//enum GAME_OVER_TYPE {ALL_FLAGS_CAPTURED,ALL_PIECES_EATEN,WRONG_FILE_FORMAT,TIE};
 	bool isGameOver;
 	GAME_OVER_TYPE gameOverReason;
 };

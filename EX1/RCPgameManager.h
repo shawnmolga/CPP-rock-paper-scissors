@@ -29,7 +29,7 @@ class RCPgameManager{
 		bool checkInsertPlayerPosition(int playerNum, ifstream & playerPositionFile);
 		bool checkInputFiles();
 		void printOutputFile(const string &outputFile);
-		void startGame();
+		int startGame();
 		bool isLegalMove(int from_x, int from_y, int to_x, int to_y, bool isPlayer1);
 		bool checkBadFormat();
 		int getPieceFromLine(int start, const string &line);
@@ -44,7 +44,7 @@ class RCPgameManager{
 		bool isAllGameFilesExists();
 		bool checkIfDigit(char c);
 		void updateJokerChange(char prevJokerRep, char newRep, bool isPlayerOne);
-		void printBoardToCout();//todo  delete this
+
 	private:
 	int indexErrorPosOne;
 	int indexErrorPosTwo;
