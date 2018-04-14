@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 #include "Constants.h"
-#include "RCPgameManager.h"
+#include "RPSgameManager.h"
 using namespace std;
 
 int main(int argc, char*[]) {
@@ -14,7 +14,7 @@ int main(int argc, char*[]) {
 				<< endl;
 		return 0;
 	}
-	RCPgameManager * mgmtGame = new RCPgameManager();
+	RPSgameManager * mgmtGame = new RPSgameManager();
 	//check if all files exist and named correctly
 	if (!mgmtGame->isAllGameFilesExists()) {
 		delete (mgmtGame);

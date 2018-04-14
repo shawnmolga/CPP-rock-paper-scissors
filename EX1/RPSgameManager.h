@@ -1,12 +1,12 @@
 /*
- * RCPgameManager.h
+ * RPSgameManager.h
  *
  *  Created on: 27 ���� 2018
  *      Author: OR
  */
 
-#ifndef EX1_RCPGAMEMANAGER_H_
-#define EX1_RCPGAMEMANAGER_H_
+#ifndef EX1_RPSGAMEMANAGER_H_
+#define EX1_RPSGAMEMANAGER_H_
 
 #include <iostream>
 #include <fstream>
@@ -14,18 +14,18 @@
 #include <fstream>
 #include "Constants.h"
 #include "Player.h"
-#include "RCPgame.h"
 #include "dirent.h"
+#include "RPSgame.h"
 
 using namespace std;
 
-class RCPgameManager{
+class RPSgameManager{
 	public:
-		RCPgameManager();
-		~RCPgameManager();
-		RCPgameManager(const RCPgameManager& manager) = delete;
-		RCPgameManager& operator=(const RCPgameManager& manager) = delete;
-		RCPgame * game;
+		RPSgameManager();
+		~RPSgameManager();
+		RPSgameManager(const RPSgameManager& manager) = delete;
+		RPSgameManager& operator=(const RPSgameManager& manager) = delete;
+		RPSgame * game;
 		bool checkInsertPlayerPosition(int playerNum, ifstream & playerPositionFile);
 		bool checkInputFiles();
 		void printOutputFile(const string &outputFile);
@@ -53,4 +53,4 @@ class RCPgameManager{
 
 };
 
-#endif /* EX1_RCPGAMEMANAGER_H_ */
+#endif /* EX1_RPSGAMEMANAGER_H_ */

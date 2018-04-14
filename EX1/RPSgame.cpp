@@ -1,7 +1,7 @@
 
-#include "RCPgame.h"
+#include "RPSgame.h"
 
-RCPgame::RCPgame() : playerOne(Player(1)), playerTwo(Player(2)), isGameOver(false)
+RPSgame::RPSgame() : playerOne(Player(1)), playerTwo(Player(2)), isGameOver(false)
 {
 	board = new Cell *[ROWS];
 	for (int i = 1; i <= ROWS; ++i)
@@ -10,7 +10,7 @@ RCPgame::RCPgame() : playerOne(Player(1)), playerTwo(Player(2)), isGameOver(fals
 	}
 }
 
-RCPgame::~RCPgame()
+RPSgame::~RPSgame()
 {
 	for (int i = 1; i <= ROWS; ++i)
 	{
@@ -19,17 +19,17 @@ RCPgame::~RCPgame()
 	delete[] board;
 }
 
-Player RCPgame::getPlayerOne() const
+Player RPSgame::getPlayerOne() const
 {
 	return playerOne;
 }
 
-Player RCPgame::getPlayerTwo() const
+Player RPSgame::getPlayerTwo() const
 {
 	return playerTwo;
 }
 
-string RCPgame::ToString(GAME_OVER_TYPE typeGame, int indexErrorPosOne, int indexErrorPosTwo, int indexErrorMoveOne, int indexErrorMoveTwo)
+string RPSgame::ToString(GAME_OVER_TYPE typeGame, int indexErrorPosOne, int indexErrorPosTwo, int indexErrorMoveOne, int indexErrorMoveTwo)
 {
 	switch (typeGame)
 	{
@@ -57,7 +57,7 @@ string RCPgame::ToString(GAME_OVER_TYPE typeGame, int indexErrorPosOne, int inde
 	}
 }
 
-bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool isCurrPieceJoker)
+bool RPSgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool isCurrPieceJoker)
 {
 	Player *currPlayer = &playerOne;
 	Player *nextPlayer = &playerTwo;
@@ -218,7 +218,7 @@ bool RCPgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 	return checkGameOver(false, isPlayerOneTurn);
 }
 
-void RCPgame::setGameOver(int winnerNumber, GAME_OVER_TYPE type)
+void RPSgame::setGameOver(int winnerNumber, GAME_OVER_TYPE type)
 {
 	isGameOver = true;
 	gameOverReason = type;
@@ -242,7 +242,7 @@ void RCPgame::setGameOver(int winnerNumber, GAME_OVER_TYPE type)
 	return;
 }
 
-bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
+bool RPSgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 {
 	Player *currPlayer = &playerOne;
 	Player *nextPlayer = &playerTwo;
@@ -292,11 +292,11 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	return false;
 }
 
-bool RCPgame::getIsGameOver() const
+bool RPSgame::getIsGameOver() const
 {
 	return isGameOver;
 }
-void RCPgame::resetGameResults()
+void RPSgame::resetGameResults()
 {
 	//reset game result after fights that have done due to positioning files
 	playerOne.setIsWinner(false);
@@ -306,7 +306,7 @@ void RCPgame::resetGameResults()
 	isGameOver = false;
 }
 
-GAME_OVER_TYPE RCPgame::getGameOverReason() const
+GAME_OVER_TYPE RPSgame::getGameOverReason() const
 {
 	return gameOverReason;
 }

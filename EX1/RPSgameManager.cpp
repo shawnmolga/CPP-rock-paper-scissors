@@ -1,14 +1,14 @@
-#include "RCPgameManager.h"
+#include "RPSgameManager.h"
 
-RCPgameManager::RCPgameManager() : game(new RCPgame()), indexErrorPosOne(0), indexErrorPosTwo(0), indexErrorMoveOne(0), indexErrorMoveTwo(0)
+RPSgameManager::RPSgameManager() : game(new RPSgame()), indexErrorPosOne(0), indexErrorPosTwo(0), indexErrorMoveOne(0), indexErrorMoveTwo(0)
 {
 }
 
-RCPgameManager::~RCPgameManager()
+RPSgameManager::~RPSgameManager()
 {
 	delete game;
 }
-int RCPgameManager::getPieceFromLine(int start, const string &line)
+int RPSgameManager::getPieceFromLine(int start, const string &line)
 {
 	int end = start;
 	if ((size_t)end >= line.length())
@@ -30,7 +30,7 @@ int RCPgameManager::getPieceFromLine(int start, const string &line)
 	return end;
 }
 
-bool RCPgameManager::isAllGameFilesExists()
+bool RPSgameManager::isAllGameFilesExists()
 {
 	bool PositionP1Exists = false, PositioP2Exists = false,
 		 moveP1Exists = false, moveP2Exists = false;
@@ -80,7 +80,7 @@ bool RCPgameManager::isAllGameFilesExists()
 	return false;
 }
 
-bool RCPgameManager::checkIfDigit(char c)
+bool RPSgameManager::checkIfDigit(char c)
 {
 	int num = c - '0';
 	if (num < 0 || num > 9)
@@ -90,7 +90,7 @@ bool RCPgameManager::checkIfDigit(char c)
 	return true;
 }
 
-int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
+int RPSgameManager::getPositionFromLine(int start, const string &line, int &row,
 										int &col)
 {
 	int size = 1;
@@ -183,7 +183,7 @@ int RCPgameManager::getPositionFromLine(int start, const string &line, int &row,
 	return end;
 }
 
-bool RCPgameManager::checkEmptyLine(int start, const string &line)
+bool RPSgameManager::checkEmptyLine(int start, const string &line)
 {
 
 	for (int i = start; i < (int)line.length(); ++i)
@@ -195,7 +195,7 @@ bool RCPgameManager::checkEmptyLine(int start, const string &line)
 	return true;
 }
 
-bool RCPgameManager::checkPositioningFormat(const string &line,
+bool RPSgameManager::checkPositioningFormat(const string &line,
 											int numOfPositionedPieces[], int playerNum, int &row, int &col,
 											bool &isJoker, char &piece)
 {
@@ -316,7 +316,7 @@ bool RCPgameManager::checkPositioningFormat(const string &line,
 	return true;
 }
 
-bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
+bool RPSgameManager::checkInsertPlayerPosition(int playerNum,
 											   ifstream &playerPositionFile)
 {
 
@@ -463,7 +463,7 @@ bool RCPgameManager::checkInsertPlayerPosition(int playerNum,
 	return true;
 }
 
-bool RCPgameManager::checkPieceOverflow(int numOfPieces[])
+bool RPSgameManager::checkPieceOverflow(int numOfPieces[])
 {
 
 	if (numOfPieces[0] > ROCKS_NUM || numOfPieces[1] > PAPERS_NUM || numOfPieces[2] > SCISSORS_NUM || numOfPieces[3] > BOMBS_NUM || numOfPieces[4] > JOKERS_NUM || numOfPieces[5] > FLAGS_NUM)
@@ -475,7 +475,7 @@ bool RCPgameManager::checkPieceOverflow(int numOfPieces[])
 	return false;
 }
 
-void RCPgameManager::updateJokerMovingPieces()
+void RPSgameManager::updateJokerMovingPieces()
 {
 	for (int i = 1; i <= ROWS; ++i)
 	{
@@ -508,7 +508,7 @@ void RCPgameManager::updateJokerMovingPieces()
 	}
 }
 
-bool RCPgameManager::checkInputFiles()
+bool RPSgameManager::checkInputFiles()
 {
 	// Case 1: check if the file exist
 	ifstream player1File(PLAYER_ONE_POSITION_FILENAME);
@@ -542,7 +542,7 @@ bool RCPgameManager::checkInputFiles()
 	return true;
 }
 
-void RCPgameManager::printOutputFile(const string &outputFile)
+void RPSgameManager::printOutputFile(const string &outputFile)
 {
 	ofstream output;
 	output.open(outputFile, ios::trunc);
@@ -573,7 +573,7 @@ void RCPgameManager::printOutputFile(const string &outputFile)
 	return;
 }
 
-bool RCPgameManager::checkBadFormat()
+bool RPSgameManager::checkBadFormat()
 {
 	ifstream positionFile1(PLAYER_ONE_POSITION_FILENAME);
 	ifstream positionFile2(PLAYER_TWO_POSITION_FILENAME);
@@ -609,7 +609,7 @@ bool RCPgameManager::checkBadFormat()
 	return false;
 }
 
-void RCPgameManager::printBoardToFile(ofstream &output)
+void RPSgameManager::printBoardToFile(ofstream &output)
 {
 	for (int i = 1; i <= ROWS; i++)
 	{
@@ -642,7 +642,7 @@ void RCPgameManager::printBoardToFile(ofstream &output)
 	return;
 }
 
-int RCPgameManager::startGame()
+int RPSgameManager::startGame()
 {
 	//check if game already over due to first positions
 	bool isGameOver = false;
@@ -780,7 +780,7 @@ int RCPgameManager::startGame()
 	return 0;
 }
 
-bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
+bool RPSgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
 								 bool isPlayer1)
 {
 
@@ -869,7 +869,7 @@ bool RCPgameManager::isLegalMove(int from_x, int from_y, int to_x, int to_y,
 }
 
 //returns true if game is over after move, false otherwise
-bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
+bool RPSgameManager::makeMove(const string &s, bool isPlayer1)
 {
 	bool isGameOver = false;
 	int from_x;
@@ -1080,7 +1080,7 @@ bool RCPgameManager::makeMove(const string &s, bool isPlayer1)
 	return isGameOver;
 }
 
-void RCPgameManager::updateJokerChange(char prevJokerRep, char newRep,
+void RPSgameManager::updateJokerChange(char prevJokerRep, char newRep,
 									   bool isPlayerOne)
 {
 	//remove one piece from number of prev piece

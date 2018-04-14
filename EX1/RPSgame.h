@@ -1,12 +1,12 @@
 /*
- * RCPgame.h
+ * RPSgame.h
  *
  *  Created on: 27 ���� 2018
  *      Author: OR
  */
 
-#ifndef EX1_RCPGAME_H_
-#define EX1_RCPGAME_H_
+#ifndef EX1_RPSGAME_H_
+#define EX1_RPSGAME_H_
 
 #include <iostream>
 #include <fstream>
@@ -30,15 +30,15 @@ enum GAME_OVER_TYPE
 	TIE_ALL_FLAGS_EATEN
 };
 
-class RCPgame
+class RPSgame
 {
 public:
-	RCPgame();
-	~RCPgame();
+	RPSgame();
+	~RPSgame();
 	Cell **board;
 	Player playerOne;
 	Player playerTwo;
-	RCPgame &operator=(RCPgame &game) = delete;
+	RPSgame &operator=(RPSgame &game) = delete;
 
 	Player getPlayerOne() const;
 	Player getPlayerTwo() const;
@@ -56,4 +56,4 @@ private:
 	GAME_OVER_TYPE gameOverReason;
 };
 
-#endif /* EX1_RCPGAME_H_ */
+#endif /* EX1_RPSGAME_H_ */
