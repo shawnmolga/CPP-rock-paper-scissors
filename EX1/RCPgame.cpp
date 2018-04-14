@@ -526,16 +526,16 @@ bool RCPgame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 		return true;
 	}
 	//check if all of player two's moving pieces are eaten
-	 if (isBeforeMove && !nextPlayer->isLeftMovingPieces())
-	 {
-	 	cout<<"5?"<<endl;
-	 	currPlayer->setIsWinner(true);
-	 	nextPlayer->setIsWinner(false);
-	 	currPlayer->setScore(currPlayer->getScore() + 1);
-	 	isGameOver = true;
-	 	gameOverReason = ALL_PIECES_EATEN;
-	 	return true;
-	 }
+//	 if (isBeforeMove && !nextPlayer->isLeftMovingPieces())
+//	 {
+//	 	cout<<"5?"<<endl;
+//	 	currPlayer->setIsWinner(true);
+//	 	nextPlayer->setIsWinner(false);
+//	 	currPlayer->setScore(currPlayer->getScore() + 1);
+//	 	isGameOver = true;
+//	 	gameOverReason = ALL_PIECES_EATEN;
+//	 	return true;
+//	 }
 
 	return false;
 }
