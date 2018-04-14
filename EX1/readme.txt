@@ -19,3 +19,5 @@ Please notice that the explenation above is related only to no moving pieces sit
 any other reason it will happen according to game rules.
 
 Empty lines and spaces are ignored.
+
+Since tab wasn't mentioned, we treat it as illegal character (not as empty character).
