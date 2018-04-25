@@ -46,11 +46,20 @@ int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 			return -1;
 		}
 	}
-
 	return end;
 }
 
-int RPSgameManager::getPositionFromLine(int start, const string &line, int &row, int &col)
+bool FilePlayerAlgorithm::checkIfDigit(char c)
+{
+	int num = c - '0';
+	if (num < 0 || num > 9)
+	{
+		return false;
+	}
+	return true;
+}
+
+int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line, int &row, int &col)
 {
 	int size = 1;
 	if ((size_t)start >= line.length())
@@ -96,7 +105,7 @@ int RPSgameManager::getPositionFromLine(int start, const string &line, int &row,
 	}
 	//get row - row format was legal
 	string col_string = line.substr(start, size);
-	col = std::atoi(col_string);
+	col = std::stoi(col_string);
 	//try to get col
 	size = 1;
 	if (line[end] != ' ')
