@@ -1,7 +1,7 @@
 /*
  * PiecePosition.h
  *
- *  Created on: 24 áàôø× 2018
+ *  Created on: 24 ï¿½ï¿½ï¿½ï¿½ï¿½ 2018
  *      Author: OR
  */
 
@@ -9,13 +9,18 @@
 #define EX2_PIECEPOSITION_H_
 
 #include "Point.h"
-
+#include "RPSBoard.h"
+#include "FightInfo.h"
+#include "Move.h"
+#include "JokerChange.h"
+#include "board.h"
+#include "RPSpoint.h"
 
 class PiecePosition {
 public:
 	virtual const Point& getPosition() const;
 	virtual char getPiece() const; // R, P, S, B, J or F
-	virtual char getJokerRep() const; // ONLY for Joker: R, P, S or B -- non-Joker may return ‘#’
+	virtual char getJokerRep() const; // ONLY for Joker: R, P, S or B -- non-Joker may return ï¿½#ï¿½
 };
 
 

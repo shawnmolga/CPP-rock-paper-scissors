@@ -1,13 +1,13 @@
 /*
  * RPSPiecePosition.h
  *
- *  Created on: 24 áàôø× 2018
+ *  Created on: 24 ï¿½ï¿½ï¿½ï¿½ï¿½ 2018
  *      Author: OR
  */
 
 #ifndef EX2_RPSPIECEPOSITION_H_
 #define EX2_RPSPIECEPOSITION_H_
-#import "PiecePosition.h"
+#include "PiecePosition.h"
 
 class RPSPiecePosition : public PiecePosition {
 public:
@@ -15,7 +15,7 @@ public:
 	~RPSPiecePosition();
 	virtual const Point& getPosition() const override;
 	virtual char getPiece() const override; // R, P, S, B, J or F
-	virtual char getJokerRep() const override; // ONLY for Joker: R, P, S or B -- non-Joker may return ‘#’
+	virtual char getJokerRep() const override; // ONLY for Joker: R, P, S or B -- non-Joker may return ï¿½#ï¿½
 private:
 	Point position;
 	char piece;

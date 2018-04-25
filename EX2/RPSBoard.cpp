@@ -1,7 +1,7 @@
 /*
  * RPSBoard.cpp
  *
- *  Created on: 24 áàôø× 2018
+ *  Created on: 24 ï¿½ï¿½ï¿½ï¿½ï¿½ 2018
  *      Author: OR
  */
 #include "RPSBoard.h"
@@ -11,7 +11,7 @@ RPSBoard::RPSBoard(){
 }
 RPSBoard::~RPSBoard(){}
 
-virtual int RPSBoard::getPlayer(const Point& pos) const{
+int RPSBoard::getPlayer(const Point& pos) const{
 	int x = pos.getX();
 	int y = pos.getY();
 	char piece = board.at(x-1).at(y-1);

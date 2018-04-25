@@ -1,16 +1,15 @@
 /*
  * RPSpoint.cpp
  *
- *  Created on: 24 áàôø× 2018
+ *  Created on: 24 ï¿½ï¿½ï¿½ï¿½ï¿½ 2018
  *      Author: OR
  */
 #include "RPSpoint.h"
 
 RPSpoint::RPSpoint(int x, int y) : x(x), y(y){}
-RPSpoint::~RPSpoint(){}
-virtual int RPSpoint::getX() const{
+int RPSpoint::getX() const{
 	return x;
 }
-virtual int RPSpoint::getY() const{
+int RPSpoint::getY() const{
 	return y;
 }
