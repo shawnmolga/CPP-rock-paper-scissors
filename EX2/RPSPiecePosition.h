@@ -11,7 +11,9 @@
 
 class RPSPiecePosition : public PiecePosition {
 public:
-	RPSPiecePosition (Point position, char piece, char jokerRep);
+	RPSPiecePosition (RPSpoint pos, char kind, char rep);
+
+	//RPSPiecePosition (Point position, char piece, char jokerRep);
 	~RPSPiecePosition();
 	virtual const Point& getPosition() const override;
 	virtual char getPiece() const override; // R, P, S, B, J or F

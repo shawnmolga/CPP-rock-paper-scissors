@@ -7,6 +7,7 @@
 
 #ifndef EX2_POINT_H_
 #define EX2_POINT_H_
+#include <vector>
 
 class Point{
 public:
