@@ -9,6 +9,7 @@
 #define EX2_RPSBOARD_H_
 #include "Board.h"
 #include "Constants.h"
+#include <vector>
 #include <sstream>
 
 class RPSBoard : public Board{
