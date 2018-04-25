@@ -1,7 +1,7 @@
 /*
  * FilePlayerAlgorithm.cpp
  *
- *  Created on: 24 áàôø× 2018
+ *  Created on: 24 ï¿½ï¿½ï¿½ï¿½ï¿½ 2018
  *      Author: OR
  */
 
@@ -50,8 +50,7 @@ int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 	return end;
 }
 
-int RPSgameManager::getPositionFromLine(int start, const string &line, int &row,
-		int &col)
+int RPSgameManager::getPositionFromLine(int start, const string &line, int &row, int &col)
 {
 	int size = 1;
 	if ((size_t)start >= line.length())
@@ -97,7 +96,7 @@ int RPSgameManager::getPositionFromLine(int start, const string &line, int &row,
 	}
 	//get row - row format was legal
 	string col_string = line.substr(start, size);
-	col = std::stoi(col_string);
+	col = std::atoi(col_string);
 	//try to get col
 	size = 1;
 	if (line[end] != ' ')

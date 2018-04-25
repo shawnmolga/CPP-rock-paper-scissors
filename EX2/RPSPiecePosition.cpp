@@ -6,6 +6,8 @@
  */
 #include "RPSPiecePosition.h"
 
+	//RPSPiecePosition (Point position, char piece, char jokerRep);
+
 RPSPiecePosition::RPSPiecePosition (RPSpoint pos, char kind, char rep) :
 position(pos), piece(kind), jokerRep(rep){}
 
