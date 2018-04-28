@@ -214,6 +214,8 @@ bool RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat, bool &isPlayerT
                 else
                 {
                     fight(true, row, col, tolower(inputPiece), isJoker, fights, vectorToFillPlayerOne[i]->getPosition(), vectorToFillPlayerTwo[i]->getPosition());
+                    playerAlgoOne->notifyFightResult(fights);
+                    playerAlgoTwo->notifyFightResult(fights);
                 }
             }
             else
