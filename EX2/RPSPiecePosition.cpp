@@ -20,5 +20,8 @@ position(pos), piece(kind), jokerRep(rep){}
  char RPSPiecePosition::getJokerRep() const{
 	jokerRep;
 }
+void RPSPiecePosition::setPiece(char inputPiece){
+	piece = inputPiece;
+}
 
 

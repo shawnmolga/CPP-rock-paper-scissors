@@ -10,6 +10,11 @@
 #include "PlayerAlgorithm.h"
 #include "RPSPiecePosition.h"
 #include "RPSpoint.h"
+#include "FightInfo.h"
+#include "dirent.h"
+#include <iostream>
+#include <fstream>
+#include <string>
 #endif 
 class FilePlayerAlgorithm : public PlayerAlgorithm {
 public:
@@ -22,8 +27,8 @@ public:
 	virtual unique_ptr<JokerChange> getJokerChange() override; // nullptr if no change is requested
 	virtual int getPieceFromLine(int start, const string &line);
 	virtual int getPositionFromLine(int start, const string &line, int &row, int &col);
-	virtual bool FilePlayerAlgorithm::checkIfDigit(char c);
-	void getPositionAndRepFromLine(const string &line, int playerNum, int &row, int &col,
+	virtual bool checkIfDigit(char c);
+	bool getPositionAndRepFromLine(const string &line, int playerNum, int &row, int &col,
 		char &jokerRep, char &piece);
 private:
 	bool checkEmptyLine(int start, const string &line);

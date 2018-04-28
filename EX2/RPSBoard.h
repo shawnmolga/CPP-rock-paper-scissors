@@ -11,15 +11,16 @@
 #include "Constants.h"
 #include <vector>
 #include <sstream>
-
-class RPSBoard : public Board{
-public:
+#include "Cell.h"
+#include "Point.h"
+#include "RPSpoint.h"
+class RPSBoard : public Board
+{
+  public:
 	RPSBoard();
 	~RPSBoard();
-	virtual int getPlayer(const Point& pos) const; // 1 for player 1�s piece, 2 for 2, 0 if empty
-private:
-vector<vector<char>> board;
+	virtual int getPlayer(const Point &pos) const; // 1 for player 1�s piece, 2 for 2, 0 if empty
+  //private:
 };
-
 
 #endif /* EX2_RPSBOARD_H_ */
