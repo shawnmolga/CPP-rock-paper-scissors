@@ -219,7 +219,7 @@ void FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int play
 
 }
 
-virtual void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr<PiecePosition>>& vectorToFill){
+void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr<PiecePosition>>& vectorToFill){
 	ifstream posFile(positionFile);
 	string line;
 	int row = -1;
@@ -272,6 +272,6 @@ virtual void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<un
 }
 
 //will not be used in file player method
-virtual void FilePlayerAlgorithm::notifyOnInitialBoard(const Board& b, const std::vector<unique_ptr<FightInfo>>& fights){}
+void FilePlayerAlgorithm::notifyOnInitialBoard(const Board& b, const std::vector<unique_ptr<FightInfo>>& fights){}
 }
 
