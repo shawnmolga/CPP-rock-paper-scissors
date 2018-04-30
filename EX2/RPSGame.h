@@ -8,7 +8,7 @@
 #include "RPSBoard.h"
 #include "RPSFight.h"
 #include "RPSMove.h"
-#include "JokerChange.h"
+#include "RPSJokerChange.h"
 #include "board.h"
 #include "RPSpoint.h"
 #include "PiecePosition.h"
@@ -52,6 +52,10 @@ class RPSGame{
 		int startGame();
 		void printBoardToFile(ofstream & output);
 		void printOutputFile(const string &outputFile);
+		void RPupdateJokerChange(char prevJokerRep, char newRep,
+											   bool isPlayerOne);
+		bool movePiece(Move& move, JokerChange& playerJokerChange, bool isPlayerOneTurn);
+		int makeMove();
 
 
 
