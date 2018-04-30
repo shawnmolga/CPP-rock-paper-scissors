@@ -1,20 +1,17 @@
-/*
- * Point.h
- *
- *  Created on: 24 באפר׳ 2018
- *      Author: OR
- */
+#ifndef __POINT_H_
+#define __POINT_H_
 
-#ifndef EX2_POINT_H_
-#define EX2_POINT_H_
-#include <vector>
+//--------------------------
+// Point Interface
+//--------------------------
+// abstract class Point should be the base class for your "Point" implementation
+// @author Amir Kirsh, TAU - Advanced Topics in Programming - 2018 Semester B
 
-class Point{
+class Point {
 public:
-	virtual int getX() const;
-	virtual int getY() const;
+	virtual int getX() const = 0;
+	virtual int getY() const = 0;
+	virtual ~Point() {}
 };
 
-
-
-#endif /* EX2_POINT_H_ */
+#endif

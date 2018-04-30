@@ -1,0 +1,35 @@
+/*
+ * RPSMove.h
+ *
+ *  Created on: 28 Apr. 2018
+ *      Author: shawn
+ */
+
+
+#ifndef EX2_RPSMOVE_H_
+#define EX2_RPSMOVE_H_
+#include "Move.h"
+#include "Point.h"
+#include "RPSPoint.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+
+class RPSMove : public Move{
+public:
+	RPSMove(RPSpoint from, RPSpoint to);
+	~RPSMove();
+	virtual  Point& getFrom () const override;
+	virtual Point& getTo () const override;
+	virtual void setFrom(RPSpoint point);
+	virtual void setTo(RPSpoint point);
+
+private:
+	RPSpoint from;
+	RPSpoint to;
+
+};
+
+#endif /* EX2_RPSMOVE_H_ */
+
+

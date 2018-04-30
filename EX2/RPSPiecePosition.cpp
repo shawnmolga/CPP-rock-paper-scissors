@@ -14,11 +14,17 @@ position(pos), piece(kind), jokerRep(rep){}
  const Point& RPSPiecePosition::getPosition() const{
  return position;
 }
+
  char RPSPiecePosition::getPiece() const{
 	return piece;
 }
+
  char RPSPiecePosition::getJokerRep() const{
-	jokerRep;
+	return jokerRep;
+}
+
+void RPSPiecePosition::setPiece(char inputPiece){
+	piece = inputPiece;
 }
 
 

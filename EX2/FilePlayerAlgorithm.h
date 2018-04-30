@@ -10,8 +10,23 @@
 #include "PlayerAlgorithm.h"
 #include "RPSPiecePosition.h"
 #include "RPSpoint.h"
+#include "FightInfo.h"
+#include "dirent.h"
+#include "RPSMove.h"
+#include "RPSJokerChange.h"
+#include <iostream>
+#include <fstream>
+#include <string>
 #endif 
 class FilePlayerAlgorithm : public PlayerAlgorithm {
+private:
+	string positionFile;
+	string movesFile;
+	ifstream player1Move;
+	int movesFileLine = 1;
+	int nextIndex = 0;
+	string line1;
+
 public:
 	FilePlayerAlgorithm(const string &positionFile, const string &movesFile);
 	virtual void getInitialPositions(int player, std::vector<unique_ptr<PiecePosition>>& vectorToFill) override;
@@ -22,11 +37,12 @@ public:
 	virtual unique_ptr<JokerChange> getJokerChange() override; // nullptr if no change is requested
 	virtual int getPieceFromLine(int start, const string &line);
 	virtual int getPositionFromLine(int start, const string &line, int &row, int &col);
-	virtual bool FilePlayerAlgorithm::checkIfDigit(char c);
-	void getPositionAndRepFromLine(const string &line, int playerNum, int &row, int &col,
+	virtual bool checkIfDigit(char c);
+	bool getPositionAndRepFromLine(const string &line, int playerNum, int &row, int &col,
 		char &jokerRep, char &piece);
-private:
+	virtual void incrementMovesFileLine();
+	virtual void resetNextIndex();
 	bool checkEmptyLine(int start, const string &line);
-	string positionFile;
-	string movesFile;
 };
+
+
