@@ -19,8 +19,8 @@ class RPSMove : public Move{
 public:
 	RPSMove(RPSpoint from, RPSpoint to);
 	~RPSMove();
-	virtual  Point& getFrom () const override;
-	virtual Point& getTo () const override;
+	virtual const Point& getFrom () const override;
+	virtual const Point& getTo () const override;
 	virtual void setFrom(RPSpoint point);
 	virtual void setTo(RPSpoint point);
 
