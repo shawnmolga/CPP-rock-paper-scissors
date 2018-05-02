@@ -9,11 +9,11 @@
 #include "RPSFight.h"
 #include "RPSMove.h"
 #include "RPSJokerChange.h"
-#include "board.h"
+#include "RPSBoard.h"
 #include "RPSpoint.h"
 #include "PiecePosition.h"
 #include "FilePlayerAlgorithm.h"
-#include "player.h"
+#include "Player.h"
 #endif 
 
 enum GAME_OVER_TYPE
@@ -37,12 +37,14 @@ class RPSGame{
         vector<vector<Cell>> board ;  //Noy move the board to be public. we need it in the algorithm
         string ToString(GAME_OVER_TYPE typeGame, int indexErrorPosOne, int indexErrorPosTwo, int indexErrorMoveOne, int indexErrorMoveTwo);
 		int checkPositionOnBoard(bool &isPlayerOneLegalFormat,bool &isPlayerTwoLegalFormat,std::vector<unique_ptr<FightInfo>>& fights);
-        bool isAllGameFilesExists();
+        bool isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
+        bool RPSGame::initPlayeresAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
         void countNumOfPieces(const int playerNum,int numOfPositionedPieces[],const int piece );
 		bool checkPieceOverflow(int numOfPieces[]);
 		bool checkGameOver(bool isBeforeMove, bool isPlayerOneTurn);
 		bool checkBadFormat();
 		void resetGameResults();
+		bool RPSGame::checkBadFormat(bool isPlayerOneLegalFormat, bool isPlayerTwoLegalFormat);
 		void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
 		bool isLegalMove(unique_ptr<Move>& move, bool isPlayer1);
 		bool fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool isCurrPieceJoker,std::vector<unique_ptr<FightInfo>>& fights,RPSpoint posOne,RPSpoint posTwo);
@@ -56,13 +58,13 @@ class RPSGame{
 											   bool isPlayerOne);
 		bool movePiece(Move& move, JokerChange& playerJokerChange, bool isPlayerOneTurn);
 		int makeMove();
-
+		bool initGameMethod(string gameMethod);
 
 
 
     private:
-        FilePlayerAlgorithm * playerAlgoOne;
-        FilePlayerAlgorithm * playerAlgoTwo;
+        PlayerAlgorithm * playerAlgoOne;
+        PlayerAlgorithm * playerAlgoTwo;
 
 		int indexErrorPosOne; //do we need line numbers?
 		int indexErrorPosTwo;

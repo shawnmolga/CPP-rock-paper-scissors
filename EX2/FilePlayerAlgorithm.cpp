@@ -10,7 +10,6 @@
 FilePlayerAlgorithm::FilePlayerAlgorithm(const string &posFile,
 										 const string &moveFile) : positionFile(posFile), movesFile(moveFile)
 {
-	player1Move(moveFile);
 }
 
 bool FilePlayerAlgorithm::checkEmptyLine(int start, const string &line)
