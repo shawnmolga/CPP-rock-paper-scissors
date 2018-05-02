@@ -642,6 +642,8 @@ void RPSgameManager::printBoardToFile(ofstream &output)
 	return;
 }
 
+
+
 int RPSgameManager::startGame()
 {
 	//check if game already over due to first positions
@@ -674,6 +676,8 @@ int RPSgameManager::startGame()
 				break;
 			}
 		}
+
+
 		if (getline(player2Move, line2))
 		{
 			if (!checkEmptyLine(0, line2))
@@ -697,6 +701,7 @@ int RPSgameManager::startGame()
 		indexLinePlayer1++;
 		indexLinePlayer2++;
 	}
+
 	if (player1Move.bad())
 	{
 		player1Move.close();

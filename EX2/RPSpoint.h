@@ -15,8 +15,8 @@ public:
 	~RPSpoint();
 	virtual int getX() const override;
 	virtual int getY() const override;
-	virtual void setX(int x) override;
-	virtual void setY(int y) override;
+	virtual void setX(int x);
+	virtual void setY(int y);
 private:
 	int x;
 	int y;
