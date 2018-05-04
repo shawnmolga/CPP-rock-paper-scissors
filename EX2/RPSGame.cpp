@@ -3,10 +3,11 @@ RPSGame::RPSGame() :
 indexErrorPosOne(0), indexErrorPosTwo(0), indexErrorMoveOne(0), indexErrorMoveTwo(
 		0), isGameOver(false), playerOne(Player(1)), playerTwo(
 				Player(2)) {
-	board(ROWS, vector<Cell>(COLS)); //	board = new Cell *[ROWS];
-	playerAlgoOne = new FilePlayerAlgorithm(PLAYER_ONE_POSITION_FILENAME,
+	gameBoard();
+	//board(ROWS, vector<Cell>(COLS)); //	board = new Cell *[ROWS];
+	//playerAlgoOne = new FilePlayerAlgorithm(PLAYER_ONE_POSITION_FILENAME,
 			PLAYER_ONE_MOVE_FILENAME);
-	playerAlgoTwo = new FilePlayerAlgorithm(PLAYER_TWO_POSITION_FILENAME,
+	//playerAlgoTwo = new FilePlayerAlgorithm(PLAYER_TWO_POSITION_FILENAME,
 			PLAYER_TWO_MOVE_FILENAME);
 }
 

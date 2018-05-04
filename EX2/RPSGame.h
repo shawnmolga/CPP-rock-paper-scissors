@@ -34,7 +34,7 @@ class RPSGame{
 	public:
 		RPSGame();
 		~RPSGame();
-        vector<vector<Cell>> board ;  //Noy move the board to be public. we need it in the algorithm
+        //vector<vector<Cell>> board ;  //Noy move the board to be public. we need it in the algorithm
         string ToString(GAME_OVER_TYPE typeGame, int indexErrorPosOne, int indexErrorPosTwo, int indexErrorMoveOne, int indexErrorMoveTwo);
 		int checkPositionOnBoard(bool &isPlayerOneLegalFormat,bool &isPlayerTwoLegalFormat,std::vector<unique_ptr<FightInfo>>& fights);
         bool isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
@@ -71,6 +71,7 @@ class RPSGame{
 		int indexErrorMoveOne;
 		int indexErrorMoveTwo;
 
+		RPSBoard gameBoard;
 		Player playerOne;
 		Player playerTwo;
 		bool isGameOver;

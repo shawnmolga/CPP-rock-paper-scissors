@@ -17,7 +17,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#endif 
+
 class FilePlayerAlgorithm : public PlayerAlgorithm {
 private:
 	string positionFile;
@@ -44,5 +44,8 @@ public:
 	virtual void resetNextIndex();
 	bool checkEmptyLine(int start, const string &line);
 };
+
+#endif
+
 
 
