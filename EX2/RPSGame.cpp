@@ -84,13 +84,13 @@ void RPSGame::updateJokerChange(char prevJokerRep, char newRep,
 
 
 //returns true if gameOver, false otherwise
-bool RPSGame::movePiece(Move& move, jokerChange& payerJokerChange,
+bool RPSGame::movePiece(Move& move, JokerChange& payerJokerChange,
 		bool isPlayerOneTurn) {
 	int from_x = move.getFrom().getX();
 	int from_y = move.getFrom().getY();
 	int to_x = move.getTo().getX();
 	int to_y = move.getTo().getY();
-	if (isLegalMove(move*, isPlayerOneTurn))
+	if (isLegalMove(move* move, isPlayerOneTurn))
 		return true;
 	//do move
 	if (board[to_x][to_y].getPiece() == 0) {

@@ -38,13 +38,13 @@ class RPSGame{
         string ToString(GAME_OVER_TYPE typeGame, int indexErrorPosOne, int indexErrorPosTwo, int indexErrorMoveOne, int indexErrorMoveTwo);
 		int checkPositionOnBoard(bool &isPlayerOneLegalFormat,bool &isPlayerTwoLegalFormat,std::vector<unique_ptr<FightInfo>>& fights);
         bool isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
-        bool RPSGame::initPlayeresAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
+        bool initPlayeresAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
         void countNumOfPieces(const int playerNum,int numOfPositionedPieces[],const int piece );
 		bool checkPieceOverflow(int numOfPieces[]);
 		bool checkGameOver(bool isBeforeMove, bool isPlayerOneTurn);
 		bool checkBadFormat();
 		void resetGameResults();
-		bool RPSGame::checkBadFormat(bool isPlayerOneLegalFormat, bool isPlayerTwoLegalFormat);
+		bool checkBadFormat(bool isPlayerOneLegalFormat, bool isPlayerTwoLegalFormat);
 		void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
 		bool isLegalMove(unique_ptr<Move>& move, bool isPlayer1);
 		bool fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool isCurrPieceJoker,std::vector<unique_ptr<FightInfo>>& fights,RPSpoint posOne,RPSpoint posTwo);
