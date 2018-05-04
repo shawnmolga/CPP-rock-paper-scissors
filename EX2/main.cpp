@@ -6,7 +6,7 @@
 #include "RPSGame.h"
 using namespace std;
 
-int main(int argc, char*[]) {
+int main(int argc, char * argv[] ) {
 	// check number of args
 	if (argc != 2) {
 		cout

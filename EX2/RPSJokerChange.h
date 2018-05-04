@@ -19,8 +19,8 @@ public:
 	~RPSJokerChange();
 	virtual Point& getJokerChangePosition() const override;
 	virtual char getJokerNewRep() const override; // R, P, S or B (but NOT J and NOT F)
-	virtual void setJokerNewRep(char newRep) override;
-	virtual void setJokerChangePosition(RPSpoint point) override;
+	virtual void setJokerNewRep(char newRep);
+	virtual void setJokerChangePosition(RPSpoint point);
 
 private:
 	char jokerNewRep;

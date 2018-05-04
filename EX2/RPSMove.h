@@ -10,7 +10,7 @@
 #define EX2_RPSMOVE_H_
 #include "Move.h"
 #include "Point.h"
-#include "RPSPoint.h"
+#include "RPSpoint.h"
 #include <iostream>
 #include <fstream>
 #include <string>

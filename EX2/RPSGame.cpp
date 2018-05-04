@@ -84,7 +84,11 @@ void RPSGame::updateJokerChange(char prevJokerRep, char newRep,
 
 
 //returns true if gameOver, false otherwise
+<<<<<<< HEAD
 bool RPSGame::movePiece(Move& move, JokerChange& payerJokerChange,
+=======
+bool RPSGame::movePiece(Move& move, JokerChange& playerJokerChange,
+>>>>>>> branch 'master' of https://github.com/noypit/CPP-PRJ.git
 		bool isPlayerOneTurn) {
 	int from_x = move.getFrom().getX();
 	int from_y = move.getFrom().getY();
@@ -107,7 +111,7 @@ bool RPSGame::movePiece(Move& move, JokerChange& payerJokerChange,
 
 	//no joker change
 	if (playerJokerChange != NULL) {
-		RPSpoint jokerPoint = payerJokerChange.getJokerChangePosition();
+		Point jokerPoint = payerJokerChange.getJokerChangePosition();
 		int x_joker = jokerPoint.getX();
 		int y_joker = jokerPoint.getY();
 		char new_rep = playerJokerChange.getJokerNewRep();

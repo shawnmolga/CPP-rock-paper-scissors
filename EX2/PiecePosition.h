@@ -6,7 +6,7 @@
 #include "FightInfo.h"
 #include "Move.h"
 #include "JokerChange.h"
-#include "board.h"
+#include "Board.h"
 #include "RPSpoint.h"
 //--------------------------
 // PiecePosition Interface

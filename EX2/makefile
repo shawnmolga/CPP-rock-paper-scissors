@@ -26,7 +26,7 @@ RPSFight.o: RPSFight.cpp RPSFight.h FightInfo.h Point.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 RPSJokerChange.o: RPSJokerChange.cpp RPSJokerChange.h JokerChange.h Point.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-RPSMove.o: RPSMove.cpp RPSMove.h Move.h Point.h RPSPoint.h
+RPSMove.o: RPSMove.cpp RPSMove.h Move.h Point.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 RPSPiecePosition.o: RPSPiecePosition.cpp RPSPiecePosition.h PiecePosition.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp

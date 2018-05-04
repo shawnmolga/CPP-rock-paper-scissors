@@ -321,131 +321,27 @@ bool RPSgameManager::checkInsertPlayerPosition(int playerNum,
 {
 
 	int numOfPositionedPieces[6] = {0};
-		string line;
-		int row = -1;
-		int col = -1;
-		char piece = 0;
-		bool isJoker = false;
-		int flagCnt = 0;
-		int indexLine = 1; //Counting the lines;
-		//initialize temporary board to check player's positions do not collide
-		char board[ROWS][COLS] = {0};
-		while (getline(playerPositionFile, line))
+	string line;
+	int row = -1;
+	int col = -1;
+	char piece = 0;
+	bool isJoker = false;
+	int flagCnt = 0;
+	int indexLine = 1; //Counting the lines;
+	//initialize temporary board to check player's positions do not collide
+	char board[ROWS][COLS] = {0};
+	while (getline(playerPositionFile, line))
+	{
+		//skip empty lines
+		if (checkEmptyLine(0, line))
 		{
-			//skip empty lines
-			if (checkEmptyLine(0, line))
-			{
-				indexLine++;
-				continue;
-			}
-			isJoker = false;
-			if (!checkPositioningFormat(line, numOfPositionedPieces, playerNum, row,
-										col, isJoker, piece))
-			{
-				if (playerNum == 1)
-				{
-					indexErrorPosOne = indexLine;
-				}
-				else
-				{
-					indexErrorPosTwo = indexLine;
-				}
-
-				return false;
-			}
-
-			//position is illegal - tried to locate 2 pieces of same player in same position
-			if (board[row - 1][col - 1] != 0)
-			{
-
-				if (playerNum == 1)
-				{
-					indexErrorPosOne = indexLine;
-				}
-				else
-				{
-					indexErrorPosTwo = indexLine;
-				}
-
-				cout
-					<< "Error: two or more pieces are positioned on the same location"
-					<< endl;
-				return false;
-			}
-			//check if there are too many pieces positioned on board
-			if (checkPieceOverflow(numOfPositionedPieces))
-			{
-				if (playerNum == 1)
-				{
-					indexErrorPosOne = indexLine;
-				}
-				else
-				{
-					indexErrorPosTwo = indexLine;
-				}
-				return false;
-			}
-			//position on current player temp board
-			if (playerNum == 1)
-			{
-				board[row - 1][col - 1] = piece;
-			}
-			else
-			{
-				board[row - 1][col - 1] = tolower(piece);
-			}
-			if (toupper(piece) == FLAG)
-			{
-				flagCnt++;
-			}
-
-			//check if there is a fight in game board
-			if (game->board[row][col].getPiece() != 0)
-			{
-				if (playerNum == 1) //If it is player one - big letters
-				{
-					game->fight(true, row, col, piece, isJoker);
-				}
-				else //If it is player two -  small letters
-				{
-					game->fight(false, row, col, tolower(piece), isJoker);
-				}
-			}
-			else //no fight
-			{
-				if (playerNum == 1)
-				{
-					Cell::updateCell(game->board[row][col], piece, isJoker);
-				}
-				else
-				{
-					Cell::updateCell(game->board[row][col], tolower(piece),
-									 isJoker);
-				}
-			}
 			indexLine++;
+			continue;
 		}
-		if (playerPositionFile.bad())
+		isJoker = false;
+		if (!checkPositioningFormat(line, numOfPositionedPieces, playerNum, row,
+									col, isJoker, piece))
 		{
-			cout << "Error while reading position file. Exiting game" << endl;
-			if (playerNum == 1)
-			{
-				indexErrorPosOne = indexLine;
-			}
-			else
-			{
-				indexErrorPosTwo = indexLine;
-			}
-
-			playerPositionFile.close();
-			return false;
-		}
-
-		//check if there are not enough flags positioned on board
-		if (flagCnt < FLAGS_NUM)
-		{
-			cout << "Error: Missing flags - not all flags are positioned on board"
-				 << endl;
 			if (playerNum == 1)
 			{
 				indexErrorPosOne = indexLine;
@@ -458,9 +354,113 @@ bool RPSgameManager::checkInsertPlayerPosition(int playerNum,
 			return false;
 		}
 
-		//after checking no overflow of initial positions on board - add jokers moving pieces to each player's array
-		updateJokerMovingPieces();
-		return true;
+		//position is illegal - tried to locate 2 pieces of same player in same position
+		if (board[row - 1][col - 1] != 0)
+		{
+
+			if (playerNum == 1)
+			{
+				indexErrorPosOne = indexLine;
+			}
+			else
+			{
+				indexErrorPosTwo = indexLine;
+			}
+
+			cout
+				<< "Error: two or more pieces are positioned on the same location"
+				<< endl;
+			return false;
+		}
+		//check if there are too many pieces positioned on board
+		if (checkPieceOverflow(numOfPositionedPieces))
+		{
+			if (playerNum == 1)
+			{
+				indexErrorPosOne = indexLine;
+			}
+			else
+			{
+				indexErrorPosTwo = indexLine;
+			}
+			return false;
+		}
+		//position on current player temp board
+		if (playerNum == 1)
+		{
+			board[row - 1][col - 1] = piece;
+		}
+		else
+		{
+			board[row - 1][col - 1] = tolower(piece);
+		}
+		if (toupper(piece) == FLAG)
+		{
+			flagCnt++;
+		}
+
+		//check if there is a fight in game board
+		if (game->board[row][col].getPiece() != 0)
+		{
+			if (playerNum == 1) //If it is player one - big letters
+			{
+				game->fight(true, row, col, piece, isJoker);
+			}
+			else //If it is player two -  small letters
+			{
+				game->fight(false, row, col, tolower(piece), isJoker);
+			}
+		}
+		else //no fight
+		{
+			if (playerNum == 1)
+			{
+				Cell::updateCell(game->board[row][col], piece, isJoker);
+			}
+			else
+			{
+				Cell::updateCell(game->board[row][col], tolower(piece),
+								 isJoker);
+			}
+		}
+		indexLine++;
+	}
+	if (playerPositionFile.bad())
+	{
+		cout << "Error while reading position file. Exiting game" << endl;
+		if (playerNum == 1)
+		{
+			indexErrorPosOne = indexLine;
+		}
+		else
+		{
+			indexErrorPosTwo = indexLine;
+		}
+
+		playerPositionFile.close();
+		return false;
+	}
+
+	//check if there are not enough flags positioned on board
+	if (flagCnt < FLAGS_NUM)
+	{
+		cout << "Error: Missing flags - not all flags are positioned on board"
+			 << endl;
+		if (playerNum == 1)
+		{
+			indexErrorPosOne = indexLine;
+		}
+		else
+		{
+			indexErrorPosTwo = indexLine;
+		}
+
+		return false;
+	}
+
+	//after checking no overflow of initial positions on board - add jokers moving pieces to each player's array
+	updateJokerMovingPieces();
+	return true;
 }
 
 bool RPSgameManager::checkPieceOverflow(int numOfPieces[])
@@ -642,6 +642,8 @@ void RPSgameManager::printBoardToFile(ofstream &output)
 	return;
 }
 
+
+
 int RPSgameManager::startGame()
 {
 	//check if game already over due to first positions
@@ -674,6 +676,8 @@ int RPSgameManager::startGame()
 				break;
 			}
 		}
+
+
 		if (getline(player2Move, line2))
 		{
 			if (!checkEmptyLine(0, line2))
@@ -697,6 +701,7 @@ int RPSgameManager::startGame()
 		indexLinePlayer1++;
 		indexLinePlayer2++;
 	}
+
 	if (player1Move.bad())
 	{
 		player1Move.close();
