@@ -3,12 +3,12 @@ RPSGame::RPSGame() :
 indexErrorPosOne(0), indexErrorPosTwo(0), indexErrorMoveOne(0), indexErrorMoveTwo(
 		0), isGameOver(false), playerOne(Player(1)), playerTwo(
 				Player(2)) {
-	gameBoard();
+	gameBoard = RPSBoard();
 	//board(ROWS, vector<Cell>(COLS)); //	board = new Cell *[ROWS];
 	//playerAlgoOne = new FilePlayerAlgorithm(PLAYER_ONE_POSITION_FILENAME,
-			PLAYER_ONE_MOVE_FILENAME);
+			//PLAYER_ONE_MOVE_FILENAME);
 	//playerAlgoTwo = new FilePlayerAlgorithm(PLAYER_TWO_POSITION_FILENAME,
-			PLAYER_TWO_MOVE_FILENAME);
+			//PLAYER_TWO_MOVE_FILENAME);
 }
 
 RPSGame::~RPSGame() {
@@ -84,29 +84,25 @@ void RPSGame::updateJokerChange(char prevJokerRep, char newRep,
 
 
 //returns true if gameOver, false otherwise
-<<<<<<< HEAD
-bool RPSGame::movePiece(Move& move, JokerChange& payerJokerChange,
-=======
 bool RPSGame::movePiece(Move& move, JokerChange& playerJokerChange,
->>>>>>> branch 'master' of https://github.com/noypit/CPP-PRJ.git
 		bool isPlayerOneTurn) {
 	int from_x = move.getFrom().getX();
 	int from_y = move.getFrom().getY();
 	int to_x = move.getTo().getX();
 	int to_y = move.getTo().getY();
-	if (isLegalMove(move* move, isPlayerOneTurn))
+	if (isLegalMove(move, isPlayerOneTurn))
 		return true;
 	//do move
-	if (board[to_x][to_y].getPiece() == 0) {
-		Cell::updateCell(board[to_x][to_y], board[from_x][from_y].getPiece(),
-				board[from_x][from_y].getIsJoker());
-		Cell::cleanCell(board[from_x][from_y]);
+	if (gameBoard.board[to_x][to_y].getPiece() == 0) {
+		Cell::updateCell(gameBoard.board[to_x][to_y], gameBoard.board[from_x][from_y].getPiece(),
+				gameBoard.board[from_x][from_y].getIsJoker());
+		Cell::cleanCell(gameBoard.board[from_x][from_y]);
 	} else {
 		isGameOver = fight(isPlayerOneTurn, to_x, to_y,
-				board[from_x][from_y].getPiece(),
-				board[from_x][from_y].getIsJoker());
+				gameBoard.board[from_x][from_y].getPiece(),
+				gameBoard.board[from_x][from_y].getIsJoker());
 
-		Cell::cleanCell(board[from_x][from_y]);
+		Cell::cleanCell(gameBoard.board[from_x][from_y]);
 	}
 
 	//no joker change
@@ -115,10 +111,10 @@ bool RPSGame::movePiece(Move& move, JokerChange& playerJokerChange,
 		int x_joker = jokerPoint.getX();
 		int y_joker = jokerPoint.getY();
 		char new_rep = playerJokerChange.getJokerNewRep();
-		if (new_rep == "E") {
+		if (new_rep == 'E') {
 			if (isPlayerOneTurn)
 				return true;
-		} else if (!board[x_joker][y_joker].getIsJoker()) { //if the original peice is not a joker
+		} else if (!gameBoard.board[x_joker][y_joker].getIsJoker()) { //if the original peice is not a joker
 			cout << "Error: Piece specified is not joker" << endl;
 			return true;
 		}
@@ -127,8 +123,8 @@ bool RPSGame::movePiece(Move& move, JokerChange& playerJokerChange,
 			cout << "Error: illegal NEW_REP " << endl;
 			return true;
 		}
-		updateJokerChange(toupper(board[x_joker][y_joker].getPiece()), toupper(new_rep), isPlayerOneTurn);
-		Cell::updateCell(board[x_joker][y_joker],
+		updateJokerChange(toupper(gameBoard.board[x_joker][y_joker].getPiece()), toupper(new_rep), isPlayerOneTurn);
+		Cell::updateCell(gameBoard.board[x_joker][y_joker],
 				isPlayerOneTurn ? new_rep : tolower(new_rep), true);
 	}
 	return false;
@@ -139,6 +135,7 @@ int RPSGame::makeMove() {
 	unique_ptr<Move> move2 = playerAlgoTwo->getMove();
 	int xPiecePlayerOne = move1->getFrom().getX();
 	int xPiecePlayerTwo = move2->getFrom().getX();
+	bool isPlayerOneTurn = true;
 	while (xPiecePlayerOne != -2 && xPiecePlayerOne != -3) {
 		unique_ptr<JokerChange> playerOneJokerChange =
 				playerAlgoOne->getJokerChange();
@@ -237,8 +234,7 @@ int RPSGame::makeMove() {
 
 		//TODO : close the stream
 		isGameOverInteral = !isGameOverInteral;
-		if (!isGameOverInteral && !isGameOver
-				&& !checkGameOver(true, isPlayerOneTurn)) {
+		if (!isGameOverInteral && !isGameOver && !checkGameOver(true, isPlayerOneTurn)) {
 			if (isPlayerOneTurn) {
 				if (!playerTwo.isLeftMovingPieces()) {
 					setGameOver(1, ALL_PIECES_EATEN);
@@ -367,37 +363,37 @@ void RPSGame::countNumOfPieces(const int playerNum, int numOfPositionedPieces[],
 	case ROCK:
 		numOfPositionedPieces[0]++;
 		playerNum == 1 ?
-				playerOne.setNumOfPieces(0, playerOne.numOfPieces[0] + 1) :
+				playerOne.setNumOfPieces(0, playerOne.numOfPieces[0] + 1);
 				playerTwo.setNumOfPieces(0, playerTwo.numOfPieces[0] + 1);
 		break;
 	case PAPER:
 		numOfPositionedPieces[1]++;
 		playerNum == 1 ?
-				playerOne.setNumOfPieces(1, playerOne.numOfPieces[1] + 1) :
+				playerOne.setNumOfPieces(1, playerOne.numOfPieces[1] + 1);
 				playerTwo.setNumOfPieces(1, playerTwo.numOfPieces[1] + 1);
 		break;
 	case SCISSOR:
 		numOfPositionedPieces[2]++;
 		playerNum == 1 ?
-				playerOne.setNumOfPieces(2, playerOne.numOfPieces[2] + 1) :
+				playerOne.setNumOfPieces(2, playerOne.numOfPieces[2] + 1);
 				playerTwo.setNumOfPieces(2, playerTwo.numOfPieces[2] + 1);
 		break;
 	case BOMB:
 		numOfPositionedPieces[3]++;
 		playerNum == 1 ?
-				playerOne.setNumOfPieces(3, playerOne.numOfPieces[3] + 1) :
+				playerOne.setNumOfPieces(3, playerOne.numOfPieces[3] + 1);
 				playerTwo.setNumOfPieces(3, playerTwo.numOfPieces[3] + 1);
 		break;
 	case JOKER:
 		numOfPositionedPieces[4]++;
 		playerNum == 1 ?
-				playerOne.setNumOfPieces(4, playerOne.numOfPieces[4] + 1) :
+				playerOne.setNumOfPieces(4, playerOne.numOfPieces[4] + 1);
 				playerTwo.setNumOfPieces(4, playerTwo.numOfPieces[4] + 1);
 		break;
 	case FLAG:
 		numOfPositionedPieces[5]++;
 		playerNum == 1 ?
-				playerOne.setNumOfPieces(5, playerOne.numOfPieces[5] + 1) :
+				playerOne.setNumOfPieces(5, playerOne.numOfPieces[5] + 1);
 				playerTwo.setNumOfPieces(5, playerTwo.numOfPieces[5] + 1);
 		break;
 	default:
