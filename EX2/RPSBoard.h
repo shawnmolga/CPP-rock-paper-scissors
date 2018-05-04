@@ -20,7 +20,8 @@ class RPSBoard : public Board
 	RPSBoard();
 	~RPSBoard();
 	virtual int getPlayer(const Point &pos) const; // 1 for player 1�s piece, 2 for 2, 0 if empty
-  //private:
+	vector<vector<Cell>> board;
+	//private:
 };
 
 #endif /* EX2_RPSBOARD_H_ */

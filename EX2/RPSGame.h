@@ -34,11 +34,15 @@ class RPSGame{
 	public:
 		RPSGame();
 		~RPSGame();
-        vector<vector<Cell>> board ;  //Noy move the board to be public. we need it in the algorithm
+        //vector<vector<Cell>> board ;  //Noy move the board to be public. we need it in the algorithm
         string ToString(GAME_OVER_TYPE typeGame, int indexErrorPosOne, int indexErrorPosTwo, int indexErrorMoveOne, int indexErrorMoveTwo);
 		int checkPositionOnBoard(bool &isPlayerOneLegalFormat,bool &isPlayerTwoLegalFormat,std::vector<unique_ptr<FightInfo>>& fights);
         bool isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
+<<<<<<< HEAD
+        bool initPlayeresAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
+=======
         bool initPlayeresAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
+>>>>>>> branch 'master' of https://github.com/noypit/CPP-PRJ.git
         void countNumOfPieces(const int playerNum,int numOfPositionedPieces[],const int piece );
 		bool checkPieceOverflow(int numOfPieces[]);
 		bool checkGameOver(bool isBeforeMove, bool isPlayerOneTurn);
@@ -71,6 +75,7 @@ class RPSGame{
 		int indexErrorMoveOne;
 		int indexErrorMoveTwo;
 
+		RPSBoard gameBoard;
 		Player playerOne;
 		Player playerTwo;
 		bool isGameOver;
