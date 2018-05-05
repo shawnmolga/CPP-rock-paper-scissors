@@ -20,7 +20,7 @@ void AutoPlayerAlgorithm::getInitialPositions(int player,
 	//positionRocks(vectorToFill);
 	//positionPapers(vectorToFill);
 	//positionScissors(vectorToFill);
-	positionBombs(player, vectorToFill);
+	//positionBombs(player);
 	positionFlags(player, vectorToFill);
 	//positionJokers(vectorToFill);
 }

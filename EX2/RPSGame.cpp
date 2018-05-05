@@ -6,11 +6,6 @@ RPSGame::RPSGame() : indexErrorPosOne(0), indexErrorPosTwo(0), indexErrorMoveOne
 					 isGameOverInternal(false)
 {
 	gameBoard = RPSBoard();
-	//board(ROWS, vector<Cell>(COLS)); //	board = new Cell *[ROWS];
-	//playerAlgoOne = new FilePlayerAlgorithm(PLAYER_ONE_POSITION_FILENAME,
-	//PLAYER_ONE_MOVE_FILENAME);
-	//playerAlgoTwo = new FilePlayerAlgorithm(PLAYER_TWO_POSITION_FILENAME,
-	//PLAYER_TWO_MOVE_FILENAME);
 }
 
 RPSGame::~RPSGame()
@@ -19,6 +14,10 @@ RPSGame::~RPSGame()
 	delete (playerAlgoTwo);
 }
 
+/*
+This function changes joker representation
+Input - previous jokerRep, new jokerRep and inidication for current player
+*/
 void RPSGame::updateJokerChange(char prevJokerRep, char newRep,
 								bool isPlayerOne)
 {
@@ -84,8 +83,8 @@ void RPSGame::updateJokerChange(char prevJokerRep, char newRep,
 }
 
 /*
-Input0 move object and
-
+Input- move object, joker change object and players turn
+Output- true if the move was done, otherwise false
 */
 //returns true if gameOver, false otherwise
 bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJokerChange,
@@ -104,14 +103,39 @@ bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJ
 						 gameBoard.board[from_x][from_y].getIsJoker());
 		Cell::cleanCell(gameBoard.board[from_x][from_y]);
 	}
-	else
+	else //fight!
 	{
+		RPSFight fights = RPSFight();
+		std::vector<unique_ptr<FightInfo>> initFights;
+		//create position fromvectors
+		RPSpoint Pos1(from_x , from_y);	
+		RPSpoint Pos2(to_x , to_y);	
+		if(!isPlayerOneTurn){
+			RPSpoint Pos1(to_x , to_y);	
+			RPSpoint Pos2(from_x , from_y);	
+		}
 		isGameOver = fight(isPlayerOneTurn, to_x, to_y,
 						   gameBoard.board[from_x][from_y].getPiece(),
-						   gameBoard.board[from_x][from_y].getIsJoker());
-
+						   gameBoard.board[from_x][from_y].getIsJoker(),fights,initFights,Pos1,Pos2); //need to add paramerrerd to fight!!
 		Cell::cleanCell(gameBoard.board[from_x][from_y]);
+		/*
+		For the player who just moved:
+		notifyFightResult(const FightInfo& fightInfo); // only if there was a fight
+		getJokerChange();--->shawn do we have to add this??	
+		*/
+		isPlayerOneTurn ? playerAlgoOne->notifyFightResult(fights): playerAlgoTwo->notifyFightResult(fights);
+		/*
+		For the other player:
+		void notifyOnOpponentMove(const Move& move);
+		void notifyFightResult(const FightInfo& fightInfo); // only if there was a fight
+		=> go back to [A TURN] for this player
+		*/
+
+		isPlayerOneTurn ? playerAlgoTwo->notifyOnOpponentMove(*move) : playerAlgoOne->notifyOnOpponentMove(*move);
+		isPlayerOneTurn ? playerAlgoOne->notifyFightResult(fights): playerAlgoTwo->notifyFightResult(fights);
+
 	}
+	
 
 	//no joker change
 	if (playerJokerChange != NULL)
@@ -654,38 +678,16 @@ void RPSGame::setGameOver(int winnerNumber, GAME_OVER_TYPE type)
 
 	return;
 }
-/*
- This function change game results according to position check file
- Output -  true if game is over due to bad format, otherwise false
- bool RPSGame::checkBadFormat(bool isPlayerOneLegalFormat, bool isPlayerTwoLegalFormat)
-{
-	if (!isPlayerOneLegalFormat && !isPlayerTwoLegalFormat)
-	{
-		setGameOver(0, WRONG_FILE_FORMAT_BOTH);
-		return true;
-	}
-	else if (!isPlayerOneLegalFormat)
-	{
-		setGameOver(2, WRONG_FILE_FORMAT_ONE);
-		return true;
-	}
 
-	else if (!isPlayerTwoLegalFormat)
-	{
-		setGameOver(1, WRONG_FILE_FORMAT_TWO);
-		return true;
-	}
-	return false;
-}
- */
 int RPSGame::checkBadFormat()
 {
 	bool isPlayerOneLegalFormat = true;
 	bool isPlayerTwoLegalFormat = true;
-	RPSFight fightInfo();
+	RPSFight fightInfo = RPSFight();
+
 	std::vector<unique_ptr<FightInfo>> initFights;
 	int isLegalFormat = checkPositionOnBoard(isPlayerOneLegalFormat,
-											  isPlayerTwoLegalFormat, fightInfo, initFights);
+											  isPlayerTwoLegalFormat,  fightInfo, initFights);
 	resetGameResults(); //reset the game result as we did in ex1!
 	if (!isPlayerOneLegalFormat && !isPlayerTwoLegalFormat)
 	{
@@ -880,7 +882,10 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 	}
 	char currPlayerPiece = toupper(currPiece);
 	char nextPlayerPiece = toupper(gameBoard.board.at(row).at(col).getPiece());
-
+	fights.setPosition(*currPos);
+	fights.setOpponentPiece(nextPlayerPiece);
+	fights.setCurrPiece(currPiece);
+	
 	//Case 1: 2 players in the same type - both should be eaten
 	if (nextPlayerPiece == currPlayerPiece)
 	{
@@ -907,8 +912,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 			nextPlayer->numOfPieces[3]--;
 			break;
 		}
-		fights.setPosition(*currPos);
-		fights.setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
 		fights.setWinner(0);
 		initFights.push_back(
 		 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), 0));
@@ -930,9 +933,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 			Cell::updateCell(gameBoard.board.at(row).at(col), currPiece,
 							 isCurrPieceJoker);
 		}
-		fights.setPosition(*currPos);
-		fights.setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
-		fights.setWinner(currPlayerNum);
 		initFights.push_back(
 		 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
 	}
@@ -948,8 +948,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 			nextPlayer->numOfPieces[3]--;
 			Cell::updateCell(gameBoard.board.at(row).at(col), 0, false);
 		}
-		fights.setPosition(*currPos);
-		fights.setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
 		fights.setWinner(nextPlayerNum);
 		initFights.push_back(
 		 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
@@ -974,8 +972,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		}
 		//bomb won and exploded so cell is empty now
 		Cell::updateCell(gameBoard.board.at(row).at(col), 0, false);
-		fights.setPosition(*currPos);
-		fights.setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
 		fights.setWinner(nextPlayerNum);
 		initFights.push_back(
 		 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
@@ -1001,8 +997,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		}
 		//bomb won and exploded so cell is empty now
 		Cell::updateCell(gameBoard.board.at(row).at(col), 0, false);
-		fights.setPosition(*currPos);
-		fights.setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
 		fights.setWinner(nextPlayerNum);
 		initFights.push_back(
 			make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
@@ -1014,7 +1008,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		if (currPlayerPiece == ROCK)
 		{
 			fights.setPosition(*currPos);
-			fights.setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
 			fights.setWinner(nextPlayerNum);
 			initFights.push_back(
 				make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
@@ -1023,8 +1016,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		else if (currPlayerPiece == SCISSOR)
 		{
 			nextPlayer->numOfPieces[1]--;
-			fights.setPosition(*currPos);
-			fights.setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
 			fights.setWinner(currPlayerNum);
 			initFights.push_back(
 			 make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
@@ -1038,8 +1029,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		if (currPlayerPiece == PAPER)
 		{
 			nextPlayer->numOfPieces[0]--;
-			fights.setPosition(*currPos);
-			fights.setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
 			fights.setWinner(currPlayerNum);
 			initFights.push_back(
 				make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
@@ -1049,7 +1038,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		else if (currPlayerPiece == SCISSOR)
 		{
 			currPlayer->numOfPieces[2]--;
-			fights.setPosition(*currPos);
 			fights.setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
 			fights.setWinner(nextPlayerNum);
 			initFights.push_back(
@@ -1062,7 +1050,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		if (currPlayerPiece == PAPER)
 		{
 			fights.setPosition(*currPos);
-			fights.setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
 			fights.setWinner(nextPlayerNum);
 			 initFights.push_back(
 			 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
@@ -1070,8 +1057,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		}
 		else if (currPlayerPiece == ROCK)
 		{
-			fights.setPosition(*currPos);
-			fights.setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
 			fights.setWinner(currPlayerNum);
 			initFights.push_back(
 			 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
@@ -1083,6 +1068,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 	}
 	return checkGameOver(false, isPlayerOneTurn);
 }
+
 /*
  Input - ofstream of output file
  Output - print the board to the file
