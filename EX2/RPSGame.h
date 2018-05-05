@@ -14,6 +14,7 @@
 #include "PiecePosition.h"
 #include "FilePlayerAlgorithm.h"
 #include "Player.h"
+#include "AutoPlayerAlgorithm.h"
 #endif 
 
 enum GAME_OVER_TYPE
@@ -36,18 +37,17 @@ class RPSGame{
 		~RPSGame();
         //vector<vector<Cell>> board ;  //Noy move the board to be public. we need it in the algorithm
         string ToString(GAME_OVER_TYPE typeGame, int indexErrorPosOne, int indexErrorPosTwo, int indexErrorMoveOne, int indexErrorMoveTwo);
-		int checkPositionOnBoard(bool &isPlayerOneLegalFormat,bool &isPlayerTwoLegalFormat,std::vector<unique_ptr<FightInfo>>& fights);
+		int checkPositionOnBoard(bool &isPlayerOneLegalFormat,bool &isPlayerTwoLegalFormat,RPSFight &fights, std::vector<unique_ptr<FightInfo>>& initFights);
         bool isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
-        bool initPlayeresAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
+        bool initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
         void countNumOfPieces(const int playerNum,int numOfPositionedPieces[],const int piece );
 		bool checkPieceOverflow(int numOfPieces[]);
 		bool checkGameOver(bool isBeforeMove, bool isPlayerOneTurn);
-		bool checkBadFormat();
+		int checkBadFormat();
 		void resetGameResults();
-		bool checkBadFormat(bool isPlayerOneLegalFormat, bool isPlayerTwoLegalFormat);
 		void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
 		bool isLegalMove(unique_ptr<Move>& move, bool isPlayer1);
-		bool fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool isCurrPieceJoker,std::vector<unique_ptr<FightInfo>>& fights,RPSpoint posOne,RPSpoint posTwo);
+		bool fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool isCurrPieceJoker,RPSFight & fights,std::vector<unique_ptr<FightInfo>> &initFights,RPSpoint posOne,RPSpoint posTwo);
 		GAME_OVER_TYPE getGameOverReason(){
 			return gameOverReason;
 		};
@@ -56,7 +56,11 @@ class RPSGame{
 		void printOutputFile(const string &outputFile);
 		void updateJokerChange(char prevJokerRep, char newRep,
 											   bool isPlayerOne);
-		bool movePiece(Move& move, JokerChange& playerJokerChange, bool isPlayerOneTurn);
+		bool initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
+
+							
+bool RPSGame::movePiece( unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJokerChange,
+		bool isPlayerOneTurn);
 		int makeMove();
 		bool initGameMethod(string gameMethod);
 
@@ -76,6 +80,7 @@ class RPSGame{
 		Player playerTwo;
 		bool isGameOver;
 		GAME_OVER_TYPE gameOverReason;
-		bool isGameOverInteral;
+		bool isGameOverInternal;
+		
 
 };

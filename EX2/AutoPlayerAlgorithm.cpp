@@ -17,12 +17,12 @@ AutoPlayerAlgorithm::AutoPlayerAlgorithm()
 void AutoPlayerAlgorithm::getInitialPositions(int player,
 		std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
-	positionRocks(vectorToFill);
-	positionPapers(vectorToFill);
-	positionScissors(vectorToFill);
+	//positionRocks(vectorToFill);
+	//positionPapers(vectorToFill);
+	//positionScissors(vectorToFill);
 	positionBombs(player, vectorToFill);
 	positionFlags(player, vectorToFill);
-	positionJokers(vectorToFill);
+	//positionJokers(vectorToFill);
 }
 
 void AutoPlayerAlgorithm::positionFlags(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill) {

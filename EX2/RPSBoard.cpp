@@ -7,7 +7,8 @@
 #include "RPSBoard.h"
 
 RPSBoard::RPSBoard(){
-	board(ROWS, vector<Cell>(COLS)); //	board = new Cell *[ROWS];
+	vector <vector<Cell>> board(ROWS, vector<Cell>(COLS));
+	//board = vector(ROWS, vector<Cell>(COLS)); //	board = new Cell *[ROWS];
 }
 RPSBoard::~RPSBoard(){}
 

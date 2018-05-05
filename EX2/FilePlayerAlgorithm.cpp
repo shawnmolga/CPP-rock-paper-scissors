@@ -272,15 +272,14 @@ void FilePlayerAlgorithm::getInitialPositions(int player,
 	posFile.close();
 }
 
-//will not be used in file player method
-//<<<<<<< HEAD
-//void FilePlayerAlgorithm::notifyOnInitialBoard(const Board& b, const std::vector<unique_ptr<FightInfo>>& fights){}
-//=======
+
+void FilePlayerAlgorithm::notifyFightResult(const FightInfo& fightInfo){
+
+}
 void FilePlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 											   const std::vector<unique_ptr<FightInfo>> &fights)
 {
 	//What to do here?!?
-	//>>>>>>> 7a49b519f61d5eafb07cd698dbe773e0d53deb08
 }
 
 //bad format - new_rep = "E"
