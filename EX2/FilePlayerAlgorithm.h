@@ -19,14 +19,6 @@
 #include <string>
 
 class FilePlayerAlgorithm : public PlayerAlgorithm {
-private:
-	string positionFile;
-	string movesFile;
-	ifstream player1Move;
-	int movesFileLine = 1;
-	int nextIndex = 0;
-	string line1;
-
 public:
 	FilePlayerAlgorithm(const string &positionFile, const string &movesFile);
 	virtual void getInitialPositions(int player, std::vector<unique_ptr<PiecePosition>>& vectorToFill) override;
@@ -42,10 +34,19 @@ public:
 	//	char &jokerRep, char &piece);
 	bool getPositionAndRepFromLine(const string &line, int &row, int &col, char &jokerRep, char &piece);
 
-	virtual void incrementMovesFileLine();
-	virtual void resetNextIndex();
+	 void incrementMovesFileLine();
+	//virtual void resetNextIndex();
 	bool checkEmptyLine(int start, const string &line);
+
+	private:
+		string positionFile;
+		string movesFile;
+		ifstream player1Move;
+		int movesFileLine;
+		int nextIndex;
+		string line1;
 };
+
 
 #endif
 

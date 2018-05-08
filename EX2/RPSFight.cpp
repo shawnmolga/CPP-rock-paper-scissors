@@ -57,3 +57,7 @@ void RPSFight::setCurrPiece(char piece)
 {
     currPiece = piece;
 }
+int  RPSFight::getWinner()const
+{
+    return winner;
+}

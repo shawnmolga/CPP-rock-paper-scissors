@@ -8,7 +8,7 @@
 #include "FilePlayerAlgorithm.h"
 
 FilePlayerAlgorithm::FilePlayerAlgorithm(const string &posFile,
-										 const string &moveFile) : positionFile(posFile), movesFile(moveFile)
+										 const string &moveFile) : positionFile(posFile), movesFile(moveFile),movesFileLine(1),nextIndex(0)
 {
 }
 
@@ -275,15 +275,15 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 //compilation error - unused fightInfo variable !
 
 void FilePlayerAlgorithm::notifyFightResult(const FightInfo& fightInfo){
-	void(fightInfo);
+	fightInfo.getPosition().getX();
 }
 
 void FilePlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 											   const std::vector<unique_ptr<FightInfo>> &fights)
 {
 	//What to do here?!?
-	void(b);
-	void(fights);
+	b.getPlayer(RPSpoint(2,1));
+	cout<<fights[0]->getPiece(1)<<endl;
 }
 
 
@@ -390,7 +390,7 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 	RPSpoint to(to_x, to_y);
 	if (getline(player1Move, line1))
 	{
-		incrementMovesFileLine();
+		//incrementMovesFileLine();
 		if (!checkEmptyLine(0, line1))
 		{
 			//move file wrong format - Point from = (-1, 0)
@@ -439,3 +439,9 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 	unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
 	return move;
 }
+void FilePlayerAlgorithm::incrementMovesFileLine(){
+	movesFileLine++;
+}
+void FilePlayerAlgorithm::notifyOnOpponentMove(const Move& move) { // noy implmenet only for compilation will succcedd
+	cout<<move.getTo().getX()<<endl;
+} // called only on opponent�s move

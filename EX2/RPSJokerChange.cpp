@@ -9,6 +9,7 @@
 
 RPSJokerChange::RPSJokerChange(char jokerNewRep, RPSpoint jokerChangePosition) : jokerNewRep(jokerNewRep), jokerChangePosition(jokerChangePosition) {}
 
+RPSJokerChange::~RPSJokerChange(){}
 const Point& RPSJokerChange::getJokerChangePosition() const{
     return jokerChangePosition;
 }

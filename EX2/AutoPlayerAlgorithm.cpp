@@ -152,10 +152,19 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 }
 
 void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move& move) {
-	void(move);
-
+	 //Implement only for compilation will succedd - noy
+	cout<<move.getFrom().getX()<<endl;
 }
 void AutoPlayerAlgorithm::notifyFightResult(const FightInfo& fightInfo) {
-	void(fightinfo);
+	cout << fightInfo.getPiece(1)<<endl; //Implement only for compilation will succedd - noy
+}
+//unique_ptr<Move> FilePlayerAlgorithm::getMove()
+
+
+unique_ptr<Move> AutoPlayerAlgorithm::getMove() {//Implement only for compilation will succedd - noy
+return NULL;
 }
 
+ unique_ptr<JokerChange>  AutoPlayerAlgorithm::getJokerChange() {//Implement only for compilation will succedd - noy
+return NULL;
+}

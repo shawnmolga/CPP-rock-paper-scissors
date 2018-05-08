@@ -8,9 +8,9 @@
 
 	//RPSPiecePosition (Point position, char piece, char jokerRep);
 
-RPSPiecePosition::RPSPiecePosition (RPSpoint pos, char kind, char rep) :
+RPSPiecePosition::RPSPiecePosition(RPSpoint pos, char kind, char rep) :
 position(pos), piece(kind), jokerRep(rep){}
-
+RPSPiecePosition::~RPSPiecePosition() {}
  const Point& RPSPiecePosition::getPosition() const{
  return position;
 }
