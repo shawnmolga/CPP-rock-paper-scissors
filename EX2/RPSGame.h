@@ -32,7 +32,25 @@ enum GAME_OVER_TYPE
 
 
 class RPSGame{
-	public:
+private:
+	PlayerAlgorithm * playerAlgoOne;
+	PlayerAlgorithm * playerAlgoTwo;
+
+	int indexErrorPosOne; //do we need line numbers?
+	int indexErrorPosTwo;
+	int indexErrorMoveOne;
+	int indexErrorMoveTwo;
+	bool isGameOver;
+
+	Player playerOne;
+	Player playerTwo;
+
+	RPSBoard gameBoard;
+	GAME_OVER_TYPE gameOverReason;
+	bool isGameOverInternal;
+
+
+public:
 		RPSGame();
 		~RPSGame();
         //vector<vector<Cell>> board ;  //Noy move the board to be public. we need it in the algorithm
@@ -56,31 +74,14 @@ class RPSGame{
 		void printOutputFile(const string &outputFile);
 		void updateJokerChange(char prevJokerRep, char newRep,
 											   bool isPlayerOne);
-		bool initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
 
 							
-bool RPSGame::movePiece( unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJokerChange,
+bool movePiece( unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJokerChange,
 		bool isPlayerOneTurn);
 		int makeMove();
 		bool initGameMethod(string gameMethod);
 
 
 
-    private:
-        PlayerAlgorithm * playerAlgoOne;
-        PlayerAlgorithm * playerAlgoTwo;
-
-		int indexErrorPosOne; //do we need line numbers?
-		int indexErrorPosTwo;
-		int indexErrorMoveOne;
-		int indexErrorMoveTwo;
-
-		RPSBoard gameBoard;
-		Player playerOne;
-		Player playerTwo;
-		bool isGameOver;
-		GAME_OVER_TYPE gameOverReason;
-		bool isGameOverInternal;
-		
 
 };

@@ -162,8 +162,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
  Input- line, player number, reference to row number and col number , joker representation and piece
  Output -  false if there is wrong format otherwise update piece, joker rep and row and col and return true
  */
-bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line,
-													int playerNum, int &row, int &col, char &jokerRep, char &piece)
+bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row, int &col, char &jokerRep, char &piece)
 {
 	int pieceIndex = getPieceFromLine(0, line);
 	piece = line[pieceIndex];
@@ -229,9 +228,10 @@ bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line,
 	return true;
 }
 
-void FilePlayerAlgorithm::getInitialPositions(int player,
-											  std::vector<unique_ptr<PiecePosition>> &vectorToFill)
+void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
+	//todo - check this
+	(void)player;
 	ifstream posFile(positionFile);
 	string line;
 	int row = -1;
@@ -247,7 +247,7 @@ void FilePlayerAlgorithm::getInitialPositions(int player,
 			indexLine++;
 			continue;
 		}
-		if (getPositionAndRepFromLine(line, player, row, col, jokerRep, piece) == false)
+		if (getPositionAndRepFromLine(line, row, col, jokerRep, piece) == false)
 		{
 			vectorToFill.push_back(
 				make_unique<RPSPiecePosition>(RPSpoint(row, col), -1, jokerRep));
@@ -272,40 +272,44 @@ void FilePlayerAlgorithm::getInitialPositions(int player,
 	posFile.close();
 }
 
+//compilation error - unused fightInfo variable !
 
 void FilePlayerAlgorithm::notifyFightResult(const FightInfo& fightInfo){
-
+	void(fightInfo);
 }
+
 void FilePlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 											   const std::vector<unique_ptr<FightInfo>> &fights)
 {
 	//What to do here?!?
+	void(b);
+	void(fights);
 }
+
 
 //bad format - new_rep = "E"
 unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 {
-	int x_joker = 0;
-	int y_joker = 0;
-	char new_rep;
 	if (!checkEmptyLine(nextIndex, line1))
 	{
+
+		char new_rep = 'E';
 		//skip all spaces until next char
-		RPSpoint point(x_joker, y_joker);
-		RPSJokerChange jc(RPSJokerChange(new_rep, point));
+		RPSpoint point(0, 0);
+		RPSJokerChange* jc = new RPSJokerChange(new_rep, point);
 		nextIndex = getPieceFromLine(nextIndex, line1) + 1;
 		if (nextIndex == 0)
 		{
 			new_rep = 'E';
-			jc.setJokerNewRep('E');
+			jc->setJokerNewRep('E');
 			//unique_ptr <RPSMove> move = make_unique <RPSMove> (from, to);
-			return make_unique<JokerChange>(jc);
+			return make_unique<RPSJokerChange>(*jc);
 		}
 		if (line1[nextIndex - 1] != JOKER)
 		{
 			cout << "Error: Bad format - Junk characters in line" << endl;
-			jc.setJokerNewRep('E');
-			return make_unique<JokerChange>(jc);
+			jc->setJokerNewRep('E');
+			return make_unique<RPSJokerChange>(*jc);
 		}
 		if (line1[nextIndex] != ':')
 		{
@@ -313,8 +317,8 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 				<< "Error: Bad format - Joker  hard coded information not placed correctly - need to be followed by colon"
 				<< endl;
 			new_rep = 'E';
-			jc.setJokerNewRep('E');
-			return make_unique<JokerChange>(jc);
+			jc->setJokerNewRep('E');
+			return make_unique<RPSJokerChange>(*jc);
 		}
 
 		nextIndex++;
@@ -322,44 +326,46 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 		if (line1[nextIndex] != ' ')
 		{
 			cout << "Bad Format - missing space before joker change" << endl;
-			jc.setJokerNewRep('E');
-			return make_unique<JokerChange>(jc);
+			jc->setJokerNewRep('E');
+			return make_unique<RPSJokerChange>(*jc);
 		}
+		int x_joker ;
+		int y_joker ;
 		nextIndex = getPositionFromLine(nextIndex, line1, x_joker, y_joker);
 		if (nextIndex == -1)
 		{
-			jc.setJokerNewRep('E');
-			return make_unique<JokerChange>(jc);
+			jc->setJokerNewRep('E');
+			return make_unique<RPSJokerChange>(*jc);
 		}
 		point.setX(x_joker);
 		point.setY(y_joker);
 		nextIndex = 1 + getPieceFromLine(nextIndex, line1);
 		if (nextIndex == 0)
 		{
-			jc.setJokerNewRep('E');
-			return make_unique<JokerChange>(jc);
+			jc->setJokerNewRep('E');
+			return make_unique<RPSJokerChange>(*jc);
 		}
 		if (line1[nextIndex - 2] != ' ')
 		{
 			cout << "Bad Format - missing space before joker translation piece"
 				 << endl;
-			jc.setJokerNewRep('E');
-			return make_unique<JokerChange>(jc);
+			jc->setJokerNewRep('E');
+			return make_unique<RPSJokerChange>(*jc);
 		}
 		new_rep = line1[nextIndex - 1];
 		if (!checkEmptyLine(nextIndex, line1))
 		{
 			cout << "Error: Bad format - rest of line is not empty" << endl;
 
-			jc.setJokerNewRep('E');
-			return make_unique<JokerChange>(jc);
+			jc->setJokerNewRep('E');
+			return make_unique<RPSJokerChange>(*jc);
 		}
-		jc.setJokerNewRep(new_rep);
-		jc.setJokerChangePosition(point);
-		return make_unique<JokerChange>(jc);
+		jc->setJokerNewRep(new_rep);
+		jc->setJokerChangePosition(point);
+		return make_unique<RPSJokerChange>(*jc);
 	}
 	else
-		return NULL; //if no jokerChange - return Null;
+		return unique_ptr<RPSJokerChange>{}; //if no jokerChange - return Null;
 }
 /*
 returns the next move of current player
@@ -376,8 +382,8 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 	int from_y = 0;
 	int to_x = 0;
 	int to_y = 0;
-	int x_joker = 0;
-	int y_joker = 0;
+	//int x_joker = 0;
+	//int y_joker = 0;
 	// RPSpoint  from = new RPSpoint(from_x, from_y);
 	// RPSpoint to = new RPSpoint(to_x, to_y);
 	RPSpoint from(from_x, from_y);

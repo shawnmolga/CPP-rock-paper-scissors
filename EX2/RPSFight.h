@@ -8,8 +8,8 @@
 
 class RPSFight : public FightInfo{
 public:
-
-	 RPSFight();
+	RPSFight();
+	// RPSFight(RPSpoint point, char opponentPiece , int winner );
 	//~RPSFight();
 	const Point& getPosition() const ;
 	char  getPiece(int player) const ; // R, P, S, B or F (but NOT J)

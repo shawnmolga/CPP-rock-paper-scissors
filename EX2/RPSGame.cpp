@@ -304,8 +304,9 @@ int RPSGame::makeMove()
 			}
 			setGameOver(0, TIE_NO_WINNER);
 		}
-		return 0;
+
 	}
+	return 0;
 }
 
 /*
@@ -318,8 +319,6 @@ int RPSGame::startGame()
 	vector<vector<int>> vector_to_fill;
 	// std::vector<unique_ptr<PiecePosition>> vectorToFill1;
 	// std::vector<unique_ptr<PiecePosition>> vectorToFill2;
-	bool isPlayerOneLegalFormat = false;
-	bool isPlayerTwoLegalFormat = false;
 	RPSFight fights(); //need to init this!
 	//meand bad format err
 	int initResult = checkBadFormat();
@@ -334,6 +333,7 @@ int RPSGame::startGame()
 	}
 	//If we got here the board is initialized! now we need to make a move.
 	makeMove();
+	return 0;
 }
 
 bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
@@ -502,7 +502,8 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 	bool isJoker = false;
 	int numOfPositionedPieces[6] = {0};
 	int flagCnt = 0;
-	for (int i = 0; i < vectorToFillPlayerOne.size(); i++)
+	//bool isPlayerOneLegalFormat = true;
+	for (int i = 0; i < (int)vectorToFillPlayerOne.size(); i++)
 	{
 		isJoker = false;
 		int inputPiece = vectorToFillPlayerOne[i]->getPiece();
@@ -564,8 +565,9 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 
 	//Iterate player 2 vector and position on the board
 	flagCnt = 0;
-	int numOfPositionedPieces[6] = {0};
-	for (int i = 0; i < vectorToFillPlayerTwo.size(); i++)
+	numOfPositionedPieces[6] = {0};
+	for (int i = 0; i < (int) vectorToFillPlayerTwo.size(); i++)
+	for (int i = 0; i < (int) vectorToFillPlayerTwo.size(); i++)
 	{
 		isJoker = false;
 		int inputPiece = vectorToFillPlayerTwo[i]->getPiece();
@@ -636,6 +638,7 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 			 << endl;
 		return -1;
 	}
+	return 0;
 }
 
 /*
@@ -871,14 +874,15 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 	RPSpoint *NextPlayerPos = &posTwo;
 	int currPlayerNum = 1;
 	int nextPlayerNum = 2;
-	if (!isPlayerOneTurn)
+    RPSFight* ptr = new RPSFight();//check this - might be bad practice
+    if (!isPlayerOneTurn)
 	{
 		currPlayer = &playerTwo;
 		nextPlayer = &playerOne;
-		RPSpoint *currPos = &posTwo;
-		RPSpoint *NextPlayerPos = &posOne;
-		int currPlayerNum = 2;
-		int nextPlayerNum = 1;
+		*currPos = posTwo;
+		*NextPlayerPos = posOne;
+		currPlayerNum = 2;
+		nextPlayerNum = 1;
 	}
 	char currPlayerPiece = toupper(currPiece);
 	char nextPlayerPiece = toupper(gameBoard.board.at(row).at(col).getPiece());
@@ -894,8 +898,8 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		case FLAG:
 			currPlayer->numOfPieces[5]--;
 			nextPlayer->numOfPieces[5]--;
-		case ROCK:
-			break;
+		    break;
+        case ROCK:
 			currPlayer->numOfPieces[0]--;
 			nextPlayer->numOfPieces[0]--;
 			break;
@@ -913,8 +917,11 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 			break;
 		}
 		fights.setWinner(0);
-		initFights.push_back(
-		 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), 0));
+		ptr->setPosition(*currPos);
+		ptr->setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
+		ptr->setWinner(0);
+		initFights.push_back(make_unique<RPSFight>(*ptr));
+
 		Cell::updateCell(gameBoard.board.at(row).at(col), 0, false);
 	}
 
@@ -933,8 +940,14 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 			Cell::updateCell(gameBoard.board.at(row).at(col), currPiece,
 							 isCurrPieceJoker);
 		}
-		initFights.push_back(
-		 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
+		//initFights.push_back(
+		// 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
+
+        ptr->setPosition(*currPos);
+        ptr->setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
+        ptr->setWinner(0);
+        initFights.push_back(make_unique<RPSFight>(*ptr));
+
 	}
 
 	//case 3: current player's piece is flag and there is another piece on board
@@ -949,8 +962,13 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 			Cell::updateCell(gameBoard.board.at(row).at(col), 0, false);
 		}
 		fights.setWinner(nextPlayerNum);
-		initFights.push_back(
-		 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
+		//initFights.push_back(
+		// 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
+
+        ptr->setPosition(*currPos);
+        ptr->setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
+        ptr->setWinner(0);
+        initFights.push_back(make_unique<RPSFight>(*ptr));
 	}
 	//case 4: there is bomb and current player has another piece
 	else if (nextPlayerPiece == BOMB)
@@ -973,8 +991,13 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		//bomb won and exploded so cell is empty now
 		Cell::updateCell(gameBoard.board.at(row).at(col), 0, false);
 		fights.setWinner(nextPlayerNum);
-		initFights.push_back(
-		 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
+		//initFights.push_back(
+		 //	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
+
+        ptr->setPosition(*currPos);
+        ptr->setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
+        ptr->setWinner(0);
+        initFights.push_back(make_unique<RPSFight>(*ptr));
 	}
 
 	//case 5: current player piece is bomb and on board there is another piece
@@ -998,8 +1021,14 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		//bomb won and exploded so cell is empty now
 		Cell::updateCell(gameBoard.board.at(row).at(col), 0, false);
 		fights.setWinner(nextPlayerNum);
-		initFights.push_back(
-			make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
+		//initFights.push_back(
+		//	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
+
+        ptr->setPosition(*currPos);
+        ptr->setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
+        ptr->setWinner(0);
+        initFights.push_back(make_unique<RPSFight>(*ptr));
+
 	}
 
 	//case 6: there is PAPER and current player has another piece
@@ -1009,16 +1038,29 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		{
 			fights.setPosition(*currPos);
 			fights.setWinner(nextPlayerNum);
-			initFights.push_back(
-				make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
+			//initFights.push_back(
+			//	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
+
+            ptr->setPosition(*currPos);
+            ptr->setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
+            ptr->setWinner(0);
+            initFights.push_back(make_unique<RPSFight>(*ptr));
+
+
 			currPlayer->numOfPieces[0]--;
 		}
 		else if (currPlayerPiece == SCISSOR)
 		{
 			nextPlayer->numOfPieces[1]--;
 			fights.setWinner(currPlayerNum);
-			initFights.push_back(
-			 make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
+			//initFights.push_back(
+			 //make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
+
+            ptr->setPosition(*currPos);
+            ptr->setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
+            ptr->setWinner(0);
+            initFights.push_back(make_unique<RPSFight>(*ptr));
+
 			Cell::updateCell(gameBoard.board.at(row).at(col), currPiece,
 							 isCurrPieceJoker);
 		}
@@ -1030,8 +1072,14 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		{
 			nextPlayer->numOfPieces[0]--;
 			fights.setWinner(currPlayerNum);
-			initFights.push_back(
-				make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
+			//initFights.push_back(
+			//	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
+
+            ptr->setPosition(*currPos);
+            ptr->setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
+            ptr->setWinner(0);
+            initFights.push_back(make_unique<RPSFight>(*ptr));
+
 			Cell::updateCell(gameBoard.board.at(row).at(col), currPiece,
 							 isCurrPieceJoker);
 		}
@@ -1040,8 +1088,13 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 			currPlayer->numOfPieces[2]--;
 			fights.setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
 			fights.setWinner(nextPlayerNum);
-			initFights.push_back(
-			 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
+			//initFights.push_back(
+			// 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
+
+            ptr->setPosition(*currPos);
+            ptr->setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
+            ptr->setWinner(0);
+            initFights.push_back(make_unique<RPSFight>(*ptr));
 		}
 	}
 
@@ -1051,15 +1104,27 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		{
 			fights.setPosition(*currPos);
 			fights.setWinner(nextPlayerNum);
-			 initFights.push_back(
-			 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
+			//initFights.push_back(
+			// 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
+            ptr->setPosition(*currPos);
+            ptr->setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
+            ptr->setWinner(0);
+            initFights.push_back(make_unique<RPSFight>(*ptr));
 			currPlayer->numOfPieces[1]--;
 		}
 		else if (currPlayerPiece == ROCK)
 		{
 			fights.setWinner(currPlayerNum);
-			initFights.push_back(
-			 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
+			//initFights.push_back(
+			// 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
+
+            ptr->setPosition(*currPos);
+            ptr->setOpponentPiece(gameBoard.board.at(row).at(col).getPiece());
+            ptr->setWinner(0);
+            initFights.push_back(make_unique<RPSFight>(*ptr));
+
+
+
 			nextPlayer->numOfPieces[2]--;
 
 			Cell::updateCell(gameBoard.board.at(row).at(col), currPiece,

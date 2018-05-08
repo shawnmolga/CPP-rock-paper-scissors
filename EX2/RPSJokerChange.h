@@ -17,7 +17,7 @@ class RPSJokerChange : public JokerChange {
 public:
 	RPSJokerChange(char jokerNewRep, RPSpoint jokerChangePosition);
 	~RPSJokerChange();
-	virtual Point& getJokerChangePosition() const override;
+	virtual const Point& getJokerChangePosition() const override;
 	virtual char getJokerNewRep() const override; // R, P, S or B (but NOT J and NOT F)
 	virtual void setJokerNewRep(char newRep);
 	virtual void setJokerChangePosition(RPSpoint point);

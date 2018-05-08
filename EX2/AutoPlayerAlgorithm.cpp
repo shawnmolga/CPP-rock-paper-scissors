@@ -40,7 +40,7 @@ void AutoPlayerAlgorithm::positionFlags(int player, std::vector<unique_ptr<Piece
 		while (isCellTaken || hasOpponentNeighbor){
 	    	if (gameBoard.board[row][col].getPiece() == 0){
 	    		isCellTaken = false;
-					if (!checkIsOpponentNeighbors){
+					if (!checkIsOpponentNeighbors(player, row, col)){
 						hasOpponentNeighbor = false;
 						Cell::updateCell(gameBoard.board[row][col], piece, false);
 						vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(row, col), piece, '#'));
@@ -74,7 +74,7 @@ void AutoPlayerAlgorithm::positionBombs(int flagRow, int flagCol, int player, st
 		while (isCellTaken || hasOpponentNeighbor){
 	    	if (gameBoard.board[row][col].getPiece() == 0){
 	    		isCellTaken = false;
-					if (!checkIsOpponentNeighbors){
+					if (!checkIsOpponentNeighbors(player, flagRow, flagCol)){
 						hasOpponentNeighbor = false;
 						Cell::updateCell(gameBoard.board[row][col], piece, false);
 						vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(row, col), piece, '#'));
@@ -141,8 +141,21 @@ bool AutoPlayerAlgorithm::checkIsOpponentNeighbors(int player, int row, int col)
 //<<<<<<< HEAD
 //void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board& b, const std::vector<unique_ptr<FightInfo>>& fights){}
 //=======
+
+//unused variable
+
 void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 		const std::vector<unique_ptr<FightInfo>> &fights)
 {
+	(void) b;
+	(void) fights;
+}
+
+void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move& move) {
+	void(move);
 
 }
+void AutoPlayerAlgorithm::notifyFightResult(const FightInfo& fightInfo) {
+	void(fightinfo);
+}
+

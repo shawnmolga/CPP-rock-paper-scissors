@@ -38,8 +38,10 @@ public:
 	virtual int getPieceFromLine(int start, const string &line);
 	virtual int getPositionFromLine(int start, const string &line, int &row, int &col);
 	virtual bool checkIfDigit(char c);
-	bool getPositionAndRepFromLine(const string &line, int playerNum, int &row, int &col,
-		char &jokerRep, char &piece);
+	//bool getPositionAndRepFromLine(const string &line, int playerNum, int &row, int &col,
+	//	char &jokerRep, char &piece);
+	bool getPositionAndRepFromLine(const string &line, int &row, int &col, char &jokerRep, char &piece);
+
 	virtual void incrementMovesFileLine();
 	virtual void resetNextIndex();
 	bool checkEmptyLine(int start, const string &line);
