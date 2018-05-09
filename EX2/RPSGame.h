@@ -80,5 +80,5 @@ public:
 		bool movePiece( unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJokerChange, bool isPlayerOneTurn);
 		int makeMove();
 		bool initGameMethod(string gameMethod);
-
+		void PrintBoardToConsole();
 };

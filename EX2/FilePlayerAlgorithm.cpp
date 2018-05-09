@@ -17,7 +17,6 @@ FilePlayerAlgorithm::FilePlayerAlgorithm(const string &posFile,
 //returns false otherwise
 bool FilePlayerAlgorithm::checkEmptyLine(int start, const string &line)
 {
-	cout << "in checkEmptyLine. line = " << line << endl;
 	for (int i = start; i < (int)line.length(); ++i)
 	{
 		if (line[i] != ' ' && line[i] != '\n')
@@ -373,7 +372,7 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 }
 
 
-void copyString(string & src, string toCopy){
+void FilePlayerAlgorithm::copyString(string & src, string toCopy){
 	for (int i = 0; i < (int)toCopy.length(); i ++){
 		src.push_back(toCopy[i]);
 	}
@@ -411,9 +410,9 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 		else
 		{
 			nextIndex = getPositionFromLine(0, local_line, from_x, from_y);
-			cout << " in getmove: from_x = " << from_x << "from_y = " << from_y << endl;
 			from.setX(from_x);
 			from.setY(from_y);
+
 			bool isLackSpace = nextIndex != -1 ? (local_line[nextIndex] != ' ') : false;
 			if (nextIndex == -1 || isLackSpace)
 			{
@@ -428,7 +427,6 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 			else
 			{
 				nextIndex = getPositionFromLine(nextIndex, local_line, to_x, to_y);
-				cout << "to_x = " << to_x << " to_y = " << to_y << endl;
 				if (nextIndex == -1)
 					from.setX(-1);
 				else
