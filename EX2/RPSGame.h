@@ -70,6 +70,7 @@ public:
 			return gameOverReason;
 		};
 		int startGame();
+		int locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>> &vectorToFill, bool &isPlayerLegalFormat, int numOfPositionedPieces[], RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights);
 		void printBoardToFile(ofstream & output);
 		void printOutputFile(const string &outputFile);
 		void updateJokerChange(char prevJokerRep, char newRep,

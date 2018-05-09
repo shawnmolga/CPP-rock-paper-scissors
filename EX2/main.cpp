@@ -21,7 +21,6 @@ int main(int argc, char * argv[] ) {
 	if (!game->initGameMethod(gameMethod)) {
 		return -1;
 	}
-
 	int isOK = 0;
 	isOK = game->startGame();
 	if (isOK == -1 || isOK == -2)

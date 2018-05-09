@@ -283,9 +283,8 @@ void FilePlayerAlgorithm::notifyFightResult(const FightInfo& fightInfo){
 void FilePlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 											   const std::vector<unique_ptr<FightInfo>> &fights)
 {
-	//What to do here?!?
-	b.getPlayer(RPSpoint(2,1));
-	cout<<fights[0]->getPiece(1)<<endl;
+	(void)fights;
+	(void)b;
 }
 
 
