@@ -50,7 +50,6 @@ private:
 	GAME_OVER_TYPE gameOverReason;
 	bool isGameOverInternal;
 
-
 public:
 		RPSGame();
 		~RPSGame();

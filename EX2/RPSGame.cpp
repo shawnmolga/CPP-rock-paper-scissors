@@ -7,6 +7,7 @@ RPSGame::RPSGame() : indexErrorPosOne(0), indexErrorPosTwo(0), indexErrorMoveOne
 {
 
 	gameBoard = RPSBoard();
+
 	playerAlgoOne = NULL;
 	playerAlgoTwo = NULL;
 }
@@ -482,6 +483,9 @@ bool RPSGame::checkPieceOverflow(int numOfPieces[])
 	return false;
 }
 
+
+
+
 /*
  This function check initial position and locate players on the board.
  Input - two boolean fields that indicate if there was a problen in players position format
@@ -499,21 +503,15 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 
 	// <vector to fill> contains position(pos), piece(kind), jokerRep(rep)
 	//Iterate player 1 vector and position on the board
-	/*
-	(void) isPlayerOneLegalFormat;
-	(void)isPlayerTwoLegalFormat;
-	(void) fights;
-	(void) initFights;
-	*/
-
-
 	int row;
 	int col;
 	bool isJoker = false;
 	int numOfPositionedPieces[6] = {0};
 	int flagCnt = 0;
 	//bool isPlayerOneLegalFormat = true;
-	for (int i = 0; i < (int)vectorToFillPlayerOne.size(); i++)
+
+	int vectorSize = (int)vectorToFillPlayerOne.size();
+	for (int i = 0; i <vectorSize; i++)
 	{
 		isJoker = false;
 		int inputPiece = vectorToFillPlayerOne[i]->getPiece();
@@ -523,7 +521,7 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 			isPlayerOneLegalFormat = false;
 			return -1;
 		}
-		// In case the line could no be read
+
 		else if (inputPiece == -2)
 		{
 			isPlayerOneLegalFormat = false;
@@ -542,6 +540,7 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 			countNumOfPieces(1, numOfPositionedPieces, inputPiece);
 			if (toupper(inputPiece) == FLAG)
 			{
+
 				flagCnt++;
 			}
 			if (gameBoard.board.at(row).at(col).getPiece() != 0)
@@ -1260,6 +1259,7 @@ bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
 	{
 		cout << "isPlayerOneUseFile == true" << endl;
 		playerAlgoOne = new FilePlayerAlgorithm(PLAYER_ONE_POSITION_FILENAME, PLAYER_ONE_MOVE_FILENAME);
+		cout << PLAYER_ONE_POSITION_FILENAME << endl;
 	}
 	else
 	{
@@ -1270,6 +1270,7 @@ bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
 	{
 		cout << "isPlayerTwoUseFile == true" << endl;
 		playerAlgoTwo = new FilePlayerAlgorithm(PLAYER_TWO_POSITION_FILENAME, PLAYER_TWO_MOVE_FILENAME);
+		cout << PLAYER_TWO_POSITION_FILENAME << endl;
 	}
 	else
 	{

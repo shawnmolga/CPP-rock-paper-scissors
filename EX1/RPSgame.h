@@ -51,9 +51,11 @@ public:
 	void resetGameResults();
 
 
-private:
+		private:
 	bool isGameOver;
 	GAME_OVER_TYPE gameOverReason;
+	void InitBoard();
+
 };
 
 #endif /* EX1_RPSGAME_H_ */

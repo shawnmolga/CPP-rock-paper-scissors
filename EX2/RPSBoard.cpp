@@ -8,6 +8,14 @@
 
 RPSBoard::RPSBoard(){
 	vector <vector<Cell>> board(ROWS, vector<Cell>(COLS));
+	cout << "in RPSBoard()" << endl;
+		for(int i=0;i<ROWS;i++) {
+			vector <Cell> rowVector;
+			for(int j=0;j<COLS;j++){
+				rowVector.push_back(Cell(0,false));
+			}
+			board.push_back(rowVector);
+		}
 	//board = vector(ROWS, vector<Cell>(COLS)); //	board = new Cell *[ROWS];
 }
 RPSBoard::~RPSBoard(){}

@@ -2,6 +2,7 @@
 #include "RPSgame.h"
 
 RPSgame::RPSgame() : playerOne(Player(1)), playerTwo(Player(2)), isGameOver(false)
+RPSgame::RPSgame() : playerOne(Player(1)), playerTwo(Player(2)), isGameOver(false)
 {
 	board = new Cell *[ROWS];
 	for (int i = 1; i <= ROWS; ++i)

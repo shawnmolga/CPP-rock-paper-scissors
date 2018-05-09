@@ -27,8 +27,6 @@ bool FilePlayerAlgorithm::checkEmptyLine(int start, const string &line)
 int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 {
 	int end = start;
-	//TODO: asked in forum if checks like that can be performed here or only by game manager
-	//no answer yet... might be deleted
 
 	if ((size_t)end >= line.length())
 	{
@@ -39,9 +37,6 @@ int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 	while (line[end] == ' ')
 	{
 		end++;
-		//TODO: asked in forum if checks like that can be performed here or only by game manager
-		//no answer yet... might be deleted
-
 		if ((size_t)end >= line.length())
 		{
 			cout << "Error - bad format - missing piece in line" << endl;
@@ -86,7 +81,9 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	}
 	if (!checkIfDigit(line[start]))
 	{
-		cout << "Error: Bad format - got letter instead of digit" << endl;
+		cout <<"1. line = " << line << endl;
+		cout <<"line[start]" << line[start] << endl;
+ 		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
 	int end = start + 1;
@@ -99,6 +96,8 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	{
 		if (!checkIfDigit(line[end]))
 		{
+			cout << "2. line = " << line << endl;
+			cout << "line[end] " << line[end] << endl;
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}
@@ -137,6 +136,9 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	}
 	if (!checkIfDigit(line[start]))
 	{
+
+		cout << "3. line = " << line << endl;
+		cout << "line[start] " << line[start] << endl;
 		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
@@ -146,6 +148,9 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 
 		if (!checkIfDigit(line[end]))
 		{
+
+			cout << "4. line = " << line << endl;
+			cout << "line[end] " << line[end] << endl;
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}
@@ -166,16 +171,11 @@ bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row
 {
 	int pieceIndex = getPieceFromLine(0, line);
 	piece = line[pieceIndex];
-
-	//TODO: asked in forum if checks like that can be performed here or only by game manager
-	//no answer yet... might be deleted
 	if ((size_t)pieceIndex + 1 >= line.length())
 	{
 		cout << "Error - bad format: missing position of piece" << endl;
 		return false;
 	}
-	//TODO: asked in forum if checks like that can be performed here or only by game manager
-	//no answer yet... might be deleted
 	if (line[pieceIndex + 1] != ' ')
 	{
 		cout << "Error - bad format: missing space after piece" << endl;
@@ -190,40 +190,43 @@ bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row
 		cout << "Error: illegal location on board" << endl;
 		return false;
 	}
-	if ((size_t)nextIndex >= line.length())
-	{
-		cout << "Error - bad format: missing joker rep piece" << endl;
-		return false;
-	}
-	if (line[nextIndex] != ' ')
-	{
-		cout
-			<< "Error - bad format: missing space after positions in joker position"
-			<< endl;
-		return false;
-	}
-	nextIndex = getPieceFromLine(nextIndex, line) + 1;
-	if (nextIndex == 0)
-	{
-		cout << "Error: Bad format - no piece to position as joker" << endl;
-		return false;
-	}
-	char jokerPiece = line[nextIndex - 1];
-	if (jokerPiece != ROCK && jokerPiece != PAPER && jokerPiece != SCISSOR && jokerPiece != BOMB)
-	{
-		cout << "Error: Bad format - illegal piece for joker" << endl;
-		return false;
-	}
+	if (piece == 'J'){
 
-	jokerRep = jokerPiece;
+		if ((size_t)nextIndex >= line.length())
+		{
 
-	//check that after position line is empty
-	if (!checkEmptyLine(nextIndex, line))
-	{
-		cout << "Error: Bad format - junk characters after position" << endl;
-		//TODO: this will be the only way for game managar to know something is wrong....
-		jokerRep = -1;
-		return false;
+			cout << "Error - bad format: missing joker rep piece" << endl;
+			return false;
+		}
+		if (line[nextIndex] != ' ')
+		{
+			cout
+					<< "Error - bad format: missing space after positions in joker position"
+					<< endl;
+			return false;
+		}
+		nextIndex = getPieceFromLine(nextIndex, line) + 1;
+		if (nextIndex == 0)
+		{
+			cout << "Error: Bad format - no piece to position as joker" << endl;
+			return false;
+		}
+		char jokerPiece = line[nextIndex - 1];
+		if (jokerPiece != ROCK && jokerPiece != PAPER && jokerPiece != SCISSOR && jokerPiece != BOMB)
+		{
+			cout << "Error: Bad format - illegal piece for joker" << endl;
+			return false;
+		}
+
+		jokerRep = jokerPiece;
+
+		//check that after position line is empty
+		if (!checkEmptyLine(nextIndex, line))
+		{
+			cout << "Error: Bad format - junk characters after position" << endl;
+			jokerRep = -1;
+			return false;
+		}
 	}
 	return true;
 }
