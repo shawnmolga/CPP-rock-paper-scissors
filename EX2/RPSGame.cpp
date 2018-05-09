@@ -5,6 +5,7 @@ RPSGame::RPSGame() : indexErrorPosOne(0), indexErrorPosTwo(0), indexErrorMoveOne
 																  Player(2)),
 					 isGameOverInternal(false)
 {
+
 	gameBoard = RPSBoard();
 	playerAlgoOne = NULL;
 	playerAlgoTwo = NULL;
@@ -492,11 +493,20 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 {
 	std::vector<unique_ptr<PiecePosition>> vectorToFillPlayerOne;
 	std::vector<unique_ptr<PiecePosition>> vectorToFillPlayerTwo;
-	playerAlgoOne->getInitialPositions(1, vectorToFillPlayerOne);
+
+	playerAlgoOne->getInitialPositions(1, vectorToFillPlayerOne );
 	playerAlgoTwo->getInitialPositions(2, vectorToFillPlayerTwo);
 
 	// <vector to fill> contains position(pos), piece(kind), jokerRep(rep)
 	//Iterate player 1 vector and position on the board
+	/*
+	(void) isPlayerOneLegalFormat;
+	(void)isPlayerTwoLegalFormat;
+	(void) fights;
+	(void) initFights;
+	*/
+
+
 	int row;
 	int col;
 	bool isJoker = false;
@@ -1211,23 +1221,22 @@ bool RPSGame::initGameMethod(string gameMethod)
 {
 	bool isPlayerOneUseFile = false;
 	bool isPlayerTwoUseFile = false;
-	if (gameMethod.compare("auto-vs-file"))
+	if (gameMethod.compare("auto-vs-file") == 0)
 	{
 		isPlayerTwoUseFile = true;
 	}
-	else if (gameMethod.compare("file-vs-auto"))
+	else if (gameMethod.compare("file-vs-auto") == 0)
 	{
 		isPlayerOneUseFile = true;
 	}
-	else if (gameMethod.compare("auto-vs-auto"))
+	else if (gameMethod.compare("auto-vs-auto") == 0)
 	{
 		return initPlayersAlgo(isPlayerOneUseFile, isPlayerTwoUseFile);
 	}
-	else if (gameMethod.compare("file-vs-file"))
+	else if (gameMethod.compare("file-vs-file") == 0)
 	{
 		isPlayerOneUseFile = true;
 		isPlayerTwoUseFile = true;
-		cout<<"GOT HERE!!!"<<endl;
 	}
 	else
 	{
@@ -1243,23 +1252,28 @@ Output- true if we successfuly init playerAlogrithms or false otherwise;
 */
 bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
 {
+	cout << "in initPlayerAlgo" << endl;
 	if (!isAllGameFilesExists(isPlayerOneUseFile, isPlayerTwoUseFile))
 		return false;
 
 	if (isPlayerOneUseFile)
 	{
+		cout << "isPlayerOneUseFile == true" << endl;
 		playerAlgoOne = new FilePlayerAlgorithm(PLAYER_ONE_POSITION_FILENAME, PLAYER_ONE_MOVE_FILENAME);
 	}
 	else
 	{
+		cout << "isPlayerOneUseFile == false" << endl;
 		playerAlgoOne = new AutoPlayerAlgorithm();
 	}
 	if (isPlayerTwoUseFile)
 	{
+		cout << "isPlayerTwoUseFile == true" << endl;
 		playerAlgoTwo = new FilePlayerAlgorithm(PLAYER_TWO_POSITION_FILENAME, PLAYER_TWO_MOVE_FILENAME);
 	}
 	else
 	{
+		cout << "isPlayerTwoUseFile == false" << endl;
 		playerAlgoTwo = new AutoPlayerAlgorithm();
 	}
 

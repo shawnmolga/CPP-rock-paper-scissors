@@ -41,6 +41,7 @@ private:
 	int indexErrorMoveOne;
 	int indexErrorMoveTwo;
 	bool isGameOver;
+	string gameMethod;
 
 	Player playerOne;
 	Player playerTwo;
@@ -76,12 +77,8 @@ public:
 											   bool isPlayerOne);
 
 							
-bool movePiece( unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJokerChange,
-		bool isPlayerOneTurn);
+		bool movePiece( unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJokerChange, bool isPlayerOneTurn);
 		int makeMove();
 		bool initGameMethod(string gameMethod);
-
-
-
 
 };
