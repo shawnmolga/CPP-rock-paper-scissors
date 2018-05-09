@@ -49,7 +49,6 @@ private:
 
 	RPSBoard gameBoard;
 	GAME_OVER_TYPE gameOverReason;
-	bool isGameOverInternal;
 
 public:
 		RPSGame();

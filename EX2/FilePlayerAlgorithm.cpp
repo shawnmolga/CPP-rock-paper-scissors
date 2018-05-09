@@ -155,7 +155,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	//col is legal
 	const string row_string = line.substr(start, size);
 	row = std::stoi(row_string);
-	cout << "in getPositionFromLine, row = " << row << "col = " << col << endl;
 
 	return end;
 }
