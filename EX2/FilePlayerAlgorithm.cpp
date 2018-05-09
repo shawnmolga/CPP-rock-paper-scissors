@@ -68,6 +68,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	int size = 1;
 	if ((size_t)start >= line.length())
 	{
+		cout<<"bad format 1"<<endl;
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
 	}
@@ -77,6 +78,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 		start = start + 1;
 		if ((size_t)start >= line.length())
 		{
+			cout<<"bad format 2"<<endl;
 			cout << "Error - bad format - missing position in line" << endl;
 			return -1;
 		}
@@ -89,6 +91,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	int end = start + 1;
 	if ((size_t)end >= line.length())
 	{
+		cout<<"bad format 3"<<endl;
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
 	}
@@ -103,6 +106,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 		end = end + 1;
 		if ((size_t)end >= line.length())
 		{
+			cout<<"bad format 4"<<endl;
 			cout << "Error - bad format - missing position in line" << endl;
 			return -1;
 		}
@@ -121,6 +125,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	start = end++;
 	if ((size_t)start >= line.length())
 	{
+		cout<<"bad format 5"<<endl;
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
 	}
@@ -129,6 +134,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 		start = start + 1;
 		if ((size_t)start >= line.length())
 		{
+			cout<<"bad format 6"<<endl;
 			cout << "Error - bad format - missing position in line" << endl;
 			return -1;
 		}
@@ -240,6 +246,7 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 	int indexLine = 1; //Counting the lines;
 	while (getline(posFile, line))
 	{
+		jokerRep = '#';
 		//skip empty lines
 		if (checkEmptyLine(0, line))
 		{
@@ -395,6 +402,7 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 	RPSpoint to(to_x, to_y);
 	if (getline(player1Move, line1))
 	{
+		cout<<line1<<endl;
 		string local_line;
 		copyString(local_line, line1);
 		//incrementMovesFileLine(); todo delete this function
