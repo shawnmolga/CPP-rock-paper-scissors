@@ -10,11 +10,14 @@
 FilePlayerAlgorithm::FilePlayerAlgorithm(const string &posFile,
 										 const string &moveFile) : positionFile(posFile), movesFile(moveFile),movesFileLine(1),nextIndex(0)
 {
-}
+	player1Move.open (moveFile, std::ofstream::in);
 
+}
+//returns true if line is empty
+//returns false otherwise
 bool FilePlayerAlgorithm::checkEmptyLine(int start, const string &line)
 {
-
+	cout << "in checkEmptyLine. line = " << line << endl;
 	for (int i = start; i < (int)line.length(); ++i)
 	{
 		if (line[i] != ' ' && line[i] != '\n')
@@ -81,8 +84,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	}
 	if (!checkIfDigit(line[start]))
 	{
-		cout <<"1. line = " << line << endl;
-		cout <<"line[start]" << line[start] << endl;
  		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
@@ -96,8 +97,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	{
 		if (!checkIfDigit(line[end]))
 		{
-			cout << "2. line = " << line << endl;
-			cout << "line[end] " << line[end] << endl;
+
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}
@@ -137,8 +137,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	if (!checkIfDigit(line[start]))
 	{
 
-		cout << "3. line = " << line << endl;
-		cout << "line[start] " << line[start] << endl;
 		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
@@ -149,8 +147,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 		if (!checkIfDigit(line[end]))
 		{
 
-			cout << "4. line = " << line << endl;
-			cout << "line[end] " << line[end] << endl;
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}
@@ -160,6 +156,8 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	//col is legal
 	const string row_string = line.substr(start, size);
 	row = std::stoi(row_string);
+	cout << "in getPositionFromLine, row = " << row << "col = " << col << endl;
+
 	return end;
 }
 /*
@@ -254,6 +252,8 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 		{
 			vectorToFill.push_back(
 				make_unique<RPSPiecePosition>(RPSpoint(row, col), -1, jokerRep));
+			posFile.close();
+			return;
 		}
 		else
 		{
@@ -271,6 +271,7 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 			make_unique<RPSPiecePosition>(RPSpoint(row, col), -2, jokerRep));
 
 		posFile.close();
+		return;
 	}
 	posFile.close();
 }
@@ -370,6 +371,13 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 	else
 		return unique_ptr<RPSJokerChange>{}; //if no jokerChange - return Null;
 }
+
+
+void copyString(string & src, string toCopy){
+	for (int i = 0; i < (int)toCopy.length(); i ++){
+		src.push_back(toCopy[i]);
+	}
+}
 /*
 returns the next move of current player
 empty line (0,0)
@@ -385,26 +393,28 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 	int from_y = 0;
 	int to_x = 0;
 	int to_y = 0;
-	//int x_joker = 0;
-	//int y_joker = 0;
-	// RPSpoint  from = new RPSpoint(from_x, from_y);
-	// RPSpoint to = new RPSpoint(to_x, to_y);
+
 	RPSpoint from(from_x, from_y);
 	RPSpoint to(to_x, to_y);
 	if (getline(player1Move, line1))
 	{
-		//incrementMovesFileLine();
-		if (!checkEmptyLine(0, line1))
+		string local_line;
+		copyString(local_line, line1);
+		//incrementMovesFileLine(); todo delete this function
+
+		if (checkEmptyLine(0, local_line))
 		{
+			cout << "line is empty" << endl;
 			//move file wrong format - Point from = (-1, 0)
 			from.setX(0);
 		}
 		else
 		{
-			nextIndex = getPositionFromLine(0, line1, from_x, from_y);
+			nextIndex = getPositionFromLine(0, local_line, from_x, from_y);
+			cout << " in getmove: from_x = " << from_x << "from_y = " << from_y << endl;
 			from.setX(from_x);
 			from.setY(from_y);
-			bool isLackSpace = nextIndex != -1 ? (line1[nextIndex] != ' ') : false;
+			bool isLackSpace = nextIndex != -1 ? (local_line[nextIndex] != ' ') : false;
 			if (nextIndex == -1 || isLackSpace)
 			{
 				if (isLackSpace)
@@ -417,7 +427,8 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 			}
 			else
 			{
-				nextIndex = getPositionFromLine(nextIndex, line1, to_x, to_y);
+				nextIndex = getPositionFromLine(nextIndex, local_line, to_x, to_y);
+				cout << "to_x = " << to_x << " to_y = " << to_y << endl;
 				if (nextIndex == -1)
 					from.setX(-1);
 				else
@@ -442,6 +453,7 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 	unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
 	return move;
 }
+
 void FilePlayerAlgorithm::incrementMovesFileLine(){
 	movesFileLine++;
 }

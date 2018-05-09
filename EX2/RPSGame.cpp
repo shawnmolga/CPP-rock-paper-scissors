@@ -5,9 +5,7 @@ RPSGame::RPSGame() : indexErrorPosOne(0), indexErrorPosTwo(0), indexErrorMoveOne
 																  Player(2)),
 					 isGameOverInternal(false)
 {
-
 	gameBoard = RPSBoard();
-
 	playerAlgoOne = NULL;
 	playerAlgoTwo = NULL;
 }
@@ -171,10 +169,16 @@ bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJ
 
 int RPSGame::makeMove()
 {
+	cout << "in makeMove" << endl;
 	unique_ptr<Move> move1 = playerAlgoOne->getMove();
+	cout << "move1: from ("<< move1->getFrom().getX()<< ", " << move1->getFrom().getY() << ") to (" << move1->getTo().getX() << ", " << move1->getTo().getY() << ")" << endl;
+
 	unique_ptr<Move> move2 = playerAlgoTwo->getMove();
 	int xPiecePlayerOne = move1->getFrom().getX();
 	int xPiecePlayerTwo = move2->getFrom().getX();
+
+	cout << "move2: from ("<< xPiecePlayerTwo << ", " << move2->getFrom().getY() << ") to (" << move2->getTo().getX() << ", " << move2->getTo().getY() << ")" << endl;
+
 	unique_ptr<JokerChange> playerOneJokerChange;
 	unique_ptr<JokerChange> playerTwoJokerChange;
 	bool isPlayerOneTurn = true;
@@ -193,6 +197,7 @@ int RPSGame::makeMove()
 										  isPlayerOneTurn);
 			if (isGameOverInteral)
 			{
+				cout <<"isGameOVerInternal = true" << endl;
 				setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 				//lines??
 				break;
@@ -207,6 +212,7 @@ int RPSGame::makeMove()
 											  isPlayerOneTurn);
 				if (isGameOverInteral)
 				{
+					cout << "isGameOverInternal = true, playertwo turn" << endl;
 					setGameOver(1, WRONG_MOVE_FILE_FORMAT_ONE);
 					//lines??
 					break;
@@ -258,7 +264,7 @@ int RPSGame::makeMove()
 				return -1;
 			}
 		}
-		else if (xPiecePlayerOne == -2) //player 2 eof
+		else if (xPiecePlayerTwo == -2) //player 2 eof
 		{
 			move1 = playerAlgoOne->getMove();
 			xPiecePlayerOne = move1->getFrom().getX();
@@ -342,10 +348,12 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
 {
 	int from_x = move->getFrom().getX();
 	int from_y = move->getFrom().getY();
-	int to_x = move->getFrom().getX();
-	int to_y = move->getFrom().getY();
+	int to_x = move->getTo().getX();
+	int to_y = move->getTo().getY();
+	cout << "from_x = " << from_x << " from_y = " << from_y << " to_x = " << to_x << " to_y = " << to_y << endl;
 
-	if ((move->getFrom().getX() < 1 || from_x > ROWS) || (to_x < 1 || to_x > ROWS) || (from_y < 1 || from_y > COLS) || (to_y < 1 || to_y > COLS))
+
+	if ((from_x< 1 || from_x > ROWS) || (to_x < 1 || to_x > ROWS) || (from_y < 1 || from_y > COLS) || (to_y < 1 || to_y > COLS))
 	{
 		cout << "Error: illegal location on board" << endl;
 		return false;
@@ -476,6 +484,7 @@ bool RPSGame::checkPieceOverflow(int numOfPieces[])
 
 	if (numOfPieces[0] > ROCKS_NUM || numOfPieces[1] > PAPERS_NUM || numOfPieces[2] > SCISSORS_NUM || numOfPieces[3] > BOMBS_NUM || numOfPieces[4] > JOKERS_NUM || numOfPieces[5] > FLAGS_NUM)
 	{
+
 		cout << "Error: a piece type appears in file more than its number"
 			 << endl;
 		return true;
@@ -538,11 +547,14 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 				isJoker = true;
 			}
 			countNumOfPieces(1, numOfPositionedPieces, inputPiece);
+
+
 			if (toupper(inputPiece) == FLAG)
 			{
 
 				flagCnt++;
 			}
+
 			if (gameBoard.board.at(row).at(col).getPiece() != 0)
 			{
 				cout
@@ -557,6 +569,9 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 			}
 		}
 	}
+
+
+
 	//check if there are too many pieces positioned on board
 	if (checkPieceOverflow(numOfPositionedPieces))
 	{
@@ -574,66 +589,73 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 
 	//Iterate player 2 vector and position on the board
 	flagCnt = 0;
-	numOfPositionedPieces[6] = {0};
-	for (int i = 0; i < (int)vectorToFillPlayerTwo.size(); i++)
-		for (int i = 0; i < (int)vectorToFillPlayerTwo.size(); i++)
-		{
-			isJoker = false;
-			int inputPiece = vectorToFillPlayerTwo[i]->getPiece();
-			// In case the line if bad forrmated
-			if (inputPiece == -1)
-			{
-				isPlayerTwoLegalFormat = false;
-				return -1;
-			}
-			// In case the line could no be read
-			else if (inputPiece == -2)
-			{
-				isPlayerTwoLegalFormat = false;
-				return -1;
-			}
-			else
-			{
-				//check position was already done there! (maybe we need to trasform here)
-				row = vectorToFillPlayerTwo[i]->getPosition().getX();
-				col = vectorToFillPlayerTwo[i]->getPosition().getY();
 
-				if (vectorToFillPlayerTwo[i]->getJokerRep() != '#')
+	//numOfPositionedPieces[6] = {0};
+	memset(numOfPositionedPieces, 0, sizeof(numOfPositionedPieces)); // for automatically-allocated arrays
+
+
+
+	for (int i = 0; i < (int)vectorToFillPlayerTwo.size(); i++)
+	{
+		isJoker = false;
+		int inputPiece = vectorToFillPlayerTwo[i]->getPiece();
+		// In case the line if bad forrmated
+		if (inputPiece == -1)
+		{
+			isPlayerTwoLegalFormat = false;
+			return -1;
+		}
+		// In case the line could no be read
+		else if (inputPiece == -2)
+		{
+			isPlayerTwoLegalFormat = false;
+			return -1;
+		}
+		else
+		{
+			//check position was already done there! (maybe we need to trasform here)
+			row = vectorToFillPlayerTwo[i]->getPosition().getX();
+			col = vectorToFillPlayerTwo[i]->getPosition().getY();
+
+			if (vectorToFillPlayerTwo[i]->getJokerRep() != '#')
+			{
+				isJoker = true;
+			}
+			countNumOfPieces(2, numOfPositionedPieces, inputPiece);
+
+
+
+			if (toupper(inputPiece) == FLAG)
+			{
+				flagCnt++;
+			}
+			if (gameBoard.board.at(row).at(col).getPiece() != 0)
+			{
+				if (gameBoard.board.at(row).at(col).getPiece() == islower(gameBoard.board.at(row).at(col).getPiece()))
 				{
-					isJoker = true;
-				}
-				countNumOfPieces(2, numOfPositionedPieces, inputPiece);
-				if (toupper(inputPiece) == FLAG)
-				{
-					flagCnt++;
-				}
-				if (gameBoard.board.at(row).at(col).getPiece() != 0)
-				{
-					if (gameBoard.board.at(row).at(col).getPiece() == islower(gameBoard.board.at(row).at(col).getPiece()))
-					{
-						isPlayerTwoLegalFormat = false;
-						cout
-							<< "Error: two or more pieces are positioned on the same location"
-							<< endl;
-						return -1;
-					}
-					else
-					{
-						RPSpoint player1Pos(vectorToFillPlayerOne[i]->getPosition().getX(), vectorToFillPlayerOne[i]->getPosition().getY());
-						RPSpoint player2Pos(vectorToFillPlayerTwo[i]->getPosition().getX(), vectorToFillPlayerTwo[i]->getPosition().getY());
-						fight(true, row, col, tolower(inputPiece), isJoker, fights, initFights,
-							  player1Pos, player2Pos);
-						playerAlgoOne->notifyFightResult(fights);
-						playerAlgoTwo->notifyFightResult(fights);
-					}
+					isPlayerTwoLegalFormat = false;
+					cout
+						<< "Error: two or more pieces are positioned on the same location"
+						<< endl;
+					return -1;
 				}
 				else
 				{
-					Cell::updateCell(gameBoard.board.at(row).at(col), tolower(inputPiece),
-									 isJoker);
+					RPSpoint player1Pos(vectorToFillPlayerOne[i]->getPosition().getX(), vectorToFillPlayerOne[i]->getPosition().getY());
+					RPSpoint player2Pos(vectorToFillPlayerTwo[i]->getPosition().getX(), vectorToFillPlayerTwo[i]->getPosition().getY());
+					fight(true, row, col, tolower(inputPiece), isJoker, fights, initFights,
+						  player1Pos, player2Pos);
+					playerAlgoOne->notifyFightResult(fights);
+					playerAlgoTwo->notifyFightResult(fights);
 				}
 			}
+			else
+			{
+				Cell::updateCell(gameBoard.board.at(row).at(col), tolower(inputPiece),
+								 isJoker);
+			}
 		}
+	}
 	//check if there are too many pieces positioned on board
 	if (checkPieceOverflow(numOfPositionedPieces))
 	{
@@ -1144,6 +1166,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
  */
 void RPSGame::printBoardToFile(ofstream &output)
 {
+	for (int i = 1; i <= ROWS; i++)
 	for (int i = 1; i <= ROWS; i++)
 	{
 		for (int j = 1; j <= COLS; j++)

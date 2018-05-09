@@ -17,6 +17,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <string.h>
 
 class FilePlayerAlgorithm : public PlayerAlgorithm {
 public:
@@ -33,8 +34,9 @@ public:
 	//bool getPositionAndRepFromLine(const string &line, int playerNum, int &row, int &col,
 	//	char &jokerRep, char &piece);
 	bool getPositionAndRepFromLine(const string &line, int &row, int &col, char &jokerRep, char &piece);
+	void copyString(string & src, string toCopy);
 
-	 void incrementMovesFileLine();
+		void incrementMovesFileLine();
 	//virtual void resetNextIndex();
 	bool checkEmptyLine(int start, const string &line);
 
