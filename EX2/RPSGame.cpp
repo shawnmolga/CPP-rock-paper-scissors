@@ -333,6 +333,7 @@ int RPSGame::startGame()
 	cout << "finished Bad Foramt" << endl;
 	if (initResult == -1)
 	{
+		cout<<"I was here"<<endl;
 		return -1;
 	}
 	else if (initResult == -2)
@@ -342,8 +343,10 @@ int RPSGame::startGame()
 	}
 	bool isPlayerOneTurn = true;
 	bool isAboutToMove = true;
+	cout<<"I was here before checkGameOver"<<endl;
 	if (checkGameOver(isAboutToMove, isPlayerOneTurn))
 	{
+
 		cout << getGameOverReason() << endl;
 		return 0;
 	}
@@ -511,7 +514,6 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 	int col;
 	int inputPiece;
 	int flagCnt = 0;
-	cout << "Locate player " << playerNum << endl;
 	for (int i = 0; i < vectorSize; i++)
 	{
 
@@ -571,7 +573,7 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 			{
 				if (gameBoard.board.at(row).at(col).getPiece() != 0)
 				{
-					if (gameBoard.board.at(row).at(col).getPiece() == islower(gameBoard.board.at(row).at(col).getPiece()))
+					if (gameBoard.board.at(row).at(col).getPiece() == tolower(gameBoard.board.at(row).at(col).getPiece()))
 					{
 						isPlayerLegalFormat = false;
 						cout
@@ -712,16 +714,19 @@ int RPSGame::checkBadFormat()
 	//resetGameResults(); //reset the game result as we did in ex1!
 	if (!isPlayerOneLegalFormat && !isPlayerTwoLegalFormat)
 	{
+		cout<<"1"<<endl;
 		setGameOver(0, WRONG_FILE_FORMAT_BOTH);
 		return -1;
 	}
 	else if (!isPlayerOneLegalFormat)
 	{
+		cout<<"2"<<endl;
 		setGameOver(2, WRONG_FILE_FORMAT_ONE);
 		return -1;
 	}
 	else if (!isPlayerTwoLegalFormat)
 	{
+		cout<<"3"<<endl;
 		setGameOver(1, WRONG_FILE_FORMAT_TWO);
 		return -1;
 	}

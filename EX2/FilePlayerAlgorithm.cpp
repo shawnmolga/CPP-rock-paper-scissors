@@ -28,7 +28,6 @@ bool FilePlayerAlgorithm::checkEmptyLine(int start, const string &line)
 
 int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 {
-	cout<<"inside getPieceFromLine "<<endl;
 	int end = start;
 
 	if ((size_t)end >= line.length())
@@ -68,7 +67,6 @@ bool FilePlayerAlgorithm::checkIfDigit(char c)
 int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 											 int &row, int &col)
 {
-	cout<<"inside getPositionFromLine"<<endl;
 	int size = 1;
 	if ((size_t)start >= line.length())
 	{
