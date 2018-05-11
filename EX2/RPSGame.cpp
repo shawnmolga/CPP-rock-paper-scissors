@@ -1,5 +1,5 @@
 #include "RPSGame.h"
-RPSGame::RPSGame() : indexErrorPosOne(0), indexErrorPosTwo(0), indexErrorMoveOne(0), indexErrorMoveTwo(0), isGameOver(false), playerOne(Player(1)), playerTwo(Player(2))
+RPSGame::RPSGame() : isGameOver(false), playerOne(Player(1)), playerTwo(Player(2))
 {
 	gameBoard = RPSBoard();
 	playerAlgoOne = NULL;
@@ -144,7 +144,6 @@ bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJ
 	//no joker change
 	if (playerJokerChange != NULL)
 	{
-		//RPSpoint  jokerPoint = playerJokerChange->getJokerChangePosition();
 		int x_joker = playerJokerChange->getJokerChangePosition().getX();
 		int y_joker = playerJokerChange->getJokerChangePosition().getY();
 		char new_rep = playerJokerChange->getJokerNewRep();
@@ -195,9 +194,7 @@ int RPSGame::makeMove()
 										   isPlayerOneTurn);
 			if (isGameOverInternal)
 			{
-				cout << "WRONG_MOVE_FILE_FORMAT_ONE" << endl;
 				setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-				cout << "after setGameOver" << endl;
 				break;
 			}
 		}
@@ -210,9 +207,7 @@ int RPSGame::makeMove()
 											   isPlayerOneTurn);
 				if (isGameOverInternal)
 				{
-					cout << "WRONG_MOVE_FILE_FORMAT_TWO" << endl;
 					setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
-					//lines??
 					break;
 				}
 			}
@@ -232,12 +227,8 @@ int RPSGame::makeMove()
 		move2 = playerAlgoTwo->getMove();
 		xPiecePlayerOne = move1->getFrom().getX();
 		xPiecePlayerTwo = move2->getFrom().getX();
-		cout << "After Move" << endl;
 		PrintBoardToConsole();
 	} //while
-	cout << "Does game over" << isGameOverInternal << endl;
-	cout << "After Move" << endl;
-	PrintBoardToConsole();
 	//game stopeed
 	if (!isGameOverInternal)
 	{
@@ -253,7 +244,6 @@ int RPSGame::makeMove()
 					isGameOverInternal = movePiece(move1, playerTwoJokerChange, isPlayerOneTurn);
 					if (isGameOverInternal)
 					{
-						//lines??
 						break;
 					}
 				}
@@ -279,7 +269,6 @@ int RPSGame::makeMove()
 					isGameOverInternal = movePiece(move1, playerTwoJokerChange, isPlayerOneTurn);
 					if (isGameOverInternal)
 					{
-						//lines??
 						break;
 					}
 				}
@@ -299,7 +288,6 @@ int RPSGame::makeMove()
 		bool doesGameOver = checkGameOver(true, isPlayerOneTurn);
 		if (!isGameOverInternal && !isGameOver && !doesGameOver)
 		{
-			cout << "enter isGameOverInternal move" << endl;
 			if (isPlayerOneTurn)
 			{
 				if (!playerTwo.isLeftMovingPieces())
@@ -763,8 +751,7 @@ int RPSGame::checkBadFormat()
  Input - enum winning type, index line pos of error of player 1, index line pos of error of player 2,index line move of player 1 , index line move of player 2
  output - string that represent winning reason.
  */
-string RPSGame::ToString(GAME_OVER_TYPE typeGame, int indexErrorPosOne,
-						 int indexErrorPosTwo, int indexErrorMoveOne, int indexErrorMoveTwo)
+string RPSGame::ToString(GAME_OVER_TYPE typeGame)
 {
 	switch (typeGame)
 	{
@@ -773,19 +760,19 @@ string RPSGame::ToString(GAME_OVER_TYPE typeGame, int indexErrorPosOne,
 	case ALL_PIECES_EATEN:
 		return "All moving PIECEs of the opponent are eaten";
 	case WRONG_FILE_FORMAT_ONE:
-		return "Bad Positioning input file for player 1 - line " + to_string(indexErrorPosOne); //TODO : line
+		return "Bad Positioning input file for player 1 "; //TODO : line
 	case WRONG_FILE_FORMAT_TWO:
-		return "Bad Positioning input file for player 2 - line " + to_string(indexErrorPosTwo); //TODO : line
+		return "Bad Positioning input file for player 2 "; //TODO : line
 	case WRONG_FILE_FORMAT_BOTH:
-		return "Bad Positioning input file for both players - player 1: line " + to_string(indexErrorPosOne) + ", player 2: line " + to_string(indexErrorPosTwo);
+		return "Bad Positioning input file for both players - player 1 , player 2";
 	case TIE_NO_WINNER:
 		return "A tie - both Moves input files done without a winner";
 	case TIE_ALL_FLAGS_EATEN:
 		return "A tie - all flags are eaten by both players in the position files";
 	case WRONG_MOVE_FILE_FORMAT_TWO:
-		return "Bad Move File input file for player 2 - line " + to_string(indexErrorMoveTwo);
+		return "Bad Move File input file for player 2  ";
 	case WRONG_MOVE_FILE_FORMAT_ONE:
-		return "Bad Move File input file for player 1 - line " + to_string(indexErrorMoveOne);
+		return "Bad Move File input file for player 1  ";
 	default:
 		return "[Unknown GAME_OVER_TYPE]";
 	}
@@ -938,9 +925,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 	fights.setPosition(*currPos);
 	fights.setOpponentPiece(nextPlayerPiece);
 	fights.setCurrPiece(currPiece);
-	cout << "fight information" << endl;
-	cout << "next player" << nextPlayerNum << endl;
-	cout << "curr player" << currPlayerNum << endl;
 	//Case 1: 2 players in the same type - both should be eaten
 	if (nextPlayerPiece == currPlayerPiece)
 	{
@@ -1253,8 +1237,7 @@ void RPSGame::printOutputFile(const string &outputFile)
 		output << "Winner: 0" << endl;
 	}
 	output << "Reason: "
-		   << ToString(getGameOverReason(), indexErrorPosOne, indexErrorPosTwo,
-					   indexErrorMoveOne, indexErrorMoveTwo)
+		   << ToString(getGameOverReason())
 		   << endl;
 	output << endl; // the third line must be en empty line!
 	printBoardToFile(output);

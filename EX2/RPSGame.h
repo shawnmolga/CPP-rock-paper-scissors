@@ -36,11 +36,6 @@ class RPSGame{
 private:
 	PlayerAlgorithm * playerAlgoOne;
 	PlayerAlgorithm * playerAlgoTwo;
-
-	int indexErrorPosOne; //do we need line numbers?
-	int indexErrorPosTwo;
-	int indexErrorMoveOne;
-	int indexErrorMoveTwo;
 	bool isGameOver;
 	string gameMethod;
 
@@ -54,7 +49,7 @@ public:
 		RPSGame();
 		~RPSGame();
         //vector<vector<Cell>> board ;  //Noy move the board to be public. we need it in the algorithm
-        string ToString(GAME_OVER_TYPE typeGame, int indexErrorPosOne, int indexErrorPosTwo, int indexErrorMoveOne, int indexErrorMoveTwo);
+        string ToString(GAME_OVER_TYPE typeGame);
 		int checkPositionOnBoard(bool &isPlayerOneLegalFormat,bool &isPlayerTwoLegalFormat, RPSFight &fights, std::vector<unique_ptr<FightInfo>>& initFights);
         bool isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
         bool initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
