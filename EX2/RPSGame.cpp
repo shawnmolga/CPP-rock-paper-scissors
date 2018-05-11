@@ -377,18 +377,18 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
 		return false;
 	}
 	//noy CHANGED!!!! need to consult with shawn
-	if (gameBoard.board.at(from_x - 1).at(from_y - 1).getPiece() == 0)
+	if (gameBoard.board.at(from_x).at(from_y).getPiece() == 0)
 	{
 		cout << "Error: there is no piece in this position" << endl;
 		return false;
 	}
-	else if ((isPlayer1 && islower(gameBoard.board.at(from_x - 1).at(from_y - 1).getPiece())) || (!isPlayer1 && isupper(gameBoard.board[from_x - 1][from_y - 1].getPiece())))
+	else if ((isPlayer1 && islower(gameBoard.board.at(from_x).at(from_y).getPiece())) || (!isPlayer1 && isupper(gameBoard.board[from_x][from_y].getPiece())))
 	{
 		cout << "Error: trying to move the opponent piece" << endl;
 		return false;
 	}
 
-	if (toupper(gameBoard.board.at(from_x - 1).at(from_y - 1).getPiece()) == BOMB || toupper(gameBoard.board[from_x - 1][from_y - 1].getPiece()) == FLAG)
+	if (toupper(gameBoard.board.at(from_x).at(from_y).getPiece()) == BOMB || toupper(gameBoard.board[from_x][from_y].getPiece()) == FLAG)
 	{
 		cout << "Error: flag/bomb piece is not allowed to move" << endl;
 		return false;
@@ -422,11 +422,11 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
 		return false;
 	}
 
-	if (gameBoard.board.at(to_x - 1).at(to_y - 1).getPiece() != 0)
+	if (gameBoard.board.at(to_x).at(to_y).getPiece() != 0)
 	{
 		if (isPlayer1)
 		{
-			if (isupper(gameBoard.board.at(to_x - 1).at(to_y - 1).getPiece()))
+			if (isupper(gameBoard.board.at(to_x).at(to_y).getPiece()))
 			{
 				cout
 					<< "Error: you are trying to move to a cell taken by your own piece"
@@ -436,7 +436,7 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
 		}
 		else
 		{
-			if (islower(gameBoard.board.at(to_x - 1).at(to_y - 1).getPiece()))
+			if (islower(gameBoard.board.at(to_x).at(to_y).getPiece()))
 			{
 				cout
 					<< "Error: you are trying to move to a cell taken by your own piece"
