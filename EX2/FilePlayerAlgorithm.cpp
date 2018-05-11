@@ -28,10 +28,12 @@ bool FilePlayerAlgorithm::checkEmptyLine(int start, const string &line)
 
 int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 {
+	cout<<"inside getPieceFromLine "<<endl;
 	int end = start;
 
 	if ((size_t)end >= line.length())
 	{
+		cout<<"missing piece in line 1"<<endl;
 		cout << "Error - bad format - missing piece in line" << endl;
 		return -1;
 	}
@@ -41,6 +43,7 @@ int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 		end++;
 		if ((size_t)end >= line.length())
 		{
+			cout<<"missing piece in line 2"<<endl;
 			cout << "Error - bad format - missing piece in line" << endl;
 			return -1;
 		}
@@ -65,6 +68,7 @@ bool FilePlayerAlgorithm::checkIfDigit(char c)
 int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 											 int &row, int &col)
 {
+	cout<<"inside getPositionFromLine"<<endl;
 	int size = 1;
 	if ((size_t)start >= line.length())
 	{
@@ -429,6 +433,9 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 						<< endl;
 				}
 				from.setX(-1);
+				//noy added 
+				unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
+				return move;
 			}
 			else
 			{
@@ -440,6 +447,9 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 					to.setX(to_x);
 					to.setY(to_y);
 				}
+				unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
+				//noy added
+				return move;
 			}
 		}
 	}

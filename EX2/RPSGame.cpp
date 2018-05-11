@@ -195,7 +195,7 @@ int RPSGame::makeMove()
 			if (isGameOverInternal)
 			{
 				cout << "WRONG_MOVE_FILE_FORMAT_ONE" << endl;
-				setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
+				setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 				break;
 			}
 		}
@@ -209,7 +209,7 @@ int RPSGame::makeMove()
 				if (isGameOverInternal)
 				{
 					cout << "WRONG_MOVE_FILE_FORMAT_TWO" << endl;
-					setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
+					setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 					//lines??
 					break;
 				}
@@ -233,8 +233,9 @@ int RPSGame::makeMove()
 		cout<<"After Move"<<endl;
 		PrintBoardToConsole();
 	} //while
+	cout<<"Does game over"<<isGameOverInternal<<endl;
 	//game stopeed
-	if (!isGameOver)
+	if (!isGameOverInternal)
 	{
 		if (xPiecePlayerOne == -2) //EOFcase
 		{
