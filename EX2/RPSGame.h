@@ -58,7 +58,7 @@ public:
 		int checkPositionOnBoard(bool &isPlayerOneLegalFormat,bool &isPlayerTwoLegalFormat, RPSFight &fights, std::vector<unique_ptr<FightInfo>>& initFights);
         bool isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
         bool initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
-        void countNumOfPieces(const int playerNum,int numOfPositionedPieces[],const int piece );
+        bool countNumOfPieces(const int playerNum,int numOfPositionedPieces[],const int piece );
 		bool checkPieceOverflow(int numOfPieces[]);
 		bool checkGameOver(bool isBeforeMove, bool isPlayerOneTurn);
 		int checkBadFormat();

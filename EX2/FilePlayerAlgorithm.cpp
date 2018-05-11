@@ -404,7 +404,6 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 	RPSpoint to(to_x, to_y);
 	if (getline(player1Move, line1))
 	{
-		cout<<line1<<endl;
 		string local_line;
 		copyString(local_line, line1);
 		//incrementMovesFileLine(); todo delete this function

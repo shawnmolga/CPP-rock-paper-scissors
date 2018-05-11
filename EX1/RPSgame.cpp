@@ -299,6 +299,7 @@ bool RPSgame::getIsGameOver() const
 }
 void RPSgame::resetGameResults()
 {
+	cout<<"Game was reseted"<<endl;
 	//reset game result after fights that have done due to positioning files
 	playerOne.setIsWinner(false);
 	playerTwo.setIsWinner(false);
