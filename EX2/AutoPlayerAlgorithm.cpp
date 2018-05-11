@@ -104,7 +104,7 @@ Output - true if this is a legal position and  false otherwise
 */
 // legal position on board starts from 0 to number of rows/cols - 1
 bool AutoPlayerAlgorithm::isLegalPosition(int row, int col){
-	if (row > ROWS-1 || col > COLS-1 || row < 0 || col < 0){
+	if (row > ROWS || col > COLS || row < 0 || col < 0){
 		return false;
 	}
 	return true;

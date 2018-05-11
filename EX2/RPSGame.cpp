@@ -531,7 +531,7 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 
 		isJoker = false;
 		inputPiece = vectorToFill[i]->getPiece();
-		cout << inputPiece << endl;
+		cout << (char)inputPiece << endl;
 		// In case the line if bad forrmated
 		if (inputPiece == -1)
 		{
@@ -578,6 +578,9 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 			}
 			if (playerNum == 1)
 			{
+				cout<<"trying to get board"<<endl;
+				cout << (char)gameBoard.board.at(row).at(col).getPiece() << endl;
+				cout<<"ROW = "<< row << "COL = " <<col; 
 				if (gameBoard.board.at(row).at(col).getPiece() != 0)
 				{
 					cout
