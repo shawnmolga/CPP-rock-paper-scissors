@@ -80,10 +80,9 @@ void RPSGame::updateJokerChange(char prevJokerRep, char newRep,
 }
 
 /*
-Input- move object, joker change object and players turn
-Output- true if the move was done, otherwise false
+Input- move object, joker's change object and players turn
+Output- returns true if gameOver, false otherwise
 */
-//returns true if gameOver, false otherwise
 bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJokerChange,
 						bool isPlayerOneTurn)
 {
@@ -169,6 +168,9 @@ bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJ
 	return false;
 }
 
+/*
+* Output - return -1 if there was an error  during move, or 0 if the move was successful.
+*/
 int RPSGame::makeMove()
 {
 	unique_ptr<Move> move1 = std::move(playerAlgoOne->getMove());
@@ -566,9 +568,6 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 			}
 			if (playerNum == 1)
 			{
-				cout<<"trying to get board"<<endl;
-				cout << (char)gameBoard.board.at(row).at(col).getPiece() << endl;
-				cout<<"ROW = "<< row << "COL = " <<col; 
 				if (gameBoard.board.at(row).at(col).getPiece() != 0)
 				{
 					cout
@@ -637,6 +636,7 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
  Output -  
  -1 if there is an error
  -2 if there is an read error
+ 0 if there is no bad formats problem or errors.
  */
 int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 								  bool &isPlayerTwoLegalFormat,
@@ -682,6 +682,7 @@ void RPSGame::resetGameResults()
 	playerTwo.setScore(0);
 	isGameOver = false;
 }
+
 /*
  Set GameOver relevant fields;
  Input - winner number and game over reason
@@ -722,7 +723,6 @@ int RPSGame::checkBadFormat()
 	std::vector<unique_ptr<FightInfo>> initFights;
 	int isLegalFormat = checkPositionOnBoard(isPlayerOneLegalFormat,
 											 isPlayerTwoLegalFormat, fightInfo, initFights);
-	cout << "in check bad format" << endl;
 	resetGameResults(); //reset the game result as we did in ex1!
 	if (!isPlayerOneLegalFormat && !isPlayerTwoLegalFormat)
 	{
@@ -736,7 +736,6 @@ int RPSGame::checkBadFormat()
 	}
 	else if (!isPlayerTwoLegalFormat)
 	{
-		cout << "3" << endl;
 		setGameOver(1, WRONG_FILE_FORMAT_TWO);
 		return -1;
 	}
@@ -777,6 +776,7 @@ string RPSGame::ToString(GAME_OVER_TYPE typeGame)
 		return "[Unknown GAME_OVER_TYPE]";
 	}
 }
+
 /*
  Verify that all game files exists
  */
@@ -836,6 +836,7 @@ bool RPSGame::isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseF
 	}
 	return false;
 }
+
 /*
  Return true if game is overm otherwise false
  */
@@ -895,11 +896,11 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 }
 
 /*
-Input - boolean that represents players turn, pieces row and col of next player , 
-curr piece player,  
-
+* Input - boolean that represents players turn, pieces row and col of next player , 
+* curr piece player,  if the player is joker or not, RPSFight object for updating fight result 
+* and vector to update for initial fights, 2 points that represent players position.
+* Output - true if game if over, otherwise false
 */
-//oid FilePlayerAlgorithm::notifyFightResult(const FightInfo& fightInfo)
 bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 					bool isCurrPieceJoker, RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights,
 					RPSpoint posOne, RPSpoint posTwo)
@@ -1307,6 +1308,7 @@ bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
 	return true;
 }
 
+//Need to erase this function - only for debug!
 void RPSGame::PrintBoardToConsole()
 {
 	cout << "*******************PRINT THE BOARD:****************" << endl;
