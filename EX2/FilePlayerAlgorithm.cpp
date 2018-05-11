@@ -264,6 +264,7 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 		}
 		else
 		{
+			cout << "jokerRep = " << jokerRep << endl;
 			vectorToFill.push_back(
 				make_unique<RPSPiecePosition>(RPSpoint(row, col), piece, jokerRep));
 		}

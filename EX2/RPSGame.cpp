@@ -90,6 +90,7 @@ bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJ
 	int from_y = move->getFrom().getY();
 	int to_x = move->getTo().getX();
 	int to_y = move->getTo().getY();
+	cout << "moving piece: " << from_x << ", " << from_y << endl;
 	if (!isLegalMove(move, isPlayerOneTurn))
 	{
 
@@ -99,8 +100,6 @@ bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJ
 	cout << gameBoard.board[to_x][to_y].getPiece() << endl;
 	if (gameBoard.board[to_x][to_y].getPiece() == 0)
 	{
-		cout << "before move" << endl;
-		PrintBoardToConsole();
 		Cell::updateCell(gameBoard.board[to_x][to_y], gameBoard.board[from_x][from_y].getPiece(),
 						 gameBoard.board[from_x][from_y].getIsJoker());
 		Cell::cleanCell(gameBoard.board[from_x][from_y]);
@@ -521,7 +520,7 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 
 		isJoker = false;
 		inputPiece = vectorToFill[i]->getPiece();
-		cout << (char)inputPiece << endl;
+		cout << "inputPiece: " << (char)inputPiece << endl;
 		// In case the line if bad forrmated
 		if (inputPiece == -1)
 		{
@@ -539,7 +538,6 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 			//check position was already done there! (maybe we need to trasform here)
 			row = vectorToFill[i]->getPosition().getX();
 			col = vectorToFill[i]->getPosition().getY();
-			cout << (char)vectorToFill[i]->getJokerRep() << endl;
 			if (vectorToFill[i]->getJokerRep() != '#')
 			{
 				isJoker = true;
@@ -578,7 +576,10 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 				}
 				else
 				{
-					Cell::updateCell(gameBoard.board.at(row).at(col), inputPiece, isJoker);
+					if (isJoker)
+						Cell::updateCell(gameBoard.board.at(row).at(col), vectorToFill[i]->getJokerRep(), isJoker);
+					else
+						Cell::updateCell(gameBoard.board.at(row).at(col), inputPiece, isJoker);
 				}
 			}
 			else
@@ -597,15 +598,23 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 					{
 						RPSpoint player1Pos(vectorToFill[i]->getPosition().getX(), vectorToFill[i]->getPosition().getY());
 						RPSpoint player2Pos(vectorToFill[i]->getPosition().getX(), vectorToFill[i]->getPosition().getY());
-						fight(false, row, col, tolower(inputPiece), isJoker, fights, initFights,
-							  player1Pos, player2Pos);
+						if (isJoker){
+							fight(false, row, col, tolower(vectorToFill[i]->getJokerRep()), isJoker, fights, initFights,
+								  player1Pos, player2Pos);
+						}
+						else
+							fight(false, row, col, tolower(inputPiece), isJoker, fights, initFights,
+								  player1Pos, player2Pos);
 						playerAlgoOne->notifyFightResult(fights);
 						playerAlgoTwo->notifyFightResult(fights);
 					}
 				}
 				else
 				{
-					Cell::updateCell(gameBoard.board.at(row).at(col), tolower(inputPiece),
+					if (isJoker)
+						Cell::updateCell(gameBoard.board.at(row).at(col), tolower(vectorToFill[i]->getJokerRep()), isJoker);
+					else
+						Cell::updateCell(gameBoard.board.at(row).at(col), tolower(inputPiece),
 									 isJoker);
 				}
 			}
@@ -905,6 +914,8 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 					bool isCurrPieceJoker, RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights,
 					RPSpoint posOne, RPSpoint posTwo)
 {
+	cout << "isPlayerOneTurn = " << isPlayerOneTurn << ", row = " << row << ", col = " << col << endl;
+	cout << " currPiece = " << currPiece << ", isJoker = " << isCurrPieceJoker<< endl;
 	Player *currPlayer = &playerOne;
 	Player *nextPlayer = &playerTwo;
 	RPSpoint *currPos = &posOne;
@@ -1141,8 +1152,10 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 	else if (nextPlayerPiece == SCISSOR)
 	{
 		cout << "case8" << endl;
+		cout << "currPlayerPiece = " << currPlayerPiece << endl;
 		if (currPlayerPiece == PAPER)
 		{
+			cout << "PAPER VS SCISSORS" << endl;
 			fights.setPosition(*currPos);
 			fights.setWinner(nextPlayerNum);
 			//initFights.push_back(
@@ -1155,6 +1168,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
 		}
 		else if (currPlayerPiece == ROCK)
 		{
+			cout << "ROCK VS SCISSORS" << endl;
 			fights.setWinner(currPlayerNum);
 			//initFights.push_back(
 			// 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
@@ -1320,20 +1334,20 @@ void RPSGame::PrintBoardToConsole()
 			{
 				if (Cell::isPlayerOnePiece(gameBoard.board[i][j]))
 				{
-					cout << "J";
+					cout << " J ";
 				}
 				else
 				{
-					cout << "j";
+					cout << " j ";
 				}
 			}
 			else if (gameBoard.board[i][j].getPiece() == 0)
 			{
-				cout << "-";
+				cout << " - ";
 			}
 			else
 			{
-				cout << gameBoard.board[i][j].getPiece();
+				cout <<" "<< gameBoard.board[i][j].getPiece() << " ";
 			}
 		}
 		cout << endl;
