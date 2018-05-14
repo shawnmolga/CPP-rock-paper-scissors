@@ -13,6 +13,10 @@ FilePlayerAlgorithm::FilePlayerAlgorithm(const string &posFile,
 	player1Move.open (moveFile, std::ofstream::in);
 
 }
+FilePlayerAlgorithm::~FilePlayerAlgorithm(){
+	player1Move.close();
+
+}
 //returns true if line is empty
 //returns false otherwise
 bool FilePlayerAlgorithm::checkEmptyLine(int start, const string &line)
@@ -32,7 +36,6 @@ int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 
 	if ((size_t)end >= line.length())
 	{
-		cout<<"missing piece in line 1"<<endl;
 		cout << "Error - bad format - missing piece in line" << endl;
 		return -1;
 	}
@@ -42,7 +45,6 @@ int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 		end++;
 		if ((size_t)end >= line.length())
 		{
-			cout<<"missing piece in line 2"<<endl;
 			cout << "Error - bad format - missing piece in line" << endl;
 			return -1;
 		}
@@ -70,7 +72,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	int size = 1;
 	if ((size_t)start >= line.length())
 	{
-		cout<<"bad format 1"<<endl;
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
 	}
@@ -80,7 +81,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 		start = start + 1;
 		if ((size_t)start >= line.length())
 		{
-			cout<<"bad format 2"<<endl;
 			cout << "Error - bad format - missing position in line" << endl;
 			return -1;
 		}
@@ -93,7 +93,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	int end = start + 1;
 	if ((size_t)end >= line.length())
 	{
-		cout<<"bad format 3"<<endl;
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
 	}
@@ -108,7 +107,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 		end = end + 1;
 		if ((size_t)end >= line.length())
 		{
-			cout<<"bad format 4"<<endl;
 			cout << "Error - bad format - missing position in line" << endl;
 			return -1;
 		}
@@ -127,7 +125,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	start = end++;
 	if ((size_t)start >= line.length())
 	{
-		cout<<"bad format 5"<<endl;
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
 	}
@@ -136,7 +133,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 		start = start + 1;
 		if ((size_t)start >= line.length())
 		{
-			cout<<"bad format 6"<<endl;
 			cout << "Error - bad format - missing position in line" << endl;
 			return -1;
 		}
@@ -237,7 +233,6 @@ bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row
 
 void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
-	//todo - check this
 	(void)player;
 	ifstream posFile(positionFile);
 	string line;
@@ -264,7 +259,6 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 		}
 		else
 		{
-			cout << "jokerRep = " << jokerRep << endl;
 			vectorToFill.push_back(
 				make_unique<RPSPiecePosition>(RPSpoint(row, col), piece, jokerRep));
 		}
@@ -287,7 +281,7 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 //compilation error - unused fightInfo variable !
 
 void FilePlayerAlgorithm::notifyFightResult(const FightInfo& fightInfo){
-	fightInfo.getPosition().getX();
+    (void) fightInfo;
 }
 
 void FilePlayerAlgorithm::notifyOnInitialBoard(const Board &b,
@@ -407,11 +401,8 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 	{
 		string local_line;
 		copyString(local_line, line1);
-		//incrementMovesFileLine(); todo delete this function
-
 		if (checkEmptyLine(0, local_line))
 		{
-			cout << "line is empty" << endl;
 			//move file wrong format - Point from = (-1, 0)
 			from.setX(0);
 		}

@@ -28,7 +28,8 @@ enum GAME_OVER_TYPE
 	WRONG_MOVE_FILE_FORMAT_ONE,
 	WRONG_MOVE_FILE_FORMAT_TWO,
 	TIE_NO_WINNER,
-	TIE_ALL_FLAGS_EATEN
+	TIE_ALL_FLAGS_EATEN,
+	TOO_MANY_MOVES
 };
 
 
@@ -44,6 +45,7 @@ private:
 
 	RPSBoard gameBoard;
 	GAME_OVER_TYPE gameOverReason;
+	int numOfMoves;
 
 public:
 		RPSGame();
