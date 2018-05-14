@@ -458,8 +458,8 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 }
 
 void FilePlayerAlgorithm::incrementMovesFileLine(){
-	movesFileLine++;
+	(void)movesFileLine;
 }
 void FilePlayerAlgorithm::notifyOnOpponentMove(const Move& move) { // noy implmenet only for compilation will succcedd
-	cout<<move.getTo().getX()<<endl;
+	(void)move;
 } // called only on opponent�s move

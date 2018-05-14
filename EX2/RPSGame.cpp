@@ -354,11 +354,10 @@ int RPSGame::startGame()
 	bool isAboutToMove = true;
 	if (checkGameOver(isAboutToMove, isPlayerOneTurn))
 	{
-
-		cout << getGameOverReason() << endl;
 		return 0;
 	}
 	//If we got here the board is initialized! now we need to make a move.
+
 	return makeMove();
 }
 
@@ -533,7 +532,6 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 	bool isPieceOkPlayer2;
 	for (int i = 0; i < vectorSize; i++)
 	{
-
 		isJoker = false;
 		inputPiece = vectorToFill[i]->getPiece();
 		// In case the line if bad forrmated
@@ -584,8 +582,7 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 				if (gameBoard.board.at(row).at(col).getPiece() != 0)
 				{
 					cout
-						<< "Error: two or more pieces are positioned on the same location"
-						<< endl;
+						<< "Error: two or more pieces are positioned on the same location for player " <<playerNum	<< endl;
 					isPlayerLegalFormat = false;
 					return -1;
 				}
@@ -604,9 +601,7 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 					if (gameBoard.board.at(row).at(col).getPiece() == tolower(gameBoard.board.at(row).at(col).getPiece()))
 					{
 						isPlayerLegalFormat = false;
-						cout
-							<< "Error: two or more pieces are positioned on the same location"
-							<< endl;
+						cout << "Error: two or more pieces are positioned on the same location for player " <<playerNum	<< endl;
 						return -1;
 					}
 					else
@@ -646,8 +641,7 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 	if (flagCnt < FLAGS_NUM)
 	{
 		isPlayerLegalFormat = false;
-		cout << "Error: Missing flags - not all flags are positioned on board"
-			 << endl;
+		cout << "Error: Missing flags - not all flags are positioned on board for player " << playerNum << endl;
 		return -1;
 	}
 	return 0;
@@ -679,6 +673,7 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 	//bool isPlayerOneLegalFormat = true;
 	//check player One Format
 	int resultPlayerOne = locateOnBoard(1, vectorToFillPlayerOne, isPlayerOneLegalFormat, numOfPositionedPieces, fights, initFights);
+
 	memset(numOfPositionedPieces, 0, sizeof(numOfPositionedPieces)); // for automatically-allocated arrays
 	//locate player2:
 	int resultPlayerTwo = locateOnBoard(2, vectorToFillPlayerTwo, isPlayerTwoLegalFormat, numOfPositionedPieces, fights, initFights);
@@ -867,6 +862,8 @@ bool RPSGame::isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseF
  */
 bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 {
+	PrintBoardToConsole();
+	cout << "isBeforeMove = " << isBeforeMove << endl;
 	Player *currPlayer = &playerOne;
 	Player *nextPlayer = &playerTwo;
 	if (!isPlayerOneTurn)
@@ -885,8 +882,10 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	//check if all of player one's flags are taken
 	if (currPlayer->numOfPieces[5] == 0)
 	{
+
 		nextPlayer->setIsWinner(true);
 		currPlayer->setIsWinner(false);
+
 		nextPlayer->setScore(nextPlayer->getScore() + 1);
 		isGameOver = true;
 		gameOverReason = ALL_FLAGS_CAPTURED;
@@ -895,8 +894,10 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	//check if all of player two's flags are taken
 	if (nextPlayer->numOfPieces[5] == 0)
 	{
+
 		currPlayer->setIsWinner(true);
 		nextPlayer->setIsWinner(false);
+
 		currPlayer->setScore(currPlayer->getScore() + 1);
 		isGameOver = true;
 		gameOverReason = ALL_FLAGS_CAPTURED;
@@ -905,8 +906,10 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	//check if all of player one's moving pieces are eaten
 	if (isBeforeMove && !currPlayer->isLeftMovingPieces())
 	{
+
 		nextPlayer->setIsWinner(true);
 		currPlayer->setIsWinner(false);
+
 		nextPlayer->setScore(nextPlayer->getScore() + 1);
 		isGameOver = true;
 		gameOverReason = ALL_PIECES_EATEN;
