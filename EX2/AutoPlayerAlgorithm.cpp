@@ -934,8 +934,8 @@ void AutoPlayerAlgorithm::updateBoard(const Board &b) {
 void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move& move) {
 	RPSpoint from = move.getFrom();
 	RPSpoint to = move.getTo();
-	AICell fromCell = gameBoard.board[from.getX()][from.geyY()];
-	AICell::updateCell(gameBoard.board[from.getX()][from.geyY()], fromCell.getPiece(), fromCell.getIsJoker());
-	AICell::updateCellKnowlage(gameBoard.board[from.getX()][from.geyY()], fromCell);
-	AICell::clearCell(gameBoard.board[from.getX()][from.geyY()]);
+	AICell fromCell = gameBoard.board[from.getX()][from.getY()];
+	AICell::updateCell(gameBoard.board[from.getX()][from.getY()], fromCell.getPiece(), fromCell.getIsJoker());
+	AICell::updateCellKnowlage(gameBoard.board[from.getX()][from.getY()], fromCell);
+	AICell::clearCell(gameBoard.board[from.getX()][from.getY()]);
 }
