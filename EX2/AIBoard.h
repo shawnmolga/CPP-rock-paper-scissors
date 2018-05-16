@@ -6,7 +6,7 @@
 #include "AICell.h"
 #include "Point.h"
 #include "RPSpoint.h"
-class AIBoard : public RPSBoard
+class AIBoard : public Board
 {
 public:
 	AIBoard();

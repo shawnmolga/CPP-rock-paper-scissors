@@ -15,5 +15,5 @@ class AICell : public Cell {
 	bool isMovingPiece;
 	int	flagProbability;
 	void initAIFields();
-	static void updateCellKnowlage(AICell cell, AICell fromCell);
+	static void updateCellKnowlage(AICell & cell, const AICell & fromCell);
 };

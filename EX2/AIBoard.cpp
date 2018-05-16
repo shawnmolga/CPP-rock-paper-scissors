@@ -1,7 +1,17 @@
 #include "AIBoard.h"
 
 AIBoard::AIBoard() {
-	board(ROWS, vector<AICell>(COLS)); //	board = new Cell *[ROWS];
+	//board(ROWS, vector<AICell>(COLS)); //	board = new Cell *[ROWS];
+	vector<vector<AICell>> board(ROWS+1, vector<AICell>(COLS+1));
+	for (int i = 0; i <= ROWS; i++)
+	{
+		vector<AICell> rowVector;
+		for (int j = 0; j <= COLS; j++)
+		{
+			rowVector.push_back(AICell(0, false));
+		}
+		board.push_back(rowVector);
+	}
 }
 AIBoard::~AIBoard() {}
 

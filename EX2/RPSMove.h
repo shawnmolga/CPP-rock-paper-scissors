@@ -22,13 +22,11 @@
 class RPSMove : public Move{
 public:
 	RPSMove(RPSpoint from, RPSpoint to);
-	~RPSMove();
+	//~RPSMove();
 	virtual const Point& getFrom () const override;
 	virtual const Point& getTo () const override;
 	virtual void setFrom(RPSpoint point);
 	virtual void setTo(RPSpoint point);
-	bool static isLegalMove(RPSBoard gameBoard , unique_ptr<Move> &move, bool isPlayer1);
-
 private:
 	RPSpoint from;
 	RPSpoint to;

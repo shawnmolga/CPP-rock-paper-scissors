@@ -1,6 +1,6 @@
 COMP = g++-5.3.0
 #put all your object files here
-OBJS = Cell.o main.o Player.o RPSGame.o FilePlayerAlgorithm.o AutoPlayerAlgorithm.o RPSBoard.o RPSFight.o RPSJokerChange.o RPSMove.o RPSPiecePosition.o RPSpoint.o
+OBJS = Cell.o main.o Player.o RPSGame.o FilePlayerAlgorithm.o AutoPlayerAlgorithm.o RPSBoard.o RPSFight.o RPSJokerChange.o RPSMove.o RPSPiecePosition.o RPSpoint.o AICell.o AIBoard.o
 #The executabel filename DON'T CHANGE
 EXEC = ex2
 CPP_COMP_FLAG = -std=c++14 -Wall -Wextra \
@@ -33,6 +33,10 @@ RPSMove.o: RPSMove.cpp RPSMove.h Move.h Point.h RPSpoint.h
 RPSPiecePosition.o: RPSPiecePosition.cpp RPSPiecePosition.h PiecePosition.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 RPSpoint.o: RPSpoint.cpp RPSpoint.h Point.h
+	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
+AICell.o: AICell.cpp AICell.h Cell.h
+	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
+AIBoard.o: AIBoard.cpp AIBoard.h Board.h Constants.h AICell.h Point.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 clean:
 	rm -f $(OBJS) $(EXEC)

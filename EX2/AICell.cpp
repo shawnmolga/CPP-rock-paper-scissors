@@ -15,7 +15,7 @@ void AICell::initAIFields() {
 	this->isMovingPieceKnown = false;
 }
 
-void AICell::updateCellKnowlage(AICell cell,AICell fromCell) {
+void AICell::updateCellKnowlage(AICell & cell,const AICell & fromCell) {
 	cell.flagProbability = fromCell.flagProbability;
 	cell.isJokerKnown = fromCell.isJokerKnown;
 	cell.isMovingPieceKnown = fromCell.isMovingPieceKnown;

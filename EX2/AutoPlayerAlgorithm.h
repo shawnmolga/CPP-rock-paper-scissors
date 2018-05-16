@@ -19,6 +19,8 @@
 #include "AIBoard.h"
 #include "RPSMove.h"
 #include <random>
+#include <cstdint> //or <stdint.h>
+#include <climits>
 
 using namespace std;
 
@@ -37,7 +39,7 @@ public:
 	void positionBombs(int flagRow, int flagCol, int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int bombsToPosition, bool shouldPositionRandomly);
 	bool isLegalPosition(int row, int col);
 	bool checkIsOpponentNeighbors(int player, int row, int col);
-	bool findEmptyNeigbor(int &row, int &col);
+	bool findEmptyNeigbor(int &row, int &col, int flagRow, int flagCol);
 	bool isOpponentPiece(int myPlayerNum, char piece);
 	void positionPiecesRandomly(int pieceNum, char piece, bool isJoker, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
 	void positionMovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
@@ -46,7 +48,7 @@ public:
 	void calcMovingPieces(const Board &b);
 	void getBestMove(int &fromRow, int &fromCol, int &toRow, int &toCol);
 	double getBestMoveForPiece(double score, const int &fromRow,const int &fromCol, int &toRow, int &toCol);
-	double tryMovePiece(unique_ptr<Move>& move,bool isPlayerOneTurn);
+	double tryMovePiece(unique_ptr<Move>& move);
 	double calcMaterial(Cell cell);
 	double calcDiscovery(AICell cell);
 	double calcScore(double material, double discovery, double reveal);
@@ -61,6 +63,7 @@ public:
 	double calcDistanceFromUnknownPiece();
 	int getRandomNumInRange(int start, int end);
 	void updateMovingPiece();
+	bool isLegalMove(unique_ptr<Move> &move, bool isPlayer1);
 	
 private:
 	int myPlayerNum;
