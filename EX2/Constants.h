@@ -14,6 +14,14 @@ using namespace std;
 #define BOMBS_NUM 2
 #define JOKERS_NUM 2
 #define FLAGS_NUM 1
+#define TOTAL_PIECES_NUM (ROCKS_NUM+PAPERS_NUM+SCISSORS_NUM+BOMBS_NUM+JOKERS_NUM+FLAGS_NUM)
+
+#define ROCK_SCORE 1
+#define PAPER_SCORE 1
+#define SCISSOR_SCORE 1
+#define BOMB_SCORE 3
+#define JOKER_SCORE 9
+#define FLAG_SCORE 100
 
 #define ROCK 'R'
 #define PAPER 'P'

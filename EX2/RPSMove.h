@@ -14,6 +14,10 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <memory> // for unique_ptr
+#include "Constants.h"
+#include "RPSBoard.h"
 
 class RPSMove : public Move{
 public:
@@ -23,6 +27,7 @@ public:
 	virtual const Point& getTo () const override;
 	virtual void setFrom(RPSpoint point);
 	virtual void setTo(RPSpoint point);
+	bool static isLegalMove(RPSBoard gameBoard , unique_ptr<Move> &move, bool isPlayer1);
 
 private:
 	RPSpoint from;

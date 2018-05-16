@@ -46,7 +46,7 @@ class RPSGame{
 		void resetGameResults();
 		bool checkBadFormat(bool isPlayerOneLegalFormat, bool isPlayerTwoLegalFormat);
 		void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
-		bool isLegalMove(unique_ptr<Move>& move, bool isPlayer1);
+		//bool isLegalMove(unique_ptr<Move>& move, bool isPlayer1);
 		bool fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool isCurrPieceJoker,std::vector<unique_ptr<FightInfo>>& fights,RPSpoint posOne,RPSpoint posTwo);
 		GAME_OVER_TYPE getGameOverReason(){
 			return gameOverReason;

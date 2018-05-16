@@ -12,6 +12,7 @@ public:
 	virtual const Point& getPosition() const = 0;
 	virtual char getOpponentPiece() const = 0; // R, P, S, B or F (but NOT J)
 	virtual int getWinner() const = 0; // 0 - both lost / tie, 1 - player 1 won, 2 - player 2 won
+	//bool static fight(RPSBoard gameBoard, bool isPlayerOneTurn, int row, int col, char currPiece, bool isCurrPieceJoker, std::vector<unique_ptr<FightInfo>>& fights, RPSpoint posOne, RPSpoint posTwo);
 	
 private:
 RPSpoint position;
