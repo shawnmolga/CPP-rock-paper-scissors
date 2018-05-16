@@ -11,7 +11,7 @@
 #include "RPSpoint.h"
 class RPSPiecePosition : public PiecePosition {
 public:
-	RPSPiecePosition (RPSpoint pos, char kind, char rep);
+	 RPSPiecePosition(RPSpoint pos, char kind, char rep);
 	//RPSPiecePosition (Point position, char piece, char jokerRep);
 	~RPSPiecePosition() override;
 	virtual const Point& getPosition() const override;

@@ -1,7 +1,7 @@
 /*
  * RPSpoint.h
  *
- *  Created on: 24 áàôø× 2018
+ *  Created on: 24 ï¿½ï¿½ï¿½ï¿½ï¿½ 2018
  *      Author: OR
  */
 
@@ -12,7 +12,7 @@
 class RPSpoint : public Point{
 public:
 	RPSpoint(int x, int y);
-	~RPSpoint();
+	~RPSpoint(){};
 	virtual int getX() const override;
 	virtual int getY() const override;
 	virtual void setX(int x);

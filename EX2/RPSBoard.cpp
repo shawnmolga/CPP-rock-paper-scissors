@@ -6,17 +6,31 @@
  */
 #include "RPSBoard.h"
 
-RPSBoard::RPSBoard(){
-	board(ROWS, vector<Cell>(COLS)); //	board = new Cell *[ROWS];
+RPSBoard::RPSBoard()
+{
+	vector<vector<Cell>> newboard(ROWS+1, vector<Cell>(COLS+1));
+	for (int i = 0; i <= ROWS; i++)
+	{
+		vector<Cell> rowVector;
+		for (int j = 0; j <= COLS; j++)
+		{
+			rowVector.push_back(Cell(0, false));
+		}
+		newboard.push_back(rowVector);
+	}
+	board = newboard;
 }
-RPSBoard::~RPSBoard(){}
+RPSBoard::~RPSBoard() {}
 
-int RPSBoard::getPlayer(const Point& pos) const{
+int RPSBoard::getPlayer(const Point &pos) const
+{
 	int x = pos.getX();
 	int y = pos.getY();
-	char piece = board.at(x-1).at(y-1).getPiece();
-	if (piece == 0) return 0;
-	else if (isupper(piece)) return 1;
-	else return 2;
+	char piece = board.at(x - 1).at(y - 1).getPiece();
+	if (piece == 0)
+		return 0;
+	else if (isupper(piece))
+		return 1;
+	else
+		return 2;
 }
-

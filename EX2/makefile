@@ -1,6 +1,6 @@
 COMP = g++-5.3.0
 #put all your object files here
-OBJS = Cell.o main.o Player.o RPSGame.o FilePlayerAlgorithm.o RPSBoard.o RPSFight.o RPSJokerChange.o RPSMove.o RPSPiecePosition.o RPSpoint.o
+OBJS = Cell.o main.o Player.o RPSGame.o FilePlayerAlgorithm.o AutoPlayerAlgorithm.o RPSBoard.o RPSFight.o RPSJokerChange.o RPSMove.o RPSPiecePosition.o RPSpoint.o
 #The executabel filename DON'T CHANGE
 EXEC = ex2
 CPP_COMP_FLAG = -std=c++14 -Wall -Wextra \
@@ -10,7 +10,7 @@ $(EXEC): $(OBJS)
 	$(COMP) $(OBJS) -o $@
 #a rule for building a simple c++ source file
 #use g++ -MM main.cpp to see dependencies
-main.o: main.cpp Constants.h RPSGame.h #put dependencies here!
+main.o: main.cpp Constants.h RPSGame.h  #put dependencies here!
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 Cell.o: Cell.cpp Cell.h Constants.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
@@ -20,11 +20,13 @@ RPSGame.o: RPSGame.cpp Cell.h Point.h RPSBoard.h RPSFight.h RPSMove.h RPSJokerCh
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 FilePlayerAlgorithm.o: FilePlayerAlgorithm.cpp FilePlayerAlgorithm.h PlayerAlgorithm.h RPSPiecePosition.h RPSpoint.h FightInfo.h RPSMove.h RPSJokerChange.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
+AutoPlayerAlgorithm.o: AutoPlayerAlgorithm.cpp RPSPiecePosition.h Constants.h
+	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 RPSBoard.o: RPSBoard.cpp RPSBoard.h Board.h Constants.h Cell.h Point.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 RPSFight.o: RPSFight.cpp RPSFight.h FightInfo.h Point.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-RPSJokerChange.o: RPSJokerChange.cpp RPSJokerChange.h JokerChange.h Point.h RPSpoint.h
+RPSJokerChange.o: RPSJokerChange.cpp RPSJokerChange.h JokerChange.h  RPSPiecePosition.h  Point.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 RPSMove.o: RPSMove.cpp RPSMove.h Move.h Point.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp

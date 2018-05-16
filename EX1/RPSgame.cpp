@@ -2,6 +2,7 @@
 #include "RPSgame.h"
 
 RPSgame::RPSgame() : playerOne(Player(1)), playerTwo(Player(2)), isGameOver(false)
+RPSgame::RPSgame() : playerOne(Player(1)), playerTwo(Player(2)), isGameOver(false)
 {
 	board = new Cell *[ROWS];
 	for (int i = 1; i <= ROWS; ++i)
@@ -298,6 +299,7 @@ bool RPSgame::getIsGameOver() const
 }
 void RPSgame::resetGameResults()
 {
+	cout<<"Game was reseted"<<endl;
 	//reset game result after fights that have done due to positioning files
 	playerOne.setIsWinner(false);
 	playerTwo.setIsWinner(false);

@@ -15,7 +15,7 @@
 #include "Board.h"
 #include "FightInfo.h"
 #include "Move.h"
-#include "JokerChange.h"
+#include "RPSJokerChange.h"
 
 using std::unique_ptr;
 //--------------------------

@@ -38,3 +38,5 @@ using namespace std;
 #define PLAYER_ONE_MOVE_FILENAME "player1.rps_moves"
 #define PLAYER_TWO_MOVE_FILENAME "player2.rps_moves"
 #define OUTPUT_FILENAME "rps.output"
+
+#define MAX_NUM_OF_MOVES 100

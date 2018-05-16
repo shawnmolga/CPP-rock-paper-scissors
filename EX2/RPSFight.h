@@ -4,19 +4,24 @@
 #include "FightInfo.h"
 #include "Point.h"
 #include "RPSpoint.h"
+#include <ctype.h>
 
 class RPSFight : public FightInfo{
 public:
-	 RPSFight(RPSpoint inputPosition,char inputOpponentPiece,int inputWinner);
+	RPSFight();
+	// RPSFight(RPSpoint point, char opponentPiece , int winner );
 	//~RPSFight();
-	virtual const Point& getPosition() const = 0;
-	virtual char getOpponentPiece() const = 0; // R, P, S, B or F (but NOT J)
-	virtual int getWinner() const = 0; // 0 - both lost / tie, 1 - player 1 won, 2 - player 2 won
-	//bool static fight(RPSBoard gameBoard, bool isPlayerOneTurn, int row, int col, char currPiece, bool isCurrPieceJoker, std::vector<unique_ptr<FightInfo>>& fights, RPSpoint posOne, RPSpoint posTwo);
-	
+	const Point& getPosition() const ;
+	char  getPiece(int player) const ; // R, P, S, B or F (but NOT J)
+ 	int getWinner() const ; // 0 - both lost / tie, 1 - player 1 won, 2 - player 2 won
+	void setPosition(RPSpoint pos);
+	void setOpponentPiece(char piece);
+	void setCurrPiece(char piece);
+	void setWinner(int playerNum);
 private:
 RPSpoint position;
-char opponentPiece;
+char currPiece; //player piece
+char opponentPiece; //next player piece
 int winner;
 };
 
