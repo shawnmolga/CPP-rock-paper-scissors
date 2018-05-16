@@ -76,7 +76,7 @@ void AutoPlayerAlgorithm::positionUnmovingPieces(int player, std::vector<unique_
 			if (gameBoard.board[row][col].getPiece() == 0)
 			{
 				isCellTaken = false;
-				if (!checkIsOpponentNeighbors)
+				if (!checkIsOpponentNeighbors(player, row, col))
 				{
 					hasOpponentNeighbor = false;
 					Cell::updateCell(gameBoard.board[row][col], piece, false);
@@ -107,7 +107,7 @@ int AutoPlayerAlgorithm::getRandomNumInRange(int start, int end)
 	return colDistr(eng);
 }
 
-bool AutoPlayerAlgorithm::findEmptyNeigbor(int &row, int &col, int flagRow, int FlagCol)
+bool AutoPlayerAlgorithm::findEmptyNeigbor(int &row, int &col)
 {
 	//down neigbor
 	char piece;
@@ -157,7 +157,7 @@ void AutoPlayerAlgorithm::positionBombs(int flagRow, int flagCol, int player, st
 	{
 		for (int i = 0; i < bombsToPosition; ++i)
 		{
-			if (findEmptyNeigbor(row, col, flagRow, flagCol))
+			if (findEmptyNeigbor(row, col))
 			{
 				Cell::updateCell(gameBoard.board[row][col], piece, false);
 				vectorToFill.push_back = (make_unique<RPSPiecePosition>(RPSpoint(row, col), piece, '#'));
@@ -615,54 +615,55 @@ double AutoPlayerAlgorithm::calcScore(double material, double discovery, double 
 		   DISTANCE_FROM_UNKNOWN_WEIGHT * distanceFromUnknownPiece;
 }
 
-void notifyFightResult(const FightInfo &fightInfo)
+void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 {
-	RPSpoint p = fightInfo.getPosition();
+	int x = fightInfo.getPosition().getX();
+	int y = fightInfo.getPosition().getY();
 	char myPiece = toupper(fightInfo.getPiece(myPlayerNum));
 	char opponentPiece = toupper(fightInfo.getPiece(myPlayerNum == 1 ? 2 : 1));
 	int winner = fightInfo.getWinner();
 	if (winner == 0)
 	{
 		if (opponentPiece == 'B')
-			bombsNumOnBoard--;
+			opponentBombsNumOnBoard--;
 		else
-			movingPieceNumOnBoard--;
-		Cell::cleanCell(gameBoard.board[p.getX()][p.getY()]);
+			opponentMovingPieceNumOnBoard--;
+		Cell::cleanCell(gameBoard.board[x][y]);
 	}
 	else if (winner != myPlayerNum)
 	{   //opponent won
 		//not a flag - game was not over
-		gameBoard.board[p.getX()][p.getY()].flagProbabilty = 0;
+		gameBoard.board[x][y].flagProbability = 0;
 		if (opponentPiece == 'B')
 		{
-			bombsNumOnBoard--;
-			Cell::cleanCell(gameBoard.board[p.getX()][p.getY()]);
+			opponentBombsNumOnBoard--;
+			Cell::cleanCell(gameBoard.board[x][y]);
 		}
 		//if it is not a bomb and not a flag - than it is moving piece
-		gameBoard.board[p.getX()][p.getY()].isMovingPieceKnown = true;
-		gameBoard.board[p.getX()][p.getY()].isMovingPiece = true;
+		gameBoard.board[x][y].isMovingPieceKnown = true;
+		gameBoard.board[x][y].isMovingPiece = true;
 		//check if piece was known before and changed.
-		bool isJoker = (gameBoard.board[p.getX()][p.getY()].getPiece() != 0 && gameBoard.board[p.getX()][p.getY()].getPiece() != opponentPiece);
+		bool isJoker = (gameBoard.board[x][y].getPiece() != 0 && gameBoard.board[x][y].getPiece() != opponentPiece);
 		if (isJoker)
-			gameBoard.board[p.getX()][p.getY()].isJokerKnown = true;
-		AICell::updateCell(gameBoard.board[p.getX()][p.getY()], opponentPiece, isJoker);
+			gameBoard.board[x][y].isJokerKnown = true;
+		AICell::updateCell(gameBoard.board[x][y], opponentPiece, isJoker);
 	}
 	else
 	{   //i won
 		//if i won so opponent piece must not be a bomb or flag(since game was not over)
-		movingPieceNumOnBoard--;
+		opponentMovingPieceNumOnBoard--;
 		if (toupper(myPiece) == 'B')
 		{
-			Cell::cleanCell(gameBoard.board[p.getX()][p.getY()]);
+			Cell::cleanCell(gameBoard.board[x][y]);
 		}
 		else
 		{ // update win
-			Cell::updateCell(gameBoard.board[p.getX()][p.getY()], myCell.getPiece(), myCell.getIsJoker());
-			AICell::updateKnowladge(gameBoard.board[p.getX()][p.getY()], myCell);
+			Cell::updateCell(gameBoard.board[x][y], myCell.getPiece(), myCell.getIsJoker());
+			AICell::updateCellKnowlage(gameBoard.board[x][y], myCell);
 		}
 	}
 
-	if (movingPieceNumOnBoard == 0)
+	if (opponentMovingPieceNumOnBoard == 0)
 	{ //we can mark all pieces as not moving pieces !!!
 		updateMovingPiece();
 	}
@@ -686,7 +687,7 @@ double AutoPlayerAlgorithm::calcDistanceFromBombOrFlag()
 			bool isMyPiece = (piece == '#') || (amIPlayerOne ? isupper(piece) : islower(piece));
 			if (!isMyPiece)
 			{
-				if (gameBoard.board[i][j].isMovingPieceKnown() && !gameBoard.board[i][j].isMovingPiece())
+				if (gameBoard.board[i][j].isMovingPieceKnown && !gameBoard.board[i][j].isMovingPiece)
 				{
 					distance = calcDistanceFromPiece(i, j, amIPlayerOne);
 					if (minimalDistance > distance)
@@ -699,7 +700,7 @@ double AutoPlayerAlgorithm::calcDistanceFromBombOrFlag()
 	return (1 - minimalDistance) / (ROWS + COLS);
 }
 
-double AutoPlayerAlgorithm::calcDistanceFromUnkownPiece()
+double AutoPlayerAlgorithm::calcDistanceFromUnknownPiece()
 {
 	bool amIPlayerOne = (myPlayerNum == 1);
 	int distance;
@@ -715,7 +716,7 @@ double AutoPlayerAlgorithm::calcDistanceFromUnkownPiece()
 			bool isMyPiece = (piece == '#') || (amIPlayerOne ? isupper(piece) : islower(piece));
 			if (!isMyPiece)
 			{
-				if (!gameBoard.board[i][j].isMovingPieceKnown())
+				if (!gameBoard.board[i][j].isMovingPieceKnown)
 				{
 					distance = calcDistanceFromPiece(i, j, amIPlayerOne);
 					if (minimalDistance > distance)
@@ -761,11 +762,12 @@ double AutoPlayerAlgorithm::calcFlagSaftey()
 	int bombs = 0;
 	int movingPieces = 0;
 	int totalEnemyPieces;
+	bool amIPlayerOne = myPlayerNum == 1;
 	for (int i = 0; i < ROWS; ++i)
 	{
 		for (int j = 0; j < ROWS; ++j)
 		{
-			if ((!gameBoard.board[i][j].isPlayerOnePiece() && amIPlayerOne) || (gameBoard.board[i][j].isPlayerOnePiece() && !amIPlayerOne))
+			if ((!AICell::isPlayerOnePiece(gameBoard.board[i][j]) && amIPlayerOne) || (gameBoard.board[i][j].isPlayerOnePiece && !amIPlayerOne))
 			{
 				if (gameBoard.board[i][j].getPiece() != 0)
 					enemyPieces++;
@@ -791,15 +793,15 @@ double AutoPlayerAlgorithm::calcFlagSaftey()
 	else
 		return (2 * protectingBombs + otherProtectingPieces) / 2 * bombs + movingPieces;
 }
+void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces, bool amIplayerOne)
 
-void AutoPlayerAlgorithm::countProtectingPieces(i, j, protectingBombs, otherProtectingPieces, enemyPieces, amIplayerOne)
 {
 	//searchRight
 	bool isMyPiece;
 	char piece = j + 1 > COLS - 1 ? 0 : gameBoard.board[i][j + 1].getPiece();
 	if (piece != 0)
 	{
-		isMyPiece = gameBoard.board[i][j + 1].isPlayerOnePiece() == amIplayerOne;
+		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i][j + 1]) == amIplayerOne;
 
 		if (toupper(piece) == 'B')
 		{
@@ -821,7 +823,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(i, j, protectingBombs, otherProt
 	char piece = j - 1 < COLS - 1 ? 0 : gameBoard.board[i][j - 1].getPiece();
 	if (piece != 0)
 	{
-		isMyPiece = gameBoard.board[i][j - 1].isPlayerOnePiece() == amIplayerOne;
+		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i][j - 1]) == amIplayerOne;
 
 		if (toupper(piece) == 'B')
 		{
@@ -843,7 +845,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(i, j, protectingBombs, otherProt
 	char piece = i - 1 < ROWS - 1 ? 0 : gameBoard.board[i - 1][j].getPiece();
 	if (piece != 0)
 	{
-		isMyPiece = gameBoard.board[i - 1][j].isPlayerOnePiece() == amIplayerOne;
+		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i - 1][j]) == amIplayerOne;
 
 		if (toupper(piece) == 'B')
 		{
@@ -865,7 +867,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(i, j, protectingBombs, otherProt
 	char piece = i + 1 > ROWS ? 0 : gameBoard.board[i + 1][j].getPiece();
 	if (piece != 0)
 	{
-		isMyPiece = gameBoard.board[i + 1][j].isPlayerOnePiece() == amIplayerOne;
+		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i + 1][j]) == amIplayerOne;
 
 		if (toupper(piece) == 'B')
 		{
@@ -887,7 +889,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(i, j, protectingBombs, otherProt
 	char piece = i - 1 < ROWS - 1 || j - 1 < COLS - 1 ? 0 : gameBoard.board[i - 1][j - 1].getPiece();
 	if (piece != 0)
 	{
-		isMyPiece = gameBoard.board[i - 1][j - 1].isPlayerOnePiece() == amIplayerOne;
+		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i - 1][j - 1]) == amIplayerOne;
 
 		if (toupper(piece) == 'B')
 		{
@@ -909,7 +911,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(i, j, protectingBombs, otherProt
 	char piece = i + 1 > ROWS - 1 || j - 1 < COLS - 1 ? 0 : gameBoard.board[i + 1][j - 1].getPiece();
 	if (piece != 0)
 	{
-		isMyPiece = gameBoard.board[i + 1][j - 1].isPlayerOnePiece() == amIplayerOne;
+		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i + 1][j - 1]) == amIplayerOne;
 
 		if (toupper(piece) == 'B')
 		{
@@ -931,7 +933,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(i, j, protectingBombs, otherProt
 	char piece = i - 1 < ROWS - 1 || j + 1 > COLS - 1 ? 0 : gameBoard.board[i - 1][j + 1].getPiece();
 	if (piece != 0)
 	{
-		isMyPiece = gameBoard.board[i - 1][j + 1].isPlayerOnePiece() == amIplayerOne;
+		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i - 1][j + 1]) == amIplayerOne;
 
 		if (toupper(piece) == 'B')
 		{
@@ -953,7 +955,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(i, j, protectingBombs, otherProt
 	char piece = i + 1 > ROWS - 1 || j + 1 > COLS - 1 ? 0 : gameBoard.board[i + 1][j + 1].getPiece();
 	if (piece != 0)
 	{
-		isMyPiece = gameBoard.board[i + 1][j + 1].isPlayerOnePiece() == amIplayerOne;
+		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i + 1][j + 1]) == amIplayerOne;
 
 		if (toupper(piece) == 'B')
 		{
@@ -991,7 +993,7 @@ double AutoPlayerAlgorithm::calcMaterial(Cell cell)
 
 double AutoPlayerAlgorithm::calcDiscovery(AICell cell)
 {
-	int isFlagKnown = cell.flagProbabilty == 0 ? 0 : 1;
+	int isFlagKnown = cell.flagProbability == 0 ? 0 : 1;
 	int isJokerKnown = cell.isJokerKnown ? 0 : 1;
 	int isMovingPiece = cell.isMovingPiece ? 0 : 1;
 
@@ -1000,11 +1002,14 @@ double AutoPlayerAlgorithm::calcDiscovery(AICell cell)
 
 char AutoPlayerAlgorithm::shouldChangeJoker(double &score, int joker_x, int joker_y, bool amIPlayerOne)
 {
-	char oldRep = gameBoard.board[x_joker][y_joker].getPiece();
+	char oldRep = gameBoard.board[joker_x][joker_y].getPiece();
 	char origRep = oldRep;
 	char newRep;
 	char bestRep = -1;
 	int currScore;
+	int material = calcMaterial(gameBoard.board[joker_x][joker_y]);;
+	int discovery = 0;
+	int reveal = 0;
 
 	for (int i = 0; i < 4; ++i)
 	{
@@ -1028,9 +1033,9 @@ char AutoPlayerAlgorithm::shouldChangeJoker(double &score, int joker_x, int joke
 			break;
 		}
 
-		Cell::updateCell(gameBoard.board[x_joker][y_joker],
+		Cell::updateCell(gameBoard.board[joker_x][joker_y],
 						 newRep, true);
-		currScore = calcScore(x_joker, y_joker);
+		currScore = calcScore(material, discovery, reveal);
 
 		if (currScore > score)
 		{
@@ -1040,7 +1045,7 @@ char AutoPlayerAlgorithm::shouldChangeJoker(double &score, int joker_x, int joke
 		else
 		{
 			//change back to old rep
-			Cell::updateCell(gameBoard.board[x_joker][y_joker],
+			Cell::updateCell(gameBoard.board[joker_x][joker_y],
 							 oldRep, true);
 		}
 	}
@@ -1056,7 +1061,7 @@ void AutoPlayerAlgorithm::updateMovingPiece()
 		{
 			if (gameBoard.board[i][j].getPiece() == 0) //empty cell
 				continue;
-			int piecePlayerNum = gameBoard.board[i][j].isPlayerOnePiece() ? 1 : 2;
+			int piecePlayerNum = AICell::isPlayerOnePiece(gameBoard.board[i][j]) ? 1 : 2;
 			if (gameBoard.board[i][j].getPiece() == '#' || myPlayerNum != piecePlayerNum)
 			{ //this is opponent's piece
 				if (gameBoard.board[i][j].isMovingPieceKnown && gameBoard.board[i][j].isMovingPiece)
@@ -1088,10 +1093,12 @@ void AutoPlayerAlgorithm::updateBoard(const Board &b)
 
 void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move &move)
 {
-	RPSpoint from = move.getFrom();
-	RPSpoint to = move.getTo();
-	AICell fromCell = gameBoard.board[from.getX()][from.getY()];
-	AICell::updateCell(gameBoard.board[from.getX()][from.getY()], fromCell.getPiece(), fromCell.getIsJoker());
-	AICell::updateCellKnowlage(gameBoard.board[from.getX()][from.getY()], fromCell);
-	AICell::clearCell(gameBoard.board[from.getX()][from.getY()]);
+	int from_x = move.getFrom().getX();
+	int from_y = move.getFrom().getY();
+	int to_x = move.getTo().getX();
+	int to_y = move.getTo().getY();
+	AICell fromCell = gameBoard.board[from_x][from_y];
+	AICell::updateCell(gameBoard.board[to_x][to_y], fromCell.getPiece(), fromCell.getIsJoker());
+	AICell::updateCellKnowlage(gameBoard.board[to_x][to_y], fromCell);
+	AICell::cleanCell(gameBoard.board[from_x][from_y]);
 }

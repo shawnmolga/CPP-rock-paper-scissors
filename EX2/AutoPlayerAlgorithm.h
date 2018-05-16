@@ -37,7 +37,7 @@ public:
 	void positionBombs(int flagRow, int flagCol, int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int bombsToPosition, bool shouldPositionRandomly);
 	bool isLegalPosition(int row, int col);
 	bool checkIsOpponentNeighbors(int player, int row, int col);
-	bool findEmptyNeigbor(int &row, int &col, int flagRow, int FlagCol);
+	bool findEmptyNeigbor(int &row, int &col);
 	bool isOpponentPiece(int myPlayerNum, char piece);
 	void positionPiecesRandomly(int pieceNum, char piece, bool isJoker, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
 	void positionMovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
@@ -60,6 +60,8 @@ public:
 	double calcFlagSaftey();
 	double calcDistanceFromUnknownPiece();
 	int getRandomNumInRange(int start, int end);
+	void updateMovingPiece();
+	
 private:
 	int myPlayerNum;
 	//opponent piece counters
