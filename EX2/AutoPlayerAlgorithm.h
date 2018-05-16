@@ -46,7 +46,7 @@ public:
 	void calcMovingPieces(const Board &b);
 	void getBestMove(int &fromRow, int &fromCol, int &toRow, int &toCol);
 	double getBestMoveForPiece(double score, const int &fromRow,const int &fromCol, int &toRow, int &toCol);
-	double tryMovePiece(Move& move,bool isPlayerOneTurn);
+	double tryMovePiece(unique_ptr<Move>& move,bool isPlayerOneTurn);
 	double calcMaterial(Cell cell);
 	double calcDiscovery(AICell cell);
 	double calcScore(double material, double discovery, double reveal);
@@ -55,6 +55,10 @@ public:
 	int calcDistanceFromPiece(int piece_x, int piece_y, bool amIPlayerOne);
 	void updateFlagProbability();
 	bool tryToFight(int to_x, int to_y, char myPiece, bool isJoker);
+	bool fight(int row, int col, char myPiece, char opponentPiece, bool isMyPieceJoker);
+	char shouldChangeJoker(double &score,int joker_x, int joker_y, bool amIPlayerOne);
+	double calcFlagSaftey();
+	double calcDistanceFromUnknownPiece();
 
 private:
 	int myPlayerNum;

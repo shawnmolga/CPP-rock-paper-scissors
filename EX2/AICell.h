@@ -7,6 +7,7 @@
 using namespace std;
 
 class AICell : public Cell {
+	public:
 	AICell(char piece, bool isJoker);
 	AICell();
 	bool isJokerKnown;
@@ -14,5 +15,5 @@ class AICell : public Cell {
 	bool isMovingPiece;
 	int	flagProbability;
 	void initAIFields();
-	void updateCellKnowlage(AICell cell, AICell fromCell);
+	static void updateCellKnowlage(AICell cell, AICell fromCell);
 };

@@ -2,14 +2,14 @@
 
 AICell::AICell(char playerPiece, bool isPieceJoker) {
 	Cell(playerPiece, isPieceJoker);
-	init();
+	initAIFields();
 }
 AICell::AICell() {
 	Cell();
-	init();
+	initAIFields();
 }
 
-AICell::initAIFields() {
+void AICell::initAIFields() {
 	this->flagProbability = FLAGS_NUM / TOTAL_PIECES_NUM;
 	this->isJokerKnown = false;
 	this->isMovingPieceKnown = false;

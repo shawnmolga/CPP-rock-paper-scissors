@@ -30,6 +30,13 @@ using namespace std;
 #define JOKER 'J'
 #define FLAG 'F'
 
+#define MATERIAL_WEIGHT 8
+#define DISCOVERY_WEIGHT 10
+#define REVEAL_WEIGHT 3
+#define FLAG_SAFTEY_WEUGHT 50
+#define DISTANCE_FROM_FLAG_WEIGHT 100
+#define DISTANCE_FROM_UNKNOWN_WEIGHT 50
+
 #define PLAYER_ONE 1
 #define PLAYER_TWO 2
 
