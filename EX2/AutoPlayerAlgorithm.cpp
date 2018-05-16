@@ -99,7 +99,7 @@ void AutoPlayerAlgorithm::positionUnmovingPieces(int player, std::vector<unique_
 	}
 }
 
-int getRandomNumInRange(int start, int end)
+int AutoPlayerAlgorithm::getRandomNumInRange(int start, int end)
 {
 	std::random_device rd;								  // obtain a random number from hardware
 	std::mt19937 eng(rd());								  // seed the generator

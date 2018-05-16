@@ -59,7 +59,7 @@ public:
 	char shouldChangeJoker(double &score,int joker_x, int joker_y, bool amIPlayerOne);
 	double calcFlagSaftey();
 	double calcDistanceFromUnknownPiece();
-
+	int getRandomNumInRange(int start, int end);
 private:
 	int myPlayerNum;
 	//opponent piece counters
