@@ -354,6 +354,7 @@ unique_ptr<Move> AutoPlayerAlgorithm::getMove()
 	int to_y;
 	getBestMove(from_x, from_y, to_x, to_y);
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
+	
 	return move;
 }
 
@@ -399,7 +400,7 @@ void AutoPlayerAlgorithm::getBestMove(int &from_x, int &from_y, int &to_x, int &
 				continue;
 			bool isMyPiece = Cell::isPlayerOnePiece(gameBoard.board[i][j]) ? (myPlayerNum == 1) : (myPlayerNum == 2);
 			if (!isMyPiece) continue;
-			score = getBestMoveForPiece(maxScore, i, j, to_X, to_y);
+			score = getBestMoveForPiece(maxScore, i, j, to_x, to_y);
 			if (maxScore < score)
 			{
 				maxScore = score;
