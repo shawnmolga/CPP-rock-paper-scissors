@@ -60,8 +60,8 @@ void AutoPlayerAlgorithm::positionUnmovingPieces(int player, std::vector<unique_
 	bool isCellTaken = true;
 	bool hasOpponentNeighbor = true;
 	char piece = (player == 1 ? 'F' : 'f');
-	int col = getRandomNumInRange(0, COLS - 1);
-	int row = getRandomNumInRange(0, ROWS - 1);
+	int x = getRandomNumInRange(0, COLS - 1);
+	int y = getRandomNumInRange(0, ROWS - 1);
 	bool shouldPositionRandomly = false;
 	int protectingBombsNum = BOMBS_NUM / (2 * FLAGS_NUM); //half will protect all flags and half will be spred randomly on board
 	int bombsPositioned = 0;							  //sum all bombs already positioned
@@ -74,20 +74,20 @@ void AutoPlayerAlgorithm::positionUnmovingPieces(int player, std::vector<unique_
 	{
 		while (isCellTaken || hasOpponentNeighbor)
 		{
-			if (gameBoard.board[row][col].getPiece() == 0)
+			if (gameBoard.board[x][y].getPiece() == 0)
 			{
 				isCellTaken = false;
-				if (!checkIsOpponentNeighbors(player, row, col))
+				if (!checkIsOpponentNeighbors(player, x, y))
 				{
 					hasOpponentNeighbor = false;
-					AICell::updateCell(gameBoard.board[row][col], piece, false);
-					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(row+1, col+1), piece, '#'));
-					positionBombs(row, col, player, vectorToFill, protectingBombsNum, shouldPositionRandomly);
+					AICell::updateCell(gameBoard.board[x][y], piece, false);
+					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), piece, '#'));
+					positionBombs(x, y, player, vectorToFill, protectingBombsNum, shouldPositionRandomly);
 					bombsPositioned += protectingBombsNum;
 				}
 			}
-			col = getRandomNumInRange(0, COLS - 1);
-			row = getRandomNumInRange(0, ROWS - 1);
+			x = getRandomNumInRange(0, COLS - 1);
+			y = getRandomNumInRange(0, ROWS - 1);
 		}
 		isCellTaken = true;
 		hasOpponentNeighbor = true;
@@ -96,7 +96,7 @@ void AutoPlayerAlgorithm::positionUnmovingPieces(int player, std::vector<unique_
 	if (bombsPositioned < BOMBS_NUM)
 	{
 		shouldPositionRandomly = true;
-		positionBombs(row, col, player, vectorToFill, BOMBS_NUM - bombsPositioned, shouldPositionRandomly);
+		positionBombs(x, y, player, vectorToFill, BOMBS_NUM - bombsPositioned, shouldPositionRandomly);
 	}
 }
 
@@ -104,73 +104,73 @@ int AutoPlayerAlgorithm::getRandomNumInRange(int start, int end)
 {
 	std::random_device rd;								  // obtain a random number from hardware
 	std::mt19937 eng(rd());								  // seed the generator
-	std::uniform_int_distribution<> colDistr(start, end); // define the range
-	return colDistr(eng);
+	std::uniform_int_distribution<> yDistr(start, end); // define the range
+	return yDistr(eng);
 }
-
-bool AutoPlayerAlgorithm::findEmptyNeigbor(int &row, int &col, int flagRow, int flagCol)
+// x-col y-row
+bool AutoPlayerAlgorithm::findEmptyNeigbor(int &x, int &y, int flag_x, int flag_y)
 {
 
 	char piece;
-	row = flagRow;
-	col = flagCol;
+	x = flag_x;
+	y = flag_y;
 	//down neigbor
-	if (isLegalPosition(row + 1, col))
+	if (isLegalPosition(x + 1, y))
 	{
-		piece = gameBoard.board[row + 1][col].getPiece();
+		piece = gameBoard.board[x + 1][y].getPiece();
 		if (piece == 0){ //empty cell
-			row = row + 1;
+			x = x + 1;
 			return true;
 		}
 	}
 	//right
 
-	if (isLegalPosition(row, col + 1))
+	if (isLegalPosition(x, y + 1))
 	{
-		piece = gameBoard.board[row][col + 1].getPiece();
+		piece = gameBoard.board[x][y + 1].getPiece();
 		if (piece == 0) {//empty cell
-			col = col + 1;
+			y = y + 1;
 			return true;
 		}
 	}
 	//up neighbor
 
-	if (isLegalPosition(row - 1, col))
+	if (isLegalPosition(x - 1, y))
 	{
-		piece = gameBoard.board[row - 1][col].getPiece();
+		piece = gameBoard.board[x - 1][y].getPiece();
 		if (piece == 0) {//empty cell
-			row = row - 1;
+			x = x - 1;
 			return true;
 		}
 	}
 	//left
 
-	if (isLegalPosition(row, col - 1))
+	if (isLegalPosition(x, y - 1))
 	{
-		piece = gameBoard.board[row][col - 1].getPiece();
+		piece = gameBoard.board[x][y - 1].getPiece();
 		if (piece == 0) {//empty cell
-			col = col -1;
+			y = y -1;
 			return true;
 		}
 	}
 	return false; //no empty cell
 }
 
-void AutoPlayerAlgorithm::positionBombs(int flagRow, int flagCol, int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int bombsToPosition, bool shouldPositionRandomly)
+void AutoPlayerAlgorithm::positionBombs(int flag_x, int flag_y, int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int bombsToPosition, bool shouldPositionRandomly)
 {
 	char piece = (player == 1 ? 'B' : 'b');
-	int row;
-	int col;
+	int x;
+	int y;
 	int bombsPositioned = 0;
 
 	if (!shouldPositionRandomly)
 	{
 		for (int i = 0; i < bombsToPosition; ++i)
 		{
-			if (findEmptyNeigbor(row, col, flagRow, flagCol))
+			if (findEmptyNeigbor(x, y, flag_x, flag_y))
 			{
-				Cell::updateCell(gameBoard.board[row][col], piece, false);
-				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(row+1, col+1), piece, '#'));
+				Cell::updateCell(gameBoard.board[x][y], piece, false);
+				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), piece, '#'));
 				bombsPositioned++;
 			}
 			else
@@ -189,21 +189,21 @@ void AutoPlayerAlgorithm::positionBombs(int flagRow, int flagCol, int player, st
 void AutoPlayerAlgorithm::positionPiecesRandomly(int pieceNum, char piece, bool isJoker, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	bool isCellTaken = true;
-	int col = getRandomNumInRange(0, COLS - 1);
-	int row = getRandomNumInRange(0, ROWS - 1);
+	int x = getRandomNumInRange(0, COLS - 1);
+	int y = getRandomNumInRange(0, ROWS - 1);
 	for (int i = 0; i < pieceNum; ++i)
 	{
 		while (isCellTaken)
 		{
-			if (gameBoard.board[row][col].getPiece() == 0)
+			if (gameBoard.board[x][y].getPiece() == 0)
 			{
 				isCellTaken = false;
-				Cell::updateCell(gameBoard.board[row][col], piece, isJoker);
-				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(row+1, col+1), piece, '#'));
+				Cell::updateCell(gameBoard.board[x][y], piece, isJoker);
+				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), piece, '#'));
 				break;
 			}
-			col = getRandomNumInRange(0, COLS - 1);
-			row = getRandomNumInRange(0, ROWS - 1);
+			x = getRandomNumInRange(0, COLS - 1);
+			y = getRandomNumInRange(0, ROWS - 1);
 		}
 		isCellTaken = true;
 	}
@@ -222,45 +222,46 @@ bool AutoPlayerAlgorithm::isOpponentPiece(int myPlayerNum, char piece)
 }
 
 /*
-Input  - relevant col and row
+Input  - relevant y and x
 Output - true if this is a legal position and  false otherwise 
  */
-// legal position on board starts from 0 to number of rows/cols - 1
-bool AutoPlayerAlgorithm::isLegalPosition(int row, int col)
+// legal position on board starts from 0 to number of xs/ys - 1
+//x-col y-row
+bool AutoPlayerAlgorithm::isLegalPosition(int x, int y)
 {
-	if (row > ROWS - 1 || col > COLS - 1 || row < 0 || col < 0)
+	if (x > COLS - 1 || y > ROWS - 1 || x < 0 || y < 0)
 	{
 		return false;
 	}
 	return true;
 }
 /*
-Input - current player num, row and col 
+Input - current player num, x and y
 Output - true if an opponent nieghbour is located there and otherwise false 
  */
-bool AutoPlayerAlgorithm::checkIsOpponentNeighbors(int player, int row, int col)
+bool AutoPlayerAlgorithm::checkIsOpponentNeighbors(int player, int x, int y)
 {
 	//down neigbor
-	char piece = gameBoard.board[row + 1][col].getPiece();
-	if (isLegalPosition(row + 1, col) && isOpponentPiece(player, piece))
+	char piece = gameBoard.board[x + 1][y].getPiece();
+	if (isLegalPosition(x + 1, y) && isOpponentPiece(player, piece))
 	{
 		return true;
 	}
 	//right
-	piece = gameBoard.board[row][col + 1].getPiece();
-	if (isLegalPosition(row, col + 1) && isOpponentPiece(player, piece))
+	piece = gameBoard.board[x][y + 1].getPiece();
+	if (isLegalPosition(x, y + 1) && isOpponentPiece(player, piece))
 	{
 		return true;
 	}
 	//up neighbor
-	piece = gameBoard.board[row - 1][col].getPiece();
-	if (isLegalPosition(row - 1, col) && isOpponentPiece(player, piece))
+	piece = gameBoard.board[x - 1][y].getPiece();
+	if (isLegalPosition(x - 1, y) && isOpponentPiece(player, piece))
 	{
 		return true;
 	}
 	//left
-	piece = gameBoard.board[row][col - 1].getPiece();
-	if (isLegalPosition(row, col - 1) && isOpponentPiece(player, piece))
+	piece = gameBoard.board[x][y - 1].getPiece();
+	if (isLegalPosition(x, y - 1) && isOpponentPiece(player, piece))
 	{
 		return true;
 	}
@@ -275,8 +276,8 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 	updateBoard(b);
 	for (int i = 0; i < (int)fights.size(); ++i)
 	{
-		int x = fights[i]->getPosition().getX();
-		int y = fights[i]->getPosition().getY();
+		int x = fights[i]->getPosition().getX()-1; //col
+		int y = fights[i]->getPosition().getY()-1; //row
 		//char myPiece = toupper(fights[i]->getPiece(myPlayerNum)); //do we need this?
 		char opponentPiece = toupper(fights[i]->getPiece(myPlayerNum == 1 ? 2 : 1));
 		int winner = fights[i]->getWinner();
@@ -362,9 +363,9 @@ unique_ptr<JokerChange> AutoPlayerAlgorithm::getJokerChange()
 	int joker_y;
 	char newRep = -1;
 	double score = INT_MIN;
-	for (int i = 0; i < ROWS; ++i)
+	for (int i = 0; i < COLS; ++i)
 	{
-		for (int j = 0; j < COLS; ++j)
+		for (int j = 0; j < ROWS; ++j)
 		{
 			if (gameBoard.board[i][j].getPiece() == 0)
 				continue;
@@ -385,7 +386,7 @@ unique_ptr<JokerChange> AutoPlayerAlgorithm::getJokerChange()
 	return jokerChange;
 }
 
-void AutoPlayerAlgorithm::getBestMove(int &fromRow, int &fromCol, int &toRow, int &toCol)
+void AutoPlayerAlgorithm::getBestMove(int &from_x, int &from_y, int &to_x, int &to_y)
 {
 	//bool isMyPiece = (myPlayerNum == 1);
 	double score;
@@ -398,81 +399,81 @@ void AutoPlayerAlgorithm::getBestMove(int &fromRow, int &fromCol, int &toRow, in
 				continue;
 			bool isMyPiece = Cell::isPlayerOnePiece(gameBoard.board[i][j]) ? (myPlayerNum == 1) : (myPlayerNum == 2);
 			if (!isMyPiece) continue;
-			score = getBestMoveForPiece(maxScore, i, j, toRow, toCol);
+			score = getBestMoveForPiece(maxScore, i, j, to_X, to_y);
 			if (maxScore < score)
 			{
 				maxScore = score;
-				fromRow = i;
-				fromCol = j;
+				from_x = i;
+				from_y = j;
 			}
 		}
 	}
 
 	//make move
-	if (gameBoard.board[toRow][toCol].getPiece() == 0)
+	if (gameBoard.board[to_x][to_y].getPiece() == 0)
 	{
-		Cell::updateCell(gameBoard.board[toRow][toCol], gameBoard.board[fromRow][fromCol].getPiece(),
-				gameBoard.board[fromRow][fromCol].getIsJoker());
-		AICell::updateCellKnowlage(gameBoard.board[toRow][toCol], gameBoard.board[fromRow][fromCol]);
+		Cell::updateCell(gameBoard.board[to_x][to_y], gameBoard.board[from_x][from_y].getPiece(),
+				gameBoard.board[from_x][from_y].getIsJoker());
+		AICell::updateCellKnowlage(gameBoard.board[to_x][to_y], gameBoard.board[from_x][from_y]);
 	}
 	else
 	{ //there is going to be a fight
-		myCell = gameBoard.board[fromRow][fromCol];
-		opponentCell = gameBoard.board[toCol][toCol];
+		myCell = gameBoard.board[from_x][from_y];
+		opponentCell = gameBoard.board[to_x][to_y];
 	}
-	AICell::cleanCell(gameBoard.board[fromRow][fromCol]);
+	AICell::cleanCell(gameBoard.board[from_x][from_y]);
 }
 
-double AutoPlayerAlgorithm::getBestMoveForPiece(double score, const int &fromRow, const int &fromCol, int &toRow, int &toCol)
+double AutoPlayerAlgorithm::getBestMoveForPiece(double score, const int &from_x, const int &from_y, int &to_x, int &to_y)
 {
-	int row = toRow;
-	int col = toCol;
+	int x = to_x; //col
+	int y = to_y; //row
 	int currScore;
 
 	//move right
-	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(fromRow, fromCol), RPSpoint(row, col + 1));
+	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x, from_y), RPSpoint(x, y + 1));
 	if (isLegalMove(move, myPlayerNum == 1))
 	{
-		// Cell prevCell = gameBoard.board[fromRow][fromCol];
+		// Cell prevCell = gameBoard.board[from_x][from_y];
 		currScore = tryMovePiece(move);
 		if (currScore > score)
 		{
 			score = currScore;
-			toRow = row;
-			toCol = col + 1;
+			to_x = x;
+			to_y = y + 1;
 		}
 	}
 
 	//move left
-	move = make_unique<RPSMove>(RPSpoint(fromRow, fromCol), RPSpoint(row, col - 1));
+	move = make_unique<RPSMove>(RPSpoint(from_x, from_y), RPSpoint(x, y - 1));
 	if (isLegalMove(move, myPlayerNum == 1))
 	{
-		//Cell prevCell = gameBoard.board[fromRow][fromCol];
+		//Cell prevCell = gameBoard.board[from_x][from_y];
 		currScore = tryMovePiece(move);
 		if (currScore > score)
 		{
 			score = currScore;
-			toRow = row;
-			toCol = col - 1;
+			to_x = x;
+			to_y = y - 1;
 		}
 	}
 
 	//move up
-	move = make_unique<RPSMove>(RPSpoint(fromRow, fromCol), RPSpoint(row - 1, col));
+	move = make_unique<RPSMove>(RPSpoint(from_x, from_y), RPSpoint(x - 1, y));
 	if (isLegalMove(move, myPlayerNum == 1))
 	{
-		// Cell prevCell = gameBoard.board[fromRow][fromCol];
+		// Cell prevCell = gameBoard.board[from_x][from_y];
 		currScore = tryMovePiece(move);
 		if (currScore > score)
 		{
 			score = currScore;
-			toRow = row - 1;
-			toCol = col;
+			to_x = x - 1;
+			to_y = y;
 		}
 	}
 
 	//move down
-	move = make_unique<RPSMove>(RPSpoint(fromRow, fromCol), RPSpoint(row + 1, col));
+	move = make_unique<RPSMove>(RPSpoint(from_x, from_y), RPSpoint(x + 1, y));
 	if (isLegalMove(move, myPlayerNum == 1))
 	{
 
@@ -480,8 +481,8 @@ double AutoPlayerAlgorithm::getBestMoveForPiece(double score, const int &fromRow
 		if (currScore > score)
 		{
 			score = currScore;
-			toRow = row + 1;
-			toCol = col;
+			to_x = x + 1;
+			to_y = y;
 		}
 	}
 
@@ -558,27 +559,27 @@ bool AutoPlayerAlgorithm::tryToFight(int to_x, int to_y, char myPiece, bool isJo
 }
 
 //false if i lost and true if i win (tie is false)
-bool AutoPlayerAlgorithm::fight(int row, int col, char myPiece, char opponentPiece, bool isMyPieceJoker)
+bool AutoPlayerAlgorithm::fight(int x, int y, char myPiece, char opponentPiece, bool isMyPieceJoker)
 {
 
 	//Case 1: 2 players in the same type - tie
 	if (myPiece == opponentPiece)
 	{
-		Cell::cleanCell(gameBoard.board[row][col]);
+		Cell::cleanCell(gameBoard.board[x][y]);
 		return false;
 	}
 
 	//Case 2: there is flag and current player has another piece
 	else if (opponentPiece == FLAG)
 	{
-		Cell::updateCell(gameBoard.board[row][col], myPiece, isMyPieceJoker);
+		Cell::updateCell(gameBoard.board[x][y], myPiece, isMyPieceJoker);
 		return true;
 	}
 
 	//case 3: there is bomb and current player has another piece
 	else if (opponentPiece == BOMB || myPiece == BOMB)
 	{
-		Cell::cleanCell(gameBoard.board[row][col]);
+		Cell::cleanCell(gameBoard.board[x][y]);
 		return false;
 	}
 
@@ -591,7 +592,7 @@ bool AutoPlayerAlgorithm::fight(int row, int col, char myPiece, char opponentPie
 		}
 		else if (myPiece == SCISSOR)
 		{
-			Cell::updateCell(gameBoard.board[row][col], myPiece,
+			Cell::updateCell(gameBoard.board[x][y], myPiece,
 					isMyPieceJoker);
 			return true;
 		}
@@ -601,7 +602,7 @@ bool AutoPlayerAlgorithm::fight(int row, int col, char myPiece, char opponentPie
 	{
 		if (myPiece == PAPER)
 		{
-			Cell::updateCell(gameBoard.board[row][col], myPiece,
+			Cell::updateCell(gameBoard.board[x][y], myPiece,
 					isMyPieceJoker);
 			return true;
 		}
@@ -619,7 +620,7 @@ bool AutoPlayerAlgorithm::fight(int row, int col, char myPiece, char opponentPie
 		}
 		else if (myPiece == ROCK)
 		{
-			Cell::updateCell(gameBoard.board[row][col], myPiece,
+			Cell::updateCell(gameBoard.board[x][y], myPiece,
 					isMyPieceJoker);
 			return true;
 		}
@@ -640,8 +641,8 @@ double AutoPlayerAlgorithm::calcScore(double material, double discovery, double 
 
 void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 {
-	int x = fightInfo.getPosition().getX();
-	int y = fightInfo.getPosition().getY();
+	int x = fightInfo.getPosition().getX()-1;
+	int y = fightInfo.getPosition().getY()-1;
 	char myPiece = toupper(fightInfo.getPiece(myPlayerNum));
 	char opponentPiece = toupper(fightInfo.getPiece(myPlayerNum == 1 ? 2 : 1));
 	int winner = fightInfo.getWinner();
@@ -829,7 +830,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBom
 {
 	//searchRight
 	bool isMyPiece;
-	char piece = j + 1 > COLS - 1 ? 0 : gameBoard.board[i][j + 1].getPiece();
+	char piece = j + 1 > ROWS - 1 ? 0 : gameBoard.board[i][j + 1].getPiece();
 	if (piece != 0)
 	{
 		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i][j + 1]) == amIplayerOne;
@@ -852,7 +853,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBom
 		}
 	}
 	//searchLeft
-	piece = j - 1 < COLS - 1 ? 0 : gameBoard.board[i][j - 1].getPiece();
+	piece = j - 1 < ROWS - 1 ? 0 : gameBoard.board[i][j - 1].getPiece();
 	if (piece != 0)
 	{
 		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i][j - 1]) == amIplayerOne;
@@ -875,7 +876,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBom
 		}
 	}
 	//searchUp
-	piece = i - 1 < ROWS - 1 ? 0 : gameBoard.board[i - 1][j].getPiece();
+	piece = i - 1 < COLS - 1 ? 0 : gameBoard.board[i - 1][j].getPiece();
 	if (piece != 0)
 	{
 		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i - 1][j]) == amIplayerOne;
@@ -898,7 +899,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBom
 		}
 	}
 	//searchDown
-	piece = i + 1 > ROWS ? 0 : gameBoard.board[i + 1][j].getPiece();
+	piece = i + 1 > COLS ? 0 : gameBoard.board[i + 1][j].getPiece();
 	if (piece != 0)
 	{
 		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i + 1][j]) == amIplayerOne;
@@ -921,7 +922,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBom
 		}
 	}
 	//SearchDiagonal
-	piece = i - 1 < ROWS - 1 || j - 1 < COLS - 1 ? 0 : gameBoard.board[i - 1][j - 1].getPiece();
+	piece = i - 1 < COLS - 1 || j - 1 < ROWS - 1 ? 0 : gameBoard.board[i - 1][j - 1].getPiece();
 	if (piece != 0)
 	{
 		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i - 1][j - 1]) == amIplayerOne;
@@ -944,7 +945,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBom
 		}
 	}
 
-	piece = i + 1 > ROWS - 1 || j - 1 < COLS - 1 ? 0 : gameBoard.board[i + 1][j - 1].getPiece();
+	piece = i + 1 > COLS - 1 || j - 1 < ROWS - 1 ? 0 : gameBoard.board[i + 1][j - 1].getPiece();
 	if (piece != 0)
 	{
 		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i + 1][j - 1]) == amIplayerOne;
@@ -967,7 +968,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBom
 		}
 	}
 
-	piece = i - 1 < ROWS - 1 || j + 1 > COLS - 1 ? 0 : gameBoard.board[i - 1][j + 1].getPiece();
+	piece = i - 1 < COLS - 1 || j + 1 > ROWS - 1 ? 0 : gameBoard.board[i - 1][j + 1].getPiece();
 	if (piece != 0)
 	{
 		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i - 1][j + 1]) == amIplayerOne;
@@ -990,7 +991,7 @@ void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBom
 		}
 	}
 
-	piece = i + 1 > ROWS - 1 || j + 1 > COLS - 1 ? 0 : gameBoard.board[i + 1][j + 1].getPiece();
+	piece = i + 1 > COLS - 1 || j + 1 > ROWS - 1 ? 0 : gameBoard.board[i + 1][j + 1].getPiece();
 	if (piece != 0)
 	{
 		isMyPiece = AICell::isPlayerOnePiece(gameBoard.board[i + 1][j + 1]) == amIplayerOne;
@@ -1121,11 +1122,11 @@ void AutoPlayerAlgorithm::updateMovingPiece()
 
 void AutoPlayerAlgorithm::updateBoard(const Board &b)
 {
-	for (int i = 0; i < ROWS; ++i)
+	for (int i = 0; i < COLS; ++i)
 	{
-		for (int j = 0; j < COLS; ++j)
+		for (int j = 0; j < ROWS; ++j)
 		{
-			RPSpoint p = RPSpoint(i, j);
+			RPSpoint p = RPSpoint(i+1, j+1);
 			if (b.getPlayer(p) != 0)
 			{ //not empty - must be opponent piece
 				Cell::updateCell(gameBoard.board[i][j], '#', false);
@@ -1136,10 +1137,10 @@ void AutoPlayerAlgorithm::updateBoard(const Board &b)
 
 void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move &move)
 {
-	int from_x = move.getFrom().getX();
-	int from_y = move.getFrom().getY();
-	int to_x = move.getTo().getX();
-	int to_y = move.getTo().getY();
+	int from_x = move.getFrom().getX()-1;
+	int from_y = move.getFrom().getY()-1;
+	int to_x = move.getTo().getX()-1;
+	int to_y = move.getTo().getY()-1;
 	AICell fromCell = gameBoard.board[from_x][from_y];
 	if (gameBoard.board[to_x][to_y].getPiece() == 0){
 		AICell::updateCell(gameBoard.board[to_x][to_y], fromCell.getPiece(), fromCell.getIsJoker());
@@ -1159,9 +1160,9 @@ bool AutoPlayerAlgorithm::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
 	int to_x = move->getFrom().getX();
 	int to_y = move->getFrom().getY();
 
-	if ((move->getFrom().getX() < 1 || from_x > ROWS)
-			|| (to_x < 1 || to_x > ROWS) || (from_y < 1 || from_y > COLS)
-			|| (to_y < 1 || to_y > COLS)) {
+	if ((move->getFrom().getX() < 0 || from_x > COLS-1)
+			|| (to_x < 0 || to_x > COLS-1) || (from_y < 0 || from_y > ROWS-1)
+			|| (to_y < 0 || to_y > ROWS-1)) {
 		cout << "Error: illegal location on board" << endl;
 		return false;
 	}

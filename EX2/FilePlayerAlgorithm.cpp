@@ -253,14 +253,14 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 		if (getPositionAndRepFromLine(line, row, col, jokerRep, piece) == false)
 		{
 			vectorToFill.push_back(
-				make_unique<RPSPiecePosition>(RPSpoint(row, col), -1, jokerRep));
+				make_unique<RPSPiecePosition>(RPSpoint(col, row), -1, jokerRep));
 			posFile.close();
 			return;
 		}
 		else
 		{
 			vectorToFill.push_back(
-				make_unique<RPSPiecePosition>(RPSpoint(row, col), piece, jokerRep));
+				make_unique<RPSPiecePosition>(RPSpoint(col, row), piece, jokerRep));
 		}
 		indexLine++;
 		//position is illegal - tried to locate 2 pieces of same player in same position
@@ -270,7 +270,7 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 	{
 		cout << "Error while reading position file. Exiting game" << endl;
 		vectorToFill.push_back(
-			make_unique<RPSPiecePosition>(RPSpoint(row, col), -2, jokerRep));
+			make_unique<RPSPiecePosition>(RPSpoint(col, row), -2, jokerRep));
 
 		posFile.close();
 		return;
@@ -408,9 +408,9 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 		}
 		else
 		{
-			nextIndex = getPositionFromLine(0, local_line, from_x, from_y);
-			from.setX(from_x);
-			from.setY(from_y);
+			nextIndex = getPositionFromLine(0, local_line, from_y, from_x);
+			from.setX(from_y);
+			from.setY(from_x);
 
 			bool isLackSpace = nextIndex != -1 ? (local_line[nextIndex] != ' ') : false;
 			if (nextIndex == -1 || isLackSpace)
@@ -428,7 +428,7 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 			}
 			else
 			{
-				nextIndex = getPositionFromLine(nextIndex, local_line, to_x, to_y);
+				nextIndex = getPositionFromLine(nextIndex, local_line, to_y, to_x);
 				if (nextIndex == -1)
 					from.setX(-1);
 				else
