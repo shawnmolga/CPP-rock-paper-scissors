@@ -69,6 +69,7 @@ private:
 	int myPlayerNum;
 	//opponent piece counters
 	int opponentBombsNumOnBoard;
+	int opponentFlagsNumOnBoard;
 	int opponentMovingPieceNumOnBoard;
 	AICell opponentCell;
 	AICell myCell;
