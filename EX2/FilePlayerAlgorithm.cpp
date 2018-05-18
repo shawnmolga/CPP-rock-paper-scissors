@@ -70,6 +70,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 											 int &row, int &col)
 {
 	int size = 1;
+	cout<<line<<endl;
 	if ((size_t)start >= line.length())
 	{
 		cout << "Error - bad format - missing position in line" << endl;
@@ -87,6 +88,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	}
 	if (!checkIfDigit(line[start]))
 	{
+		cout<<"error1"<<endl;
  		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
@@ -96,11 +98,14 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
 	}
+	cout<<"Line[start]:"<<(char)line[start]<<endl;
+	
 	while (line[end] != ' ')
 	{
+		cout<<"line[end]: "<< (char)line[end]<<endl;
 		if (!checkIfDigit(line[end]))
 		{
-
+			cout << "Error:error 2" << endl;
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}
@@ -139,7 +144,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	}
 	if (!checkIfDigit(line[start]))
 	{
-
+		cout << "Error:error 3" << endl;
 		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
@@ -149,7 +154,8 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 
 		if (!checkIfDigit(line[end]))
 		{
-
+		cout << "Error:error 4" << endl;
+	cout<<line[end]<<endl;
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}
@@ -171,6 +177,7 @@ bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row
 {
 	int pieceIndex = getPieceFromLine(0, line);
 	piece = line[pieceIndex];
+	cout<<"get piece: "<<piece<<endl;
 	if ((size_t)pieceIndex + 1 >= line.length())
 	{
 		cout << "Error - bad format: missing position of piece" << endl;
@@ -342,8 +349,8 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 			jc->setJokerNewRep('E');
 			return make_unique<RPSJokerChange>(*jc);
 		}
-		point.setX(x_joker);
-		point.setY(y_joker);
+		point.setX(y_joker); //noy changes due to bug!
+		point.setY(x_joker);//noy changes due to bug!
 		nextIndex = 1 + getPieceFromLine(nextIndex, line1);
 		if (nextIndex == 0)
 		{
@@ -409,8 +416,11 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 		else
 		{
 			nextIndex = getPositionFromLine(0, local_line, from_y, from_x);
-			from.setX(from_y);
-			from.setY(from_x);
+			from.setX(from_x); //noy changes!
+			from.setY(from_y); //noy changes
+			// from.setX(from_y); //noy changes!
+			// from.setY(from_x); //noy changes
+
 
 			bool isLackSpace = nextIndex != -1 ? (local_line[nextIndex] != ' ') : false;
 			if (nextIndex == -1 || isLackSpace)

@@ -138,8 +138,12 @@ bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJ
 	//no joker change
 	if (playerJokerChange != NULL)
 	{
-		int x_joker = playerJokerChange->getJokerChangePosition().getX(); //col
-		int y_joker = playerJokerChange->getJokerChangePosition().getY(); //row
+		int x_joker = playerJokerChange->getJokerChangePosition().getX(); //row
+		cout<<"X_joker:" <<x_joker<<endl;
+
+		int y_joker = playerJokerChange->getJokerChangePosition().getY(); //col
+		cout<<"Y_joker:" <<y_joker<<endl;
+
 		char new_rep = playerJokerChange->getJokerNewRep();
 		if (new_rep == 'E')
 		{
@@ -606,8 +610,8 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 					}
 					else
 					{
-						RPSpoint player1Pos(vectorToFill[i]->getPosition().getX(), vectorToFill[i]->getPosition().getY());
-						RPSpoint player2Pos(vectorToFill[i]->getPosition().getX(), vectorToFill[i]->getPosition().getY());
+						RPSpoint player1Pos(vectorToFill[i]->getPosition().getX(), vectorToFill[i]->getPosition().getY());//noy changes!
+						RPSpoint player2Pos(vectorToFill[i]->getPosition().getX(), vectorToFill[i]->getPosition().getY());//noy changes
 						if (isJoker){
 							fight(false, x, y, tolower(vectorToFill[i]->getJokerRep()), isJoker, fights, initFights,
 								  player1Pos, player2Pos);

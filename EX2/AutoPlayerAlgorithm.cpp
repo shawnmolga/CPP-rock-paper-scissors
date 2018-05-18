@@ -354,7 +354,7 @@ unique_ptr<Move> AutoPlayerAlgorithm::getMove()
 	int to_y;
 	getBestMove(from_x, from_y, to_x, to_y);
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
-
+	
 	return move;
 }
 

@@ -1,7 +1,7 @@
 /*
  * AutoPlayerDao.h
  *
- *  Created on: 2 боай 2018
+ *  Created on: 2 пїЅпїЅпїЅпїЅ 2018
  *      Author: OR
  */
 
