@@ -327,7 +327,7 @@ void AutoPlayerAlgorithm::updateFlagProbability()
 	{
 		for (int j = 0; j < ROWS; ++j)
 		{
-			if (gameBoard.board[i][j].flagProbability != 0)
+			if (gameBoard.board[i][j].flagProbability != 0 && gameBoard.board[i][j].flagProbability != 1)
 			{
 				unkownPiecesNum++; //count pieces that we dont know if there are flags or not
 			}
@@ -354,7 +354,7 @@ unique_ptr<Move> AutoPlayerAlgorithm::getMove()
 	int to_y;
 	getBestMove(from_x, from_y, to_x, to_y);
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
-	
+
 	return move;
 }
 
@@ -647,14 +647,24 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 	char myPiece = toupper(fightInfo.getPiece(myPlayerNum));
 	char opponentPiece = toupper(fightInfo.getPiece(myPlayerNum == 1 ? 2 : 1));
 	int winner = fightInfo.getWinner();
+
+	//check if piece was known before and changed.
+	bool isJoker = (opponentCell.getPiece() != opponentPiece);
+
 	if (winner == 0)
 	{
-		if (opponentPiece == 'B')
+		if (opponentPiece == 'B') {
 			opponentBombsNumOnBoard--;
+			if (isJoker) //for removing extra pieces as jokers unkown
+				opponentMovingPieceNumOnBoard--;
+		}
 		else if (opponentPiece == 'F')
 			opponentFlagsNumOnBoard--;
-		else
+		else {
 			opponentMovingPieceNumOnBoard--;
+			if (isJoker) //for removing extra pieces as jokers unkown
+				opponentBombsNumOnBoard--;
+		}
 		Cell::cleanCell(gameBoard.board[x][y]);
 	}
 	else if (winner != myPlayerNum)
@@ -664,6 +674,8 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 		if (opponentPiece == 'B')
 		{
 			opponentBombsNumOnBoard--;
+			if (isJoker) //for removing extra pieces as jokers unkown
+				opponentMovingPieceNumOnBoard--;
 			Cell::cleanCell(gameBoard.board[x][y]);
 		}
 		else {
@@ -671,20 +683,21 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 		gameBoard.board[x][y].isMovingPieceKnown = true;
 		gameBoard.board[x][y].isMovingPiece = true;
 		}
-		//check if piece was known before and changed.
-		bool isJoker = (gameBoard.board[x][y].getPiece() != 0 && gameBoard.board[x][y].getPiece() != opponentPiece);
+
 		if (isJoker)
 			gameBoard.board[x][y].isJokerKnown = true;
 		AICell::updateCell(gameBoard.board[x][y], opponentPiece, isJoker);
-		AICell::updateCellKnowlage(gameBoard.board[x][y], opponentCell);
 	}
 	else
 	{   //i won
 		//if i won so opponent piece must not be a bomb
 		if (opponentPiece == 'F')
 			opponentFlagsNumOnBoard--;
-		else
+		else {
 			opponentMovingPieceNumOnBoard--;
+			if (isJoker) //for removing extra pieces as jokers unkown
+				opponentBombsNumOnBoard--;
+		}
 		if (toupper(myPiece) == 'B')
 		{
 			Cell::cleanCell(gameBoard.board[x][y]);
