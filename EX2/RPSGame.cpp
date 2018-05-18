@@ -139,10 +139,8 @@ bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJ
 	if (playerJokerChange != NULL)
 	{
 		int x_joker = playerJokerChange->getJokerChangePosition().getX(); //row
-		cout<<"X_joker:" <<x_joker<<endl;
 
 		int y_joker = playerJokerChange->getJokerChangePosition().getY(); //col
-		cout<<"Y_joker:" <<y_joker<<endl;
 
 		char new_rep = playerJokerChange->getJokerNewRep();
 		if (new_rep == 'E')
