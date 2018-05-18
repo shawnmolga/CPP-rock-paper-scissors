@@ -1195,9 +1195,9 @@ bool RPSGame::fight(bool isPlayerOneTurn, int row, int col, char currPiece,
  */
 void RPSGame::printBoardToFile(ofstream &output)
 {
-	for (int i = 1; i <= ROWS; i++)
+	for (int i = 1; i <= COLS; i++)
 	{
-		for (int j = 1; j <= COLS; j++)
+		for (int j = 1; j <= ROWS; j++)
 		{
 			if (gameBoard.board[i][j].getIsJoker())
 			{
@@ -1328,9 +1328,9 @@ bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
 void RPSGame::PrintBoardToConsole()
 {
 	cout << "*******************PRINT THE BOARD:****************" << endl;
-	for (int i = 1; i <= ROWS; i++)
+	for (int i = 1; i <= COLS; i++)
 	{
-		for (int j = 1; j <= COLS; j++)
+		for (int j = 1; j <= ROWS; j++)
 		{
 			if (gameBoard.board[i][j].getIsJoker())
 			{

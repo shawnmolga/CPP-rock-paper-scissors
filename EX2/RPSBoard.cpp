@@ -8,11 +8,11 @@
 
 RPSBoard::RPSBoard()
 {
-	vector<vector<Cell>> newboard(ROWS+1, vector<Cell>(COLS+1));
-	for (int i = 0; i <= ROWS; i++)
+	vector<vector<Cell>> newboard(COLS+1, vector<Cell>(ROWS+1));
+	for (int i = 0; i <= COLS; i++)
 	{
 		vector<Cell> rowVector;
-		for (int j = 0; j <= COLS; j++)
+		for (int j = 0; j <= ROWS; j++)
 		{
 			rowVector.push_back(Cell(0, false));
 		}
@@ -26,7 +26,7 @@ int RPSBoard::getPlayer(const Point &pos) const
 {
 	int x = pos.getX();
 	int y = pos.getY();
-	char piece = board.at(x - 1).at(y - 1).getPiece();
+	char piece = board.at(x).at(y).getPiece();
 	if (piece == 0)
 		return 0;
 	else if (isupper(piece))

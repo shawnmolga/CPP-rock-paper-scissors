@@ -313,9 +313,9 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 void AutoPlayerAlgorithm::updateFlagProbability()
 {
 	int unkownPiecesNum = 0;
-	for (int i = 0; i < ROWS; ++i)
+	for (int i = 0; i < COLS; ++i)
 	{
-		for (int j = 0; j < COLS; ++j)
+		for (int j = 0; j < ROWS; ++j)
 		{
 			if (gameBoard.board[i][j].flagProbability != 0)
 			{
@@ -324,9 +324,9 @@ void AutoPlayerAlgorithm::updateFlagProbability()
 		}
 	}
 	//update probability
-	for (int i = 0; i < ROWS; ++i)
+	for (int i = 0; i < COLS; ++i)
 	{
-		for (int j = 0; j < COLS; ++j)
+		for (int j = 0; j < ROWS; ++j)
 		{
 			if (gameBoard.board[i][j].flagProbability != 0)
 			{
@@ -381,9 +381,9 @@ void AutoPlayerAlgorithm::getBestMove(int &fromRow, int &fromCol, int &toRow, in
 	//bool isMyPiece = (myPlayerNum == 1);
 	double score;
 	int maxScore = INT_MIN;
-	for (int i = 0; i < ROWS; ++i)
+	for (int i = 0; i < COLS; ++i)
 	{
-		for (int j = 0; j < COLS; ++j)
+		for (int j = 0; j < ROWS; ++j)
 		{
 			if (gameBoard.board[i][j].getPiece() == 0 || gameBoard.board[i][j].getPiece() == '#')
 				continue;
@@ -691,9 +691,9 @@ double AutoPlayerAlgorithm::calcDistanceFromBombOrFlag()
 	int distance;
 	int minimalDistance = INT_MAX;
 	//find bomb or flag
-	for (int i = 0; i < ROWS; ++i)
+	for (int i = 0; i < COLS; ++i)
 	{
-		for (int j = 0; j < COLS; ++j)
+		for (int j = 0; j < ROWS; ++j)
 		{
 			char piece = gameBoard.board[i][j].getPiece();
 			if (piece == 0)
@@ -720,9 +720,9 @@ double AutoPlayerAlgorithm::calcDistanceFromUnknownPiece()
 	int distance;
 	int minimalDistance = INT_MAX;
 	//find bomb or flag
-	for (int i = 0; i < ROWS; ++i)
+	for (int i = 0; i < COLS; ++i)
 	{
-		for (int j = 0; j < COLS; ++j)
+		for (int j = 0; j < ROWS; ++j)
 		{
 			char piece = gameBoard.board[i][j].getPiece();
 			if (piece == 0)
@@ -748,9 +748,9 @@ int AutoPlayerAlgorithm::calcDistanceFromPiece(int piece_x, int piece_y, bool am
 	int distance;
 	int minimalDistance = INT_MAX;
 
-	for (int i = 0; i < ROWS; ++i)
+	for (int i = 0; i < COLS; ++i)
 	{
-		for (int j = 0; j < COLS; ++j)
+		for (int j = 0; j < ROWS; ++j)
 		{
 			char piece = gameBoard.board[i][j].getPiece();
 			if (piece == 0 || piece == '#')
@@ -777,7 +777,7 @@ double AutoPlayerAlgorithm::calcFlagSaftey()
 	int movingPieces = 0;
 	int totalEnemyPieces = 0;
 	bool amIPlayerOne = myPlayerNum == 1;
-	for (int i = 0; i < ROWS; ++i)
+	for (int i = 0; i < COLS; ++i)
 	{
 		for (int j = 0; j < ROWS; ++j)
 		{
@@ -1082,9 +1082,9 @@ char AutoPlayerAlgorithm::shouldChangeJoker(double &score, int joker_x, int joke
 
 void AutoPlayerAlgorithm::updateMovingPiece()
 {
-	for (int i = 0; i < ROWS; ++i)
+	for (int i = 0; i < COLS; ++i)
 	{
-		for (int j = 0; j < COLS; ++j)
+		for (int j = 0; j < ROWS; ++j)
 		{
 			if (gameBoard.board[i][j].getPiece() == 0) //empty cell
 				continue;
