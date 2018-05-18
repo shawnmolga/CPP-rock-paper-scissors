@@ -170,6 +170,7 @@ bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJ
 */
 int RPSGame::makeMove()
 {
+
 	unique_ptr<Move> move1 = std::move(playerAlgoOne->getMove());
 	unique_ptr<Move> move2 = std::move(playerAlgoTwo->getMove());
 	int xPiecePlayerOne = move1->getFrom().getX(); //col
@@ -191,6 +192,7 @@ int RPSGame::makeMove()
 			isPlayerOneTurn = true;
 			isGameOverInternal = movePiece(move1, playerOneJokerChange,
 										   isPlayerOneTurn);
+			PrintBoardToConsole();
 			if (isGameOverInternal)
 			{
 				setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
@@ -204,6 +206,7 @@ int RPSGame::makeMove()
 				isPlayerOneTurn = false;
 				isGameOverInternal = movePiece(move2, playerTwoJokerChange,
 											   isPlayerOneTurn);
+				PrintBoardToConsole();
 				if (isGameOverInternal)
 				{
 					setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
@@ -250,6 +253,7 @@ int RPSGame::makeMove()
 				{
 					isPlayerOneTurn = true;
 					isGameOverInternal = movePiece(move1, playerTwoJokerChange, isPlayerOneTurn);
+					PrintBoardToConsole();
 					if (isGameOverInternal)
 					{
 						break;
@@ -277,6 +281,7 @@ int RPSGame::makeMove()
 				{
 					isPlayerOneTurn = true;
 					isGameOverInternal = movePiece(move1, playerTwoJokerChange, isPlayerOneTurn);
+					PrintBoardToConsole();
 					if (isGameOverInternal)
 					{
 						break;
@@ -459,7 +464,7 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
  */
 bool RPSGame::countNumOfPieces(const int playerNum, int numOfPositionedPieces[],
 							   const int piece)
-{
+{ cout << "in countNumOfPieces. piece = " <<  piece << endl;
 	switch (piece)
 	{
 	case ROCK:
@@ -503,6 +508,8 @@ bool RPSGame::countNumOfPieces(const int playerNum, int numOfPositionedPieces[],
  */
 bool RPSGame::checkPieceOverflow(int numOfPieces[])
 {
+	cout << "in checkPieceOverflow" << endl;
+	cout << "numOfPieces[0] " << numOfPieces[0] << "numOfPieces[1] " << numOfPieces[1] << "numOfPieces[2] " << numOfPieces[1] << " numOfPieces[3] " << numOfPieces[3] << " numOfPieces[4] " << numOfPieces[4] << " numOfPieces[5] " << numOfPieces[5] << endl;
 
 	if (numOfPieces[0] > ROCKS_NUM || numOfPieces[1] > PAPERS_NUM || numOfPieces[2] > SCISSORS_NUM || numOfPieces[3] > BOMBS_NUM || numOfPieces[4] > JOKERS_NUM || numOfPieces[5] > FLAGS_NUM)
 	{
@@ -522,6 +529,7 @@ bool RPSGame::checkPieceOverflow(int numOfPieces[])
  */
 int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>> &vectorToFill, bool &isPlayerLegalFormat, int numOfPositionedPieces[], RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights)
 {
+	cout << "in locateOnBoard" << endl;
 	int vectorSize = vectorToFill.size();
 	bool isJoker = false;
 	int x;
@@ -661,6 +669,7 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 								  bool &isPlayerTwoLegalFormat,
 								  RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights)
 {
+	cout << "in checkPositionOnBoard" << endl;
 	std::vector<unique_ptr<PiecePosition>> vectorToFillPlayerOne;
 	std::vector<unique_ptr<PiecePosition>> vectorToFillPlayerTwo;
 
@@ -1270,6 +1279,7 @@ Output- true if we successfuly init playerAlogrithms or false otherwise;
 */
 bool RPSGame::initGameMethod(string gameMethod)
 {
+	cout << "in initGameMethod"<<  endl;
 	bool isPlayerOneUseFile = false;
 	bool isPlayerTwoUseFile = false;
 	if (gameMethod.compare("auto-vs-file") == 0)
@@ -1303,6 +1313,7 @@ Output- true if we successfuly init playerAlogrithms or false otherwise;
 */
 bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
 {
+	cout << "in initPlayerAlgo" << endl;
 	if (!isAllGameFilesExists(isPlayerOneUseFile, isPlayerTwoUseFile))
 		return false;
 
@@ -1312,6 +1323,7 @@ bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
 	}
 	else
 	{
+		cout << "creaating new AutoPlayerAlgorithm" << endl;
 		playerAlgoOne = new AutoPlayerAlgorithm();
 	}
 	if (isPlayerTwoUseFile)

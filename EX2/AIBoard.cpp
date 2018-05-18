@@ -2,7 +2,8 @@
 
 AIBoard::AIBoard() {
 	//board(ROWS, vector<AICell>(COLS)); //	board = new Cell *[ROWS];
-	vector<vector<AICell>> board(COLS+1, vector<AICell>(ROWS+1));
+	cout << "creating AIBoard" << endl;
+	vector<vector<AICell>> newboard(COLS+1, vector<AICell>(ROWS+1));
 	for (int i = 0; i <= COLS; i++)
 	{
 		vector<AICell> rowVector;
@@ -10,9 +11,15 @@ AIBoard::AIBoard() {
 		{
 			rowVector.push_back(AICell(0, false));
 		}
-		board.push_back(rowVector);
+		newboard.push_back(rowVector);
 	}
+	board = newboard;
+
 }
+
+
+
+
 AIBoard::~AIBoard() {}
 
 int AIBoard::getPlayer(const Point& pos) const {

@@ -10,10 +10,11 @@
 //constructor
 AutoPlayerAlgorithm::AutoPlayerAlgorithm()
 {
+	cout << "creating autoPlayerAlgorithm" << endl;
 	gameBoard = AIBoard();
 	myPlayerNum = -1;
 	opponentFlagsNumOnBoard = FLAGS_NUM;
-	opponentBombsNumOnBoard = BOMBS_NUM + JOKERS_NUM;									//we dont know if joker is now bomb or not
+	opponentBombsNumOnBoard = BOMBS_NUM + JOKERS_NUM;	//we dont know if joker is now bomb or not
 	opponentMovingPieceNumOnBoard = SCISSORS_NUM + ROCKS_NUM + PAPERS_NUM + JOKERS_NUM; //we dont know if joker is moving piece now or not
 }
 
