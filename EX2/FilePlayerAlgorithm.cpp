@@ -120,6 +120,8 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	//get row - row format was legal
 	string col_string = line.substr(start, size);
 	col = std::stoi(col_string);
+	cout<<"COL: "<<col<<endl;
+
 	//try to get col
 	size = 1;
 	if (line[end] != ' ')
@@ -149,13 +151,14 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 		return -1;
 	}
 	end = start + 1;
+	cout<<"end: "<<end<<endl;
 	while ((size_t)end != line.length() && line[end] != ' ')
 	{
 
 		if (!checkIfDigit(line[end]))
 		{
 		cout << "Error:error 4" << endl;
-	cout<<line[end]<<endl;
+		cout<<line[end]<<endl;
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}
