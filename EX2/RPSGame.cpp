@@ -98,6 +98,7 @@ bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJ
 	cout <<"to y: "<<to_y<<endl;
 	if (!isLegalMove(move, isPlayerOneTurn))
 	{
+		cout<<"ERROR: ILLEGAL MOVE"<<endl;
 		return true;
 	}
 	//do move
@@ -202,6 +203,7 @@ int RPSGame::makeMove()
 			PrintBoardToConsole();
 			if (isGameOverInternal)
 			{
+				cout<<"ERROR AI: ILLEGAL MOVE"<<endl;
 				setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 				break;
 			}
@@ -216,6 +218,7 @@ int RPSGame::makeMove()
 				PrintBoardToConsole();
 				if (isGameOverInternal)
 				{
+					cout<<"ERROR AI: ILLEGAL MOVE"<<endl;
 					setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 					break;
 				}
@@ -887,7 +890,7 @@ bool RPSGame::isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseF
  */
 bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 {
-	PrintBoardToConsole();
+	//PrintBoardToConsole();
 	cout << "isBeforeMove = " << isBeforeMove << endl;
 	Player *currPlayer = &playerOne;
 	Player *nextPlayer = &playerTwo;
