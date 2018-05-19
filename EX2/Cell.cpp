@@ -34,3 +34,11 @@ bool Cell::isPlayerOnePiece(Cell &cell)
 	return false;
 }
 
+bool Cell::checkIsMovingPiece(){
+	char piece = toupper(getPiece());
+	if (piece == 0 || piece == '#')
+		return false;
+	if (piece == 'B' || piece == 'F')
+		return false;
+	return true;
+}

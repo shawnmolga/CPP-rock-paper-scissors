@@ -28,3 +28,4 @@ bool AICell::isMyPiece(int myPlayerNum){
 		return false;
 	return myPlayerNum == 1 ? isupper(piece) : islower(piece);
 }
+

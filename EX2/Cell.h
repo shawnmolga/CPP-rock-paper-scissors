@@ -19,6 +19,7 @@ class Cell
 		bool getIsJoker() const;
 		static bool isPlayerOnePiece(Cell& cell);
 		static void updateCell(Cell& cell, char piece, bool isJoker);
+		bool checkIsMovingPiece();
 private:
 	char piece;
 	bool isJoker;

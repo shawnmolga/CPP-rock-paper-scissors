@@ -430,12 +430,9 @@ void AutoPlayerAlgorithm::getBestMove(int &from_x, int &from_y, int &to_x, int &
 	{
 		for (int j = 0; j < ROWS; ++j)
 		{
-			if (i == 9 && j == 9)
-				cout<<"HEEEEEEEEEY"<<endl;
-			if (gameBoard.board[i][j].getPiece() == 0 || gameBoard.board[i][j].getPiece() == '#')
-				continue;
 			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum)) continue;
 			cout<<"MY PIECE!!!"<<endl;
+			if (!gameBoard.board[i][j].checkIsMovingPiece()) continue;
 			score = getBestMoveForPiece(maxScore, i, j, to_x, to_y);
 			cout<<"Score: "<<score<<endl;
 			if (maxScore < score)
@@ -674,9 +671,17 @@ double AutoPlayerAlgorithm::calcScore(double material, double discovery, double 
 	double flagSaftey = calcFlagSaftey();
 	double distanceFromBombOrFlag = calcDistanceFromBombOrFlag();
 	double distanceFromUnknownPiece = calcDistanceFromUnknownPiece();
-	return MATERIAL_WEIGHT * material + DISCOVERY_WEIGHT * discovery + REVEAL_WEIGHT * reveal +
+	double score = MATERIAL_WEIGHT * material + DISCOVERY_WEIGHT * discovery + REVEAL_WEIGHT * reveal +
 			FLAG_SAFTEY_WEUGHT * flagSaftey + DISTANCE_FROM_FLAG_WEIGHT * distanceFromBombOrFlag +
 			DISTANCE_FROM_UNKNOWN_WEIGHT * distanceFromUnknownPiece;
+	cout<<"material: "<<material<<endl;
+	cout<<"discovery: "<<discovery<<endl;
+	cout<<"reveal: "<<reveal<<endl;
+	cout<<"flag safety: "<<flagSaftey<<endl;
+	cout<<"distance 1: "<<distanceFromBombOrFlag<<endl;
+	cout<<"distance 2: "<<distanceFromUnknownPiece<<endl;
+	cout<<"in calc sore: "<<score<<endl;
+	return score;
 }
 
 void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
@@ -875,8 +880,8 @@ double AutoPlayerAlgorithm::calcFlagSaftey()
 	}
 
 	if (enemyPieces > 0)
-		return (-1 * enemyPieces / totalEnemyPieces);
-	return (2 * protectingBombs + otherProtectingPieces) / 2 * bombs + movingPieces;
+		return ((-1 * enemyPieces) / totalEnemyPieces);
+	return (((2 * protectingBombs) + otherProtectingPieces) / ((2 * bombs) + movingPieces));
 }
 void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces, bool amIplayerOne)
 
