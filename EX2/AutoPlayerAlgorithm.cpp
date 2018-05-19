@@ -39,9 +39,9 @@ void AutoPlayerAlgorithm::printVectorPositions(std::vector<unique_ptr<PiecePosit
 
 void AutoPlayerAlgorithm::positionMovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
-	positionPiecesRandomly(ROCKS_NUM, player == 1 ? 'R' : 'r', false, vectorToFill);
-	positionPiecesRandomly(PAPERS_NUM, player == 1 ? 'P' : 'p', false, vectorToFill);
-	positionPiecesRandomly(SCISSORS_NUM, player == 1 ? 'S' : 's', false, vectorToFill);
+	positionPiecesRandomly(ROCKS_NUM, player == 1 ? 'R' : 'r', false, '#', vectorToFill);
+	positionPiecesRandomly(PAPERS_NUM, player == 1 ? 'P' : 'p', false,'#', vectorToFill);
+	positionPiecesRandomly(SCISSORS_NUM, player == 1 ? 'S' : 's', false,'#', vectorToFill);
 }
 
 void AutoPlayerAlgorithm::positionJokers(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
@@ -51,16 +51,16 @@ void AutoPlayerAlgorithm::positionJokers(int player, std::vector<unique_ptr<Piec
 		switch (pieceNum)
 		{
 		case 1: //rock
-			positionPiecesRandomly(1, player == 1 ? 'R' : 'r', true, vectorToFill);
+			positionPiecesRandomly(1, player == 1 ? 'J' : 'j', true,player == 1 ? 'R' : 'r', vectorToFill);
 			break;
 		case 2: //paper
-			positionPiecesRandomly(1, player == 1 ? 'P' : 'p', true, vectorToFill);
+			positionPiecesRandomly(1, player == 1 ? 'J' : 'j', true,player == 1 ? 'P' : 'p', vectorToFill);
 			break;
 		case 3: //scissors
-			positionPiecesRandomly(1, player == 1 ? 'S' : 's', true, vectorToFill);
+			positionPiecesRandomly(1, player == 1 ? 'J' : 'j', true,player == 1 ? 'S' : 's', vectorToFill);
 			break;
 		case 4: //bomb
-			positionPiecesRandomly(1, player == 1 ? 'B' : 'b', true, vectorToFill);
+			positionPiecesRandomly(1, player == 1 ? 'J' : 'j', true,player == 1 ? 'B' : 'b', vectorToFill);
 			break;
 		default:
 			break;
@@ -197,10 +197,10 @@ void AutoPlayerAlgorithm::positionBombs(int flag_x, int flag_y, int player, std:
 
 	bombsToPosition = bombsToPosition - bombsPositioned;
 
-	positionPiecesRandomly(bombsToPosition, piece, false, vectorToFill);
+	positionPiecesRandomly(bombsToPosition, piece, false,'#', vectorToFill);
 }
 
-void AutoPlayerAlgorithm::positionPiecesRandomly(int pieceNum, char piece, bool isJoker, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
+void AutoPlayerAlgorithm::positionPiecesRandomly(int pieceNum, char piece, bool isJoker, char pieceRep, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	bool isCellTaken = true;
 	int x = getRandomNumInRange(0, COLS - 1);
@@ -213,7 +213,11 @@ void AutoPlayerAlgorithm::positionPiecesRandomly(int pieceNum, char piece, bool 
 			{
 				isCellTaken = false;
 				Cell::updateCell(gameBoard.board[x][y], piece, isJoker);
-				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), piece, '#'));
+				if (isJoker){
+					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), piece , pieceRep));
+				}
+				else //not a joker
+					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), piece, pieceRep));
 				break;
 			}
 			x = getRandomNumInRange(0, COLS - 1);

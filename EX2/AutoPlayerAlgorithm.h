@@ -41,7 +41,7 @@ public:
 	bool checkIsOpponentNeighbors(int player, int row, int col);
 	bool findEmptyNeigbor(int &row, int &col, int flagRow, int flagCol);
 	bool isOpponentPiece(int myPlayerNum, char piece);
-	void positionPiecesRandomly(int pieceNum, char piece, bool isJoker, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
+	void positionPiecesRandomly(int pieceNum, char piece, bool isJoker,char pieceRep, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
 	void positionMovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
 	void positionJokers(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
 	void updateBoard(const Board &b);
