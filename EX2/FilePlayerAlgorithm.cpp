@@ -70,7 +70,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 											 int &row, int &col)
 {
 	int size = 1;
-	cout<<line<<endl;
 	if ((size_t)start >= line.length())
 	{
 		cout << "Error - bad format - missing position in line" << endl;
@@ -88,7 +87,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	}
 	if (!checkIfDigit(line[start]))
 	{
-		cout<<"error1"<<endl;
  		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
@@ -143,7 +141,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	}
 	if (!checkIfDigit(line[start]))
 	{
-		cout << "Error:error 3" << endl;
 		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
@@ -153,8 +150,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 
 		if (!checkIfDigit(line[end]))
 		{
-		cout << "Error:error 4" << endl;
-		cout<<line[end]<<endl;
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}
@@ -174,7 +169,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
  */
 bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row, int &col, char &jokerRep, char &piece)
 {
-	cout<<"Enter getPositionAndRepFromLine "<<endl;
 	int pieceIndex = getPieceFromLine(0, line);
 	piece = line[pieceIndex];
 	if ((size_t)pieceIndex + 1 >= line.length())
@@ -230,7 +224,6 @@ bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row
 		//check that after position line is empty
 		if (!checkEmptyLine(nextIndex, line))
 		{
-			cout<<"Enter here??"<<endl;
 			cout << "Error: Bad format - junk characters after position" << endl;
 			jokerRep = -1;
 			return false;
