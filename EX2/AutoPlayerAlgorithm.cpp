@@ -371,6 +371,7 @@ void AutoPlayerAlgorithm::updateFlagProbability()
 
 unique_ptr<Move> AutoPlayerAlgorithm::getMove()
 {
+	cout<<"inside get move~~~~~~~~~~~~~~~"<<endl;
 	int from_x;
 	int from_y;
 	int to_x;
@@ -450,8 +451,9 @@ void AutoPlayerAlgorithm::getBestMove(int &from_x, int &from_y, int &to_x, int &
 
 double AutoPlayerAlgorithm::getBestMoveForPiece(double score, const int &from_x, const int &from_y, int &to_x, int &to_y)
 {
-	int x = to_x; //col
-	int y = to_y; //row
+	cout<<"INSIDE getBestMoveForPiece"<<endl;
+	int x = from_x; //col
+	int y = from_y; //row
 	int currScore;
 
 	//move right

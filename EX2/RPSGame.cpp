@@ -182,6 +182,10 @@ int RPSGame::makeMove()
 	int xPiecePlayerOne = move1->getFrom().getX();
 	int xPiecePlayerTwo = move2->getFrom().getX(); 
 
+	cout<<"GOT MOVES!!!!"<<endl;
+	cout<<"move ONE to "<<xPiecePlayerOne<<", "<<move1->getFrom().getY()<<endl;
+	cout<<"move TWO to "<<xPiecePlayerTwo<<", "<<move2->getFrom().getY()<<endl;
+
 	unique_ptr<JokerChange> playerOneJokerChange;
 	unique_ptr<JokerChange> playerTwoJokerChange;
 	bool isPlayerOneTurn = true;
@@ -192,6 +196,12 @@ int RPSGame::makeMove()
 			playerAlgoOne->getJokerChange();
 		unique_ptr<JokerChange> playerTwoJokerChange =
 			playerAlgoTwo->getJokerChange();
+
+		cout<<"GOT JOKER CHANGES!!!!"<<endl;
+		cout<<"Joker change ONE to "<<playerOneJokerChange->getJokerChangePosition().getX()<<", "<<playerOneJokerChange->getJokerChangePosition().getY()<<"new rep: "<<playerOneJokerChange->getJokerNewRep()<<endl;
+		cout<<"Joker change TWO to "<<playerTwoJokerChange->getJokerChangePosition().getX()<<", "<<playerTwoJokerChange->getJokerChangePosition().getY()<<"new rep: "<<playerTwoJokerChange->getJokerNewRep()<<endl;
+
+
 		isGameOverInternal = false;
 		if (xPiecePlayerOne != 0)
 		{
