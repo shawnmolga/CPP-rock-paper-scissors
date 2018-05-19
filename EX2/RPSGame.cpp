@@ -181,14 +181,12 @@ int RPSGame::makeMove()
 	unique_ptr<Move> move2 = std::move(playerAlgoTwo->getMove());
 	int xPiecePlayerOne = move1->getFrom().getX();
 	int xPiecePlayerTwo = move2->getFrom().getX(); 
-	cout<<"xPiecePlayerOne: " << xPiecePlayerOne<<endl;
-	cout<<"xPiecePlayerTwo: " << xPiecePlayerTwo<<endl;
 
 	unique_ptr<JokerChange> playerOneJokerChange;
 	unique_ptr<JokerChange> playerTwoJokerChange;
 	bool isPlayerOneTurn = true;
 	bool isGameOverInternal = false;
-	while (xPiecePlayerOne != -2 && xPiecePlayerOne != -3 && numOfMoves < MAX_NUM_OF_MOVES)
+	while (xPiecePlayerOne != -2 && xPiecePlayerOne != -3 && xPiecePlayerTwo != -2  && xPiecePlayerTwo != -3 && numOfMoves < MAX_NUM_OF_MOVES)
 	{
 		unique_ptr<JokerChange> playerOneJokerChange =
 			playerAlgoOne->getJokerChange();
@@ -226,6 +224,7 @@ int RPSGame::makeMove()
 		}
 		else if (xPiecePlayerTwo == -3)
 		{
+			cout<<"error here 1?"<<endl;
 			cout << "Error while reading move file. Exiting game" << endl;
 			//we need to remeber to close the stream!!!
 			//playerAlgoTwo->closeStream();
@@ -241,8 +240,9 @@ int RPSGame::makeMove()
 		move2 = playerAlgoTwo->getMove();
 		xPiecePlayerOne = move1->getFrom().getX();
 		xPiecePlayerTwo = move2->getFrom().getX();
-	} //while
 
+	} //while
+cout<<"Outside while"<<endl;
 	//game stopeed
 	if(numOfMoves >=100){
 		setGameOver(0, TIE_NO_WINNER);
@@ -254,12 +254,13 @@ int RPSGame::makeMove()
 	cout<<"before isGameOverInternal"<<endl;
 	if (!isGameOverInternal)
 	{
-		if (xPiecePlayerOne == -2) //EOFcase
+		cout<<"Inside big if"<<endl;
+		if (xPiecePlayerOne == -2) //EOFcase player 1 
 		{
 			cout<<"inside if!"<<endl;
 			// move2 = playerAlgoTwo->getMove();
 			// xPiecePlayerTwo = move2->getFrom().getX();
-			//playerTwoJokerChange =playerAlgoTwo->getJokerChange();
+			playerTwoJokerChange =playerAlgoTwo->getJokerChange();
 			while (xPiecePlayerTwo != -2 && xPiecePlayerTwo != -3)
 			{
 				if (xPiecePlayerTwo != 0)
@@ -278,6 +279,7 @@ int RPSGame::makeMove()
 			}
 			if (xPiecePlayerTwo != -2)
 			{
+				cout<<"error here 2?"<<endl;
 				cout << "Error while reading move file. Exiting game" << endl;
 				//we need to remeber to close the stream!!!
 				//playerAlgoTwo->closeStream();
@@ -287,11 +289,13 @@ int RPSGame::makeMove()
 		}
 		else if (xPiecePlayerTwo == -2) //player 2 eof
 		{
-			// move1 = playerAlgoOne->getMove();
-			// xPiecePlayerOne = move1->getFrom().getX();
-			//playerOneJokerChange =playerAlgoOne->getJokerChange();
+			//  move1 = playerAlgoOne->getMove();
+			//  xPiecePlayerOne = move1->getFrom().getX();
+			playerOneJokerChange =playerAlgoOne->getJokerChange();
+			cout<<"inside else if"<<endl;
 			while (xPiecePlayerOne != -2 && xPiecePlayerOne != -3)
 			{
+				cout<<"inside while"<<endl;
 				if (xPiecePlayerOne != 0)
 				{
 					isPlayerOneTurn = true;
@@ -304,10 +308,13 @@ int RPSGame::makeMove()
 				}
 				move1 = playerAlgoOne->getMove();
 				xPiecePlayerOne = move1->getFrom().getX();
+				cout<<"xPiecePlayerOne: "<<xPiecePlayerOne<<endl;
 				playerOneJokerChange = playerAlgoOne->getJokerChange();
 			}
 			if (xPiecePlayerOne != -2)
 			{
+				cout<<"error here 3?"<<endl;
+				cout<<"xPiecePlayerOne"<<xPiecePlayerOne<<endl;
 				cout << "Error while reading move file. Exiting game" << endl;
 				//we need to remeber to close the stream!!!
 
