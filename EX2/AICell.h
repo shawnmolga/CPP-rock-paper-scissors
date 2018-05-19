@@ -16,4 +16,5 @@ class AICell : public Cell {
 	int	flagProbability;
 	void initAIFields();
 	static void updateCellKnowlage(AICell & cell, const AICell & fromCell);
+	bool isMyPiece(int myPlayerNum);
 };

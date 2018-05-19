@@ -3,7 +3,7 @@
 AIBoard::AIBoard() {
 	//board(ROWS, vector<AICell>(COLS)); //	board = new Cell *[ROWS];
 	cout << "creating AIBoard" << endl;
-	vector<vector<AICell>> newboard(COLS+1, vector<AICell>(ROWS+1));
+	vector<vector<AICell>> newboard(COLS, vector<AICell>(ROWS));
 	for (int i = 0; i <= COLS; i++)
 	{
 		vector<AICell> rowVector;

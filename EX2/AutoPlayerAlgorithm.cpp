@@ -297,15 +297,20 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 		const std::vector<unique_ptr<FightInfo>> &fights)
 {
 	updateBoard(b);
+	//delete after debug
+	cout<<"************AFTER NOTIFY************"<<endl;
+	PrintBoardToConsole();
 	for (int i = 0; i < (int)fights.size(); ++i)
 	{
 		int x = fights[i]->getPosition().getX()-1; //col
 		int y = fights[i]->getPosition().getY()-1; //row
-		//char myPiece = toupper(fights[i]->getPiece(myPlayerNum)); //do we need this?
+		char myPiece = toupper(fights[i]->getPiece(myPlayerNum)); //do we need this?
 		char opponentPiece = toupper(fights[i]->getPiece(myPlayerNum == 1 ? 2 : 1));
 		int winner = fights[i]->getWinner();
 		if (winner == 0)
 		{
+			AICell::cleanCell(gameBoard.board[x][y]);
+
 			if (opponentPiece == 'B')
 				opponentBombsNumOnBoard--;
 			else if (opponentPiece == 'F')
@@ -317,8 +322,10 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 		{ //opponent won
 			//not a flag - cant win with flag
 			gameBoard.board[x][y].flagProbability = 0;
-			if (opponentPiece == 'B')
+			if (opponentPiece == 'B') {
 				opponentBombsNumOnBoard--;
+				AICell::cleanCell(gameBoard.board[x][y]);
+			}
 			else {
 				//if it is not a bomb and not a flag - than it is moving piece
 				gameBoard.board[x][y].isMovingPieceKnown = true;
@@ -332,6 +339,8 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 		}
 		else
 		{ //i won
+			if (myPiece == 'B')
+				AICell::cleanCell(gameBoard.board[x][y]);
 			//if i won so opponent piece must not be a bomb
 			if (opponentPiece == 'F')
 				opponentFlagsNumOnBoard--;
@@ -413,6 +422,7 @@ unique_ptr<JokerChange> AutoPlayerAlgorithm::getJokerChange()
 
 void AutoPlayerAlgorithm::getBestMove(int &from_x, int &from_y, int &to_x, int &to_y)
 {
+	cout<<"inside get best move~~~~~~~~~~~~"<<endl;
 	//bool isMyPiece = (myPlayerNum == 1);
 	double score;
 	int maxScore = INT_MIN;
@@ -420,10 +430,13 @@ void AutoPlayerAlgorithm::getBestMove(int &from_x, int &from_y, int &to_x, int &
 	{
 		for (int j = 0; j < ROWS; ++j)
 		{
+			if (i == 9 && j == 9)
+				cout<<"HEEEEEEEEEY"<<endl;
 			if (gameBoard.board[i][j].getPiece() == 0 || gameBoard.board[i][j].getPiece() == '#')
 				continue;
 			bool isMyPiece = Cell::isPlayerOnePiece(gameBoard.board[i][j]) ? (myPlayerNum == 1) : (myPlayerNum == 2);
 			if (!isMyPiece) continue;
+			cout<<"STILL OK"<<endl;
 			score = getBestMoveForPiece(maxScore, i, j, to_x, to_y);
 			if (maxScore < score)
 			{
@@ -1166,7 +1179,7 @@ void AutoPlayerAlgorithm::updateBoard(const Board &b)
 		for (int j = 0; j < ROWS; ++j)
 		{
 			RPSpoint p = RPSpoint(i+1, j+1);
-			if (b.getPlayer(p) != 0)
+			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum) && b.getPlayer(p) != 0)
 			{ //not empty - must be opponent piece
 				Cell::updateCell(gameBoard.board[i][j], '#', false);
 			}
@@ -1270,4 +1283,36 @@ bool AutoPlayerAlgorithm::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
 	}
 
 	return true;
+}
+
+//Need to erase this function - only for debug!
+void AutoPlayerAlgorithm::PrintBoardToConsole()
+{
+	cout << "*******************PRINT THE BOARD:****************" << endl;
+	for (int i = 0; i < ROWS; i++)
+	{
+		for (int j = 0; j < COLS; j++)
+		{
+			if (gameBoard.board[j][i].getIsJoker())
+			{
+				if (Cell::isPlayerOnePiece(gameBoard.board[j][i]))
+				{
+					cout << " J ";
+				}
+				else
+				{
+					cout << " j ";
+				}
+			}
+			else if (gameBoard.board[j][i].getPiece() == 0)
+			{
+				cout << " - ";
+			}
+			else
+			{
+				cout <<" "<< gameBoard.board[j][i].getPiece() << " ";
+			}
+		}
+		cout << endl;
+	}
 }

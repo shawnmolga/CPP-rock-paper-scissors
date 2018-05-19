@@ -65,6 +65,7 @@ public:
 	void updateMovingPiece();
 	bool isLegalMove(unique_ptr<Move> &move, bool isPlayer1);
 	void printVectorPositions(std::vector<unique_ptr<PiecePosition>> &vectorToFill);
+	void PrintBoardToConsole();
 	
 private:
 	int myPlayerNum;
