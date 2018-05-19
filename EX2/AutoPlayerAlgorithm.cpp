@@ -33,7 +33,12 @@ void AutoPlayerAlgorithm::getInitialPositions(int player,
 //TODO:delete after debug
 void AutoPlayerAlgorithm::printVectorPositions(std::vector<unique_ptr<PiecePosition>> &vectorToFill){
 	for (size_t i=0;i<vectorToFill.size(); ++i){
+		cout<<"piece: ";
 		cout<<(vectorToFill[i]->getPiece())<<endl;
+		cout<<"position: x: ";
+		cout<<(vectorToFill[i]->getPosition().getX());
+		cout<<" y: ";
+		cout<<(vectorToFill[i]->getPosition().getY())<<endl;
 	}
 }
 
@@ -95,7 +100,7 @@ void AutoPlayerAlgorithm::positionUnmovingPieces(int player, std::vector<unique_
 				{
 					hasOpponentNeighbor = false;
 					AICell::updateCell(gameBoard.board[x][y], piece, false);
-					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), piece, '#'));
+					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), '#'));
 					positionBombs(x, y, player, vectorToFill, protectingBombsNum, shouldPositionRandomly);
 					bombsPositioned += protectingBombsNum;
 				}
@@ -184,7 +189,7 @@ void AutoPlayerAlgorithm::positionBombs(int flag_x, int flag_y, int player, std:
 			if (findEmptyNeigbor(x, y, flag_x, flag_y))
 			{
 				Cell::updateCell(gameBoard.board[x][y], piece, false);
-				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), piece, '#'));
+				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), '#'));
 				bombsPositioned++;
 			}
 			else
@@ -214,10 +219,10 @@ void AutoPlayerAlgorithm::positionPiecesRandomly(int pieceNum, char piece, bool 
 				isCellTaken = false;
 				Cell::updateCell(gameBoard.board[x][y], piece, isJoker);
 				if (isJoker){
-					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), piece , pieceRep));
+					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece) , pieceRep));
 				}
 				else //not a joker
-					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), piece, pieceRep));
+					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), pieceRep));
 				break;
 			}
 			x = getRandomNumInRange(0, COLS - 1);
