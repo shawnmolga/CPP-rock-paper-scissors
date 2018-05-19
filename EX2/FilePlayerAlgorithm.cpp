@@ -101,7 +101,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	{
 		if (!checkIfDigit(line[end]))
 		{
-			cout << "Error:error 2" << endl;
 			cout << "Error: Bad format - got letter instead of digit" << endl;
 			return -1;
 		}

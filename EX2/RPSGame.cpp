@@ -86,7 +86,6 @@ Output- returns true if gameOver, false otherwise
 bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJokerChange,
 						bool isPlayerOneTurn)
 {
-	cout<<" Inside move piece "<<endl;
 	numOfMoves ++; // we increment the numerator for each move
 	int from_x = move->getFrom().getX(); //col
 	int from_y = move->getFrom().getY(); //row
@@ -96,9 +95,13 @@ bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJ
 	cout <<"From y: "<<from_y<<endl;
 	cout <<"to x: "<<to_x<<endl;
 	cout <<"to y: "<<to_y<<endl;
-	if (!isLegalMove(move, isPlayerOneTurn))
+	if (!isLegalMove(move, isPlayerOneTurn)) //noy changed!
 	{
-		cout<<"ERROR: ILLEGAL MOVE"<<endl;
+		if (isPlayerOneTurn){
+			setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
+		}
+		else
+			setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 		return true;
 	}
 	//do move
@@ -149,7 +152,7 @@ bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJ
 		int y_joker = playerJokerChange->getJokerChangePosition().getY(); //col
 
 		char new_rep = playerJokerChange->getJokerNewRep();
-		if (new_rep == 'E')
+		if (new_rep == 'E') //means bad format
 		{
 			if (isPlayerOneTurn)
 				return true;
@@ -182,10 +185,6 @@ int RPSGame::makeMove()
 	int xPiecePlayerOne = move1->getFrom().getX();
 	int xPiecePlayerTwo = move2->getFrom().getX(); 
 
-	cout<<"GOT MOVES!!!!"<<endl;
-	cout<<"move ONE to "<<xPiecePlayerOne<<", "<<move1->getFrom().getY()<<endl;
-	cout<<"move TWO to "<<xPiecePlayerTwo<<", "<<move2->getFrom().getY()<<endl;
-
 	unique_ptr<JokerChange> playerOneJokerChange;
 	unique_ptr<JokerChange> playerTwoJokerChange;
 	bool isPlayerOneTurn = true;
@@ -197,9 +196,9 @@ int RPSGame::makeMove()
 		unique_ptr<JokerChange> playerTwoJokerChange =
 			playerAlgoTwo->getJokerChange();
 
-		cout<<"GOT JOKER CHANGES!!!!"<<endl;
-		cout<<"Joker change ONE to "<<playerOneJokerChange->getJokerChangePosition().getX()<<", "<<playerOneJokerChange->getJokerChangePosition().getY()<<"new rep: "<<playerOneJokerChange->getJokerNewRep()<<endl;
-		cout<<"Joker change TWO to "<<playerTwoJokerChange->getJokerChangePosition().getX()<<", "<<playerTwoJokerChange->getJokerChangePosition().getY()<<"new rep: "<<playerTwoJokerChange->getJokerNewRep()<<endl;
+		// cout<<"GOT JOKER CHANGES!!!!"<<endl;
+		// cout<<"Joker change ONE to "<<playerOneJokerChange->getJokerChangePosition().getX()<<", "<<playerOneJokerChange->getJokerChangePosition().getY()<<"new rep: "<<playerOneJokerChange->getJokerNewRep()<<endl;
+		// cout<<"Joker change TWO to "<<playerTwoJokerChange->getJokerChangePosition().getX()<<", "<<playerTwoJokerChange->getJokerChangePosition().getY()<<"new rep: "<<playerTwoJokerChange->getJokerNewRep()<<endl;
 
 
 		isGameOverInternal = false;
@@ -234,7 +233,6 @@ int RPSGame::makeMove()
 		}
 		else if (xPiecePlayerTwo == -3)
 		{
-			cout<<"error here 1?"<<endl;
 			cout << "Error while reading move file. Exiting game" << endl;
 			//we need to remeber to close the stream!!!
 			//playerAlgoTwo->closeStream();
@@ -252,7 +250,6 @@ int RPSGame::makeMove()
 		xPiecePlayerTwo = move2->getFrom().getX();
 
 	} //while
-cout<<"Outside while"<<endl;
 	//game stopeed
 	if(numOfMoves >=100){
 		setGameOver(0, TIE_NO_WINNER);
@@ -261,13 +258,10 @@ cout<<"Outside while"<<endl;
 		//playerAlgoOne->closeStream();
 		return 0;
 	}
-	cout<<"before isGameOverInternal"<<endl;
 	if (!isGameOverInternal)
 	{
-		cout<<"Inside big if"<<endl;
 		if (xPiecePlayerOne == -2) //EOFcase player 1 
 		{
-			cout<<"inside if!"<<endl;
 			// move2 = playerAlgoTwo->getMove();
 			// xPiecePlayerTwo = move2->getFrom().getX();
 			playerTwoJokerChange =playerAlgoTwo->getJokerChange();
@@ -280,16 +274,15 @@ cout<<"Outside while"<<endl;
 					PrintBoardToConsole();
 					if (isGameOverInternal)
 					{
-						break;
+						return -1;
 					}
 				}
 				move2 = playerAlgoTwo->getMove();
 				xPiecePlayerTwo = move2->getFrom().getX();
 				playerTwoJokerChange =playerAlgoTwo->getJokerChange();
 			}
-			if (xPiecePlayerTwo != -2)
+			if (xPiecePlayerTwo == -3)
 			{
-				cout<<"error here 2?"<<endl;
 				cout << "Error while reading move file. Exiting game" << endl;
 				//we need to remeber to close the stream!!!
 				//playerAlgoTwo->closeStream();
@@ -302,10 +295,8 @@ cout<<"Outside while"<<endl;
 			//  move1 = playerAlgoOne->getMove();
 			//  xPiecePlayerOne = move1->getFrom().getX();
 			playerOneJokerChange =playerAlgoOne->getJokerChange();
-			cout<<"inside else if"<<endl;
 			while (xPiecePlayerOne != -2 && xPiecePlayerOne != -3)
 			{
-				cout<<"inside while"<<endl;
 				if (xPiecePlayerOne != 0)
 				{
 					isPlayerOneTurn = true;
@@ -313,18 +304,15 @@ cout<<"Outside while"<<endl;
 					PrintBoardToConsole();
 					if (isGameOverInternal)
 					{
-						break;
+						return -1; //game over
 					}
 				}
 				move1 = playerAlgoOne->getMove();
 				xPiecePlayerOne = move1->getFrom().getX();
-				cout<<"xPiecePlayerOne: "<<xPiecePlayerOne<<endl;
 				playerOneJokerChange = playerAlgoOne->getJokerChange();
 			}
-			if (xPiecePlayerOne != -2)
+			if (xPiecePlayerOne == -3)
 			{
-				cout<<"error here 3?"<<endl;
-				cout<<"xPiecePlayerOne"<<xPiecePlayerOne<<endl;
 				cout << "Error while reading move file. Exiting game" << endl;
 				//we need to remeber to close the stream!!!
 
@@ -498,7 +486,8 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
  */
 bool RPSGame::countNumOfPieces(const int playerNum, int numOfPositionedPieces[],
 							   const int piece)
-{ cout << "in countNumOfPieces. piece = " <<  piece << endl;
+{ 
+	cout << "in countNumOfPieces. piece = " <<  piece << endl;
 	switch (piece)
 	{
 	case ROCK:
@@ -759,18 +748,17 @@ void RPSGame::setGameOver(int winnerNumber, GAME_OVER_TYPE type)
 	{
 		return;
 	}
-
 	else if (winnerNumber == playerOne.getPlayerNum())
 	{
 		playerOne.setIsWinner(true);
-		//playerTwo.setIsWinner(false);
+		playerTwo.setIsWinner(false);
 		playerOne.setScore(playerOne.getScore() + 1);
 		return;
 	}
 	else
 	{
 		playerTwo.setIsWinner(true);
-		//playerOne.setIsWinner(false);
+		playerOne.setIsWinner(false);
 		playerTwo.setScore(playerTwo.getScore() + 1);
 	}
 
@@ -1284,6 +1272,7 @@ void RPSGame::printOutputFile(const string &outputFile)
 		return;
 	}
 	//player 1 is thw winner
+
 	if (playerOne.getIsWinner())
 	{
 		output << "Winner: 1" << endl;
