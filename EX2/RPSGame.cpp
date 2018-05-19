@@ -86,11 +86,16 @@ Output- returns true if gameOver, false otherwise
 bool RPSGame::movePiece(unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJokerChange,
 						bool isPlayerOneTurn)
 {
+	cout<<" Inside move piece "<<endl;
 	numOfMoves ++; // we increment the numerator for each move
 	int from_x = move->getFrom().getX(); //col
 	int from_y = move->getFrom().getY(); //row
 	int to_x = move->getTo().getX(); //col
 	int to_y = move->getTo().getY(); //row
+	cout <<"From x: "<<from_x<<endl;
+	cout <<"From y: "<<from_y<<endl;
+	cout <<"to x: "<<to_x<<endl;
+	cout <<"to y: "<<to_y<<endl;
 	if (!isLegalMove(move, isPlayerOneTurn))
 	{
 		return true;
@@ -173,8 +178,10 @@ int RPSGame::makeMove()
 
 	unique_ptr<Move> move1 = std::move(playerAlgoOne->getMove());
 	unique_ptr<Move> move2 = std::move(playerAlgoTwo->getMove());
-	int xPiecePlayerOne = move1->getFrom().getX(); //col
-	int xPiecePlayerTwo = move2->getFrom().getX(); //col
+	int xPiecePlayerOne = move1->getFrom().getX();
+	int xPiecePlayerTwo = move2->getFrom().getX(); 
+	cout<<"xPiecePlayerOne: " << xPiecePlayerOne<<endl;
+	cout<<"xPiecePlayerTwo: " << xPiecePlayerTwo<<endl;
 
 	unique_ptr<JokerChange> playerOneJokerChange;
 	unique_ptr<JokerChange> playerTwoJokerChange;
@@ -241,18 +248,21 @@ int RPSGame::makeMove()
 		//playerAlgoOne->closeStream();
 		return 0;
 	}
+	cout<<"before isGameOverInternal"<<endl;
 	if (!isGameOverInternal)
 	{
 		if (xPiecePlayerOne == -2) //EOFcase
 		{
-			move2 = playerAlgoTwo->getMove();
-			xPiecePlayerTwo = move2->getFrom().getX();
+			cout<<"inside if!"<<endl;
+			// move2 = playerAlgoTwo->getMove();
+			// xPiecePlayerTwo = move2->getFrom().getX();
+			//playerTwoJokerChange =playerAlgoTwo->getJokerChange();
 			while (xPiecePlayerTwo != -2 && xPiecePlayerTwo != -3)
 			{
 				if (xPiecePlayerTwo != 0)
 				{
-					isPlayerOneTurn = true;
-					isGameOverInternal = movePiece(move1, playerTwoJokerChange, isPlayerOneTurn);
+					isPlayerOneTurn = false;
+					isGameOverInternal = movePiece(move2, playerTwoJokerChange, isPlayerOneTurn);
 					PrintBoardToConsole();
 					if (isGameOverInternal)
 					{
@@ -261,6 +271,7 @@ int RPSGame::makeMove()
 				}
 				move2 = playerAlgoTwo->getMove();
 				xPiecePlayerTwo = move2->getFrom().getX();
+				playerTwoJokerChange =playerAlgoTwo->getJokerChange();
 			}
 			if (xPiecePlayerTwo != -2)
 			{
@@ -273,14 +284,15 @@ int RPSGame::makeMove()
 		}
 		else if (xPiecePlayerTwo == -2) //player 2 eof
 		{
-			move1 = playerAlgoOne->getMove();
-			xPiecePlayerOne = move1->getFrom().getX();
+			// move1 = playerAlgoOne->getMove();
+			// xPiecePlayerOne = move1->getFrom().getX();
+			//playerOneJokerChange =playerAlgoOne->getJokerChange();
 			while (xPiecePlayerOne != -2 && xPiecePlayerOne != -3)
 			{
 				if (xPiecePlayerOne != 0)
 				{
 					isPlayerOneTurn = true;
-					isGameOverInternal = movePiece(move1, playerTwoJokerChange, isPlayerOneTurn);
+					isGameOverInternal = movePiece(move1, playerOneJokerChange, isPlayerOneTurn);
 					PrintBoardToConsole();
 					if (isGameOverInternal)
 					{
@@ -289,6 +301,7 @@ int RPSGame::makeMove()
 				}
 				move1 = playerAlgoOne->getMove();
 				xPiecePlayerOne = move1->getFrom().getX();
+				playerOneJokerChange = playerAlgoOne->getJokerChange();
 			}
 			if (xPiecePlayerOne != -2)
 			{
@@ -364,6 +377,7 @@ int RPSGame::startGame()
 		return 0;
 	}
 	//If we got here the board is initialized! now we need to make a move.
+	cout << "going to make a move" << endl;
 
 	return makeMove();
 }
