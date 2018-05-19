@@ -434,10 +434,10 @@ void AutoPlayerAlgorithm::getBestMove(int &from_x, int &from_y, int &to_x, int &
 				cout<<"HEEEEEEEEEY"<<endl;
 			if (gameBoard.board[i][j].getPiece() == 0 || gameBoard.board[i][j].getPiece() == '#')
 				continue;
-			bool isMyPiece = Cell::isPlayerOnePiece(gameBoard.board[i][j]) ? (myPlayerNum == 1) : (myPlayerNum == 2);
-			if (!isMyPiece) continue;
-			cout<<"STILL OK"<<endl;
+			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum)) continue;
+			cout<<"MY PIECE!!!"<<endl;
 			score = getBestMoveForPiece(maxScore, i, j, to_x, to_y);
+			cout<<"Score: "<<score<<endl;
 			if (maxScore < score)
 			{
 				maxScore = score;
@@ -561,6 +561,7 @@ double AutoPlayerAlgorithm::tryMovePiece(unique_ptr<Move> &move)
 		Cell::cleanCell(gameBoard.board[from_x][from_y]);
 	}
 	double score = calcScore(material, discovery, reveal);
+	cout<<"SCORE IS: "<<score<<endl;
 	//return board to be as it was
 	AICell::updateCell(gameBoard.board[from_x][from_y], myCell.getPiece(),
 			myCell.getIsJoker());
@@ -1209,10 +1210,10 @@ void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move &move)
 bool AutoPlayerAlgorithm::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
 	int from_x = move->getFrom().getX();
 	int from_y = move->getFrom().getY();
-	int to_x = move->getFrom().getX();
-	int to_y = move->getFrom().getY();
+	int to_x = move->getTo().getX();
+	int to_y = move->getTo().getY();
 
-	if ((move->getFrom().getX() < 0 || from_x > COLS-1)
+	if ((from_x < 0 || from_x > COLS-1)
 			|| (to_x < 0 || to_x > COLS-1) || (from_y < 0 || from_y > ROWS-1)
 			|| (to_y < 0 || to_y > ROWS-1)) {
 		cout << "Error: illegal location on board" << endl;
