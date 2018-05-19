@@ -9,14 +9,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="da2d32cb-143c-46ff-86a6-ed00b66028c2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/RPSgame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/RPSgame.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/Tests/Edge Case 8/rps.output" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/Tests/Edge Case 8/rps.output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/Player.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/RPSGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/RPSGame.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/RPSGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/RPSGame.h" afterDir="false" />
-    </list>
+    <list default="true" id="da2d32cb-143c-46ff-86a6-ed00b66028c2" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,8 +22,8 @@
       <file leaf-file-name="RPSGame.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/EX2/RPSGame.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="221" column="21" selection-start-line="221" selection-start-column="13" selection-end-line="221" selection-end-column="21" />
+            <state relative-caret-position="305">
+              <caret line="218" column="2" lean-forward="true" selection-start-line="218" selection-start-column="2" selection-end-line="218" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -275,15 +268,16 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="98166000" />
+    <option name="totallyTimeSpent" value="98447000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1293" height="693" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="2" visible="true" weight="0.2472178" />
+      <window_info content_ui="combo" id="Project" order="2" visible="true" weight="0.2472178" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.3291592" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Structure" order="0" side_tool="true" weight="0.25" />
@@ -296,7 +290,6 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3298969" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -655,8 +648,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/EX2/RPSGame.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="221" column="21" selection-start-line="221" selection-start-column="13" selection-end-line="221" selection-end-column="21" />
+        <state relative-caret-position="305">
+          <caret line="218" column="2" lean-forward="true" selection-start-line="218" selection-start-column="2" selection-end-line="218" selection-end-column="2" />
         </state>
       </provider>
     </entry>
