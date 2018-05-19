@@ -52,7 +52,8 @@ public:
 		~RPSGame();
         //vector<vector<Cell>> board ;  //Noy move the board to be public. we need it in the algorithm
         string ToString(GAME_OVER_TYPE typeGame);
-		int checkPositionOnBoard(bool &isPlayerOneLegalFormat,bool &isPlayerTwoLegalFormat, RPSFight &fights, std::vector<unique_ptr<FightInfo>>& initFights);
+	void updateJokerMovingPieces();
+	int checkPositionOnBoard(bool &isPlayerOneLegalFormat,bool &isPlayerTwoLegalFormat, RPSFight &fights, std::vector<unique_ptr<FightInfo>>& initFights);
         bool isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
         bool initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
         bool countNumOfPieces(const int playerNum,int numOfPositionedPieces[],const int piece );

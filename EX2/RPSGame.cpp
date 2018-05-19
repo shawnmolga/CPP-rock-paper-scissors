@@ -11,6 +11,48 @@ RPSGame::~RPSGame()
 	delete (playerAlgoTwo);
 }
 
+void RPSGame::updateJokerMovingPieces()
+{
+	PrintBoardToConsole();
+	for (int i = 1; i <= ROWS; ++i)
+	{
+		for (int j = 1; j <= COLS; ++j)
+		{
+			if (gameBoard.board[i][j].getIsJoker())
+			{
+				int pieceIndex;
+				cout << "before switch" << endl;
+				switch (toupper(gameBoard.board[i][j].getPiece()))
+				{
+					case ROCK:
+						cout << "in rock" << endl;
+						pieceIndex = 0;
+						break;
+					case PAPER:
+						cout << "in paper" << endl;
+						pieceIndex = 1;
+						break;
+					case SCISSOR:
+						cout << "in scissors" << endl;
+						pieceIndex = 2;
+						break;
+					case BOMB:
+						cout << "in bomb" << endl;
+						pieceIndex = 3;
+						break;
+				}
+				isupper(gameBoard.board[i][j].getPiece()) ? playerOne.setNumOfPieces(pieceIndex,
+																					   playerOne.numOfPieces[pieceIndex] + 1)
+													  : playerTwo.setNumOfPieces(pieceIndex,
+																					   playerTwo.numOfPieces[pieceIndex] + 1);
+
+				cout << "check1: "<<  playerTwo.numOfPieces[pieceIndex] << endl;
+
+			}
+		}
+	}
+}
+
 /*
 This function changes joker representation
 Input - previous jokerRep, new jokerRep and inidication for current player
@@ -380,6 +422,7 @@ int RPSGame::startGame()
 	}
 	bool isPlayerOneTurn = true;
 	bool isAboutToMove = true;
+	cout << "beforecheckGameOver" << endl;
 	if (checkGameOver(isAboutToMove, isPlayerOneTurn))
 	{
 		return 0;
@@ -707,10 +750,28 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 	//bool isPlayerOneLegalFormat = true;
 	//check player One Format
 	int resultPlayerOne = locateOnBoard(1, vectorToFillPlayerOne, isPlayerOneLegalFormat, numOfPositionedPieces, fights, initFights);
-
+	updateJokerMovingPieces();
 	memset(numOfPositionedPieces, 0, sizeof(numOfPositionedPieces)); // for automatically-allocated arrays
-	//locate player2:
 	int resultPlayerTwo = locateOnBoard(2, vectorToFillPlayerTwo, isPlayerTwoLegalFormat, numOfPositionedPieces, fights, initFights);
+	updateJokerMovingPieces();
+
+	cout << "check2: " << playerTwo.numOfPieces[2]  << endl << endl;
+
+
+	//todo deltee this
+	cout << "player1" << endl;
+	for (int i= 0; i <6; i ++){
+		cout << playerOne.numOfPieces[i] << endl;
+	}
+	cout << endl;
+	cout << "player2" << endl;
+
+	for (int i= 0; i <6; i ++){
+		cout << playerTwo.numOfPieces[i] << endl;
+	}
+
+
+
 	if (resultPlayerOne == -1 || resultPlayerTwo == -1)
 	{
 		return -1;
@@ -895,7 +956,7 @@ bool RPSGame::isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseF
  */
 bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 {
-	//PrintBoardToConsole();
+	PrintBoardToConsole();
 	cout << "isBeforeMove = " << isBeforeMove << endl;
 	Player *currPlayer = &playerOne;
 	Player *nextPlayer = &playerTwo;
@@ -906,7 +967,8 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	}
 	if (currPlayer->numOfPieces[5] == 0 && nextPlayer->numOfPieces[5] == 0)
 	{
-		isGameOver = true;
+		cout << "1" << endl;
+ 		isGameOver = true;
 		currPlayer->setIsWinner(false);
 		nextPlayer->setIsWinner(false);
 		gameOverReason = TIE_ALL_FLAGS_EATEN;
@@ -915,7 +977,7 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	//check if all of player one's flags are taken
 	if (currPlayer->numOfPieces[5] == 0)
 	{
-
+		cout << "2" << endl;
 		nextPlayer->setIsWinner(true);
 		currPlayer->setIsWinner(false);
 
@@ -927,7 +989,7 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	//check if all of player two's flags are taken
 	if (nextPlayer->numOfPieces[5] == 0)
 	{
-
+		cout << "3" << endl;
 		currPlayer->setIsWinner(true);
 		nextPlayer->setIsWinner(false);
 
@@ -939,7 +1001,7 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 	//check if all of player one's moving pieces are eaten
 	if (isBeforeMove && !currPlayer->isLeftMovingPieces())
 	{
-
+		cout << "4" << endl;
 		nextPlayer->setIsWinner(true);
 		currPlayer->setIsWinner(false);
 

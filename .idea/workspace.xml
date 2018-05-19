@@ -10,60 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="da2d32cb-143c-46ff-86a6-ed00b66028c2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/good moves file format with tabs, spaces and enters - OK/player1.rps_board" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/good moves file format with tabs, spaces and enters - OK/player1.rps_board" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/good moves file format with tabs, spaces and enters - OK/player1.rps_moves" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/good moves file format with tabs, spaces and enters - OK/player1.rps_moves" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/good moves file format with tabs, spaces and enters - OK/player2.rps_board" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/good moves file format with tabs, spaces and enters - OK/player2.rps_board" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/good moves file format with tabs, spaces and enters - OK/player2.rps_moves" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/good moves file format with tabs, spaces and enters - OK/player2.rps_moves" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 moves out of bounds - ERROR/player1.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 moves out of bounds - ERROR/player1.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 moves out of bounds - ERROR/player2.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 moves out of bounds - ERROR/player2.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 moves out of bounds - ERROR/rps.output" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 trying to move the bomb - ERROR/player1.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 trying to move the bomb - ERROR/player1.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 trying to move the bomb - ERROR/player2.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 trying to move the bomb - ERROR/player2.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 trying to move the bomb - ERROR/rps.output" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 wins by eat player2 flag - OK/player1.rps_board" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 wins by eat player2 flag - OK/player1.rps_board" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 wins by eat player2 flag - OK/player1.rps_moves" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 wins by eat player2 flag - OK/player1.rps_moves" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 wins by eat player2 flag - OK/player2.rps_board" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 wins by eat player2 flag - OK/player2.rps_board" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 wins by eat player2 flag - OK/player2.rps_moves" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player1 wins by eat player2 flag - OK/player2.rps_moves" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 move to occupied cell - ERROR/player1.rps_board" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 move to occupied cell - ERROR/player1.rps_board" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 move to occupied cell - ERROR/player1.rps_moves" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 move to occupied cell - ERROR/player1.rps_moves" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 move to occupied cell - ERROR/player2.rps_board" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 move to occupied cell - ERROR/player2.rps_board" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 move to occupied cell - ERROR/player2.rps_moves" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 move to occupied cell - ERROR/player2.rps_moves" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 try to change the JOKER to FLAG - ERROR/player1.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 try to change the JOKER to FLAG - ERROR/player1.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 try to change the JOKER to FLAG - ERROR/player2.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 try to change the JOKER to FLAG - ERROR/player2.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 try to change the JOKER to FLAG - ERROR/rps.output" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 try to move in slant - ERROR/player1.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 try to move in slant - ERROR/player1.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 try to move in slant - ERROR/player2.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 try to move in slant - ERROR/player2.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/player2 try to move in slant - ERROR/rps.output" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/tie, no more moves to do - OK/player1.rps_board" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/tie, no more moves to do - OK/player1.rps_board" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/tie, no more moves to do - OK/player1.rps_moves" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/tie, no more moves to do - OK/player1.rps_moves" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/tie, no more moves to do - OK/player2.rps_board" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/tie, no more moves to do - OK/player2.rps_board" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/tie, no more moves to do - OK/player2.rps_moves" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/tie, no more moves to do - OK/player2.rps_moves" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 1 (too few arguments) - ERROR/player1.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 1 (too few arguments) - ERROR/player1.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 1 (too few arguments) - ERROR/player2.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 1 (too few arguments) - ERROR/player2.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 1 (too few arguments) - ERROR/rps.output" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 2 (not an integer) - ERROR/player1.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 2 (not an integer) - ERROR/player1.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 2 (not an integer) - ERROR/player2.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 2 (not an integer) - ERROR/player2.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 2 (not an integer) - ERROR/rps.output" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 3 (joker) - ERROR/player1.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 3 (joker) - ERROR/player1.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 3 (joker) - ERROR/player2.rps_board" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 3 (joker) - ERROR/player2.rps_moves" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX1/tests_guy/moving parsing tests/wrong moves file format 3 (joker) - ERROR/rps.output" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/AIBoard.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/AIBoard.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EX1/RPSgame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/RPSgame.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EX1/Tests/Edge Case 8/rps.output" beforeDir="false" afterPath="$PROJECT_DIR$/EX1/Tests/Edge Case 8/rps.output" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EX2/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/Player.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EX2/RPSGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/RPSGame.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EX2/RPSGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/RPSGame.h" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -77,11 +29,44 @@
       <file leaf-file-name="RPSGame.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/EX2/RPSGame.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="237">
-              <caret line="466" column="54" selection-start-line="466" selection-start-column="54" selection-end-line="466" selection-end-column="54" />
-              <folding>
-                <element signature="e#254#2158#0" />
-              </folding>
+            <state relative-caret-position="152">
+              <caret line="221" column="21" selection-start-line="221" selection-start-column="13" selection-end-line="221" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RPSgameManager.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/EX1/RPSgameManager.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="186">
+              <caret line="654" column="27" selection-start-line="654" selection-start-column="14" selection-end-line="654" selection-end-column="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RPSgameManager.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/EX1/RPSgameManager.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="297">
+              <caret line="27" column="22" selection-start-line="27" selection-start-column="18" selection-end-line="27" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RPSgame.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/EX1/RPSgame.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="152">
+              <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/EX1/main.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -89,44 +74,8 @@
       <file leaf-file-name="RPSGame.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EX2/RPSGame.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="29" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AutoPlayerAlgorithm.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1336">
-              <caret line="189" column="48" selection-start-line="189" selection-start-column="26" selection-end-line="189" selection-end-column="48" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AutoPlayerAlgorithm.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AIBoard.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EX2/AIBoard.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="32" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AIBoard.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EX2/AIBoard.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+            <state relative-caret-position="351">
+              <caret line="54" column="9" selection-start-line="54" selection-start-column="9" selection-end-line="54" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -134,8 +83,8 @@
       <file leaf-file-name="RPSBoard.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EX2/RPSBoard.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="20" column="9" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="9" />
+            <state relative-caret-position="93">
+              <caret line="10" column="33" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -144,7 +93,7 @@
         <entry file="file://$PROJECT_DIR$/EX2/RPSBoard.h">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="347">
-              <caret line="22" column="31" lean-forward="true" selection-start-line="22" selection-end-line="23" />
+              <caret line="22" column="31" selection-start-line="22" selection-end-line="23" />
             </state>
           </provider>
         </entry>
@@ -152,17 +101,17 @@
       <file leaf-file-name="Player.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EX2/Player.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="24" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="24" />
+            <state relative-caret-position="169">
+              <caret line="20" column="33" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EX2/main.cpp">
+      <file leaf-file-name="Player.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/EX2/Player.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="22" column="29" selection-start-line="22" selection-start-column="15" selection-end-line="22" selection-end-column="29" />
+            <state relative-caret-position="271">
+              <caret line="26" column="23" selection-start-line="26" selection-start-column="9" selection-end-line="26" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -171,36 +120,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>stream</find>
-      <find>isGam</find>
-      <find>setGame</find>
-      <find>setGameOver</find>
-      <find>we ne</find>
-      <find>makeMove</find>
-      <find>startGame</find>
-      <find>makeMOve</find>
-      <find>cout</find>
-      <find>close</find>
-      <find>two or more</find>
-      <find>cout &lt;&lt;</find>
-      <find>setis</find>
-      <find>getGameOverReason</find>
-      <find>all flags</find>
-      <find>ALL_FLAGS_CAPTURED</find>
-      <find>checkGameOver</find>
-      <find>checkG</find>
-      <find>printB</find>
-      <find>movepiece</find>
-      <find>initPlayersAlgo</find>
-      <find>appears</find>
-      <find>locate</find>
-      <find>locateon</find>
       <find>islegalPosit</find>
       <find>checkIsOpponentNeighbors</find>
       <find>positionPiecesRandomly</find>
       <find>checkPieceOverflow</find>
       <find>islegal</find>
       <find>locateOnBoard</find>
+      <find>gameb</find>
+      <find>isLeftMovingPieces</find>
+      <find>getinit</find>
+      <find>makemove</find>
+      <find>checkpo</find>
+      <find>todo del</find>
+      <find>update</find>
+      <find>locateo</find>
+      <find>updateJokerMovingPieces</find>
+      <find>'</find>
+      <find>&quot;4</find>
+      <find>numof</find>
+      <find>movin</find>
+      <find>star</find>
+      <find>checkInsertPlayerPosition</find>
+      <find>checkg</find>
+      <find>checkgameOv</find>
+      <find>startGame</find>
+      <find>startG</find>
+      <find>locateon</find>
+      <find>checkposition</find>
+      <find>checkBadFormat</find>
+      <find>checkbad</find>
+      <find>start</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -216,19 +165,20 @@
         <option value="$PROJECT_DIR$/EX2/RPSPiecePosition.cpp" />
         <option value="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.h" />
         <option value="$PROJECT_DIR$/EX2/PlayerAlgorithm.h" />
-        <option value="$PROJECT_DIR$/EX1/RPSgame.cpp" />
         <option value="$PROJECT_DIR$/EX2/RPSBoard.h" />
         <option value="$PROJECT_DIR$/EX2/RPSBoard.cpp" />
         <option value="$PROJECT_DIR$/EX1/RPSgame.h" />
         <option value="$PROJECT_DIR$/EX1/RPSgameManager.cpp" />
         <option value="$PROJECT_DIR$/EX2/main.cpp" />
         <option value="$PROJECT_DIR$/EX2/Constants.h" />
-        <option value="$PROJECT_DIR$/EX2/RPSGame.h" />
         <option value="$PROJECT_DIR$/EX2/FilePlayerAlgorithm.h" />
         <option value="$PROJECT_DIR$/EX2/FilePlayerAlgorithm.cpp" />
         <option value="$PROJECT_DIR$/EX2/AIBoard.cpp" />
         <option value="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp" />
+        <option value="$PROJECT_DIR$/EX2/RPSGame.h" />
+        <option value="$PROJECT_DIR$/EX2/Player.cpp" />
         <option value="$PROJECT_DIR$/EX2/RPSGame.cpp" />
+        <option value="$PROJECT_DIR$/EX1/RPSgame.cpp" />
       </list>
     </option>
   </component>
@@ -256,7 +206,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -267,12 +216,18 @@
             <path>
               <item name="CPP-PRJ" type="b2602c69:ProjectViewProjectNode" />
               <item name="CPP-PRJ" type="462c0819:PsiDirectoryNode" />
+              <item name="EX1" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CPP-PRJ" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CPP-PRJ" type="462c0819:PsiDirectoryNode" />
               <item name="EX2" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -320,7 +275,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="93364000" />
+    <option name="totallyTimeSpent" value="98166000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1293" height="693" extended-state="6" />
@@ -356,34 +311,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/EX2/FilePlayerAlgorithm.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1394">
-          <caret line="82" column="29" selection-start-line="82" selection-start-column="29" selection-end-line="82" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="24" selection-start-line="1" selection-start-column="24" selection-end-line="1" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/Board.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="6" selection-start-line="24" selection-start-column="6" selection-end-line="24" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/RPSGame.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="952">
-          <caret line="56" column="13" selection-start-line="56" selection-start-column="13" selection-end-line="56" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/EX2/RPSMove.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
@@ -545,13 +472,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/EX1/RPSgame.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/EX1/RPSgame.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -559,24 +479,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/RPSJokerChange.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/EX2/RPSJokerChange.c" />
     <entry file="file://$PROJECT_DIR$/EX2/RPSFight.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="13" column="19" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EX1/RPSgameManager.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9775">
-          <caret line="575" column="4" selection-start-line="575" selection-start-column="4" selection-end-line="575" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -636,31 +543,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/FilePlayerAlgorithm.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3213">
-          <caret line="189" column="63" selection-start-line="189" selection-start-column="63" selection-end-line="189" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/Player.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="24" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/EX2/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="22" column="29" selection-start-line="22" selection-start-column="15" selection-end-line="22" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/RPSGame.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="29" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -673,15 +559,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/EX2/RPSBoard.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="20" column="9" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="9" />
+        <state relative-caret-position="93">
+          <caret line="10" column="33" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/EX2/RPSBoard.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="347">
-          <caret line="22" column="31" lean-forward="true" selection-start-line="22" selection-end-line="23" />
+          <caret line="22" column="31" selection-start-line="22" selection-end-line="23" />
         </state>
       </provider>
     </entry>
@@ -706,13 +592,71 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/EX1/Player.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-196" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX2/FilePlayerAlgorithm.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50">
+          <caret line="238" column="17" selection-start-line="238" selection-start-column="17" selection-end-line="238" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX2/Player.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="26" column="23" selection-start-line="26" selection-start-column="9" selection-end-line="26" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX2/Player.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="20" column="33" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX1/RPSgameManager.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="27" column="22" selection-start-line="27" selection-start-column="18" selection-end-line="27" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX1/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX1/RPSgameManager.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="654" column="27" selection-start-line="654" selection-start-column="14" selection-end-line="654" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX2/RPSGame.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="54" column="9" selection-start-line="54" selection-start-column="9" selection-end-line="54" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX1/RPSgame.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/EX2/RPSGame.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="466" column="54" selection-start-line="466" selection-start-column="54" selection-end-line="466" selection-end-column="54" />
-          <folding>
-            <element signature="e#254#2158#0" />
-          </folding>
+        <state relative-caret-position="152">
+          <caret line="221" column="21" selection-start-line="221" selection-start-column="13" selection-end-line="221" selection-end-column="21" />
         </state>
       </provider>
     </entry>
