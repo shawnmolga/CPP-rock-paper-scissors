@@ -530,9 +530,9 @@ bool RPSGame::checkPieceOverflow(int numOfPieces[])
 
 	if (numOfPieces[0] > ROCKS_NUM || numOfPieces[1] > PAPERS_NUM || numOfPieces[2] > SCISSORS_NUM || numOfPieces[3] > BOMBS_NUM || numOfPieces[4] > JOKERS_NUM || numOfPieces[5] > FLAGS_NUM)
 	{
-
 		cout << "Error: a piece type appears in file more than its number"
 			 << endl;
+
 		return true;
 	}
 	return false;
@@ -1331,8 +1331,10 @@ Output- true if we successfuly init playerAlogrithms or false otherwise;
 bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
 {
 	cout << "in initPlayerAlgo" << endl;
-	if (!isAllGameFilesExists(isPlayerOneUseFile, isPlayerTwoUseFile))
-		return false;
+	if (isPlayerOneUseFile || isPlayerTwoUseFile){
+		if (!isAllGameFilesExists(isPlayerOneUseFile, isPlayerTwoUseFile))
+			return false;
+	}
 
 	if (isPlayerOneUseFile)
 	{

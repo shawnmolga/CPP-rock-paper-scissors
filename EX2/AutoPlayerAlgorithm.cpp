@@ -22,9 +22,19 @@ void AutoPlayerAlgorithm::getInitialPositions(int player,
 		std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	myPlayerNum = player;
+	cout<<"BEFORE POSITIONING AI STUFF"<<endl;
 	positionUnmovingPieces(player, vectorToFill);
 	positionMovingPieces(player, vectorToFill);
 	positionJokers(player, vectorToFill);
+	//delete after debug
+	printVectorPositions(vectorToFill);
+}
+
+//TODO:delete after debug
+void AutoPlayerAlgorithm::printVectorPositions(std::vector<unique_ptr<PiecePosition>> &vectorToFill){
+	for (size_t i=0;i<vectorToFill.size(); ++i){
+		cout<<(vectorToFill[i]->getPiece())<<endl;
+	}
 }
 
 void AutoPlayerAlgorithm::positionMovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
@@ -36,24 +46,27 @@ void AutoPlayerAlgorithm::positionMovingPieces(int player, std::vector<unique_pt
 
 void AutoPlayerAlgorithm::positionJokers(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
-	int pieceNum = getRandomNumInRange(1, 4);
-	switch (pieceNum)
-	{
-	case 1: //rock
-		positionPiecesRandomly(ROCKS_NUM, player == 1 ? 'R' : 'r', true, vectorToFill);
-		break;
-	case 2: //paper
-		positionPiecesRandomly(PAPERS_NUM, player == 1 ? 'P' : 'p', false, vectorToFill);
-		break;
-	case 3: //scissors
-		positionPiecesRandomly(SCISSORS_NUM, player == 1 ? 'S' : 's', false, vectorToFill);
-		break;
-	case 4: //bomb
-		positionPiecesRandomly(SCISSORS_NUM, player == 1 ? 'B' : 'b', false, vectorToFill);
-		break;
-	default:
-		break;
+	for (int i=0; i<JOKERS_NUM; ++i){
+		int pieceNum = getRandomNumInRange(1, 4);
+		switch (pieceNum)
+		{
+		case 1: //rock
+			positionPiecesRandomly(1, player == 1 ? 'R' : 'r', true, vectorToFill);
+			break;
+		case 2: //paper
+			positionPiecesRandomly(1, player == 1 ? 'P' : 'p', true, vectorToFill);
+			break;
+		case 3: //scissors
+			positionPiecesRandomly(1, player == 1 ? 'S' : 's', true, vectorToFill);
+			break;
+		case 4: //bomb
+			positionPiecesRandomly(1, player == 1 ? 'B' : 'b', true, vectorToFill);
+			break;
+		default:
+			break;
+		}
 	}
+
 }
 
 void AutoPlayerAlgorithm::positionUnmovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
@@ -680,9 +693,9 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 			Cell::cleanCell(gameBoard.board[x][y]);
 		}
 		else {
-		//if it is not a bomb and not a flag - than it is moving piece
-		gameBoard.board[x][y].isMovingPieceKnown = true;
-		gameBoard.board[x][y].isMovingPiece = true;
+			//if it is not a bomb and not a flag - than it is moving piece
+			gameBoard.board[x][y].isMovingPieceKnown = true;
+			gameBoard.board[x][y].isMovingPiece = true;
 		}
 
 		if (isJoker)

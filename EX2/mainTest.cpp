@@ -9,8 +9,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 	RPSGame manager;
-	manager.playerAlgoOne = AutoPlayerAlgorithm();
-	manager.playerAlgoTwo = AutoPlayerAlgorithm();
+	manager.initPlayersAlgo(false,false);
 	//should be empty
 	cout<<"********BEFORE LOCATING PIECES*************"<<endl;
 	manager.PrintBoardToConsole();
