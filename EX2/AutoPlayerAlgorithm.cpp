@@ -789,6 +789,9 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 	}
 
 	updateFlagProbability();
+
+	cout<<"@@@@@@@@AFTER FIGHT"<<endl;
+	PrintBoardToConsole();
 }
 
 double AutoPlayerAlgorithm::calcDistanceFromBombOrFlag()

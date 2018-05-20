@@ -229,7 +229,7 @@ bool RPSGame::movePiece(unique_ptr<Move> &move,
 	if (wasFight)
 	{
 		isPlayerOneTurn ? playerAlgoTwo->notifyOnOpponentMove(*move) : playerAlgoOne->notifyOnOpponentMove(*move);
-		isPlayerOneTurn ? playerAlgoOne->notifyFightResult(fights) : playerAlgoTwo->notifyFightResult(fights);
+		isPlayerOneTurn ? playerAlgoTwo->notifyFightResult(fights) : playerAlgoOne->notifyFightResult(fights);
 	}
 
 	return gameOverIntenral;
