@@ -328,7 +328,7 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 				AICell::cleanCell(gameBoard.board[x][y]);
 			}
 			else {
-				AICell::updateCell(gameBoard.board[x][y], opponentPiece, false);
+				AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? tolower(opponentPiece) : opponentPiece, false);
 				//if it is not a bomb and not a flag - than it is moving piece
 				gameBoard.board[x][y].isMovingPieceKnown = true;
 				gameBoard.board[x][y].isMovingPiece = true;
@@ -343,7 +343,7 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 				opponentFlagsNumOnBoard--;
 			else //must be moving piece
 				opponentMovingPieceNumOnBoard--;
-			AICell::updateCell(gameBoard.board[x][y], myPiece, gameBoard.board[x][y].getIsJoker());
+			AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? myPiece : tolower(myPiece), gameBoard.board[x][y].getIsJoker());
 		}
 
 
@@ -398,7 +398,8 @@ unique_ptr<Move> AutoPlayerAlgorithm::getMove()
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
 
 	///delete after debug
-	cout<<"MY MOVE: "<<from_x<<" "<<from_y<<" to "<<to_x<<" "<<to_y<<endl;
+	cout<<"player number "<<myPlayerNum<<endl;
+	cout<<"MY MOVE: "<<from_x<<" "<<from_y<<" to "<<to_x<<" "<<to_y<<" my piece: "<<myCell.getPiece()<<endl;
 	cout<<"~~~~MY BOARD~~~~"<<endl;
 	PrintBoardToConsole();
 
@@ -614,35 +615,37 @@ bool AutoPlayerAlgorithm::tryToFight(int to_x, int to_y, char myPiece, bool isJo
 bool AutoPlayerAlgorithm::fight(int x, int y, char myPiece, char opponentPiece, bool isMyPieceJoker)
 {
 
+	char myPieceRep = toupper(myPiece);
+	char oppPieceRep = toupper(opponentPiece);
 	//Case 1: 2 players in the same type - tie
-	if (myPiece == opponentPiece)
+	if (myPieceRep == oppPieceRep)
 	{
 		Cell::cleanCell(gameBoard.board[x][y]);
 		return false;
 	}
 
 	//Case 2: there is flag and current player has another piece
-	else if (opponentPiece == FLAG)
+	else if (oppPieceRep == FLAG)
 	{
 		Cell::updateCell(gameBoard.board[x][y], myPiece, isMyPieceJoker);
 		return true;
 	}
 
 	//case 3: there is bomb and current player has another piece
-	else if (opponentPiece == BOMB || myPiece == BOMB)
+	else if (oppPieceRep == BOMB || myPieceRep == BOMB)
 	{
 		Cell::cleanCell(gameBoard.board[x][y]);
 		return false;
 	}
 
 	//case 4: there is PAPER and current player has another piece
-	else if (opponentPiece == PAPER)
+	else if (oppPieceRep == PAPER)
 	{
-		if (myPiece == ROCK)
+		if (myPieceRep == ROCK)
 		{
 			return false;
 		}
-		else if (myPiece == SCISSOR)
+		else if (myPieceRep == SCISSOR)
 		{
 			Cell::updateCell(gameBoard.board[x][y], myPiece,
 					isMyPieceJoker);
@@ -650,27 +653,27 @@ bool AutoPlayerAlgorithm::fight(int x, int y, char myPiece, char opponentPiece, 
 		}
 	}
 	//case 7: player 1 is ROCK and player 2 another piece
-	else if (opponentPiece == ROCK)
+	else if (oppPieceRep == ROCK)
 	{
-		if (myPiece == PAPER)
+		if (myPieceRep == PAPER)
 		{
 			Cell::updateCell(gameBoard.board[x][y], myPiece,
 					isMyPieceJoker);
 			return true;
 		}
-		else if (myPiece == SCISSOR)
+		else if (myPieceRep == SCISSOR)
 		{
 			return false;
 		}
 	}
 
-	else if (opponentPiece == SCISSOR)
+	else if (oppPieceRep == SCISSOR)
 	{
-		if (myPiece == PAPER)
+		if (myPieceRep == PAPER)
 		{
 			return false;
 		}
-		else if (myPiece == ROCK)
+		else if (myPieceRep == ROCK)
 		{
 			Cell::updateCell(gameBoard.board[x][y], myPiece,
 					isMyPieceJoker);
@@ -708,7 +711,7 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 	int winner = fightInfo.getWinner();
 
 	//check if piece was known before and changed.
-	bool isJoker = (opponentCell.getPiece() != opponentPiece);
+	bool isJoker = (opponentCell.getPiece() != opponentPiece && opponentCell.getPiece() != 0 && opponentCell.getPiece() != '#');
 
 	if (winner == 0)
 	{
@@ -738,7 +741,7 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 			Cell::cleanCell(gameBoard.board[x][y]);
 		}
 		else {
-			AICell::updateCell(gameBoard.board[x][y], opponentPiece, isJoker);
+			AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? tolower(opponentPiece) : opponentPiece, isJoker);
 			//if it is not a bomb and not a flag - than it is moving piece
 			gameBoard.board[x][y].isMovingPieceKnown = true;
 			gameBoard.board[x][y].isMovingPiece = true;
