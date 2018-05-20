@@ -21,23 +21,23 @@ void RPSGame::updateJokerMovingPieces()
 			if (gameBoard.board[i][j].getIsJoker())
 			{
 				int pieceIndex;
-				cout << "before switch" << endl;
+				//cout << "before switch" << endl;
 				switch (toupper(gameBoard.board[i][j].getPiece()))
 				{
 				case ROCK:
-					cout << "in rock" << endl;
+					//cout << "in rock" << endl;
 					pieceIndex = 0;
 					break;
 				case PAPER:
-					cout << "in paper" << endl;
+					//cout << "in paper" << endl;
 					pieceIndex = 1;
 					break;
 				case SCISSOR:
-					cout << "in scissors" << endl;
+					//cout << "in scissors" << endl;
 					pieceIndex = 2;
 					break;
 				case BOMB:
-					cout << "in bomb" << endl;
+				//	cout << "in bomb" << endl;
 					pieceIndex = 3;
 					break;
 				}
@@ -46,7 +46,7 @@ void RPSGame::updateJokerMovingPieces()
 														  : playerTwo.setNumOfPieces(pieceIndex,
 																					 playerTwo.numOfPieces[pieceIndex] + 1);
 
-				cout << "check1: " << playerTwo.numOfPieces[pieceIndex] << endl;
+				//cout << "check1: " << playerTwo.numOfPieces[pieceIndex] << endl;
 			}
 		}
 	}

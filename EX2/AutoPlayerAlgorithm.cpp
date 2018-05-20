@@ -1182,8 +1182,7 @@ void AutoPlayerAlgorithm::updateMovingPiece()
 		{
 			if (gameBoard.board[i][j].getPiece() == 0) //empty cell
 				continue;
-			int piecePlayerNum = AICell::isPlayerOnePiece(gameBoard.board[i][j]) ? 1 : 2;
-			if (gameBoard.board[i][j].getPiece() == '#' || myPlayerNum != piecePlayerNum)
+			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum))
 			{ //this is opponent's piece
 				if (gameBoard.board[i][j].isMovingPieceKnown && gameBoard.board[i][j].isMovingPiece)
 				{
