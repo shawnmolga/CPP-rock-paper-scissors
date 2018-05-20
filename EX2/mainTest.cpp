@@ -6,7 +6,7 @@
 #include "RPSGame.h"
 using namespace std;
 
-int main(int argc, char *argv[])
+int main()
 {
 	RPSGame manager;
 	manager.initPlayersAlgo(false,false);
@@ -21,6 +21,15 @@ int main(int argc, char *argv[])
 	}
 	cout<<"************AFTER POSITION PIECES*******************"<<endl;
 	manager.PrintBoardToConsole();
+
+	bool isPlayerOneTurn = true;
+	bool isAboutToMove = true;
+	cout << "beforecheckGameOver" << endl;
+	if (manager.checkGameOver(isAboutToMove, isPlayerOneTurn))
+	{
+		cout<<"GAME OVER BEFORE MOVE............"<<endl;
+		return 0;
+	}
 
 	cout<<"************BEFORE FIRST MOVE*******************"<<endl;
 	manager.makeMove();

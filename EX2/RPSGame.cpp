@@ -530,7 +530,6 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
 bool RPSGame::countNumOfPieces(const int playerNum, int numOfPositionedPieces[],
 							   const int piece)
 { 
-	cout << "in countNumOfPieces. piece = " <<  piece << endl;
 	switch (piece)
 	{
 	case ROCK:
