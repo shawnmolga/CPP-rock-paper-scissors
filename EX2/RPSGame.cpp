@@ -965,6 +965,7 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 		currPlayer = &playerTwo;
 		nextPlayer = &playerOne;
 	}
+	cout <<"currPlayer->isLeftMovingPieces()"<< (int) currPlayer->isLeftMovingPieces() <<endl;
 	if (currPlayer->numOfPieces[5] == 0 && nextPlayer->numOfPieces[5] == 0)
 	{
 		cout << "1" << endl;
