@@ -308,6 +308,9 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 		char myPiece = toupper(fights[i]->getPiece(myPlayerNum)); //do we need this?
 		char opponentPiece = toupper(fights[i]->getPiece(myPlayerNum == 1 ? 2 : 1));
 		int winner = fights[i]->getWinner();
+
+		cout<<"###############FIGHTT RESULTS: position: "<<x<<" , "<<y<<" winner: "<<winner<<" my number: "<<myPlayerNum<<" my piece: "<<myPiece<<" opp piece: "<<opponentPiece<<endl;
+
 		if (winner == 0)
 		{
 			AICell::cleanCell(gameBoard.board[x][y]);

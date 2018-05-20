@@ -80,8 +80,8 @@ bool RPSgame::fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool
 		case FLAG:
 			currPlayer->numOfPieces[5]--;
 			nextPlayer->numOfPieces[5]--;
-		case ROCK:
 			break;
+		case ROCK:
 			currPlayer->numOfPieces[0]--;
 			nextPlayer->numOfPieces[0]--;
 			break;

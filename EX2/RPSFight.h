@@ -15,13 +15,13 @@ public:
 	char  getPiece(int player) const ; // R, P, S, B or F (but NOT J)
  	int getWinner() const ; // 0 - both lost / tie, 1 - player 1 won, 2 - player 2 won
 	void setPosition(RPSpoint pos);
-	void setOpponentPiece(char piece);
-	void setCurrPiece(char piece);
+	void setPlayerOnePiece(char piece);
+	void setPlayerTwoPiece(char piece);
 	void setWinner(int playerNum);
 private:
 RPSpoint position;
-char currPiece; //player piece
-char opponentPiece; //next player piece
+char playerOnePiece; //player piece
+char playerTwoPiece; //next player piece
 int winner;
 };
 

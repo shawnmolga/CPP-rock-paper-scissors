@@ -7,7 +7,7 @@
 #include "RPSFight.h"
 
 //RPSFight::RPSFight(RPSpoint inputPosition,char inputOpponentPiece, int inputWinner): position(inputPosition),opponentPiece(inputOpponentPiece),winner(inputWinner) {}
-RPSFight::RPSFight() : position(RPSpoint(0, 0)), opponentPiece('#'), winner(0) {}
+RPSFight::RPSFight() : position(RPSpoint(0, 0)),playerOnePiece('#') ,playerTwoPiece('#'), winner(0) {}
 
 const Point &RPSFight::getPosition() const
 {
@@ -17,27 +17,12 @@ char RPSFight::getPiece(int player) const
 {
     if (player == 1)
     {
-        if (islower(currPiece))
-        {
-            return currPiece;
-        }
-        else
-        {
-            return opponentPiece;
-        }
+        return playerOnePiece;
     }
     else
     {
-        if (isupper(currPiece))
-        {
-            return currPiece;
-        }
-        else
-        {
-            return opponentPiece;
-        }
+        return playerTwoPiece;
     }
-    return opponentPiece;
 }
 
 void RPSFight::setPosition(RPSpoint pos)
@@ -49,13 +34,13 @@ void RPSFight::setWinner(int playerNum)
 {
     winner = playerNum;
 }
-void RPSFight::setOpponentPiece(char piece)
+void RPSFight::setPlayerOnePiece(char piece)
 {
-    opponentPiece = piece;
+    playerOnePiece = piece;
 }
-void RPSFight::setCurrPiece(char piece)
+void RPSFight::setPlayerTwoPiece(char piece)
 {
-    currPiece = piece;
+    playerTwoPiece = piece;
 }
 int  RPSFight::getWinner()const
 {
