@@ -42,12 +42,11 @@ void RPSGame::updateJokerMovingPieces()
 					break;
 				}
 				isupper(gameBoard.board[i][j].getPiece()) ? playerOne.setNumOfPieces(pieceIndex,
-						playerOne.numOfPieces[pieceIndex] + 1)
-						: playerTwo.setNumOfPieces(pieceIndex,
-								playerTwo.numOfPieces[pieceIndex] + 1);
+																					 playerOne.numOfPieces[pieceIndex] + 1)
+														  : playerTwo.setNumOfPieces(pieceIndex,
+																					 playerTwo.numOfPieces[pieceIndex] + 1);
 
-				cout << "check1: "<<  playerTwo.numOfPieces[pieceIndex] << endl;
-
+				cout << "check1: " << playerTwo.numOfPieces[pieceIndex] << endl;
 			}
 		}
 	}
@@ -58,34 +57,34 @@ This function changes joker representation
 Input - previous jokerRep, new jokerRep and inidication for current player
  */
 void RPSGame::updateJokerChange(char prevJokerRep, char newRep,
-		bool isPlayerOne)
+								bool isPlayerOne)
 {
 	//remove one piece from number of prev piece
 	switch (prevJokerRep)
 	{
 	case ROCK:
 		isPlayerOne ? playerOne.setNumOfPieces(0,
-				playerOne.numOfPieces[0] - 1)
-				: playerTwo.setNumOfPieces(0,
-						playerTwo.numOfPieces[0] - 1);
+											   playerOne.numOfPieces[0] - 1)
+					: playerTwo.setNumOfPieces(0,
+											   playerTwo.numOfPieces[0] - 1);
 		break;
 	case PAPER:
 		isPlayerOne ? playerOne.setNumOfPieces(1,
-				playerOne.numOfPieces[1] - 1)
-				: playerTwo.setNumOfPieces(1,
-						playerTwo.numOfPieces[1] - 1);
+											   playerOne.numOfPieces[1] - 1)
+					: playerTwo.setNumOfPieces(1,
+											   playerTwo.numOfPieces[1] - 1);
 		break;
 	case SCISSOR:
 		isPlayerOne ? playerOne.setNumOfPieces(2,
-				playerOne.numOfPieces[2] - 1)
-				: playerTwo.setNumOfPieces(2,
-						playerTwo.numOfPieces[2] - 1);
+											   playerOne.numOfPieces[2] - 1)
+					: playerTwo.setNumOfPieces(2,
+											   playerTwo.numOfPieces[2] - 1);
 		break;
 	case BOMB:
 		isPlayerOne ? playerOne.setNumOfPieces(3,
-				playerOne.numOfPieces[3] - 1)
-				: playerTwo.setNumOfPieces(3,
-						playerTwo.numOfPieces[3] - 1);
+											   playerOne.numOfPieces[3] - 1)
+					: playerTwo.setNumOfPieces(3,
+											   playerTwo.numOfPieces[3] - 1);
 		break;
 		break;
 	}
@@ -94,28 +93,28 @@ void RPSGame::updateJokerChange(char prevJokerRep, char newRep,
 	{
 	case ROCK:
 		isPlayerOne ? playerOne.setNumOfPieces(0,
-				playerOne.numOfPieces[0] + 1)
-				: playerTwo.setNumOfPieces(0,
-						playerTwo.numOfPieces[0] + 1);
+											   playerOne.numOfPieces[0] + 1)
+					: playerTwo.setNumOfPieces(0,
+											   playerTwo.numOfPieces[0] + 1);
 		;
 		break;
 	case PAPER:
 		isPlayerOne ? playerOne.setNumOfPieces(1,
-				playerOne.numOfPieces[1] + 1)
-				: playerTwo.setNumOfPieces(1,
-						playerTwo.numOfPieces[1] + 1);
+											   playerOne.numOfPieces[1] + 1)
+					: playerTwo.setNumOfPieces(1,
+											   playerTwo.numOfPieces[1] + 1);
 		break;
 	case SCISSOR:
 		isPlayerOne ? playerOne.setNumOfPieces(2,
-				playerOne.numOfPieces[2] + 1)
-				: playerTwo.setNumOfPieces(2,
-						playerTwo.numOfPieces[2] + 1);
+											   playerOne.numOfPieces[2] + 1)
+					: playerTwo.setNumOfPieces(2,
+											   playerTwo.numOfPieces[2] + 1);
 		break;
 	case BOMB:
 		isPlayerOne ? playerOne.setNumOfPieces(3,
-				playerOne.numOfPieces[3] + 1)
-				: playerTwo.setNumOfPieces(3,
-						playerTwo.numOfPieces[3] + 1);
+											   playerOne.numOfPieces[3] + 1)
+					: playerTwo.setNumOfPieces(3,
+											   playerTwo.numOfPieces[3] + 1);
 		break;
 		break;
 	}
@@ -126,25 +125,26 @@ Input- move object, joker's change object and players turn
 Output- returns true if gameOver, false otherwise
  */
 bool RPSGame::movePiece(unique_ptr<Move> &move,
-		bool isPlayerOneTurn,bool &isBadFormat)
+						bool isPlayerOneTurn, bool &isBadFormat)
 {
 	RPSFight fights = RPSFight();
 	std::vector<unique_ptr<FightInfo>> initFights;
-	bool gameOverIntenral  = false;
+	bool gameOverIntenral = false;
 	bool wasFight = false;
 	isBadFormat = false;
-	numOfMoves ++; // we increment the numerator for each move
+	numOfMoves++;						 // we increment the numerator for each move
 	int from_x = move->getFrom().getX(); //col
 	int from_y = move->getFrom().getY(); //row
-	int to_x = move->getTo().getX(); //col
-	int to_y = move->getTo().getY(); //row
-	cout <<"From x: "<<from_x<<endl;
-	cout <<"From y: "<<from_y<<endl;
-	cout <<"to x: "<<to_x<<endl;
-	cout <<"to y: "<<to_y<<endl;
+	int to_x = move->getTo().getX();	 //col
+	int to_y = move->getTo().getY();	 //row
+	cout << "From x: " << from_x << endl;
+	cout << "From y: " << from_y << endl;
+	cout << "to x: " << to_x << endl;
+	cout << "to y: " << to_y << endl;
 	if (!isLegalMove(move, isPlayerOneTurn)) //noy changed!
 	{
-		if (isPlayerOneTurn){
+		if (isPlayerOneTurn)
+		{
 			setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 		}
 		else
@@ -156,7 +156,7 @@ bool RPSGame::movePiece(unique_ptr<Move> &move,
 	if (gameBoard.board[to_x][to_y].getPiece() == 0)
 	{
 		Cell::updateCell(gameBoard.board[to_x][to_y], gameBoard.board[from_x][from_y].getPiece(),
-				gameBoard.board[from_x][from_y].getIsJoker());
+						 gameBoard.board[from_x][from_y].getIsJoker());
 		Cell::cleanCell(gameBoard.board[from_x][from_y]);
 	}
 	else //fight!
@@ -170,9 +170,9 @@ bool RPSGame::movePiece(unique_ptr<Move> &move,
 			RPSpoint Pos2(from_x, from_y);
 		}
 		isGameOver = fight(isPlayerOneTurn, to_x, to_y,
-				gameBoard.board[from_x][from_y].getPiece(),
-				gameBoard.board[from_x][from_y].getIsJoker(), fights, initFights, Pos1, Pos2); //need to add paramerrerd to fight!!
-		gameOverIntenral= isGameOver;
+						   gameBoard.board[from_x][from_y].getPiece(),
+						   gameBoard.board[from_x][from_y].getIsJoker(), fights, initFights, Pos1, Pos2); //need to add paramerrerd to fight!!
+		gameOverIntenral = isGameOver;
 		isBadFormat = false;
 		Cell::cleanCell(gameBoard.board[from_x][from_y]);
 		/*
@@ -195,7 +195,7 @@ bool RPSGame::movePiece(unique_ptr<Move> &move,
 	//no joker change
 	if (playerJokerChange != NULL)
 	{
-		cout<<"inside if!"<<endl;
+		cout << "inside if!" << endl;
 		int x_joker = playerJokerChange->getJokerChangePosition().getX(); //row
 
 		int y_joker = playerJokerChange->getJokerChangePosition().getY(); //col
@@ -203,7 +203,8 @@ bool RPSGame::movePiece(unique_ptr<Move> &move,
 		char new_rep = playerJokerChange->getJokerNewRep();
 		if (new_rep == 'E') //means bad format
 		{
-			if (isPlayerOneTurn){
+			if (isPlayerOneTurn)
+			{
 				isBadFormat = true;
 				return true;
 			}
@@ -222,10 +223,11 @@ bool RPSGame::movePiece(unique_ptr<Move> &move,
 		}
 		updateJokerChange(toupper(gameBoard.board[x_joker][y_joker].getPiece()), toupper(new_rep), isPlayerOneTurn);
 		Cell::updateCell(gameBoard.board[x_joker][y_joker],
-				isPlayerOneTurn ? new_rep : tolower(new_rep), true);
+						 isPlayerOneTurn ? new_rep : tolower(new_rep), true);
 	}
 
-	if (wasFight) {
+	if (wasFight)
+	{
 		isPlayerOneTurn ? playerAlgoTwo->notifyOnOpponentMove(*move) : playerAlgoOne->notifyOnOpponentMove(*move);
 		isPlayerOneTurn ? playerAlgoOne->notifyFightResult(fights) : playerAlgoTwo->notifyFightResult(fights);
 	}
@@ -248,32 +250,32 @@ int RPSGame::makeMove()
 	bool isPlayerOneTurn = true;
 	bool isGameOverInternal = false;
 	bool isBadFormat = false;
-	while (xPiecePlayerOne != -2 && xPiecePlayerOne != -3 && xPiecePlayerTwo != -2  && xPiecePlayerTwo != -3 && numOfMoves < MAX_NUM_OF_MOVES)
+	while (xPiecePlayerOne != EOF_MOVE_ERR && xPiecePlayerOne != READ_LINE_ERR && xPiecePlayerTwo != EOF_MOVE_ERR && xPiecePlayerTwo != READ_LINE_ERR && numOfMoves < MAX_NUM_OF_MOVES)
 	{
-		isBadFormat  = false;
-//		unique_ptr<JokerChange> playerOneJokerChange =
-//				playerAlgoOne->getJokerChange();
-//		unique_ptr<JokerChange> playerTwoJokerChange =
-//				playerAlgoTwo->getJokerChange();
+		isBadFormat = false;
+		//		unique_ptr<JokerChange> playerOneJokerChange =
+		//				playerAlgoOne->getJokerChange();
+		//		unique_ptr<JokerChange> playerTwoJokerChange =
+		//				playerAlgoTwo->getJokerChange();
 
 		// cout<<"GOT JOKER CHANGES!!!!"<<endl;
 		// cout<<"Joker change ONE to "<<playerOneJokerChange->getJokerChangePosition().getX()<<", "<<playerOneJokerChange->getJokerChangePosition().getY()<<"new rep: "<<playerOneJokerChange->getJokerNewRep()<<endl;
 		// cout<<"Joker change TWO to "<<playerTwoJokerChange->getJokerChangePosition().getX()<<", "<<playerTwoJokerChange->getJokerChangePosition().getY()<<"new rep: "<<playerTwoJokerChange->getJokerNewRep()<<endl;
 
-
 		isGameOverInternal = false;
 		if (xPiecePlayerOne != 0)
 		{
 			isPlayerOneTurn = true;
-			isGameOverInternal = movePiece(move,isPlayerOneTurn,isBadFormat);
-			cout<<"isGameOverInternal: "<<isGameOverInternal<<endl;
+			isGameOverInternal = movePiece(move, isPlayerOneTurn, isBadFormat);
+			cout << "isGameOverInternal: " << isGameOverInternal << endl;
 			PrintBoardToConsole();
 			if (isGameOverInternal)
 			{
-				if(isBadFormat){
-					cout<<"enter isGameOverInternal"<<endl;
-					cout<<"ERROR AI: ILLEGAL MOVE"<<endl;
-					setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);	
+				if (isBadFormat)
+				{
+					cout << "enter isGameOverInternal" << endl;
+					cout << "ERROR AI: ILLEGAL MOVE" << endl;
+					setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 				}
 				// cout<<"enter isGameOverInternal"<<endl;
 				// cout<<"ERROR AI: ILLEGAL MOVE"<<endl;
@@ -284,19 +286,20 @@ int RPSGame::makeMove()
 		move = std::move(playerAlgoTwo->getMove());
 		xPiecePlayerTwo = move->getFrom().getX();
 
-		if (xPiecePlayerTwo != -2 && xPiecePlayerTwo != -3)
+		if (xPiecePlayerTwo != EOF_MOVE_ERR && xPiecePlayerTwo != READ_LINE_ERR)
 		{
-			if (xPiecePlayerTwo != 0)
+			if (xPiecePlayerTwo != EMPTY_LINE)
 			{
 				isPlayerOneTurn = false;
-				isGameOverInternal = movePiece(move,isPlayerOneTurn,isBadFormat);
-				cout<<"isGameOverInternal: "<<isGameOverInternal<<endl;
+				isGameOverInternal = movePiece(move, isPlayerOneTurn, isBadFormat);
+				cout << "isGameOverInternal: " << isGameOverInternal << endl;
 				PrintBoardToConsole();
 				if (isGameOverInternal)
 				{
-					if(isBadFormat){
-						cout<<"enter isGameOverInternal"<<endl;
-						cout<<"ERROR AI: ILLEGAL MOVE"<<endl;
+					if (isBadFormat)
+					{
+						cout << "enter isGameOverInternal" << endl;
+						cout << "ERROR AI: ILLEGAL MOVE" << endl;
 						setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 					}
 					// cout<<"enter isGameOverInternal"<<endl;
@@ -306,13 +309,13 @@ int RPSGame::makeMove()
 				}
 			}
 		}
-		else if (xPiecePlayerTwo == -3)
+		else if (xPiecePlayerTwo == READ_LINE_ERR)
 		{
 			cout << "Error while reading move file. Exiting game" << endl;
 			//we need to remeber to close the stream!!!
 			//playerAlgoTwo->closeStream();
 			//playerAlgoOne->closeStream();
-			return -1;
+			return  ERROR_DURING_MOVE;
 		}
 		else
 		{
@@ -326,83 +329,81 @@ int RPSGame::makeMove()
 
 	} //while
 	//game stopped
-	if(numOfMoves >=100){
+	if (numOfMoves >= 100)
+	{
 		setGameOver(0, TIE_NO_WINNER);
-		gameOverReason = TOO_MANY_MOVES ;
+		gameOverReason = TOO_MANY_MOVES;
 		//playerAlgoTwo->closeStream();
 		//playerAlgoOne->closeStream();
-		return 0;
+		return MOVE_DONE_SUCC;
 	}
 	if (!isGameOverInternal)
 	{
-		if (xPiecePlayerOne == -2) //EOFcase player 1 
+		if (xPiecePlayerOne == EOF_MOVE_ERR) //EOFcase player 1
 		{
-			 move = playerAlgoTwo->getMove();
-			 xPiecePlayerTwo = move->getFrom().getX();
-			 //playerTwoJokerChange =playerAlgoTwo->getJokerChange();
-			while (xPiecePlayerTwo != -2 && xPiecePlayerTwo != -3)
+			move = playerAlgoTwo->getMove();
+			xPiecePlayerTwo = move->getFrom().getX();
+			//playerTwoJokerChange =playerAlgoTwo->getJokerChange();
+			while (xPiecePlayerTwo != EOF_MOVE_ERR && xPiecePlayerTwo != READ_LINE_ERR)
 			{
 				isBadFormat = false;
-				if (xPiecePlayerTwo != 0)
+				if (xPiecePlayerTwo != EMPTY_LINE) 
 				{
 					isPlayerOneTurn = false;
-					isGameOverInternal = movePiece(move, isPlayerOneTurn,isBadFormat);
+					isGameOverInternal = movePiece(move, isPlayerOneTurn, isBadFormat);
 					PrintBoardToConsole();
 					if (isGameOverInternal)
 					{
-						if(isBadFormat){
-							cout<<"enter isGameOverInternal"<<endl;
+						if (isBadFormat)
+						{
+							cout << "enter isGameOverInternal" << endl;
 							setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
 						}
-						cout<<"enter isGameOverInternal"<<endl;
-						return -1;
+						cout << "enter isGameOverInternal" << endl;
+						return ERROR_DURING_MOVE;
 					}
 				}
 				move = playerAlgoTwo->getMove();
 				xPiecePlayerTwo = move->getFrom().getX();
 			}
-			if (xPiecePlayerTwo == -3)
+			if (xPiecePlayerTwo == READ_LINE_ERR)
 			{
 				cout << "Error while reading move file. Exiting game" << endl;
 				//we need to remeber to close the stream!!!
 				//playerAlgoTwo->closeStream();
 				//playerAlgoOne->closeStream();
-				return -1;
+				return ERROR_DURING_MOVE;
 			}
 		}
-		else if (xPiecePlayerTwo == -2) //player 2 eof
+		else if (xPiecePlayerTwo == EOF_MOVE_ERR) //player 2 eof
 		{
 			//  move1 = playerAlgoOne->getMove();
 			//  xPiecePlayerOne = move1->getFrom().getX();
 			//playerOneJokerChange =playerAlgoOne->getJokerChange();
-			while (xPiecePlayerOne != -2 && xPiecePlayerOne != -3)
+			while (xPiecePlayerOne != EOF_MOVE_ERR && xPiecePlayerOne != READ_LINE_ERR)
 			{
 				isBadFormat = false;
-				if (xPiecePlayerOne != 0)
+				if (xPiecePlayerOne != EMPTY_LINE)
 				{
 					isPlayerOneTurn = true;
-					isGameOverInternal = movePiece(move, isPlayerOneTurn,isBadFormat);
+					isGameOverInternal = movePiece(move, isPlayerOneTurn, isBadFormat);
 					PrintBoardToConsole();
 					if (isGameOverInternal)
 					{
-						if(isBadFormat){
-							cout<<"enter isGameOverInternal"<<endl;
+						if (isBadFormat)
+						{
 							setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
 						}
-						return -1; //game over
+						return ERROR_DURING_MOVE; //game over
 					}
 				}
 				move = playerAlgoOne->getMove();
 				xPiecePlayerOne = move->getFrom().getX();
 			}
-			if (xPiecePlayerOne == -3)
+			if (xPiecePlayerOne == READ_LINE_ERR)
 			{
 				cout << "Error while reading move file. Exiting game" << endl;
-				//we need to remeber to close the stream!!!
-
-				//playerAlgoTwo->closeStream();
-				//playerAlgoOne->closeStream();
-				return -1;
+				return ERROR_DURING_MOVE;
 			}
 		}
 
@@ -419,7 +420,7 @@ int RPSGame::makeMove()
 
 					//playerAlgoTwo->closeStream();
 					//playerAlgoOne->closeStream();
-					return 0;
+					return MOVE_DONE_SUCC;
 				}
 			}
 			else
@@ -430,7 +431,7 @@ int RPSGame::makeMove()
 
 					//playerAlgoTwo->closeStream();
 					//playerAlgoOne->closeStream();
-					return 0;
+					return MOVE_DONE_SUCC;
 				}
 			}
 			setGameOver(0, TIE_NO_WINNER);
@@ -439,12 +440,12 @@ int RPSGame::makeMove()
 
 	//playerAlgoTwo->closeStream();
 	//playerAlgoOne->closeStream();
-	return 0;
+	return MOVE_DONE_SUCC;
 }
 
 /*
- Return -1 if there is bad format error or -2 if there is getline error
- and 0 if everything is ok
+ Return BAD_FORMAT_POS_ERR if there is bad format error or -2 if there is getline error
+ and GAME_OVER_SUCC (0) if everything is ok
  */
 
 int RPSGame::startGame()
@@ -453,22 +454,21 @@ int RPSGame::startGame()
 	// std::vector<unique_ptr<PiecePosition>> vectorToFill2;
 	//meand bad format err
 	int initResult = checkBadFormat();
-	if (initResult == -1)
+	if (initResult == BAD_FORMAT_POS_ERR)
 	{
-		return -1;
+		return BAD_FORMAT_POS_ERR;
 	}
-	else if (initResult == -2)
+	else if (initResult == READ_LINE_POS_ERR)
 	{
 		cout << "Error: could not read line in file. exiting..." << endl;
-		return -2;
+		return READ_LINE_POS_ERR;
 	}
 	bool isPlayerOneTurn = true;
 	bool isAboutToMove = true;
-	cout << "beforecheckGameOver" << endl;
 	if (checkGameOver(isAboutToMove, isPlayerOneTurn))
 	{
-		
-		return 0;
+
+		return GAME_OVER_SUCC;
 	}
 
 	//If we got here the board is initialized! now we need to make a move.
@@ -517,8 +517,8 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
 		if (to_y != from_y)
 		{
 			cout
-			<< "Error: illegal move - can move only one cell up/down/left/right "
-			<< endl;
+				<< "Error: illegal move - can move only one cell up/down/left/right "
+				<< endl;
 			return false;
 		}
 	}
@@ -527,16 +527,16 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
 		if (to_x != from_x)
 		{
 			cout
-			<< "Error: illegal move - can move only one cell up/down/left/right"
-			<< endl;
+				<< "Error: illegal move - can move only one cell up/down/left/right"
+				<< endl;
 			return false;
 		}
 	}
 	else
 	{
 		cout
-		<< "Error: illegal move - can move only one cell up/down/left/right"
-		<< endl;
+			<< "Error: illegal move - can move only one cell up/down/left/right"
+			<< endl;
 		return false;
 	}
 
@@ -547,8 +547,8 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
 			if (isupper(gameBoard.board.at(to_x).at(to_y).getPiece()))
 			{
 				cout
-				<< "Error: you are trying to move to a cell taken by your own piece"
-				<< endl;
+					<< "Error: you are trying to move to a cell taken by your own piece"
+					<< endl;
 				return false;
 			}
 		}
@@ -557,8 +557,8 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
 			if (islower(gameBoard.board.at(to_x).at(to_y).getPiece()))
 			{
 				cout
-				<< "Error: you are trying to move to a cell taken by your own piece"
-				<< endl;
+					<< "Error: you are trying to move to a cell taken by your own piece"
+					<< endl;
 				return false;
 			}
 		}
@@ -572,8 +572,8 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
  output- updated array with relevant piece , return true is piece is ok otherwise false!
  */
 bool RPSGame::countNumOfPieces(const int playerNum, int numOfPositionedPieces[],
-		const int piece)
-{ 
+							   const int piece)
+{
 	switch (piece)
 	{
 	case ROCK:
@@ -623,7 +623,7 @@ bool RPSGame::checkPieceOverflow(int numOfPieces[])
 	if (numOfPieces[0] > ROCKS_NUM || numOfPieces[1] > PAPERS_NUM || numOfPieces[2] > SCISSORS_NUM || numOfPieces[3] > BOMBS_NUM || numOfPieces[4] > JOKERS_NUM || numOfPieces[5] > FLAGS_NUM)
 	{
 		cout << "Error: a piece type appears in file more than its number"
-				<< endl;
+			 << endl;
 
 		return true;
 	}
@@ -634,7 +634,7 @@ bool RPSGame::checkPieceOverflow(int numOfPieces[])
  This function locate players on the board.
  Input - player number, vectorTofill (that vector contain all players pieces), isPlayerLegalFormat will indicate if there s bad format
  numOFPieces array in order to check if all the pieces are located in the board, fights and initFights vector (for notify function)
- Output  -1 if there is bad format on player one or -2 if there is a problem with getline func
+ Output  BAD_FORMAT_POS_ERR(-1) if there is bad format on player one or READ_LINE_POS_ERR (-2) if there is a problem with getline func
  */
 int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>> &vectorToFill, bool &isPlayerLegalFormat, int numOfPositionedPieces[], RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights)
 {
@@ -655,16 +655,16 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 		isJoker = false;
 		inputPiece = vectorToFill[i]->getPiece();
 		// In case the line if bad forrmated
-		if (inputPiece == -1)
+		if (inputPiece == BAD_FORMAT_POS_ERR)
 		{
 			isPlayerLegalFormat = false;
-			return -1;
+			return BAD_FORMAT_POS_ERR;
 		}
 
-		else if (inputPiece == -2)
+		else if (inputPiece == READ_LINE_POS_ERR)
 		{
 			isPlayerLegalFormat = false;
-			return -2;
+			return READ_LINE_POS_ERR;
 		}
 		else
 		{
@@ -681,7 +681,7 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 				if (!isPieceOkPlayer1)
 				{
 					isPlayerLegalFormat = false;
-					return -1;
+					return BAD_FORMAT_POS_ERR;
 				}
 			}
 			else
@@ -690,16 +690,16 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 				if (!isPieceOkPlayer2)
 				{
 					isPlayerLegalFormat = false;
-					return -1;
+					return BAD_FORMAT_POS_ERR;
 				}
 			}
 			//position is illegal - tried to locate 2 pieces of same player in same position
 			if (board[x - 1][y - 1] != 0)
 			{
 				cout
-				<< "Error: two or more pieces are positioned on the same location"
-				<< endl;
-				return -1;
+					<< "Error: two or more pieces are positioned on the same location"
+					<< endl;
+				return BAD_FORMAT_POS_ERR;
 			}
 			//else
 			board[x - 1][y - 1] = inputPiece;
@@ -713,9 +713,9 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 				if (gameBoard.board.at(x).at(y).getPiece() != 0)
 				{
 					cout
-					<< "Error: two or more pieces are positioned on the same location for player " <<playerNum	<< endl;
+						<< "Error: two or more pieces are positioned on the same location for player " << playerNum << endl;
 					isPlayerLegalFormat = false;
-					return -1;
+					return BAD_FORMAT_POS_ERR;
 				}
 				else
 				{
@@ -732,20 +732,21 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 					if (gameBoard.board.at(x).at(y).getPiece() == tolower(gameBoard.board.at(x).at(y).getPiece()))
 					{
 						isPlayerLegalFormat = false;
-						cout << "Error: two or more pieces are positioned on the same location for player " <<playerNum	<< endl;
-						return -1;
+						cout << "Error: two or more pieces are positioned on the same location for player " << playerNum << endl;
+						return BAD_FORMAT_POS_ERR;
 					}
 					else
 					{
-						RPSpoint player1Pos(vectorToFill[i]->getPosition().getX(), vectorToFill[i]->getPosition().getY());//noy changes!
-						RPSpoint player2Pos(vectorToFill[i]->getPosition().getX(), vectorToFill[i]->getPosition().getY());//noy changes
-						if (isJoker){
+						RPSpoint player1Pos(vectorToFill[i]->getPosition().getX(), vectorToFill[i]->getPosition().getY()); //noy changes!
+						RPSpoint player2Pos(vectorToFill[i]->getPosition().getX(), vectorToFill[i]->getPosition().getY()); //noy changes
+						if (isJoker)
+						{
 							fight(false, x, y, tolower(vectorToFill[i]->getJokerRep()), isJoker, fights, initFights,
-									player1Pos, player2Pos);
+								  player1Pos, player2Pos);
 						}
 						else
 							fight(false, x, y, tolower(inputPiece), isJoker, fights, initFights,
-									player1Pos, player2Pos);
+								  player1Pos, player2Pos);
 						//playerAlgoOne->notifyFightResult(fights);
 						//playerAlgoTwo->notifyFightResult(fights);
 					}
@@ -756,7 +757,7 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 						Cell::updateCell(gameBoard.board.at(x).at(y), tolower(vectorToFill[i]->getJokerRep()), isJoker);
 					else
 						Cell::updateCell(gameBoard.board.at(x).at(y), tolower(inputPiece),
-								isJoker);
+										 isJoker);
 				}
 			}
 		}
@@ -766,29 +767,29 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 	if (checkPieceOverflow(numOfPositionedPieces))
 	{
 		isPlayerLegalFormat = false;
-		return -1;
+		return BAD_FORMAT_POS_ERR;
 	}
 	//check if there are not enough flags positioned on board
 	if (flagCnt < FLAGS_NUM)
 	{
 		isPlayerLegalFormat = false;
 		cout << "Error: Missing flags - not all flags are positioned on board for player " << playerNum << endl;
-		return -1;
+		return BAD_FORMAT_POS_ERR;
 	}
-	return 0;
+	return NO_BAD_FORMAT_ERR;
 }
 
 /*
  This function check initial position and locate players on the board.
  Input - two boolean fields that indicate if there was a problen in players position format
  Output -  
- -1 if there is an error
- -2 if there is an read error
- 0 if there is no bad formats problem or errors.
+ BAD_FORMAT_POS_ERR(-1) if there is an error
+ READ_LINE_POS_ERR(-2) if there is an read error
+ NO_BAD_FORMAT_ERR (0) if there is no bad formats problem or errors.
  */
 int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
-		bool &isPlayerTwoLegalFormat,
-		RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights)
+								  bool &isPlayerTwoLegalFormat,
+								  RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights)
 {
 	cout << "in checkPositionOnBoard" << endl;
 	std::vector<unique_ptr<PiecePosition>> vectorToFillPlayerOne;
@@ -810,32 +811,32 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 	int resultPlayerTwo = locateOnBoard(2, vectorToFillPlayerTwo, isPlayerTwoLegalFormat, numOfPositionedPieces, fights, initFights);
 	updateJokerMovingPieces();
 
-	cout << "check2: " << playerTwo.numOfPieces[2]  << endl << endl;
-
+	cout << "check2: " << playerTwo.numOfPieces[2] << endl
+		 << endl;
 
 	//todo deltee this
 	cout << "player1" << endl;
-	for (int i= 0; i <6; i ++){
+	for (int i = 0; i < 6; i++)
+	{
 		cout << playerOne.numOfPieces[i] << endl;
 	}
 	cout << endl;
 	cout << "player2" << endl;
 
-	for (int i= 0; i <6; i ++){
+	for (int i = 0; i < 6; i++)
+	{
 		cout << playerTwo.numOfPieces[i] << endl;
 	}
 
-
-
-	if (resultPlayerOne == -1 || resultPlayerOne == -2)
+	if (resultPlayerOne == BAD_FORMAT_POS_ERR || resultPlayerOne == READ_LINE_POS_ERR)
 	{
-		return -1;
+		return BAD_FORMAT_POS_ERR;//-1
 	}
-	else if (resultPlayerTwo == -2 || resultPlayerTwo == -1)
+	else if (resultPlayerTwo == READ_LINE_POS_ERR || resultPlayerTwo == BAD_FORMAT_POS_ERR)
 	{
-		return -2;
+		return READ_LINE_POS_ERR; //-2
 	}
-	return 0;
+	return NO_BAD_FORMAT_ERR;
 }
 
 /*
@@ -889,7 +890,7 @@ int RPSGame::checkBadFormat()
 
 	std::vector<unique_ptr<FightInfo>> initFights;
 	int isLegalFormat = checkPositionOnBoard(isPlayerOneLegalFormat,
-			isPlayerTwoLegalFormat, fightInfo, initFights);
+											 isPlayerTwoLegalFormat, fightInfo, initFights);
 	resetGameResults(); //reset the game result as we did in ex1!
 	if (!isPlayerOneLegalFormat && !isPlayerTwoLegalFormat)
 	{
@@ -952,7 +953,7 @@ string RPSGame::ToString(GAME_OVER_TYPE typeGame)
 bool RPSGame::isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
 {
 	bool PositionP1Exists = false, PositioP2Exists = false,
-			moveP1Exists = false, moveP2Exists = false;
+		 moveP1Exists = false, moveP2Exists = false;
 	std::string currentFilename;
 	DIR *dir;
 	struct dirent *ent;
@@ -983,15 +984,15 @@ bool RPSGame::isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseF
 		if (isPlayerOneUseFile && (!PositionP1Exists || !moveP1Exists))
 		{
 			std::cout
-			<< "Error reading temp dirList file in working directory, Exit from Game."
-			<< std::endl;
+				<< "Error reading temp dirList file in working directory, Exit from Game."
+				<< std::endl;
 			return false;
 		}
 		if (isPlayerTwoUseFile && (!PositioP2Exists || !moveP2Exists))
 		{
 			std::cout
-			<< "Error reading temp dirList file in working directory, Exit from Game."
-			<< std::endl;
+				<< "Error reading temp dirList file in working directory, Exit from Game."
+				<< std::endl;
 			return false;
 		}
 		return true;
@@ -999,8 +1000,8 @@ bool RPSGame::isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseF
 	else
 	{
 		std::cout
-		<< "Unable to open temp dirList file in working directory, Exit from Game."
-		<< std::endl;
+			<< "Unable to open temp dirList file in working directory, Exit from Game."
+			<< std::endl;
 		return false;
 	}
 	return false;
@@ -1011,7 +1012,7 @@ bool RPSGame::isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseF
  */
 bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 {
-	cout<<"^^^^^^^^^^^^^^^^^ Inside checkGameOver ^^^^^^^^^^^^^^^^"<<endl; 
+	cout << "^^^^^^^^^^^^^^^^^ Inside checkGameOver ^^^^^^^^^^^^^^^^" << endl;
 	cout << "isBeforeMove =  " << isBeforeMove << endl;
 	Player *currPlayer = &playerOne;
 	Player *nextPlayer = &playerTwo;
@@ -1021,7 +1022,7 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 		nextPlayer = &playerOne;
 	}
 	//currPlayer->isLeftMovingPieces();
-	cout <<"isLeft"<<currPlayer->isLeftMovingPieces()<<endl;
+	cout << "isLeft" << currPlayer->isLeftMovingPieces() << endl;
 
 	if (currPlayer->numOfPieces[5] == 0 && nextPlayer->numOfPieces[5] == 0)
 	{
@@ -1068,6 +1069,17 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 		gameOverReason = ALL_PIECES_EATEN;
 		return true;
 	}
+	if (isBeforeMove && !nextPlayer->isLeftMovingPieces())
+	{
+		cout << "5" << endl;
+		currPlayer->setIsWinner(true);
+		nextPlayer->setIsWinner(false);
+
+		currPlayer->setScore(nextPlayer->getScore() + 1);
+		isGameOver = true;
+		gameOverReason = ALL_PIECES_EATEN;
+		return true;
+	}
 	return false;
 }
 
@@ -1078,10 +1090,10 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
  * Output - true if game if over, otherwise false
  */
 bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
-		bool isCurrPieceJoker, RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights,
-		RPSpoint posOne, RPSpoint posTwo)
+					bool isCurrPieceJoker, RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights,
+					RPSpoint posOne, RPSpoint posTwo)
 {
-	numOfMoves = 0;// we resent the numerator if there is a fight
+	numOfMoves = 0; // we resent the numerator if there is a fight
 	Player *currPlayer = &playerOne;
 	Player *nextPlayer = &playerTwo;
 	RPSpoint *currPos = &posOne;
@@ -1100,8 +1112,9 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 	}
 	char currPlayerPiece = toupper(currPiece);
 	char nextPlayerPiece = toupper(gameBoard.board.at(x).at(y).getPiece());
-	cout<<"Fight begin "<< "currPlayerPiece: "<< currPlayerPiece<<endl;
-	cout<< "nextPlayerPiece: "<< nextPlayerPiece<<endl;
+	cout << "Fight begin "
+		 << "currPlayerPiece: " << currPlayerPiece << endl;
+	cout << "nextPlayerPiece: " << nextPlayerPiece << endl;
 
 	fights.setPosition(*currPos);
 	fights.setOpponentPiece(nextPlayerPiece);
@@ -1109,7 +1122,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 	//Case 1: 2 players in the same type - both should be eaten
 	if (nextPlayerPiece == currPlayerPiece)
 	{
-		cout<<"case1"<<endl;
+		cout << "case1" << endl;
 		switch (nextPlayerPiece)
 		{
 		case FLAG:
@@ -1145,7 +1158,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 	//Case 2: there is flag and current player has another piece
 	else if (nextPlayerPiece == FLAG)
 	{
-		cout<<"case2"<<endl;
+		cout << "case2" << endl;
 		nextPlayer->numOfPieces[5]--;
 		if (currPlayerPiece == BOMB)
 		{
@@ -1156,7 +1169,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 		else
 		{
 			Cell::updateCell(gameBoard.board.at(x).at(y), currPiece,
-					isCurrPieceJoker);
+							 isCurrPieceJoker);
 		}
 		//initFights.push_back(
 		// 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
@@ -1170,7 +1183,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 	//case 3: current player's piece is flag and there is another piece on board
 	else if (currPlayerPiece == FLAG)
 	{
-		cout<<"case3"<<endl;
+		cout << "case3" << endl;
 		currPlayer->numOfPieces[5]--;
 
 		if (nextPlayerPiece == BOMB)
@@ -1191,7 +1204,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 	//case 4: there is bomb and current player has another piece
 	else if (nextPlayerPiece == BOMB)
 	{
-		cout<<"case4"<<endl;
+		cout << "case4" << endl;
 		//bomb exploded!
 		nextPlayer->numOfPieces[3]--;
 		//piece is eaten
@@ -1222,7 +1235,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 	//case 5: current player piece is bomb and on board there is another piece
 	else if (currPlayerPiece == BOMB)
 	{
-		cout<<"case5"<<endl;
+		cout << "case5" << endl;
 		//bomb exploded!
 		currPlayer->numOfPieces[3]--;
 
@@ -1253,7 +1266,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 	//case 6: there is PAPER and current player has another piece
 	else if (nextPlayerPiece == PAPER)
 	{
-		cout<<"case6"<<endl;
+		cout << "case6" << endl;
 
 		if (currPlayerPiece == ROCK)
 		{
@@ -1282,13 +1295,13 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 			initFights.push_back(make_unique<RPSFight>(*ptr));
 
 			Cell::updateCell(gameBoard.board.at(x).at(y), currPiece,
-					isCurrPieceJoker);
+							 isCurrPieceJoker);
 		}
 	}
 	//case 7: player 1 is ROCK and player 2 another piece
 	else if (nextPlayerPiece == ROCK)
 	{
-		cout<<"case7"<<endl;
+		cout << "case7" << endl;
 		if (currPlayerPiece == PAPER)
 		{
 			nextPlayer->numOfPieces[0]--;
@@ -1302,7 +1315,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 			initFights.push_back(make_unique<RPSFight>(*ptr));
 
 			Cell::updateCell(gameBoard.board.at(x).at(y), currPiece,
-					isCurrPieceJoker);
+							 isCurrPieceJoker);
 		}
 		else if (currPlayerPiece == SCISSOR)
 		{
@@ -1321,7 +1334,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 
 	else if (nextPlayerPiece == SCISSOR)
 	{
-		cout<<"case8"<<endl;
+		cout << "case8" << endl;
 		if (currPlayerPiece == PAPER)
 		{
 			fights.setPosition(*currPos);
@@ -1336,7 +1349,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 		}
 		else if (currPlayerPiece == ROCK)
 		{
-			cout<<"Inside case 8 rock!"<<endl;
+			cout << "Inside case 8 rock!" << endl;
 			fights.setWinner(currPlayerNum);
 			//initFights.push_back(
 			// 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), currPlayerNum));
@@ -1347,10 +1360,10 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 			initFights.push_back(make_unique<RPSFight>(*ptr));
 
 			nextPlayer->numOfPieces[2]--;
-			cout<< "gameBoard.board.at(x).at(y)"<<gameBoard.board[x][y].getPiece()<<endl;
-			cout<<"curr piece"<<currPiece<<endl;
+			cout << "gameBoard.board.at(x).at(y)" << gameBoard.board[x][y].getPiece() << endl;
+			cout << "curr piece" << currPiece << endl;
 			Cell::updateCell(gameBoard.board.at(x).at(y), currPiece,
-					isCurrPieceJoker);
+							 isCurrPieceJoker);
 		}
 	}
 	return checkGameOver(false, isPlayerOneTurn);
@@ -1422,8 +1435,8 @@ void RPSGame::printOutputFile(const string &outputFile)
 		output << "Winner: 0" << endl;
 	}
 	output << "Reason: "
-			<< ToString(getGameOverReason())
-			<< endl;
+		   << ToString(getGameOverReason())
+		   << endl;
 	output << endl; // the third line must be en empty line!
 	printBoardToFile(output);
 	output.close();
@@ -1436,7 +1449,7 @@ Output- true if we successfuly init playerAlogrithms or false otherwise;
  */
 bool RPSGame::initGameMethod(string gameMethod)
 {
-	cout << "in initGameMethod"<<  endl;
+	cout << "in initGameMethod" << endl;
 	bool isPlayerOneUseFile = false;
 	bool isPlayerTwoUseFile = false;
 	if (gameMethod.compare("auto-vs-file") == 0)
@@ -1471,7 +1484,8 @@ Output- true if we successfuly init playerAlogrithms or false otherwise;
 bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile)
 {
 	cout << "in initPlayerAlgo" << endl;
-	if (isPlayerOneUseFile || isPlayerTwoUseFile){
+	if (isPlayerOneUseFile || isPlayerTwoUseFile)
+	{
 		if (!isAllGameFilesExists(isPlayerOneUseFile, isPlayerTwoUseFile))
 			return false;
 	}
@@ -1522,7 +1536,7 @@ void RPSGame::PrintBoardToConsole()
 			}
 			else
 			{
-				cout <<" "<< gameBoard.board[j][i].getPiece() << " ";
+				cout << " " << gameBoard.board[j][i].getPiece() << " ";
 			}
 		}
 		cout << endl;

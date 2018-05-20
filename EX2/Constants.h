@@ -47,3 +47,18 @@ using namespace std;
 #define OUTPUT_FILENAME "rps.output"
 
 #define MAX_NUM_OF_MOVES 100
+
+// move macros
+#define ERROR_DURING_MOVE -1
+#define JOKER_REP_ERROR -1
+#define BAD_FORMAT_ERR -1
+#define EOF_MOVE_ERR -2
+#define READ_LINE_ERR -3
+
+//position macros
+#define BAD_FORMAT_POS_ERR -1
+#define READ_LINE_POS_ERR -2
+#define NO_BAD_FORMAT_ERR 0 
+#define GAME_OVER_SUCC 0
+#define MOVE_DONE_SUCC 0 
+#define EMPTY_LINE 0 
