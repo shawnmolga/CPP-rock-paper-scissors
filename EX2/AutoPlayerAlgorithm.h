@@ -52,9 +52,9 @@ public:
 	double calcMaterial(Cell cell);
 	double calcDiscovery(AICell cell);
 	double calcScore(double material, double discovery, double reveal);
-	void countProtectingPieces(int i, int j, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces, bool amIplayerOne);
+	void countProtectingPieces(int i, int j, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces);
 	double calcDistanceFromBombOrFlag();
-	int calcDistanceFromPiece(int piece_x, int piece_y, bool amIPlayerOne);
+	int calcDistanceFromPiece(int piece_x, int piece_y);
 	void updateFlagProbability();
 	bool tryToFight(int to_x, int to_y, char myPiece, bool isJoker);
 	bool fight(int row, int col, char myPiece, char opponentPiece, bool isMyPieceJoker);
