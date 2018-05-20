@@ -75,7 +75,7 @@ public:
 											   bool isPlayerOne);
 
 							
-		bool movePiece( unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJokerChange, bool isPlayerOneTurn);
+		bool movePiece( unique_ptr<Move> &move, unique_ptr<JokerChange> &playerJokerChange, bool isPlayerOneTurn, bool &isBadFormat);
 		int makeMove();
 		bool initGameMethod(string gameMethod);
 		void PrintBoardToConsole();
