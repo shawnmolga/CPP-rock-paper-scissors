@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 		cout
 			<< "Usage: Program should get one argument of game method: 'auto-vs-file' / 'auto-vs-auto' / 'file-vs-file' / 'file-vs-auto'"
 			<< endl;
-		return 0;
+		return GAME_OVER_SUCC;
 	}
 	string gameMethod = argv[1];
 
@@ -22,16 +22,16 @@ int main(int argc, char *argv[])
 	//check if all files exist and named correctly
 	if (!game->initGameMethod(gameMethod))
 	{
-		return -1;
+		return BAD_FORMAT_ERR;
 	}
-	int isOK = 0;
+	int isOK = GAME_OVER_SUCC;
 	isOK = game->startGame();
-	if (isOK == -1 || isOK == -2)
+	if (isOK == BAD_FORMAT_ERR || isOK == READ_LINE_POS_ERR)
 	{
 		game->printOutputFile(OUTPUT_FILENAME);
-		return -1;
+		return BAD_FORMAT_ERR; //return -1
 	}
 
 	game->printOutputFile(OUTPUT_FILENAME);
-	return 0;
+	return GAME_OVER_SUCC; //return 0
 }

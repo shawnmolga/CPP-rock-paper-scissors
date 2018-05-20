@@ -268,7 +268,7 @@ bool RPSgameManager::checkPositioningFormat(const string &line,
 		return false;
 	}
 	int nextIndex = getPositionFromLine(pieceIndex + 1, line, row, col);
-	if (nextIndex == -1)
+	if (nextIndex == -1) 
 		return false;
 	//check if position is legal
 	if ((row < 1 || row > ROWS) || (col < 1 || col > COLS))
