@@ -1121,11 +1121,11 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 	char nextPlayerPiece = toupper(gameBoard.board.at(x).at(y).getPiece());
 	ptr->setPlayerOnePiece(currPlayerNum == 1 ? currPlayerPiece : nextPlayerPiece);
 	ptr->setPlayerTwoPiece(nextPlayerNum == 1 ? currPlayerPiece : nextPlayerPiece);
-	ptr->setPosition(*currPos);
+	ptr->setPosition(*NextPlayerPos);
 	cout<<"Fight begin "<< "currPlayerPiece: "<< currPlayerPiece<<endl;
 	cout<< "nextPlayerPiece: "<< nextPlayerPiece<<endl;
 
-	fights.setPosition(*currPos);
+	fights.setPosition(*NextPlayerPos);
 	fights.setPlayerOnePiece(ptr->getPiece(1));
 	fights.setPlayerTwoPiece(ptr->getPiece(2));
 	//Case 1: 2 players in the same type - both should be eaten
