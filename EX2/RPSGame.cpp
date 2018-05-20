@@ -800,6 +800,7 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 	std::vector<unique_ptr<PiecePosition>> vectorToFillPlayerTwo;
 
 	playerAlgoOne->getInitialPositions(1, vectorToFillPlayerOne);
+
 	playerAlgoTwo->getInitialPositions(2, vectorToFillPlayerTwo);
 
 	//resetGameResults(); //where to put this?
@@ -834,15 +835,15 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 
 	if (resultPlayerOne == BAD_FORMAT_POS_ERR || resultPlayerOne == READ_LINE_POS_ERR)
 	{
-		return BAD_FORMAT_POS_ERR;//-1
+		return BAD_FORMAT_POS_ERR; 			//-1
 	}
 	else if (resultPlayerTwo == READ_LINE_POS_ERR || resultPlayerTwo == BAD_FORMAT_POS_ERR)
 	{
 		cout<<"enter and return -2"<<endl;
-		return READ_LINE_POS_ERR; //-2
+		return READ_LINE_POS_ERR; 			//-2
 	}
 	return NO_BAD_FORMAT_ERR;
-	
+
 }
 
 /*
@@ -902,17 +903,17 @@ int RPSGame::checkBadFormat()
 	if (!isPlayerOneLegalFormat && !isPlayerTwoLegalFormat)
 	{
 		setGameOver(0, WRONG_FILE_FORMAT_BOTH);
-		return -1;
+		return BAD_FORMAT_POS_ERR;
 	}
 	else if (!isPlayerOneLegalFormat)
 	{
 		setGameOver(2, WRONG_FILE_FORMAT_ONE);
-		return -1;
+		return BAD_FORMAT_POS_ERR;
 	}
 	else if (!isPlayerTwoLegalFormat)
 	{
 		setGameOver(1, WRONG_FILE_FORMAT_TWO);
-		return -1;
+		return BAD_FORMAT_POS_ERR;
 	}
 	const RPSBoard gameBoardConst = gameBoard;
 	playerAlgoOne->notifyOnInitialBoard(gameBoardConst, initFights);
