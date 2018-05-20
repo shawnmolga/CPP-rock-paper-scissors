@@ -297,6 +297,9 @@ update algorithm about initial board and fight results
 void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 		const std::vector<unique_ptr<FightInfo>> &fights)
 {
+	//delete after debug
+		cout<<"************AFTER NOTIFY-BEFORE UPDATE************"<<endl;
+		PrintBoardToConsole();
 	updateBoard(b);
 	for (int i = 0; i < (int)fights.size(); ++i)
 	{
@@ -720,7 +723,7 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 
 
 	//check if piece was known before and changed.
-	bool isJoker = (opponentCell.getPiece() != opponentPiece && opponentCell.getPiece() != 0 && opponentCell.getPiece() != '#');
+	bool isJoker = (toupper(opponentCell.getPiece()) != opponentPiece && opponentCell.getPiece() != 0 && opponentCell.getPiece() != '#');
 
 	if (winner == 0)
 	{
