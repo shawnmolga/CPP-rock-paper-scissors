@@ -462,8 +462,10 @@ int RPSGame::startGame()
 	cout << "beforecheckGameOver" << endl;
 	if (checkGameOver(isAboutToMove, isPlayerOneTurn))
 	{
+		
 		return 0;
 	}
+
 	//If we got here the board is initialized! now we need to make a move.
 	cout << "going to make a move" << endl;
 
@@ -993,10 +995,8 @@ bool RPSGame::isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseF
  */
 bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 {
-	PrintBoardToConsole();
+	cout<<"^^^^^^^^^^^^^^^^^ Inside checkGameOver ^^^^^^^^^^^^^^^^"<<endl; 
 	cout << "isBeforeMove =  " << isBeforeMove << endl;
-
-
 	Player *currPlayer = &playerOne;
 	Player *nextPlayer = &playerTwo;
 	if (!isPlayerOneTurn)
@@ -1004,8 +1004,9 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
 		currPlayer = &playerTwo;
 		nextPlayer = &playerOne;
 	}
-	cout<<"curr numOfPieces[5]: " << currPlayer->numOfPieces[5] <<endl;
-	cout<<"next numOfPieces[5]: " << nextPlayer->numOfPieces[5] <<endl;
+	//currPlayer->isLeftMovingPieces();
+	cout <<"isLeft"<<currPlayer->isLeftMovingPieces()<<endl;
+
 	if (currPlayer->numOfPieces[5] == 0 && nextPlayer->numOfPieces[5] == 0)
 	{
 		cout << "1" << endl;
