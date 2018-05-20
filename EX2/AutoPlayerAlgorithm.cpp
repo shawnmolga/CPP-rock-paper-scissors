@@ -298,9 +298,6 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 		const std::vector<unique_ptr<FightInfo>> &fights)
 {
 	updateBoard(b);
-	//delete after debug
-	cout<<"************AFTER NOTIFY************"<<endl;
-	PrintBoardToConsole();
 	for (int i = 0; i < (int)fights.size(); ++i)
 	{
 		int x = fights[i]->getPosition().getX()-1; //col
@@ -358,6 +355,10 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 	}
 
 	updateFlagProbability();
+
+	//delete after debug
+	cout<<"************AFTER NOTIFY************"<<endl;
+	PrintBoardToConsole();
 }
 
 void AutoPlayerAlgorithm::updateFlagProbability()
@@ -695,23 +696,28 @@ double AutoPlayerAlgorithm::calcScore(double material, double discovery, double 
 	double score = MATERIAL_WEIGHT * material + DISCOVERY_WEIGHT * discovery + REVEAL_WEIGHT * reveal +
 			FLAG_SAFTEY_WEUGHT * flagSaftey + DISTANCE_FROM_FLAG_WEIGHT * distanceFromBombOrFlag +
 			DISTANCE_FROM_UNKNOWN_WEIGHT * distanceFromUnknownPiece;
-//	cout<<"material: "<<material<<endl;
-//	cout<<"discovery: "<<discovery<<endl;
-//	cout<<"reveal: "<<reveal<<endl;
-//	cout<<"flag safety: "<<flagSaftey<<endl;
-//	cout<<"distance 1: "<<distanceFromBombOrFlag<<endl;
-//	cout<<"distance 2: "<<distanceFromUnknownPiece<<endl;
-//	cout<<"in calc sore: "<<score<<endl;
+	//	cout<<"material: "<<material<<endl;
+	//	cout<<"discovery: "<<discovery<<endl;
+	//	cout<<"reveal: "<<reveal<<endl;
+	//	cout<<"flag safety: "<<flagSaftey<<endl;
+	//	cout<<"distance 1: "<<distanceFromBombOrFlag<<endl;
+	//	cout<<"distance 2: "<<distanceFromUnknownPiece<<endl;
+	//	cout<<"in calc sore: "<<score<<endl;
 	return score;
 }
 
 void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 {
+	cout<<"FIGHT RESULT"<<endl;
+
 	int x = fightInfo.getPosition().getX()-1;
 	int y = fightInfo.getPosition().getY()-1;
 	char myPiece = toupper(fightInfo.getPiece(myPlayerNum));
 	char opponentPiece = toupper(fightInfo.getPiece(myPlayerNum == 1 ? 2 : 1));
 	int winner = fightInfo.getWinner();
+
+	cout<<"###############FIGHTT RESULTS: position: "<<x<<" , "<<y<<" winner: "<<winner<<" my number: "<<myPlayerNum<<" my piece: "<<myPiece<<" opp piece: "<<opponentPiece<<endl;
+
 
 	//check if piece was known before and changed.
 	bool isJoker = (opponentCell.getPiece() != opponentPiece && opponentCell.getPiece() != 0 && opponentCell.getPiece() != '#');
@@ -1208,6 +1214,7 @@ void AutoPlayerAlgorithm::updateBoard(const Board &b)
 
 void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move &move)
 {
+	cout<<"MOVE RESULT"<<endl;
 	int from_x = move.getFrom().getX()-1;
 	int from_y = move.getFrom().getY()-1;
 	int to_x = move.getTo().getX()-1;
@@ -1234,12 +1241,12 @@ bool AutoPlayerAlgorithm::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
 	if ((from_x < 0 || from_x > COLS-1)
 			|| (to_x < 0 || to_x > COLS-1) || (from_y < 0 || from_y > ROWS-1)
 			|| (to_y < 0 || to_y > ROWS-1)) {
-//		cout << "Error: illegal location on board" << endl;
+		//		cout << "Error: illegal location on board" << endl;
 		return false;
 	}
 
 	if (from_x == to_x && from_y == to_y) {
-	//	cout << "Error: user MUST move one piece" << endl;
+		//	cout << "Error: user MUST move one piece" << endl;
 		return false;
 	}
 
@@ -1283,17 +1290,17 @@ bool AutoPlayerAlgorithm::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
 	if (gameBoard.board.at(to_x).at(to_y).getPiece() != 0) {
 		if (isPlayer1) {
 			if (isupper(gameBoard.board.at(to_x).at(to_y).getPiece())) {
-			//	cout
-			//	<< "Error: you are trying to move to a cell taken by your own piece"
-			//	<< endl;
+				//	cout
+				//	<< "Error: you are trying to move to a cell taken by your own piece"
+				//	<< endl;
 				return false;
 			}
 		}
 		else {
 			if (islower(gameBoard.board.at(to_x).at(to_y).getPiece())) {
-			//	cout
-			//	<< "Error: you are trying to move to a cell taken by your own piece"
-			//	<< endl;
+				//	cout
+				//	<< "Error: you are trying to move to a cell taken by your own piece"
+				//	<< endl;
 				return false;
 			}
 		}

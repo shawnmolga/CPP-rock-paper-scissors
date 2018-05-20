@@ -1264,13 +1264,13 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 		}
 		//bomb won and exploded so cell is empty now
 		Cell::updateCell(gameBoard.board.at(x).at(y), 0, false);
-		fights.setWinner(nextPlayerNum);
+		fights.setWinner(currPlayerPiece);
 		//initFights.push_back(
 		//	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
 
 		//ptr->setPosition(*currPos);
 		//ptr->setOpponentPiece(gameBoard.board.at(x).at(y).getPiece());
-		ptr->setWinner(nextPlayerNum);
+		ptr->setWinner(currPlayerPiece);
 		initFights.push_back(make_unique<RPSFight>(*ptr));
 	}
 
