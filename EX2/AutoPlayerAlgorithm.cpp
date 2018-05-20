@@ -215,12 +215,15 @@ void AutoPlayerAlgorithm::positionPiecesRandomly(int pieceNum, char piece, bool 
 			if (gameBoard.board[x][y].getPiece() == 0)
 			{
 				isCellTaken = false;
-				Cell::updateCell(gameBoard.board[x][y], piece, isJoker);
+
 				if (isJoker){
-					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece) , pieceRep));
+					Cell::updateCell(gameBoard.board[x][y], pieceRep, isJoker);
+					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece) , toupper(pieceRep)));
 				}
-				else //not a joker
-					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), pieceRep));
+				else {//not a joker
+					Cell::updateCell(gameBoard.board[x][y], piece, isJoker);
+					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), toupper(pieceRep)));
+				}
 				break;
 			}
 			x = getRandomNumInRange(0, COLS - 1);
@@ -394,6 +397,11 @@ unique_ptr<Move> AutoPlayerAlgorithm::getMove()
 	getBestMove(from_x, from_y, to_x, to_y);
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
 
+	///delete after debug
+	cout<<"MY MOVE: "<<from_x<<" "<<from_y<<" to "<<to_x<<" "<<to_y<<endl;
+	cout<<"~~~~MY BOARD~~~~"<<endl;
+	PrintBoardToConsole();
+
 	return move;
 }
 
@@ -402,7 +410,8 @@ unique_ptr<JokerChange> AutoPlayerAlgorithm::getJokerChange()
 	int joker_x;
 	int joker_y;
 	char newRep = -1;
-	double score = INT_MIN;
+	char bestRep = newRep;
+	double score = calcScore(1, 0, 0);
 	for (int i = 0; i < COLS; ++i)
 	{
 		for (int j = 0; j < ROWS; ++j)
@@ -411,16 +420,21 @@ unique_ptr<JokerChange> AutoPlayerAlgorithm::getJokerChange()
 			if (gameBoard.board[i][j].getIsJoker() && isMyPiece)
 			{
 				newRep = shouldChangeJoker(score, i, j, myPlayerNum == 1);
-				joker_x = i;
-				joker_y = j;
+				if (newRep != -1){
+					bestRep = newRep;
+					joker_x = i;
+					joker_y = j;
+				}
 			}
 		}
 	}
 	//no joker change needed
-	if (newRep == -1)
+	if (bestRep == -1)
 		return nullptr;
 
-	unique_ptr<JokerChange> jokerChange = make_unique<RPSJokerChange>(newRep, RPSpoint(joker_x+1, joker_y+1));
+	AICell::updateCell(gameBoard.board[joker_x][joker_y],newRep,true);
+	cout<<"JOKER CHANGED: to "<<newRep<<endl;
+	unique_ptr<JokerChange> jokerChange = make_unique<RPSJokerChange>(toupper(newRep), RPSpoint(joker_x+1, joker_y+1));
 	return jokerChange;
 }
 
@@ -1132,8 +1146,7 @@ char AutoPlayerAlgorithm::shouldChangeJoker(double &score, int joker_x, int joke
 			break;
 		}
 
-		Cell::updateCell(gameBoard.board[joker_x][joker_y],
-				newRep, true);
+		Cell::updateCell(gameBoard.board[joker_x][joker_y],newRep, true);
 		currScore = calcScore(material, discovery, reveal);
 
 		if (currScore > score)
@@ -1141,12 +1154,9 @@ char AutoPlayerAlgorithm::shouldChangeJoker(double &score, int joker_x, int joke
 			score = currScore;
 			bestRep = newRep;
 		}
-		else
-		{
-			//change back to old rep
-			Cell::updateCell(gameBoard.board[joker_x][joker_y],
-					oldRep, true);
-		}
+		//change back to old rep
+		Cell::updateCell(gameBoard.board[joker_x][joker_y],oldRep, true);
+
 	}
 
 	return bestRep;
