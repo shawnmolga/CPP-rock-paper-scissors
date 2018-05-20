@@ -14,9 +14,9 @@ RPSGame::~RPSGame()
 void RPSGame::updateJokerMovingPieces()
 {
 	PrintBoardToConsole();
-	for (int i = 1; i <= ROWS; ++i)
+	for (int i = 1; i <= COLS; ++i)
 	{
-		for (int j = 1; j <= COLS; ++j)
+		for (int j = 1; j <= ROWS; ++j)
 		{
 			if (gameBoard.board[i][j].getIsJoker())
 			{
