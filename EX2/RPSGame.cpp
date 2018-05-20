@@ -694,15 +694,17 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 				}
 			}
 			//position is illegal - tried to locate 2 pieces of same player in same position
-			if (board[x - 1][y - 1] != 0)
+			if (board[x-1][y-1] != 0) //changes!!!
 			{
+				cout<<"error 1"<<endl;
 				cout
 					<< "Error: two or more pieces are positioned on the same location"
 					<< endl;
+				isPlayerLegalFormat = false;
 				return BAD_FORMAT_POS_ERR;
 			}
 			//else
-			board[x - 1][y - 1] = inputPiece;
+			board[x-1][y-1] = inputPiece;
 
 			if (toupper(inputPiece) == FLAG)
 			{
@@ -712,6 +714,7 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 			{
 				if (gameBoard.board.at(x).at(y).getPiece() != 0)
 				{
+					cout<<"error 2"<<endl;
 					cout
 						<< "Error: two or more pieces are positioned on the same location for player " << playerNum << endl;
 					isPlayerLegalFormat = false;
@@ -731,6 +734,7 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
 				{
 					if (gameBoard.board.at(x).at(y).getPiece() == tolower(gameBoard.board.at(x).at(y).getPiece()))
 					{
+						cout<<"error 3"<<endl;
 						isPlayerLegalFormat = false;
 						cout << "Error: two or more pieces are positioned on the same location for player " << playerNum << endl;
 						return BAD_FORMAT_POS_ERR;
@@ -834,9 +838,11 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 	}
 	else if (resultPlayerTwo == READ_LINE_POS_ERR || resultPlayerTwo == BAD_FORMAT_POS_ERR)
 	{
+		cout<<"enter and return -2"<<endl;
 		return READ_LINE_POS_ERR; //-2
 	}
 	return NO_BAD_FORMAT_ERR;
+	
 }
 
 /*
@@ -891,6 +897,7 @@ int RPSGame::checkBadFormat()
 	std::vector<unique_ptr<FightInfo>> initFights;
 	int isLegalFormat = checkPositionOnBoard(isPlayerOneLegalFormat,
 											 isPlayerTwoLegalFormat, fightInfo, initFights);
+	cout<<"After is legalFormat"<<endl;
 	resetGameResults(); //reset the game result as we did in ex1!
 	if (!isPlayerOneLegalFormat && !isPlayerTwoLegalFormat)
 	{
