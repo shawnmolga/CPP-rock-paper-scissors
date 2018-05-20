@@ -398,7 +398,7 @@ unique_ptr<Move> AutoPlayerAlgorithm::getMove()
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
 
 	///delete after debug
-	cout<<"MY MOVE: "<<from_x<<" "<<from_y<<" to "<<to_x<<" "<<to_y<<endl;
+	cout<<"MY MOVE: "<<from_x<<" "<<from_y<<" to "<<to_x<<" "<<to_y<<" my piece: "<<myCell.getPiece()<<endl;
 	cout<<"~~~~MY BOARD~~~~"<<endl;
 	PrintBoardToConsole();
 
@@ -708,7 +708,7 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 	int winner = fightInfo.getWinner();
 
 	//check if piece was known before and changed.
-	bool isJoker = (opponentCell.getPiece() != opponentPiece);
+	bool isJoker = (opponentCell.getPiece() != opponentPiece && opponentCell.getPiece() != 0 && opponentCell.getPiece() != '#');
 
 	if (winner == 0)
 	{
