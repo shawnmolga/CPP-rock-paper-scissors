@@ -1463,14 +1463,14 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
                              isCurrPieceJoker);
         }
         else if (currPlayerPiece == SCISSOR)
-            handlePaperOrRockVsScissors(2,nextPlayer, nextPlayerNum, x , y, initFights, ptr, currPos, fights);
+            handlePaperOrRockVsScissors(2,currPlayer, nextPlayerNum, x , y, initFights, ptr, currPos, fights);
     }
 
     else if (nextPlayerPiece == SCISSOR)
     {
         if (currPlayerPiece == PAPER) {
-            handlePaperOrRockVsScissors(1,currPlayer,currPlayerNum, x, y, initFights, ptr, currPos, fights);
-            fights.setPosition(*currPos);
+            handlePaperOrRockVsScissors(1,currPlayer,nextPlayerNum, x, y, initFights, ptr, currPos, fights);
+            //fights.setPosition(*currPos);
         }
         else if (currPlayerPiece == ROCK){
             handlePaperOrRockVsScissors(2,nextPlayer,currPlayerNum,  x , y, initFights, ptr, currPos, fights);
