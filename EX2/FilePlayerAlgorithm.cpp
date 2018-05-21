@@ -87,7 +87,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	}
 	if (!checkIfDigit(line[start]))
 	{
- 		cout << "Error: Bad format - got letter instead of digit" << endl;
+		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
 	int end = start + 1;
@@ -96,7 +96,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
 	}
-	
+
 	while (line[end] != ' ')
 	{
 		if (!checkIfDigit(line[end]))
@@ -161,6 +161,37 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 
 	return end;
 }
+
+bool FilePlayerAlgorithm::handleJokerPiece(string line,int & nextIndex, char & jokerRep) {
+
+	if ((size_t) nextIndex >= line.length()) {
+		cout << "Error - bad format: missing joker rep piece" << endl;
+		return false;
+	}
+	if (line[nextIndex] != ' ') {
+		cout
+				<< "Error - bad format: missing space after positions in joker position"
+				<< endl;
+		return false;
+	}
+	nextIndex = getPieceFromLine(nextIndex, line) + 1;
+	if (nextIndex == 0) {
+		cout << "Error: Bad format - no piece to position as joker" << endl;
+		return false;
+	}
+	char jokerPiece = line[nextIndex - 1];
+	if (jokerPiece != ROCK && jokerPiece != PAPER && jokerPiece != SCISSOR && jokerPiece != BOMB) {
+		cout << "Error: Bad format - illegal piece for joker" << endl;
+		return false;
+	}
+
+	jokerRep = jokerPiece;
+	return true;
+}
+
+
+
+
 /*
  check if there is bad format in certain line.
  Input- line, player number, reference to row number and col number , joker representation and piece
@@ -181,7 +212,7 @@ bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row
 		return false;
 	}
 	int nextIndex = getPositionFromLine(pieceIndex + 1, line, row, col);
-	if (nextIndex == BAD_FORMAT_ERR) // BAD_FORMAT_ERR = -1
+	if (nextIndex == BAD_FORMAT_ERR)
 		return false;
 	//check if position is legal
 	if ((row < 1 || row > ROWS) || (col < 1 || col > COLS))
@@ -189,44 +220,17 @@ bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row
 		cout << "Error: illegal location on board" << endl;
 		return false;
 	}
-	if (piece == 'J'){
-
-		if ((size_t)nextIndex >= line.length())
-		{
-
-			cout << "Error - bad format: missing joker rep piece" << endl;
+	if (piece == 'J') {
+		if (!FilePlayerAlgorithm::handleJokerPiece(line, nextIndex, jokerRep))
 			return false;
-		}
-		if (line[nextIndex] != ' ')
-		{
-			cout
-					<< "Error - bad format: missing space after positions in joker position"
-					<< endl;
-			return false;
-		}
-		nextIndex = getPieceFromLine(nextIndex, line) + 1;
-		if (nextIndex == 0)
-		{
-			cout << "Error: Bad format - no piece to position as joker" << endl;
-			return false;
-		}
-		char jokerPiece = line[nextIndex - 1];
-		if (jokerPiece != ROCK && jokerPiece != PAPER && jokerPiece != SCISSOR && jokerPiece != BOMB)
-		{
-			cout << "Error: Bad format - illegal piece for joker" << endl;
-			return false;
-		}
-
-		jokerRep = jokerPiece;
 	}
-	
-		//check that after position line is empty
-		if (!checkEmptyLine(nextIndex, line))
-		{
-			cout << "Error: Bad format - junk characters after position" << endl;
-			jokerRep = JOKER_REP_ERROR;
-			return false;
-		}
+	//check that after position line is empty
+	if (!checkEmptyLine(nextIndex, line))
+	{
+		cout << "Error: Bad format - junk characters after position" << endl;
+		jokerRep = JOKER_REP_ERROR;
+		return false;
+	}
 	return true;
 }
 
@@ -239,26 +243,29 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 	int col = -1;
 	char piece = 0;
 	char jokerRep = '#';
+	//int indexLine = 1; //Counting the lines;
 	while (getline(posFile, line))
 	{
 		jokerRep = '#';
 		//skip empty lines
 		if (checkEmptyLine(0, line))
 		{
+			//indexLine++;
 			continue;
 		}
 		if (getPositionAndRepFromLine(line, row, col, jokerRep, piece) == false)
 		{
 			vectorToFill.push_back(
-				make_unique<RPSPiecePosition>(RPSpoint(col, row), BAD_FORMAT_POS_ERR, jokerRep));
+					make_unique<RPSPiecePosition>(RPSpoint(col, row), BAD_FORMAT_POS_ERR, jokerRep));
 			posFile.close();
 			return;
 		}
 		else
 		{
 			vectorToFill.push_back(
-				make_unique<RPSPiecePosition>(RPSpoint(col, row), piece, jokerRep));
+					make_unique<RPSPiecePosition>(RPSpoint(col, row), piece, jokerRep));
 		}
+		//indexLine++;
 		//position is illegal - tried to locate 2 pieces of same player in same position
 	}
 	//if there was a problem while reading we will put -2 in the piece
@@ -266,7 +273,7 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 	{
 		cout << "Error while reading position file. Exiting game" << endl;
 		vectorToFill.push_back(
-			make_unique<RPSPiecePosition>(RPSpoint(col, row), READ_LINE_POS_ERR, jokerRep));
+				make_unique<RPSPiecePosition>(RPSpoint(col, row), READ_LINE_POS_ERR, jokerRep));
 
 		posFile.close();
 		return;
@@ -274,8 +281,9 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 	posFile.close();
 }
 
+
 void FilePlayerAlgorithm::notifyFightResult(const FightInfo& fightInfo){
-    (void) fightInfo;
+	(void) fightInfo;
 }
 
 void FilePlayerAlgorithm::notifyOnInitialBoard(const Board &b,
@@ -313,8 +321,8 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 		if (line1[nextIndex] != ':')
 		{
 			cout
-				<< "Error: Bad format - Joker  hard coded information not placed correctly - need to be followed by colon"
-				<< endl;
+					<< "Error: Bad format - Joker  hard coded information not placed correctly - need to be followed by colon"
+					<< endl;
 			new_rep = 'E';
 			jc->setJokerNewRep('E');
 			return make_unique<RPSJokerChange>(*jc);
@@ -374,15 +382,79 @@ void FilePlayerAlgorithm::copyString(string & src, string toCopy){
 	}
 }
 
+
+unique_ptr<Move> FilePlayerAlgorithm::handleNonEmptyLine(string local_line, int & from_x, int & from_y, int & to_x, int & to_y, RPSpoint& from, RPSpoint& to){
+	nextIndex = getPositionFromLine(0, local_line, from_y, from_x);
+	from.setX(from_x);
+	from.setY(from_y);
+
+	bool isLackSpace = nextIndex != BAD_FORMAT_ERR ? (local_line[nextIndex] != ' ') : false;
+	if (nextIndex == BAD_FORMAT_ERR || isLackSpace)
+	{
+		if (isLackSpace)
+			cout
+					<< "Error: bad format - missing space between source to destination"
+					<< endl;
+
+		from.setX(BAD_FORMAT_ERR);
+		unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
+		return move;
+	}
+	nextIndex = getPositionFromLine(nextIndex, local_line, to_y, to_x);
+	if (nextIndex == BAD_FORMAT_ERR)
+		from.setX(BAD_FORMAT_ERR);
+	else
+	{
+		to.setX(to_x);
+		to.setY(to_y);
+	}
+	unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
+	return move;
+}
 /*
-Returns the next move of current player
+returns the next move of current player
 empty line (0,0)
-wrong format: (-1,0) = BAD_FORMAT_ERR
+wrong format: (-1,0) =  BAD_FORMAT_ERR
 getline error: (-3,0) = READ_LINE_ERR
 eof: (-2,0) = EOF_MOVE_ERR
+
 */
 unique_ptr<Move> FilePlayerAlgorithm::getMove()
 {
+
+	int from_x = 0;
+	int from_y = 0;
+	int to_x = 0;
+	int to_y = 0;
+
+	RPSpoint from(from_x, from_y);
+	RPSpoint to(to_x, to_y);
+	if (getline(player1Move, line1))
+	{
+		string local_line;
+		copyString(local_line, line1);
+		if (checkEmptyLine(0, local_line))
+			from.setX(0);
+		else
+			return handleNonEmptyLine(local_line, from_x, from_y, to_x, to_y, from, to);
+
+	}
+		//If we reach eod we will return -2
+	else if(player1Move.eof()){
+		from.setX(EOF_MOVE_ERR);
+	}
+	else if(player1Move.bad())
+	{
+		//if getLine error - Point from = (-2,0)
+		from.setX(READ_LINE_ERR);
+	}
+	unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
+	return move;
+}
+/*
+unique_ptr<Move> FilePlayerAlgorithm::getMove()
+{
+
 	int from_x = 0;
 	int from_y = 0;
 	int to_x = 0;
@@ -402,31 +474,26 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 		else
 		{
 			nextIndex = getPositionFromLine(0, local_line, from_y, from_x);
-			from.setX(from_x); //noy changes!
-			from.setY(from_y); //noy changes
-			// from.setX(from_y); //noy changes!
-			// from.setY(from_x); //noy changes
+			from.setX(from_x);
+			from.setY(from_y);
 
-
-			bool isLackSpace = nextIndex != BAD_FORMAT_ERR ? (local_line[nextIndex] != ' ') : false;
-			if (nextIndex == BAD_FORMAT_ERR || isLackSpace)
+			bool isLackSpace = nextIndex != -1 ? (local_line[nextIndex] != ' ') : false;
+			if (nextIndex == -1 || isLackSpace)
 			{
 				if (isLackSpace)
-				{
 					cout
-						<< "Error: bad format - missing space between source to destination"
-						<< endl;
-				}
-				from.setX(BAD_FORMAT_ERR);
-				//noy added 
+							<< "Error: bad format - missing space between source to destination"
+							<< endl;
+
+				from.setX(-1);
 				unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
 				return move;
 			}
 			else
 			{
 				nextIndex = getPositionFromLine(nextIndex, local_line, to_y, to_x);
-				if (nextIndex == BAD_FORMAT_ERR)
-					from.setX(BAD_FORMAT_ERR);
+				if (nextIndex == -1)
+					from.setX(-1);
 				else
 				{
 					to.setX(to_x);
@@ -438,24 +505,21 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 			}
 		}
 	}
-	//If we reach eod we will return READ_LINE_ERR (-2,0)
+		//If we reach eod we will return -2
 	else if(player1Move.eof()){
-		from.setX(EOF_MOVE_ERR);
+		from.setX(-2);
 	}
 	else if(player1Move.bad())
 	{
 		//if getLine error - Point from = (-2,0)
-		from.setX(READ_LINE_ERR);
+		from.setX(-3);
 	}
 	//make_unique < RPSPiecePosition
 	//						> (RPSpoint(row, col), -2, jokerRep));
 	unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
 	return move;
 }
-
-void FilePlayerAlgorithm::incrementMovesFileLine(){
-	(void)movesFileLine;
-}
-void FilePlayerAlgorithm::notifyOnOpponentMove(const Move& move) {
+*/
+void FilePlayerAlgorithm::notifyOnOpponentMove(const Move& move) { // noy implmenet only for compilation will succcedd
 	(void)move;
 } // called only on opponent�s move
