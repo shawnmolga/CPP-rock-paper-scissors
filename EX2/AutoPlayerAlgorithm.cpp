@@ -326,30 +326,44 @@ bool AutoPlayerAlgorithm::isLegalPosition(int x, int y)
  */
 bool AutoPlayerAlgorithm::checkIsOpponentNeighbors(int x, int y)
 {
+	char piece;
+
 	//down neigbor
-	char piece = gameBoard.board[x + 1][y].getPiece();
-	if (isLegalPosition(x + 1, y) && isOpponentPiece(piece))
-	{
-		return true;
+	if(isLegalPosition(x + 1, y)){
+		piece = gameBoard.board[x + 1][y].getPiece();
+		if (isOpponentPiece(piece))
+		{
+			return true;
+		}
 	}
+
 	//right
-	piece = gameBoard.board[x][y + 1].getPiece();
-	if (isLegalPosition(x, y + 1) && isOpponentPiece(piece))
-	{
-		return true;
+	if (isLegalPosition(x, y + 1)){
+		piece = gameBoard.board[x][y + 1].getPiece();
+		if (isOpponentPiece(piece))
+		{
+			return true;
+		}
 	}
+
 	//up neighbor
-	piece = gameBoard.board[x - 1][y].getPiece();
-	if (isLegalPosition(x - 1, y) && isOpponentPiece(piece))
-	{
-		return true;
+	if (isLegalPosition(x - 1, y)){
+		piece = gameBoard.board[x - 1][y].getPiece();
+		if (isOpponentPiece(piece))
+		{
+			return true;
+		}
 	}
+
 	//left
-	piece = gameBoard.board[x][y - 1].getPiece();
-	if (isLegalPosition(x, y - 1) && isOpponentPiece(piece))
-	{
-		return true;
+	if (isLegalPosition(x, y - 1)){
+		piece = gameBoard.board[x][y - 1].getPiece();
+		if (isOpponentPiece(piece))
+		{
+			return true;
+		}
 	}
+
 	return false;
 }
 
@@ -1434,10 +1448,15 @@ void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move &move)
 	int to_x = move.getTo().getX()-1;
 	int to_y = move.getTo().getY()-1;
 	AICell fromCell = gameBoard.board[from_x][from_y];
+
+	if (gameBoard.board[from_x][from_y].isMyPiece(myPlayerNum))
+		return;
+
 	if (gameBoard.board[to_x][to_y].getPiece() == 0){
 		AICell::updateCell(gameBoard.board[to_x][to_y], fromCell.getPiece(), fromCell.getIsJoker());
 		AICell::updateCellKnowlage(gameBoard.board[to_x][to_y], fromCell);
 	}
+
 	else { //there's a fight
 		opponentCell = gameBoard.board[from_x][from_y];
 		myCell = gameBoard.board[to_x][to_y];
