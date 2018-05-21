@@ -7,7 +7,6 @@
 
 #include "AutoPlayerAlgorithm.h"
 
-//constructor
 AutoPlayerAlgorithm::AutoPlayerAlgorithm()
 {
 	cout << "creating autoPlayerAlgorithm" << endl;
@@ -18,6 +17,12 @@ AutoPlayerAlgorithm::AutoPlayerAlgorithm()
 	opponentMovingPieceNumOnBoard = SCISSORS_NUM + ROCKS_NUM + PAPERS_NUM + JOKERS_NUM; //we dont know if joker is moving piece now or not
 }
 
+/**
+    game manager will use this function to get positions of pieces to locate on board.
+
+    @params: player - current player number
+    vectorToFill - vector of positions that will be filled
+ */
 void AutoPlayerAlgorithm::getInitialPositions(int player,
 		std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
@@ -28,18 +33,12 @@ void AutoPlayerAlgorithm::getInitialPositions(int player,
 	positionJokers(player, vectorToFill);
 }
 
-//TODO:delete after debug
-void AutoPlayerAlgorithm::printVectorPositions(std::vector<unique_ptr<PiecePosition>> &vectorToFill){
-	for (size_t i=0;i<vectorToFill.size(); ++i){
-		cout<<"piece: ";
-		cout<<(vectorToFill[i]->getPiece())<<endl;
-		cout<<"position: x: ";
-		cout<<(vectorToFill[i]->getPosition().getX());
-		cout<<" y: ";
-		cout<<(vectorToFill[i]->getPosition().getY())<<endl;
-	}
-}
+/**
+    fill vector in positions of all moving pieces of current player and position them on algorithm's board
 
+    @params: player - current player number
+    vectorToFill - vector of positions that will be filled
+ */
 void AutoPlayerAlgorithm::positionMovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	positionPiecesRandomly(ROCKS_NUM, player == 1 ? 'R' : 'r', false, '#', vectorToFill);
@@ -47,6 +46,12 @@ void AutoPlayerAlgorithm::positionMovingPieces(int player, std::vector<unique_pt
 	positionPiecesRandomly(SCISSORS_NUM, player == 1 ? 'S' : 's', false,'#', vectorToFill);
 }
 
+/**
+    fill vector in positions of all jokers of current player and position them on algorithm's board
+
+    @params: player - current player number
+    vectorToFill - vector of positions that will be filled
+ */
 void AutoPlayerAlgorithm::positionJokers(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	for (int i=0; i<JOKERS_NUM; ++i){
@@ -72,6 +77,12 @@ void AutoPlayerAlgorithm::positionJokers(int player, std::vector<unique_ptr<Piec
 
 }
 
+/**
+    position flags and bombs in algorithm's board and fill positions in vector
+
+    @params: player - current player number
+    vectorToFill - vector of positions that will be filled
+ */
 void AutoPlayerAlgorithm::positionUnmovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	bool isCellTaken = true;
@@ -94,7 +105,7 @@ void AutoPlayerAlgorithm::positionUnmovingPieces(int player, std::vector<unique_
 			if (gameBoard.board[x][y].getPiece() == 0)
 			{
 				isCellTaken = false;
-				if (!checkIsOpponentNeighbors(player, x, y))
+				if (!checkIsOpponentNeighbors(x, y))
 				{
 					hasOpponentNeighbor = false;
 					AICell::updateCell(gameBoard.board[x][y], piece, false);
@@ -117,6 +128,13 @@ void AutoPlayerAlgorithm::positionUnmovingPieces(int player, std::vector<unique_
 	}
 }
 
+/**
+    choose range to get a random number from.
+
+    @params: start - range start
+    end - range end
+    @return random number from given range
+ */
 int AutoPlayerAlgorithm::getRandomNumInRange(int start, int end)
 {
 	std::random_device rd;								  // obtain a random number from hardware
@@ -124,7 +142,14 @@ int AutoPlayerAlgorithm::getRandomNumInRange(int start, int end)
 	std::uniform_int_distribution<> yDistr(start, end); // define the range
 	return yDistr(eng);
 }
-// x-col y-row
+
+/**
+    finding empty neighbor cell to flag position to locate a bomb in it
+
+    @params: x,y - will be filled if an empty neighbor cell found as it's position.
+    flag_x , flag_y - flag's position
+    @return: true - empty neighbor cell was found, false - otherwise.
+ */
 bool AutoPlayerAlgorithm::findEmptyNeigbor(int &x, int &y, int flag_x, int flag_y)
 {
 
@@ -173,6 +198,17 @@ bool AutoPlayerAlgorithm::findEmptyNeigbor(int &x, int &y, int flag_x, int flag_
 	return false; //no empty cell
 }
 
+/**
+    position bombs in algorithm's board and fill positions in vector
+
+    @params: flag_x , flag_y - relevant if bombs should be positioned as flag's neighbors.
+    If so, represents the location of flag.
+    player - current player number.
+    vectorToFill - vector of positions that will be filled
+    bombsToPosition - number of bombs should be positioned
+    shouldPositionRandomly - false - bombs should be positioned as flag's neighbor.
+    true - otherwise.
+ */
 void AutoPlayerAlgorithm::positionBombs(int flag_x, int flag_y, int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int bombsToPosition, bool shouldPositionRandomly)
 {
 	char piece = (player == 1 ? 'B' : 'b');
@@ -203,6 +239,16 @@ void AutoPlayerAlgorithm::positionBombs(int flag_x, int flag_y, int player, std:
 	positionPiecesRandomly(bombsToPosition, piece, false,'#', vectorToFill);
 }
 
+/**
+    position pieces randomly from same kind and by given number of pieces
+
+    @params: pieceNum - number of pieces to position.
+    piece - kind of piece to position.
+    isJoker - is piece represents a joker.
+    pieceRep - joker representation or '#' if this is not a joker
+    player - current player number.
+    vectorToFill - vector of positions that will be filled
+ */
 void AutoPlayerAlgorithm::positionPiecesRandomly(int pieceNum, char piece, bool isJoker, char pieceRep, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	bool isCellTaken = true;
@@ -233,9 +279,18 @@ void AutoPlayerAlgorithm::positionPiecesRandomly(int pieceNum, char piece, bool 
 	}
 }
 
-bool AutoPlayerAlgorithm::isOpponentPiece(int myPlayerNum, char piece)
+/**
+    check if this piece belongs to opponent
+
+    @params: piece - piece to check
+    @return: true - this is opponent piece, false - otherwise.
+ */
+bool AutoPlayerAlgorithm::isOpponentPiece(char piece)
 {
-	if (myPlayerNum == 1)
+	if (piece == '#')
+		return true;
+
+	else if (myPlayerNum == 1)
 	{
 		return islower(piece);
 	}
@@ -246,11 +301,11 @@ bool AutoPlayerAlgorithm::isOpponentPiece(int myPlayerNum, char piece)
 }
 
 /*
-Input  - relevant y and x
-Output - true if this is a legal position and  false otherwise 
+ * check if position is in board's limits
+ *
+@param: relevant y and x
+@return: true if this is a legal position and  false otherwise
  */
-// legal position on board starts from 0 to number of xs/ys - 1
-//x-col y-row
 bool AutoPlayerAlgorithm::isLegalPosition(int x, int y)
 {
 	if (x > COLS - 1 || y > ROWS - 1 || x < 0 || y < 0)
@@ -259,40 +314,48 @@ bool AutoPlayerAlgorithm::isLegalPosition(int x, int y)
 	}
 	return true;
 }
-/*
-Input - current player num, x and y
-Output - true if an opponent nieghbour is located there and otherwise false 
+
+/**
+    checks if in neighbor cell there is an opponent piece
+
+    @params: x,y - piece position to check its neighbors.
+    @return: true if an opponent nieghbour is located there and otherwise false
  */
-bool AutoPlayerAlgorithm::checkIsOpponentNeighbors(int player, int x, int y)
+bool AutoPlayerAlgorithm::checkIsOpponentNeighbors(int x, int y)
 {
 	//down neigbor
 	char piece = gameBoard.board[x + 1][y].getPiece();
-	if (isLegalPosition(x + 1, y) && isOpponentPiece(player, piece))
+	if (isLegalPosition(x + 1, y) && isOpponentPiece(piece))
 	{
 		return true;
 	}
 	//right
 	piece = gameBoard.board[x][y + 1].getPiece();
-	if (isLegalPosition(x, y + 1) && isOpponentPiece(player, piece))
+	if (isLegalPosition(x, y + 1) && isOpponentPiece(piece))
 	{
 		return true;
 	}
 	//up neighbor
 	piece = gameBoard.board[x - 1][y].getPiece();
-	if (isLegalPosition(x - 1, y) && isOpponentPiece(player, piece))
+	if (isLegalPosition(x - 1, y) && isOpponentPiece(piece))
 	{
 		return true;
 	}
 	//left
 	piece = gameBoard.board[x][y - 1].getPiece();
-	if (isLegalPosition(x, y - 1) && isOpponentPiece(player, piece))
+	if (isLegalPosition(x, y - 1) && isOpponentPiece(piece))
 	{
 		return true;
 	}
 	return false;
 }
-/*
-update algorithm about initial board and fight results
+
+/**
+    game manager will use this function to update AI algorithm
+    on board positions and fight results after locating all pieces on board.
+
+    @params: b - Board instance to get board positions
+    fights - vector of all fight results that occur after piece positioning.
  */
 void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 		const std::vector<unique_ptr<FightInfo>> &fights)
@@ -364,6 +427,9 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 	PrintBoardToConsole();
 }
 
+/**
+    AI algorithm update for each opponent piece its probability to represent a flag.
+ */
 void AutoPlayerAlgorithm::updateFlagProbability()
 {
 	int unkownPiecesNum = 0;
@@ -394,13 +460,17 @@ void AutoPlayerAlgorithm::updateFlagProbability()
 	}
 }
 
+/**
+    game manager will use this function to get auto player's move
+
+    @return: move - chosen move to play
+ */
 unique_ptr<Move> AutoPlayerAlgorithm::getMove()
 {
-	//cout<<"inside get move~~~~~~~~~~~~~~~"<<endl;
-	int from_x;
-	int from_y;
-	int to_x;
-	int to_y;
+	int from_x = -3;
+	int from_y = -3;
+	int to_x = -3;
+	int to_y = -3;
 	getBestMove(from_x, from_y, to_x, to_y);
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
 
@@ -413,6 +483,12 @@ unique_ptr<Move> AutoPlayerAlgorithm::getMove()
 	return move;
 }
 
+/**
+    game manager will use this function to get a joker change , if changed
+
+    @return: nullptr - if joker was not changed.
+    instance represents joker's change - otherwise.
+ */
 unique_ptr<JokerChange> AutoPlayerAlgorithm::getJokerChange()
 {
 	int joker_x;
@@ -446,6 +522,13 @@ unique_ptr<JokerChange> AutoPlayerAlgorithm::getJokerChange()
 	return jokerChange;
 }
 
+/**
+    get best move from AI algorithm to play. tries all moves of current player and decides
+    which move is the best to play.
+
+    @params: from_x,from_y - from where to move
+    to_x,to_y - to where to move
+ */
 void AutoPlayerAlgorithm::getBestMove(int &from_x, int &from_y, int &to_x, int &to_y)
 {
 	//cout<<"inside get best move~~~~~~~~~~~~"<<endl;
@@ -483,6 +566,14 @@ void AutoPlayerAlgorithm::getBestMove(int &from_x, int &from_y, int &to_x, int &
 	AICell::cleanCell(gameBoard.board[from_x][from_y]);
 }
 
+/**
+    get best move of a specific piece. try all legal moves for a piece and choose
+    the best one.
+
+    @params: score - previous best move score
+    from_x,from_y - from where to move
+    to_x,to_y - to where to move
+ */
 double AutoPlayerAlgorithm::getBestMoveForPiece(double score, const int &from_x, const int &from_y, int &to_x, int &to_y)
 {
 	//cout<<"INSIDE getBestMoveForPiece"<<endl;
@@ -549,7 +640,12 @@ double AutoPlayerAlgorithm::getBestMoveForPiece(double score, const int &from_x,
 	return score;
 }
 
-//returns true if gameOver, false otherwise
+/**
+    move piece to get its score and then undo the move.
+
+    @params: move - move to play
+    @return: score - score of current move that was tried.
+ */
 double AutoPlayerAlgorithm::tryMovePiece(unique_ptr<Move> &move)
 {
 	int from_x = move->getFrom().getX();
@@ -598,6 +694,19 @@ double AutoPlayerAlgorithm::tryMovePiece(unique_ptr<Move> &move)
 	return score;
 }
 
+/**
+    try to make a fight of move considered to be played by AI algorithm.
+    we might not know who is the opponent we are fighting against -
+    if we know we will perform the fight. otherwise, we will choose fight result randomly.
+
+    @params: to_x,to_y - fight position
+    myPiece - my piece to participate the fight at
+    is joker - is my piece joker - true, else - false.
+    isProbOne - function should set this referenced parameter to true if we know opponent's piece for sure.
+    (and the fight result is real)
+    @return: true - current player lost (my player)
+    else - false.
+ */
 bool AutoPlayerAlgorithm::tryToFight(int to_x, int to_y, char myPiece, bool isJoker, bool& isProbOne)
 {
 	char opponentPiece = gameBoard.board[to_x][to_y].getPiece();
@@ -625,7 +734,16 @@ bool AutoPlayerAlgorithm::tryToFight(int to_x, int to_y, char myPiece, bool isJo
 	}
 }
 
-//false if i lost and true if i win (tie is false)
+/**
+    perform a fight with my moving piece against opponent's piece.
+
+    @params: x,y - fight position
+    myPiece - my piece to participate the fight at
+    opponentPiece - opponent piece to participate the fight at
+    isMyPiecejoker - is my piece joker - true, else - false.
+    @return: true - current player lost a piece (my player)
+    else - false.
+ */
 bool AutoPlayerAlgorithm::fight(int x, int y, char myPiece, char opponentPiece, bool isMyPieceJoker)
 {
 
@@ -635,20 +753,20 @@ bool AutoPlayerAlgorithm::fight(int x, int y, char myPiece, char opponentPiece, 
 	if (myPieceRep == oppPieceRep)
 	{
 		Cell::cleanCell(gameBoard.board[x][y]);
-		return false;
-	}
-
-	//Case 2: there is flag and current player has another piece
-	else if (oppPieceRep == FLAG)
-	{
-		Cell::updateCell(gameBoard.board[x][y], myPiece, isMyPieceJoker);
 		return true;
 	}
 
-	//case 3: there is bomb and current player has another piece
-	else if (oppPieceRep == BOMB || myPieceRep == BOMB)
+	//case 2: there is bomb and my player has another piece
+	else if (oppPieceRep == BOMB)
 	{
 		Cell::cleanCell(gameBoard.board[x][y]);
+		return true;
+	}
+
+	//Case 3: there is flag and current player has another piece
+	else if (oppPieceRep == FLAG)
+	{
+		Cell::updateCell(gameBoard.board[x][y], myPiece, isMyPieceJoker);
 		return false;
 	}
 
@@ -657,27 +775,27 @@ bool AutoPlayerAlgorithm::fight(int x, int y, char myPiece, char opponentPiece, 
 	{
 		if (myPieceRep == ROCK)
 		{
-			return false;
+			return true;
 		}
 		else if (myPieceRep == SCISSOR)
 		{
 			Cell::updateCell(gameBoard.board[x][y], myPiece,
 					isMyPieceJoker);
-			return true;
+			return false;
 		}
 	}
-	//case 7: player 1 is ROCK and player 2 another piece
+	//case 5: opponent piece is ROCK and i have another piece
 	else if (oppPieceRep == ROCK)
 	{
 		if (myPieceRep == PAPER)
 		{
 			Cell::updateCell(gameBoard.board[x][y], myPiece,
 					isMyPieceJoker);
-			return true;
+			return false;
 		}
 		else if (myPieceRep == SCISSOR)
 		{
-			return false;
+			return true;
 		}
 	}
 
@@ -685,19 +803,27 @@ bool AutoPlayerAlgorithm::fight(int x, int y, char myPiece, char opponentPiece, 
 	{
 		if (myPieceRep == PAPER)
 		{
-			return false;
+			return true;
 		}
 		else if (myPieceRep == ROCK)
 		{
 			Cell::updateCell(gameBoard.board[x][y], myPiece,
 					isMyPieceJoker);
-			return true;
+			return false;
 		}
 	}
-	cout<<"fight false !"<<endl;
 	return false; //shouldnt get here
 }
 
+/**
+    calculate a score for a given board state. Use different weights and parameters normalized to one to
+    get to that score.
+
+    @params: material - score for strength of piece that just moved.
+    discovery - score for opponent's piece discovered in fight.
+    reveal - score represents if i should reveal my piece by moving it.
+    @return: total score of current move result.
+ */
 double AutoPlayerAlgorithm::calcScore(double material, double discovery, double reveal)
 {
 	double flagSaftey = calcFlagSaftey();
@@ -716,6 +842,13 @@ double AutoPlayerAlgorithm::calcScore(double material, double discovery, double 
 	return score;
 }
 
+/**
+    manager will use this function after both moves of opponent and mine - only if there
+    was a fight - to notify about fight result.
+
+    @params: fightInfo - includes pieces participated in fight, who won and in which location
+    the fight was.
+ */
 void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 {
 	cout<<"FIGHT RESULT"<<endl;
@@ -801,6 +934,11 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 	PrintBoardToConsole();
 }
 
+/**
+    calculate the shortest path from a piece of mine to an opponent's flag or bombs
+
+    @return: distance from closest piece of mine to a flag or bomb.
+ */
 double AutoPlayerAlgorithm::calcDistanceFromBombOrFlag()
 {
 	int distance;
@@ -829,6 +967,12 @@ double AutoPlayerAlgorithm::calcDistanceFromBombOrFlag()
 	return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
 }
 
+/**
+    calculate the shortest path from a piece of mine to an opponent's piece
+    that was not seen moving yet and suspected as a flag.
+
+    @return: distance from closest piece of mine to an unkown piece.
+ */
 double AutoPlayerAlgorithm::calcDistanceFromUnknownPiece()
 {
 	int distance;
@@ -857,6 +1001,11 @@ double AutoPlayerAlgorithm::calcDistanceFromUnknownPiece()
 	return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
 }
 
+/**
+    calculate a the shortest path from my pieces to a given piece.
+	@params: piece_x,piece_y - location of piece
+    @return: distance from my pieces to a piece.
+ */
 int AutoPlayerAlgorithm::calcDistanceFromPiece(int piece_x, int piece_y)
 {
 	int distance;
@@ -879,6 +1028,14 @@ int AutoPlayerAlgorithm::calcDistanceFromPiece(int piece_x, int piece_y)
 	return distance;
 }
 
+/**
+    a parameter calculated for scoring function.
+    represents how safe is my flag - if it has piece protectors of mine or
+    if opponent's pieces are close to me
+
+    @return: score of flag's safety between -1 to 1. can be negative if there is opponent neighbors
+    to my flag.
+ */
 double AutoPlayerAlgorithm::calcFlagSaftey()
 {
 	int protectingBombs = 0;
@@ -920,6 +1077,15 @@ double AutoPlayerAlgorithm::calcFlagSaftey()
 		return ((double)(-1 * enemyPieces) / (double)totalEnemyPieces);
 	return ((double)((2 * protectingBombs) + otherProtectingPieces) / (double)((2 * bombs) + movingPieces));
 }
+
+/**
+    calculates protectors and enemies surrounding a piece (current player's flag)
+    for flag safety calculation function.
+	@params: i,j - flag's location.
+	protecting bombs - function will update this reference to bombs number that are flag's neigbors.
+	other protecting pieces - piece neighbors of flag that belong to same player
+	enemy pieces - opponent piece neighbors of flag
+ */
 void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces)
 
 {
@@ -1110,6 +1276,12 @@ void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBom
 	}
 }
 
+/**
+    calculate a score of material parameter for scoring function.
+    score is given by the kind of a piece that just tried to move.
+
+    @return: score between 0 to 1.
+ */
 double AutoPlayerAlgorithm::calcMaterial(Cell cell)
 {
 	if (cell.getIsJoker())
@@ -1129,6 +1301,13 @@ double AutoPlayerAlgorithm::calcMaterial(Cell cell)
 
 }
 
+/**
+    calculate a score of discovery parameter for scoring function.
+    the less we know about a neighbor we can do a fight with in the next move -
+    the higher the score could be.
+
+    @return: discovery parameter score between 0 to 1.
+ */
 double AutoPlayerAlgorithm::calcDiscovery(AICell cell)
 {
 	int isFlagKnown = cell.flagProbability == 0 ? 0 : 1;
@@ -1138,6 +1317,16 @@ double AutoPlayerAlgorithm::calcDiscovery(AICell cell)
 	return (double)(isFlagKnown + isJokerKnown + isMovingPiece) / 3.0;
 }
 
+/**
+    AI algorithm function trying to change a joker piece to new representation
+    and check if it improves current player's game state.
+
+    @params: score - this function will calculate and update best score of joker piece change
+    joker_x,joker_y - joker's position
+    amIPlayerOne - true - current player's number is one. else - false.
+    @return: new representation of highest score board state after joker change.
+    if it is better not to do a joker change - return -1.
+ */
 char AutoPlayerAlgorithm::shouldChangeJoker(double &score, int joker_x, int joker_y, bool amIPlayerOne)
 {
 	char oldRep = gameBoard.board[joker_x][joker_y].getPiece();
@@ -1187,6 +1376,9 @@ char AutoPlayerAlgorithm::shouldChangeJoker(double &score, int joker_x, int joke
 	return bestRep;
 }
 
+/**
+    when AI algorithm is sure - changes all opponent's unknown pieces to moving pieces.
+ */
 void AutoPlayerAlgorithm::updateMovingPiece()
 {
 	for (int i = 0; i < COLS; ++i)
@@ -1206,9 +1398,12 @@ void AutoPlayerAlgorithm::updateMovingPiece()
 			}
 		}
 	}
-	//TODO: update flag probabilty
 }
 
+/**
+	update AI board after manager notified on board's positions.
+	@params: b - board given by manager
+ */
 void AutoPlayerAlgorithm::updateBoard(const Board &b)
 {
 	for (int i = 0; i < COLS; ++i)
@@ -1224,6 +1419,10 @@ void AutoPlayerAlgorithm::updateBoard(const Board &b)
 	}
 }
 
+/**
+	manager will ue this function to notify AI on opponent's move. and AI will
+	use this data to update its board and learn about the game.
+ */
 void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move &move)
 {
 	cout<<"MOVE RESULT"<<endl;
@@ -1243,7 +1442,11 @@ void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move &move)
 	AICell::cleanCell(gameBoard.board[from_x][from_y]);
 }
 
+/**
+    check if the move AI tried to play is legal
 
+    @return: true - move is legal. else - false.
+ */
 bool AutoPlayerAlgorithm::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
 	int from_x = move->getFrom().getX();
 	int from_y = move->getFrom().getY();
