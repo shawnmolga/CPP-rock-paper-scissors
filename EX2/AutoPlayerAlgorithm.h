@@ -56,7 +56,7 @@ public:
 	double calcDistanceFromBombOrFlag();
 	int calcDistanceFromPiece(int piece_x, int piece_y);
 	void updateFlagProbability();
-	bool tryToFight(int to_x, int to_y, char myPiece, bool isJoker);
+	bool tryToFight(int to_x, int to_y, char myPiece, bool isJoker, bool& isProbOne);
 	bool fight(int row, int col, char myPiece, char opponentPiece, bool isMyPieceJoker);
 	char shouldChangeJoker(double &score,int joker_x, int joker_y, bool amIPlayerOne);
 	double calcFlagSaftey();

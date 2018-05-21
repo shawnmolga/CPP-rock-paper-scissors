@@ -298,8 +298,8 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 		const std::vector<unique_ptr<FightInfo>> &fights)
 {
 	//delete after debug
-		cout<<"************AFTER NOTIFY-BEFORE UPDATE************"<<endl;
-		PrintBoardToConsole();
+	cout<<"************AFTER NOTIFY-BEFORE UPDATE************"<<endl;
+	PrintBoardToConsole();
 	updateBoard(b);
 	for (int i = 0; i < (int)fights.size(); ++i)
 	{
@@ -561,6 +561,9 @@ double AutoPlayerAlgorithm::tryMovePiece(unique_ptr<Move> &move)
 	double discovery = 0;
 	double material = calcMaterial(gameBoard.board[from_x][from_y]);
 	double reveal = -0.5;
+	bool lostPieceInFight = false;
+	bool isProbOne = false;
+	double score;
 
 	if (gameBoard.board[to_x][to_y].getPiece() == 0)
 	{
@@ -572,16 +575,19 @@ double AutoPlayerAlgorithm::tryMovePiece(unique_ptr<Move> &move)
 	{
 		reveal = -1;
 		discovery = calcDiscovery(gameBoard.board[to_x][to_y]);
-		bool lostPieceInFight = tryToFight(to_x, to_y,
+		lostPieceInFight = tryToFight(to_x, to_y,
 				gameBoard.board[from_x][from_y].getPiece(),
-				gameBoard.board[from_x][from_y].getIsJoker());
-		if (lostPieceInFight)
-		{
-			material *= -1.0;
-		}
+				gameBoard.board[from_x][from_y].getIsJoker(), isProbOne);
 		Cell::cleanCell(gameBoard.board[from_x][from_y]);
 	}
-	double score = calcScore(material, discovery, reveal);
+	if (isProbOne && lostPieceInFight)
+	{
+		score = INT_MIN;
+	}
+	else{
+		score = calcScore(material, discovery, reveal);
+	}
+
 	//return board to be as it was
 	AICell::updateCell(gameBoard.board[from_x][from_y], myCell.getPiece(),
 			myCell.getIsJoker());
@@ -592,11 +598,12 @@ double AutoPlayerAlgorithm::tryMovePiece(unique_ptr<Move> &move)
 	return score;
 }
 
-bool AutoPlayerAlgorithm::tryToFight(int to_x, int to_y, char myPiece, bool isJoker)
+bool AutoPlayerAlgorithm::tryToFight(int to_x, int to_y, char myPiece, bool isJoker, bool& isProbOne)
 {
 	char opponentPiece = gameBoard.board[to_x][to_y].getPiece();
 	if (opponentPiece != '#')
 	{ //we know the opponent piece so we can simulate fight normally
+		isProbOne = true;
 		return fight(to_x, to_y, myPiece, opponentPiece, isJoker);
 	}
 	else
