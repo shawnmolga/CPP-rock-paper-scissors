@@ -323,30 +323,44 @@ bool AutoPlayerAlgorithm::isLegalPosition(int x, int y)
  */
 bool AutoPlayerAlgorithm::checkIsOpponentNeighbors(int x, int y)
 {
+	char piece;
+
 	//down neigbor
-	char piece = gameBoard.board[x + 1][y].getPiece();
-	if (isLegalPosition(x + 1, y) && isOpponentPiece(piece))
-	{
-		return true;
+	if(isLegalPosition(x + 1, y)){
+		piece = gameBoard.board[x + 1][y].getPiece();
+		if (isOpponentPiece(piece))
+		{
+			return true;
+		}
 	}
+
 	//right
-	piece = gameBoard.board[x][y + 1].getPiece();
-	if (isLegalPosition(x, y + 1) && isOpponentPiece(piece))
-	{
-		return true;
+	if (isLegalPosition(x, y + 1)){
+		piece = gameBoard.board[x][y + 1].getPiece();
+		if (isOpponentPiece(piece))
+		{
+			return true;
+		}
 	}
+
 	//up neighbor
-	piece = gameBoard.board[x - 1][y].getPiece();
-	if (isLegalPosition(x - 1, y) && isOpponentPiece(piece))
-	{
-		return true;
+	if (isLegalPosition(x - 1, y)){
+		piece = gameBoard.board[x - 1][y].getPiece();
+		if (isOpponentPiece(piece))
+		{
+			return true;
+		}
 	}
+
 	//left
-	piece = gameBoard.board[x][y - 1].getPiece();
-	if (isLegalPosition(x, y - 1) && isOpponentPiece(piece))
-	{
-		return true;
+	if (isLegalPosition(x, y - 1)){
+		piece = gameBoard.board[x][y - 1].getPiece();
+		if (isOpponentPiece(piece))
+		{
+			return true;
+		}
 	}
+
 	return false;
 }
 
