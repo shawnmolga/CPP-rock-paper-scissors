@@ -1016,7 +1016,7 @@ int AutoPlayerAlgorithm::calcDistanceFromPiece(int piece_x, int piece_y)
 		for (int j = 0; j < ROWS; ++j)
 		{
 			bool isMyPiece = gameBoard.board[i][j].isMyPiece(myPlayerNum);
-			if (isMyPiece)
+			if (isMyPiece && gameBoard.board[i][j].checkIsMovingPiece())
 			{
 				distance = abs(i - piece_x) + abs(j - piece_y);
 				if (minimalDistance > distance)
