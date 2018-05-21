@@ -38,9 +38,9 @@ public:
 	void positionUnmovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
 	void positionBombs(int flagRow, int flagCol, int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int bombsToPosition, bool shouldPositionRandomly);
 	bool isLegalPosition(int row, int col);
-	bool checkIsOpponentNeighbors(int player, int row, int col);
+	bool checkIsOpponentNeighbors(int row, int col);
 	bool findEmptyNeigbor(int &row, int &col, int flagRow, int flagCol);
-	bool isOpponentPiece(int myPlayerNum, char piece);
+	bool isOpponentPiece(char piece);
 	void positionPiecesRandomly(int pieceNum, char piece, bool isJoker,char pieceRep, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
 	void positionMovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
 	void positionJokers(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
