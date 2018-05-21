@@ -133,6 +133,11 @@ bool RPSGame::movePiece(unique_ptr<Move> &move,
     bool gameOverIntenral  = false;
     bool wasFight = false;
     isBadFormat = false;
+
+    //check if able to move - (maybe all pieces were eaten)
+    if (checkGameOver(true,isPlayerOneTurn))
+    		return true;
+
     numOfMoves ++; // we increment the numerator for each move
     int from_x = move->getFrom().getX(); //col
     int from_y = move->getFrom().getY(); //row
