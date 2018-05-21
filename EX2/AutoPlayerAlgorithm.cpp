@@ -1445,10 +1445,15 @@ void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move &move)
 	int to_x = move.getTo().getX()-1;
 	int to_y = move.getTo().getY()-1;
 	AICell fromCell = gameBoard.board[from_x][from_y];
+
+	if (gameBoard.board[from_x][from_y].isMyPiece(myPlayerNum))
+		return;
+
 	if (gameBoard.board[to_x][to_y].getPiece() == 0){
 		AICell::updateCell(gameBoard.board[to_x][to_y], fromCell.getPiece(), fromCell.getIsJoker());
 		AICell::updateCellKnowlage(gameBoard.board[to_x][to_y], fromCell);
 	}
+
 	else { //there's a fight
 		opponentCell = gameBoard.board[from_x][from_y];
 		myCell = gameBoard.board[to_x][to_y];
