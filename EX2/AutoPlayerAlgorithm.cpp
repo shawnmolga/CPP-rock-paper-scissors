@@ -584,7 +584,10 @@ double AutoPlayerAlgorithm::tryMovePiece(unique_ptr<Move> &move)
 	{
 		score = INT_MIN;
 	}
-	score = calcScore(material, discovery, reveal);
+	else{
+		score = calcScore(material, discovery, reveal);
+	}
+
 	//return board to be as it was
 	AICell::updateCell(gameBoard.board[from_x][from_y], myCell.getPiece(),
 			myCell.getIsJoker());
