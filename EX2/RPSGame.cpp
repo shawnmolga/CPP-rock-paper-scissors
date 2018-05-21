@@ -226,9 +226,9 @@ bool RPSGame::movePiece(unique_ptr<Move> &move,
 						 isPlayerOneTurn ? new_rep : tolower(new_rep), true);
 	}
 
+	isPlayerOneTurn ? playerAlgoTwo->notifyOnOpponentMove(*move) : playerAlgoOne->notifyOnOpponentMove(*move);
 	if (wasFight)
 	{
-		isPlayerOneTurn ? playerAlgoTwo->notifyOnOpponentMove(*move) : playerAlgoOne->notifyOnOpponentMove(*move);
 		isPlayerOneTurn ? playerAlgoTwo->notifyFightResult(fights) : playerAlgoOne->notifyFightResult(fights);
 	}
 
@@ -1202,7 +1202,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 			nextPlayer->numOfPieces[3]--;
 			Cell::updateCell(gameBoard.board.at(x).at(y), 0, false);
 		}
-		fights.setWinner(nextPlayerNum);
+		//fights.setWinner(nextPlayerNum);
 		//initFights.push_back(
 		// 	make_unique<RPSFight>(currPos, gameBoard.board.at(row).at(col).getPiece(), nextPlayerNum));
 
@@ -1377,6 +1377,9 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
 							 isCurrPieceJoker);
 		}
 	}
+
+	delete ptr;
+
 	return checkGameOver(false, isPlayerOneTurn);
 }
 
