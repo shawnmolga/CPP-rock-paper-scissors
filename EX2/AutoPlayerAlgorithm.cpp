@@ -41,6 +41,7 @@ void AutoPlayerAlgorithm::getInitialPositions(int player,
  */
 void AutoPlayerAlgorithm::positionMovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
+	cout<<"inside positionMovingPieces "<<endl;
 	positionPiecesRandomly(ROCKS_NUM, player == 1 ? 'R' : 'r', false, '#', vectorToFill);
 	positionPiecesRandomly(PAPERS_NUM, player == 1 ? 'P' : 'p', false,'#', vectorToFill);
 	positionPiecesRandomly(SCISSORS_NUM, player == 1 ? 'S' : 's', false,'#', vectorToFill);
@@ -54,6 +55,7 @@ void AutoPlayerAlgorithm::positionMovingPieces(int player, std::vector<unique_pt
  */
 void AutoPlayerAlgorithm::positionJokers(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
+	cout<<"inside positionJoker "<<endl;
 	for (int i=0; i<JOKERS_NUM; ++i){
 		int pieceNum = getRandomNumInRange(1, 4);
 		switch (pieceNum)
@@ -85,6 +87,7 @@ void AutoPlayerAlgorithm::positionJokers(int player, std::vector<unique_ptr<Piec
  */
 void AutoPlayerAlgorithm::positionUnmovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
+	cout<<"in positionUnmovingPieces"<<endl;
 	bool isCellTaken = true;
 	bool hasOpponentNeighbor = true;
 	char piece = (player == 1 ? 'F' : 'f');

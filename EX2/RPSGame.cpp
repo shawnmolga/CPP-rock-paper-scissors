@@ -895,6 +895,7 @@ int RPSGame::insertToBoard(int playerNum, int x, int y, char inputPiece, bool & 
 int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>> &vectorToFill, bool &isPlayerLegalFormat,
                            int numOfPositionedPieces[], RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights)
 {
+	cout<<"in locateOnBoard"<<endl;
     int vectorSize = vectorToFill.size();
     bool isJoker = false;
     int x;
