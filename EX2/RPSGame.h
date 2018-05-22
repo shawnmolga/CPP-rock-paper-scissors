@@ -100,7 +100,7 @@ public:
                            bool isPlayerOne);
 
 
-    bool movePiece( unique_ptr<Move> &move, bool isPlayerOneTurn, bool &isBadFormat);
+    bool movePiece( unique_ptr<Move> &move, bool isPlayerOneTurn, bool &isBadFormat, bool onlyOnePlayes);
     int makeMove();
     bool initGameMethod(string gameMethod);
     void PrintBoardToConsole();

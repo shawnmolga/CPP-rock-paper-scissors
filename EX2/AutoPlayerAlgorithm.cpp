@@ -15,6 +15,7 @@ AutoPlayerAlgorithm::AutoPlayerAlgorithm()
 	opponentFlagsNumOnBoard = FLAGS_NUM;
 	opponentBombsNumOnBoard = BOMBS_NUM + JOKERS_NUM;	//we dont know if joker is now bomb or not
 	opponentMovingPieceNumOnBoard = SCISSORS_NUM + ROCKS_NUM + PAPERS_NUM + JOKERS_NUM; //we dont know if joker is moving piece now or not
+	willBeFight = false;
 }
 
 /**
@@ -493,7 +494,7 @@ unique_ptr<Move> AutoPlayerAlgorithm::getMove()
 	cout<<"MY MOVE: "<<from_x<<" "<<from_y<<" to "<<to_x<<" "<<to_y<<" my piece: "<<myCell.getPiece()<<endl;
 	cout<<"~~~~MY BOARD~~~~"<<endl;
 	PrintBoardToConsole();
-
+	cout<<"succeess"<<endl;
 	return move;
 }
 
@@ -505,11 +506,13 @@ unique_ptr<Move> AutoPlayerAlgorithm::getMove()
  */
 unique_ptr<JokerChange> AutoPlayerAlgorithm::getJokerChange()
 {
-	int joker_x;
-	int joker_y;
+	cout<<"START CHANGE"<<endl;
+	int joker_x = -1;
+	int joker_y = -1;
 	char newRep = -1;
 	char bestRep = newRep;
-	double score = calcScore(1, 0, 0);
+	double score = calcScore(1, 0, 0, -1, -1);
+	cout<<"SCORE SUCCESS"<<endl;
 	for (int i = 0; i < COLS; ++i)
 	{
 		for (int j = 0; j < ROWS; ++j)
@@ -530,9 +533,9 @@ unique_ptr<JokerChange> AutoPlayerAlgorithm::getJokerChange()
 	if (bestRep == -1)
 		return nullptr;
 
-	AICell::updateCell(gameBoard.board[joker_x][joker_y],newRep,true);
-	cout<<"JOKER CHANGED: to "<<newRep<<endl;
-	unique_ptr<JokerChange> jokerChange = make_unique<RPSJokerChange>(toupper(newRep), RPSpoint(joker_x+1, joker_y+1));
+	AICell::updateCell(gameBoard.board[joker_x][joker_y],bestRep,true);
+	cout<<"JOKER CHANGED: to "<<bestRep<<endl;
+	unique_ptr<JokerChange> jokerChange = make_unique<RPSJokerChange>(toupper(bestRep), RPSpoint(joker_x+1, joker_y+1));
 	return jokerChange;
 }
 
@@ -690,12 +693,15 @@ double AutoPlayerAlgorithm::tryMovePiece(unique_ptr<Move> &move)
 				gameBoard.board[from_x][from_y].getIsJoker(), isProbOne);
 		Cell::cleanCell(gameBoard.board[from_x][from_y]);
 	}
+	if (!isProbOne) willBeFight = true;
+
 	if (isProbOne && lostPieceInFight)
 	{
 		score = INT_MIN;
 	}
 	else{
-		score = calcScore(material, discovery, reveal);
+		score = calcScore(material, discovery, reveal, to_x, to_y);
+		willBeFight = false;
 	}
 
 	//return board to be as it was
@@ -838,11 +844,27 @@ bool AutoPlayerAlgorithm::fight(int x, int y, char myPiece, char opponentPiece, 
     reveal - score represents if i should reveal my piece by moving it.
     @return: total score of current move result.
  */
-double AutoPlayerAlgorithm::calcScore(double material, double discovery, double reveal)
+double AutoPlayerAlgorithm::calcScore(double material, double discovery, double reveal, int to_x, int to_y)
 {
+	bool isJoker = false;
+	if (to_x != -1 && to_y != -1){
+		if (gameBoard.board[to_x][to_y].isMyPiece(myPlayerNum) && gameBoard.board[to_x][to_y].getIsJoker()){
+			isJoker = true;
+		}
+	}
 	double flagSaftey = calcFlagSaftey();
-	double distanceFromBombOrFlag = calcDistanceFromBombOrFlag();
-	double distanceFromUnknownPiece = calcDistanceFromUnknownPiece();
+	double distanceFromBombOrFlag = to_x == -1 ? 0 : calcDistanceFromBombOrFlag(to_x,to_y);
+	double distanceFromUnknownPiece = to_x == -1 ? 0 : calcDistanceFromUnknownPiece(to_x,to_y);
+
+	//we dont want to defend opponent's flag with bombs !!
+	if (distanceFromBombOrFlag > 0.9 || distanceFromUnknownPiece > 0.9){
+		if (isJoker && !gameBoard.board[to_x][to_y].checkIsMovingPiece()){
+			distanceFromBombOrFlag = 0;
+			distanceFromUnknownPiece = 0;
+		}
+
+	}
+
 	double score = MATERIAL_WEIGHT * material + DISCOVERY_WEIGHT * discovery + REVEAL_WEIGHT * reveal +
 			FLAG_SAFTEY_WEUGHT * flagSaftey + DISTANCE_FROM_FLAG_WEIGHT * distanceFromBombOrFlag +
 			DISTANCE_FROM_UNKNOWN_WEIGHT * distanceFromUnknownPiece;
@@ -851,8 +873,8 @@ double AutoPlayerAlgorithm::calcScore(double material, double discovery, double 
 	//	cout<<"reveal: "<<reveal<<endl;
 	//	cout<<"flag safety: "<<flagSaftey<<endl;
 	//	cout<<"distance 1: "<<distanceFromBombOrFlag<<endl;
-	//	cout<<"distance 2: "<<distanceFromUnknownPiece<<endl;
-	//	cout<<"in calc sore: "<<score<<endl;
+	cout<<"distance 2: "<<distanceFromUnknownPiece<<endl;
+	cout<<"in calc sore: "<<score<<endl;
 	return score;
 }
 
@@ -950,10 +972,10 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 
 /**
     calculate the shortest path from a piece of mine to an opponent's flag or bombs
-
+	@params: to_x,to_y: location of my moved piece (new location)
     @return: distance from closest piece of mine to a flag or bomb.
  */
-double AutoPlayerAlgorithm::calcDistanceFromBombOrFlag()
+double AutoPlayerAlgorithm::calcDistanceFromBombOrFlag(int to_x, int to_y)
 {
 	int distance;
 	int minimalDistance = ROWS + COLS;
@@ -970,7 +992,7 @@ double AutoPlayerAlgorithm::calcDistanceFromBombOrFlag()
 			{
 				if (gameBoard.board[i][j].isMovingPieceKnown && !gameBoard.board[i][j].isMovingPiece)
 				{
-					distance = calcDistanceFromPiece(i, j);
+					distance = calcDistanceFromPiece(i, j, to_x, to_y);
 					if (minimalDistance > distance)
 						minimalDistance = distance;
 				}
@@ -984,10 +1006,10 @@ double AutoPlayerAlgorithm::calcDistanceFromBombOrFlag()
 /**
     calculate the shortest path from a piece of mine to an opponent's piece
     that was not seen moving yet and suspected as a flag.
-
+	@params: to_x,to_y: location of my moved piece (new location)
     @return: distance from closest piece of mine to an unkown piece.
  */
-double AutoPlayerAlgorithm::calcDistanceFromUnknownPiece()
+double AutoPlayerAlgorithm::calcDistanceFromUnknownPiece(int to_x, int to_y)
 {
 	int distance;
 	int minimalDistance = ROWS + COLS;
@@ -1004,7 +1026,7 @@ double AutoPlayerAlgorithm::calcDistanceFromUnknownPiece()
 			{
 				if (!gameBoard.board[i][j].isMovingPieceKnown)
 				{
-					distance = calcDistanceFromPiece(i, j);
+					distance = calcDistanceFromPiece(i, j, to_x, to_y);
 					if (minimalDistance > distance)
 						minimalDistance = distance;
 				}
@@ -1017,15 +1039,22 @@ double AutoPlayerAlgorithm::calcDistanceFromUnknownPiece()
 
 /**
     calculate a the shortest path from my pieces to a given piece.
-	@params: piece_x,piece_y - location of piece
+	@params: piece_x,piece_y - location of unknown piece
+	my_x,my_y - location of my piece to calculate the distance from it to opponent's unkown piece
     @return: distance from my pieces to a piece.
  */
-int AutoPlayerAlgorithm::calcDistanceFromPiece(int piece_x, int piece_y)
+int AutoPlayerAlgorithm::calcDistanceFromPiece(int piece_x, int piece_y, int my_x, int my_y)
 {
 	int distance;
-	int minimalDistance = INT_MAX;
 
-	for (int i = 0; i < COLS; ++i)
+	//there will be a fight with my piece vs unkown piece
+	if (willBeFight && my_x == piece_x && my_y == piece_y){
+		return 0;
+	}
+	distance = abs(my_x - piece_x) + abs(my_y - piece_y);
+	return distance;
+
+	/*for (int i = 0; i < COLS; ++i)
 	{
 		for (int j = 0; j < ROWS; ++j)
 		{
@@ -1038,8 +1067,8 @@ int AutoPlayerAlgorithm::calcDistanceFromPiece(int piece_x, int piece_y)
 			}
 		}
 	}
-
-	return distance;
+	cout<<minimalDistance<<endl;
+	return minimalDistance;*/
 }
 
 /**
@@ -1375,7 +1404,7 @@ char AutoPlayerAlgorithm::shouldChangeJoker(double &score, int joker_x, int joke
 		}
 
 		Cell::updateCell(gameBoard.board[joker_x][joker_y],newRep, true);
-		currScore = calcScore(material, discovery, reveal);
+		currScore = calcScore(material, discovery, reveal, joker_x, joker_y);
 
 		if (currScore > score)
 		{
@@ -1521,23 +1550,8 @@ bool AutoPlayerAlgorithm::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
 		return false;
 	}
 
-	if (gameBoard.board.at(to_x).at(to_y).getPiece() != 0) {
-		if (isPlayer1) {
-			if (isupper(gameBoard.board.at(to_x).at(to_y).getPiece())) {
-				//	cout
-				//	<< "Error: you are trying to move to a cell taken by your own piece"
-				//	<< endl;
-				return false;
-			}
-		}
-		else {
-			if (islower(gameBoard.board.at(to_x).at(to_y).getPiece())) {
-				//	cout
-				//	<< "Error: you are trying to move to a cell taken by your own piece"
-				//	<< endl;
-				return false;
-			}
-		}
+	if (gameBoard.board.at(to_x).at(to_y).isMyPiece(myPlayerNum)) {
+		return false;
 	}
 
 	return true;
@@ -1555,11 +1569,11 @@ void AutoPlayerAlgorithm::PrintBoardToConsole()
 			{
 				if (Cell::isPlayerOnePiece(gameBoard.board[j][i]))
 				{
-					cout << " J ";
+					cout << " J="<<gameBoard.board[j][i].getPiece();
 				}
 				else
 				{
-					cout << " j ";
+					cout << " j="<<gameBoard.board[j][i].getPiece();
 				}
 			}
 			else if (gameBoard.board[j][i].getPiece() == 0)
