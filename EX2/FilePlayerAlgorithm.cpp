@@ -10,12 +10,12 @@
 FilePlayerAlgorithm::FilePlayerAlgorithm(const string &posFile,
 										 const string &moveFile) : positionFile(posFile), movesFile(moveFile),movesFileLine(1),nextIndex(0)
 {
-	player1Move.open (moveFile, std::ofstream::in);
+	playerMoveFile.open (moveFile, std::ofstream::in);
 
 }
 
 FilePlayerAlgorithm::~FilePlayerAlgorithm(){
-	player1Move.close();
+	playerMoveFile.close();
 
 }
 
@@ -30,7 +30,7 @@ FilePlayerAlgorithm::~FilePlayerAlgorithm(){
  */
 bool FilePlayerAlgorithm::checkEmptyLine(int start, const string &line)
 {
-	for (int i = start; i < (int)line.length(); ++i)
+	for (int i = start; i < (int)line.length(); ++i) //skip space or enter
 	{
 		if (line[i] != ' ' && line[i] != '\n')
 			return false;
@@ -51,13 +51,13 @@ int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 {
 	int end = start;
 
-	if ((size_t)end >= line.length())
+	if ((size_t)end >= line.length()) //start reading after line ended
 	{
 		cout << "Error - bad format - missing piece in line" << endl;
 		return -1;
 	}
 
-	while (line[end] == ' ')
+	while (line[end] == ' ') //skip spaces until piece
 	{
 		end++;
 		if ((size_t)end >= line.length())
@@ -66,7 +66,7 @@ int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 			return -1;
 		}
 	}
-	return end;
+	return end; //return piece index
 }
 
 /**
@@ -96,13 +96,13 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 											 int &row, int &col)
 {
 	int size = 1;
-	if ((size_t)start >= line.length())
+	if ((size_t)start >= line.length()) //try reading from index after line ended
 	{
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
 	}
 
-	while (line[start] == ' ')
+	while (line[start] == ' ') //skip spaces until column position
 	{
 		start = start + 1;
 		if ((size_t)start >= line.length())
@@ -111,13 +111,13 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 			return -1;
 		}
 	}
-	if (!checkIfDigit(line[start]))
+	if (!checkIfDigit(line[start])) //verify this is a digit
 	{
 		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
 	}
 	int end = start + 1;
-	if ((size_t)end >= line.length())
+	if ((size_t)end >= line.length()) //no row
 	{
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
@@ -283,15 +283,13 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 	int row = -1;
 	int col = -1;
 	char piece = 0;
-	char jokerRep = '#';
-	//int indexLine = 1; //Counting the lines;
+	char jokerRep = '#'; //empty rep
 	while (getline(posFile, line))
 	{
 		jokerRep = '#';
 		//skip empty lines
 		if (checkEmptyLine(0, line))
 		{
-			//indexLine++;
 			continue;
 		}
 		if (getPositionAndRepFromLine(line, row, col, jokerRep, piece) == false)
@@ -306,7 +304,6 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 			vectorToFill.push_back(
 					make_unique<RPSPiecePosition>(RPSpoint(col, row), piece, jokerRep));
 		}
-		//indexLine++;
 		//position is illegal - tried to locate 2 pieces of same player in same position
 	}
 	//if there was a problem while reading we will put -2 in the piece
@@ -360,7 +357,6 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 		{
 			new_rep = 'E';
 			jc->setJokerNewRep('E');
-			//unique_ptr <RPSMove> move = make_unique <RPSMove> (from, to);
 			return make_unique<RPSJokerChange>(*jc);
 		}
 		if (line1[nextIndex - 1] != JOKER)
@@ -395,8 +391,8 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 			jc->setJokerNewRep('E');
 			return make_unique<RPSJokerChange>(*jc);
 		}
-		point.setX(y_joker); //noy changes due to bug!
-		point.setY(x_joker);//noy changes due to bug!
+		point.setX(y_joker);
+		point.setY(x_joker);
 		nextIndex = 1 + getPieceFromLine(nextIndex, line1);
 		if (nextIndex == 0)
 		{
@@ -423,7 +419,7 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 		return make_unique<RPSJokerChange>(*jc);
 	}
 	else
-		return unique_ptr<RPSJokerChange>{}; //if no jokerChange - return Null;
+		return nullptr; //if no jokerChange - return Null;
 }
 
 /**
@@ -490,7 +486,7 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 
 	RPSpoint from(from_x, from_y);
 	RPSpoint to(to_x, to_y);
-	if (getline(player1Move, line1))
+	if (getline(playerMoveFile, line1))
 	{
 		string local_line;
 		copyString(local_line, line1);
@@ -501,10 +497,10 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 
 	}
 	//If we reach eod we will return -2
-	else if(player1Move.eof()){
+	else if(playerMoveFile.eof()){
 		return nullptr;
 	}
-	else if(player1Move.bad())
+	else if(playerMoveFile.bad())
 	{
 		//if getLine error - Point from = (-2,0)
 		from.setX(READ_LINE_ERR);

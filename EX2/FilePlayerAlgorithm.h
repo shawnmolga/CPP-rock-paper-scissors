@@ -44,7 +44,7 @@ public:
 private:
     string positionFile;
     string movesFile;
-    ifstream player1Move;
+    ifstream playerMoveFile;
     int movesFileLine;
     int nextIndex;
     string line1;
