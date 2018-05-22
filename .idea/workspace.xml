@@ -10,11 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="da2d32cb-143c-46ff-86a6-ed00b66028c2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/AICell.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/AICell.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/AICell.h" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/AICell.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.h" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EX2/RPSGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/RPSGame.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EX2/RPSGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/RPSGame.h" afterDir="false" />
     </list>
@@ -30,8 +25,8 @@
       <file leaf-file-name="RPSGame.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/EX2/RPSGame.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="662" column="21" lean-forward="true" selection-start-line="662" selection-start-column="21" selection-end-line="662" selection-end-column="21" />
+            <state relative-caret-position="153">
+              <caret line="9" column="27" lean-forward="true" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -39,8 +34,8 @@
       <file leaf-file-name="RPSGame.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EX2/RPSGame.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="103" column="103" selection-start-line="103" selection-start-column="90" selection-end-line="103" selection-end-column="103" />
+            <state relative-caret-position="1496">
+              <caret line="88" column="31" selection-start-line="88" selection-start-column="31" selection-end-line="88" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -99,11 +94,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>locateo</find>
-      <find>updateJokerMovingPieces</find>
-      <find>'</find>
-      <find>&quot;4</find>
-      <find>numof</find>
       <find>movin</find>
       <find>star</find>
       <find>checkInsertPlayerPosition</find>
@@ -120,7 +110,6 @@
       <find>fight</find>
       <find>shawn</find>
       <find>handleSwitchCase</find>
-      <find>handleNextPlayerPieceFlag</find>
       <find>handlePaperVsRock</find>
       <find>handlePaperOrRockVsScissors</find>
       <find>handlenextplaye</find>
@@ -128,7 +117,13 @@
       <find>handlenextplayerbomb</find>
       <find>handles</find>
       <find>handlepaperorro</find>
+      <find>movepiece(</find>
       <find>movepiece</find>
+      <find>fight(</find>
+      <find>handleswitch</find>
+      <find>pieceflag</find>
+      <find>handleNextPlayerPieceFlag</find>
+      <find>switchcas</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -156,9 +151,9 @@
         <option value="$PROJECT_DIR$/EX1/RPSgame.cpp" />
         <option value="$PROJECT_DIR$/EX2/FilePlayerAlgorithm.cpp" />
         <option value="$PROJECT_DIR$/EX2/FilePlayerAlgorithm.h" />
-        <option value="$PROJECT_DIR$/EX2/RPSGame.h" />
         <option value="$PROJECT_DIR$/EX2/RPSpoint.cpp" />
         <option value="$PROJECT_DIR$/EX2/RPSGame.cpp" />
+        <option value="$PROJECT_DIR$/EX2/RPSGame.h" />
       </list>
     </option>
   </component>
@@ -246,12 +241,12 @@
       <workItem from="1526149588850" duration="7073000" />
       <workItem from="1526294778407" duration="6440000" />
       <workItem from="1526673445061" duration="2971000" />
-      <workItem from="1526968582294" duration="6485000" />
+      <workItem from="1526968582294" duration="9906000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="120213000" />
+    <option name="totallyTimeSpent" value="123634000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1293" height="693" extended-state="6" />
@@ -608,15 +603,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/EX2/RPSGame.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="103" column="103" selection-start-line="103" selection-start-column="90" selection-end-line="103" selection-end-column="103" />
+        <state relative-caret-position="1496">
+          <caret line="88" column="31" selection-start-line="88" selection-start-column="31" selection-end-line="88" selection-end-column="31" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/EX2/RPSGame.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="662" column="21" lean-forward="true" selection-start-line="662" selection-start-column="21" selection-end-line="662" selection-end-column="21" />
+        <state relative-caret-position="153">
+          <caret line="9" column="27" lean-forward="true" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
         </state>
       </provider>
     </entry>
