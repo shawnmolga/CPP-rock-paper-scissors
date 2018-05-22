@@ -951,7 +951,7 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 /**
     calculate the shortest path from a piece of mine to an opponent's flag or bombs
 	@params: to_x,to_y: location of my moved piece (new location)
-    @return: distance from closest piece of mine to a flag or bomb.
+    @return: distance from closest piece of mine to a flag or bomb normalized to 1.
  */
 double AutoPlayerAlgorithm::calcDistanceFromBombOrFlag(int to_x, int to_y)
 {
@@ -1011,7 +1011,6 @@ double AutoPlayerAlgorithm::calcDistanceFromUnknownPiece(int to_x, int to_y)
 		}
 	}
 return (double)(ROWS+COLS) - (double)minimalDistance;
-//	return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
 }
 
 /**
@@ -1023,31 +1022,12 @@ return (double)(ROWS+COLS) - (double)minimalDistance;
 int AutoPlayerAlgorithm::calcDistanceFromPiece(int piece_x, int piece_y, int my_x, int my_y)
 {
 	int distance;
-	//int minimalDistance = INT_MAX; //to do: remove!
-	//there will be a fight with my piece vs unkown piece
+	//there will be a fight with my piece vs unknown piece
 	if (willBeFight && my_x == piece_x && my_y == piece_y){
 		return 0;
 	}
 	distance = abs(my_x - piece_x) + abs(my_y - piece_y);
 	return distance;
-	// (void)my_x;
-	// (void)my_y;
-	// for (int i = 0; i < COLS; ++i)
-	// {
-	// 	for (int j = 0; j < ROWS; ++j)
-	// 	{
-	// 		bool isMyPiece = gameBoard.board[i][j].isMyPiece(myPlayerNum);
-	// 		if (isMyPiece && gameBoard.board[i][j].checkIsMovingPiece())
-	// 		{
-	// 			distance = abs(i - piece_x) + abs(j - piece_y);
-	// 			if (minimalDistance > distance){
-	// 			minimalDistance = distance;
-	// 			}
-	// 		}
-	// 	}
-	// }
-	// cout<<minimalDistance<<endl;
-	// return minimalDistance;
 }
 
 /**
@@ -1060,8 +1040,8 @@ int AutoPlayerAlgorithm::calcDistanceFromPiece(int piece_x, int piece_y, int my_
  */
 double AutoPlayerAlgorithm::calcFlagSaftey()
 {
-	int protectingBombs = 0;
-	int otherProtectingPieces = 0;
+	int protectingBombs = 0; //bombs neighbors to flag counter
+	int otherProtectingPieces = 0; //moving pieces neighbors flag counter
 	int enemyPieces = 0;
 	int bombs = 0;
 	int movingPieces = 0;
@@ -1079,7 +1059,7 @@ double AutoPlayerAlgorithm::calcFlagSaftey()
 			}
 			//else - this is my piece
 			char piece = toupper(gameBoard.board[i][j].getPiece());
-			if (piece == 'F')
+			if (piece == 'F') //found a flag of mine - now check neighbors (protectors/enemies)
 			{
 				countProtectingPieces(i, j, protectingBombs, otherProtectingPieces, enemyPieces);
 			}
@@ -1094,7 +1074,7 @@ double AutoPlayerAlgorithm::calcFlagSaftey()
 		}
 	}
 	if (bombs == 0 && movingPieces == 0)
-		return -1; //flag safety doesnt matter - no pieces left
+		return -1; //flag safety does not matter - no pieces left
 	if (enemyPieces > 0)
 		return ((double)(-1 * enemyPieces) / (double)totalEnemyPieces);
 	return ((double)((2 * protectingBombs) + otherProtectingPieces) / (double)((2 * bombs) + movingPieces));
@@ -1124,7 +1104,7 @@ void AutoPlayerAlgorithm::updateNeighborAsProtectorOrEnemy(char piece, int x, in
 			else
 				enemyPieces++; //enemies piece is next to flag
 		}
-		else if (toupper(piece) != 'F')
+		else if (toupper(piece) != 'F') //count only moving pieces protectors
 		{
 			if (isMyPiece)
 				otherProtectingPieces++;
@@ -1198,7 +1178,7 @@ double AutoPlayerAlgorithm::calcMaterial(Cell cell)
 	case 'S':
 		return 1.0 - ((double)SCISSOR_SCORE / (double)10);
 	}
-	return -1; //should never get here!
+	return -1.0; //should never get here!
 
 }
 
@@ -1215,7 +1195,7 @@ double AutoPlayerAlgorithm::calcDiscovery(AICell cell)
 	int isJokerKnown = cell.isJokerKnown ? 0 : 1;
 	int isMovingPiece = cell.isMovingPiece ? 0 : 1;
 
-	return (double)(isFlagKnown + isJokerKnown + isMovingPiece) / 3.0;
+	return (double)(isFlagKnown + isJokerKnown + isMovingPiece) / 3.0; //normalized to one
 }
 
 /**
@@ -1239,7 +1219,8 @@ char AutoPlayerAlgorithm::shouldChangeJoker(double &score, int joker_x, int joke
 	double discovery = 0;
 	double reveal = 0;
 
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 4; ++i) //try all joker representations and
+		//then decide by highest score if we want and which representation to give to joker
 	{
 		switch (i)
 		{
@@ -1332,9 +1313,10 @@ void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move &move)
 	int to_y = move.getTo().getY()-1;
 	AICell fromCell = gameBoard.board[from_x][from_y];
 
+	//in case i am the only player plays - can happen only in auto-vs-file mode when move file is over before victory
 	if (gameBoard.board[from_x][from_y].isMyPiece(myPlayerNum))
 		return;
-
+	//in case there is no fight we can update the AI board
 	if (gameBoard.board[to_x][to_y].getPiece() == 0){
 		AICell::updateCell(gameBoard.board[to_x][to_y], fromCell.getPiece(), fromCell.getIsJoker());
 		AICell::updateCellKnowlage(gameBoard.board[to_x][to_y], fromCell);
@@ -1353,34 +1335,38 @@ void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move &move)
     @return: true - move is legal. else - false.
  */
 bool AutoPlayerAlgorithm::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
+	//get move positions
 	int from_x = move->getFrom().getX();
 	int from_y = move->getFrom().getY();
 	int to_x = move->getTo().getX();
 	int to_y = move->getTo().getY();
 
+	//check if position is in board limits
 	if ((from_x < 0 || from_x > COLS-1)
 			|| (to_x < 0 || to_x > COLS-1) || (from_y < 0 || from_y > ROWS-1)
 			|| (to_y < 0 || to_y > ROWS-1)) {
 		return false;
 	}
 
+	//check there was an actual move
 	if (from_x == to_x && from_y == to_y) {
 		return false;
 	}
 
+	//check if not trying to move empty piece
 	if (gameBoard.board.at(from_x).at(from_y).getPiece() == 0) {
 		return false;
-	}
+	}//check if not trying to move opponent's piece
 	else if ((isPlayer1 && islower(gameBoard.board.at(from_x).at(from_y).getPiece()))
 			|| (!isPlayer1 && isupper(gameBoard.board[from_x][from_y].getPiece()))) {
 		return false;
 	}
-
+	//check if not trying to move unmoving piece
 	if (toupper(gameBoard.board.at(from_x).at(from_y).getPiece()) == BOMB
 			|| toupper(gameBoard.board[from_x][from_y].getPiece()) == FLAG) {
 		return false;
 	}
-
+	//check not trying to move to illegal cell
 	if (to_x == from_x + 1 || to_x == from_x - 1) {
 		if (to_y != from_y) {
 			return false;
@@ -1394,7 +1380,7 @@ bool AutoPlayerAlgorithm::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
 	else {
 		return false;
 	}
-
+	//check not trying to move to a cell taken by my own piece
 	if (gameBoard.board.at(to_x).at(to_y).isMyPiece(myPlayerNum)) {
 		return false;
 	}
