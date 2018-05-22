@@ -567,7 +567,7 @@ void AutoPlayerAlgorithm::getBestMove(int &from_x, int &from_y, int &to_x, int &
 			}
 		}
 	}
-
+	myCell = gameBoard.board[from_x][from_y];
 	//make move
 	if (gameBoard.board[to_x][to_y].getPiece() == 0)
 	{
@@ -1014,8 +1014,9 @@ double AutoPlayerAlgorithm::calcDistanceFromUnknownPiece()
 			}
 		}
 	}
-
-	return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
+	cout<<"***mminimal distance ***"<<minimalDistance<<endl;
+return (double)(ROWS+COLS) - (double)minimalDistance;
+//	return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
 }
 
 /**
@@ -1036,8 +1037,10 @@ int AutoPlayerAlgorithm::calcDistanceFromPiece(int piece_x, int piece_y)
 			if (isMyPiece && gameBoard.board[i][j].checkIsMovingPiece())
 			{
 				distance = abs(i - piece_x) + abs(j - piece_y);
-				if (minimalDistance > distance)
-					minimalDistance = distance;
+				if (minimalDistance > distance){
+				cout<<gameBoard.board[i][j].getPiece()<<"i "<< i << " j "<< j<<endl;
+				minimalDistance = distance;
+				}
 			}
 		}
 	}
