@@ -67,7 +67,7 @@ public:
 	void printVectorPositions(std::vector<unique_ptr<PiecePosition>> &vectorToFill);
 	void PrintBoardToConsole();
 	void positionFlagsOnBoard(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int& bombsPositioned);
-	void AutoPlayerAlgorithm::updateNeighborAsProtectorOrEnemy(char piece, int x, int y, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces);
+	void updateNeighborAsProtectorOrEnemy(char piece, int x, int y, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces);
 	
 private:
 	int myPlayerNum;

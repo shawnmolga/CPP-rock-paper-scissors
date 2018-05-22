@@ -13,12 +13,21 @@ FilePlayerAlgorithm::FilePlayerAlgorithm(const string &posFile,
 	player1Move.open (moveFile, std::ofstream::in);
 
 }
+
 FilePlayerAlgorithm::~FilePlayerAlgorithm(){
 	player1Move.close();
 
 }
-//returns true if line is empty
-//returns false otherwise
+
+/**
+    checks if line is empty.
+
+    @params: start - from where we need to start to read from line
+    line - line to read
+    vectorToFill - vector of positions that will be filled
+    @return: returns true if line is empty
+			 returns false otherwise
+ */
 bool FilePlayerAlgorithm::checkEmptyLine(int start, const string &line)
 {
 	for (int i = start; i < (int)line.length(); ++i)
@@ -30,6 +39,14 @@ bool FilePlayerAlgorithm::checkEmptyLine(int start, const string &line)
 	return true;
 }
 
+/**
+    extract piece from line.
+
+    @params: start - from where we need to start to read from line
+    line - line to read
+    vectorToFill - vector of positions that will be filled
+    @return: returns the index we read until it in line
+ */
 int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 {
 	int end = start;
@@ -52,6 +69,13 @@ int FilePlayerAlgorithm::getPieceFromLine(int start, const string &line)
 	return end;
 }
 
+/**
+    checks if a char read from line represents a digit betweeb 0-9.
+
+    @params: c - character to check
+    @return: true - if character is a digit betweeb 0-9
+    else - false;
+ */
 bool FilePlayerAlgorithm::checkIfDigit(char c)
 {
 	int num = c - '0';
@@ -62,9 +86,11 @@ bool FilePlayerAlgorithm::checkIfDigit(char c)
 	return true;
 }
 
-/*
- Input- start position, line, row number and col number
- Output - -1 if there is an error otherwise the number of last char in
+/**
+    extract row and column for line.
+
+    @params: start position, line, row number and col number
+    @return: -1 if there is an error otherwise the number of last char in
  */
 int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 											 int &row, int &col)
@@ -162,6 +188,15 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	return end;
 }
 
+/**
+    get joker new representation from line if exist and legal.
+
+    @params: line - line to read joker representation from.
+    nextIndex - index to start reading from joker new piece representation.
+    jokerRep - new representation of joker read from line.
+    @return: return true - if succeed reading new joker piece.
+    false - piece representation is not legal.
+ */
 bool FilePlayerAlgorithm::handleJokerPiece(string line,int & nextIndex, char & jokerRep) {
 
 	if ((size_t) nextIndex >= line.length()) {
@@ -190,12 +225,12 @@ bool FilePlayerAlgorithm::handleJokerPiece(string line,int & nextIndex, char & j
 }
 
 
+/**
+    check if there is bad format in certain line.
 
+    @params: line, player number, reference to row number and col number , joker represe4ntation and piece.
+    @return: false if there is wrong format otherwise update piece, joker rep and row and col and return true.
 
-/*
- check if there is bad format in certain line.
- Input- line, player number, reference to row number and col number , joker representation and piece
- Output -  false if there is wrong format otherwise update piece, joker rep and row and col and return true
  */
 bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row, int &col, char &jokerRep, char &piece)
 {
@@ -234,6 +269,12 @@ bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row
 	return true;
 }
 
+/**
+    game manager will use this function to get positions of pieces to locate on board.
+
+    @params: player - current player number
+    vectorToFill - vector of positions that will be filled
+ */
 void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	(void)player;
@@ -281,11 +322,16 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 	posFile.close();
 }
 
-
+/**
+	does nothing to algorithm from file
+ */
 void FilePlayerAlgorithm::notifyFightResult(const FightInfo& fightInfo){
 	(void) fightInfo;
 }
 
+/**
+    does nothing to algorithm from file
+ */
 void FilePlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 											   const std::vector<unique_ptr<FightInfo>> &fights)
 {
@@ -293,8 +339,13 @@ void FilePlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 	(void)b;
 }
 
+/**
+    game manager will use this function to get a joker change , if changed
+	note: in this function bad format - new_rep = "E"
 
-//bad format - new_rep = "E"
+    @return: nullptr - if joker was not changed.
+    instance represents joker's change - otherwise.
+ */
 unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 {
 	if (!checkEmptyLine(nextIndex, line1))
@@ -375,14 +426,23 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 		return unique_ptr<RPSJokerChange>{}; //if no jokerChange - return Null;
 }
 
-
+/**
+    copy string to string reference
+ */
 void FilePlayerAlgorithm::copyString(string & src, string toCopy){
 	for (int i = 0; i < (int)toCopy.length(); i ++){
 		src.push_back(toCopy[i]);
 	}
 }
 
-
+/**
+    parse line to get move from file. will use this function only if line is not empty.
+    @params: local_line - line to read from.
+    from_x, from_y - parse from where to move.
+    to_x,to_y - parse to where to move.
+	from,to - update reference with move parsed from line.
+    @return: move parsed from line
+ */
 unique_ptr<Move> FilePlayerAlgorithm::handleNonEmptyLine(string local_line, int & from_x, int & from_y, int & to_x, int & to_y, RPSpoint& from, RPSpoint& to){
 	nextIndex = getPositionFromLine(0, local_line, from_y, from_x);
 	from.setX(from_x);
@@ -411,14 +471,15 @@ unique_ptr<Move> FilePlayerAlgorithm::handleNonEmptyLine(string local_line, int 
 	unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
 	return move;
 }
-/*
-returns the next move of current player
-empty line (0,0)
-wrong format: (-1,0) =  BAD_FORMAT_ERR
-getline error: (-3,0) = READ_LINE_ERR
-eof: (-2,0) = EOF_MOVE_ERR
 
-*/
+/**
+    game manager will use this function to get player's move from file.
+	if empty line return move as (0,0)
+	if wrong format: (-1,0) =  BAD_FORMAT_ERR
+	if getline error: (-3,0) = READ_LINE_ERR
+	if eof: (-2,0) = EOF_MOVE_ERR
+    @return: move - chosen move to play
+ */
 unique_ptr<Move> FilePlayerAlgorithm::getMove()
 {
 
@@ -451,75 +512,10 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 	unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
 	return move;
 }
-/*
-unique_ptr<Move> FilePlayerAlgorithm::getMove()
-{
 
-	int from_x = 0;
-	int from_y = 0;
-	int to_x = 0;
-	int to_y = 0;
-
-	RPSpoint from(from_x, from_y);
-	RPSpoint to(to_x, to_y);
-	if (getline(player1Move, line1))
-	{
-		string local_line;
-		copyString(local_line, line1);
-		if (checkEmptyLine(0, local_line))
-		{
-			//move file wrong format - Point from = (-1, 0)
-			from.setX(0);
-		}
-		else
-		{
-			nextIndex = getPositionFromLine(0, local_line, from_y, from_x);
-			from.setX(from_x);
-			from.setY(from_y);
-
-			bool isLackSpace = nextIndex != -1 ? (local_line[nextIndex] != ' ') : false;
-			if (nextIndex == -1 || isLackSpace)
-			{
-				if (isLackSpace)
-					cout
-							<< "Error: bad format - missing space between source to destination"
-							<< endl;
-
-				from.setX(-1);
-				unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
-				return move;
-			}
-			else
-			{
-				nextIndex = getPositionFromLine(nextIndex, local_line, to_y, to_x);
-				if (nextIndex == -1)
-					from.setX(-1);
-				else
-				{
-					to.setX(to_x);
-					to.setY(to_y);
-				}
-				unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
-				//noy added
-				return move;
-			}
-		}
-	}
-		//If we reach eod we will return -2
-	else if(player1Move.eof()){
-		from.setX(-2);
-	}
-	else if(player1Move.bad())
-	{
-		//if getLine error - Point from = (-2,0)
-		from.setX(-3);
-	}
-	//make_unique < RPSPiecePosition
-	//						> (RPSpoint(row, col), -2, jokerRep));
-	unique_ptr<RPSMove> move = make_unique<RPSMove>(from, to);
-	return move;
-}
-*/
+/**
+	does nothing to algorithm from file
+ */
 void FilePlayerAlgorithm::notifyOnOpponentMove(const Move& move) { // noy implmenet only for compilation will succcedd
 	(void)move;
-} // called only on opponent�s move
+} // called only on opponent's move
