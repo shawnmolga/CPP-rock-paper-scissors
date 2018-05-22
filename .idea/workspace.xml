@@ -11,7 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="da2d32cb-143c-46ff-86a6-ed00b66028c2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/RPSGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/RPSGame.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EX2/AutoPlayerDao.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EX2/AutoPlayerDao.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EX2/FilePlayerAlgorithm.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/FilePlayerAlgorithm.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,20 +24,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="RPSGame.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="RPSGame.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EX2/RPSGame.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="423">
-              <caret line="508" column="1" selection-start-line="508" selection-start-column="1" selection-end-line="508" selection-end-column="1" />
+            <state relative-caret-position="6832">
+              <caret line="498" column="12" lean-forward="true" selection-start-line="498" selection-start-column="12" selection-end-line="498" selection-end-column="12" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AutoPlayerAlgorithm.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AutoPlayerAlgorithm.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
-              <caret line="1066" column="53" lean-forward="true" selection-start-line="1066" selection-start-column="53" selection-end-line="1066" selection-end-column="53" />
+              <caret line="1066" selection-start-line="1066" selection-end-line="1066" />
             </state>
           </provider>
         </entry>
@@ -61,8 +63,8 @@
       <file leaf-file-name="FilePlayerAlgorithm.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EX2/FilePlayerAlgorithm.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8075">
-              <caret line="475" column="31" selection-start-line="475" selection-start-column="31" selection-end-line="475" selection-end-column="31" />
+            <state relative-caret-position="7905">
+              <caret line="465" column="31" selection-start-line="465" selection-start-column="31" selection-end-line="465" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -156,8 +158,8 @@
         <option value="$PROJECT_DIR$/EX2/FilePlayerAlgorithm.h" />
         <option value="$PROJECT_DIR$/EX2/RPSpoint.cpp" />
         <option value="$PROJECT_DIR$/EX2/RPSGame.h" />
-        <option value="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp" />
         <option value="$PROJECT_DIR$/EX2/RPSGame.cpp" />
+        <option value="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp" />
       </list>
     </option>
   </component>
@@ -246,12 +248,12 @@
       <workItem from="1526294778407" duration="6440000" />
       <workItem from="1526673445061" duration="2971000" />
       <workItem from="1526968582294" duration="9906000" />
-      <workItem from="1526999617385" duration="2286000" />
+      <workItem from="1526999617385" duration="2353000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="127397000" />
+    <option name="totallyTimeSpent" value="127464000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1293" height="693" extended-state="6" />
@@ -557,8 +559,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/EX2/FilePlayerAlgorithm.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8075">
-          <caret line="475" column="31" selection-start-line="475" selection-start-column="31" selection-end-line="475" selection-end-column="31" />
+        <state relative-caret-position="7905">
+          <caret line="465" column="31" selection-start-line="465" selection-start-column="31" selection-end-line="465" selection-end-column="31" />
         </state>
       </provider>
     </entry>
@@ -618,17 +620,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp">
+    <entry file="file://$PROJECT_DIR$/EX2/RPSGame.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="1066" column="53" lean-forward="true" selection-start-line="1066" selection-start-column="53" selection-end-line="1066" selection-end-column="53" />
+        <state relative-caret-position="6832">
+          <caret line="498" column="12" lean-forward="true" selection-start-line="498" selection-start-column="12" selection-end-line="498" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/RPSGame.cpp">
+    <entry file="file://$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="508" column="1" selection-start-line="508" selection-start-column="1" selection-end-line="508" selection-end-column="1" />
+        <state relative-caret-position="135">
+          <caret line="1066" selection-start-line="1066" selection-end-line="1066" />
         </state>
       </provider>
     </entry>

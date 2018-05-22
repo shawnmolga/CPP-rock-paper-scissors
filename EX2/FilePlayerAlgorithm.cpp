@@ -155,7 +155,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
 	}
-	while (line[start] == ' ')
+	while (line[start] == ' ') //skip spaces
 	{
 		start = start + 1;
 		if ((size_t)start >= line.length())
@@ -164,7 +164,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 			return -1;
 		}
 	}
-	if (!checkIfDigit(line[start]))
+	if (!checkIfDigit(line[start])) //check row is a number
 	{
 		cout << "Error: Bad format - got letter instead of digit" << endl;
 		return -1;
@@ -199,22 +199,23 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
  */
 bool FilePlayerAlgorithm::handleJokerPiece(string line,int & nextIndex, char & jokerRep) {
 
-	if ((size_t) nextIndex >= line.length()) {
+	if ((size_t) nextIndex >= line.length()) { //no joker representation in line - we've reached end of line
 		cout << "Error - bad format: missing joker rep piece" << endl;
 		return false;
 	}
-	if (line[nextIndex] != ' ') {
+	if (line[nextIndex] != ' ') { //no space between position to joker rep
 		cout
 				<< "Error - bad format: missing space after positions in joker position"
 				<< endl;
 		return false;
 	}
-	nextIndex = getPieceFromLine(nextIndex, line) + 1;
+	nextIndex = getPieceFromLine(nextIndex, line) + 1; //extract joker rep
 	if (nextIndex == 0) {
 		cout << "Error: Bad format - no piece to position as joker" << endl;
 		return false;
 	}
 	char jokerPiece = line[nextIndex - 1];
+	//chep rep is legal for joker
 	if (jokerPiece != ROCK && jokerPiece != PAPER && jokerPiece != SCISSOR && jokerPiece != BOMB) {
 		cout << "Error: Bad format - illegal piece for joker" << endl;
 		return false;
@@ -234,20 +235,20 @@ bool FilePlayerAlgorithm::handleJokerPiece(string line,int & nextIndex, char & j
  */
 bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row, int &col, char &jokerRep, char &piece)
 {
-	int pieceIndex = getPieceFromLine(0, line);
+	int pieceIndex = getPieceFromLine(0, line); //extract piece from line 
 	piece = line[pieceIndex];
-	if ((size_t)pieceIndex + 1 >= line.length())
+	if ((size_t)pieceIndex + 1 >= line.length()) //no position in line
 	{
 		cout << "Error - bad format: missing position of piece" << endl;
 		return false;
 	}
-	if (line[pieceIndex + 1] != ' ')
+	if (line[pieceIndex + 1] != ' ') //no space between piece to poition - must be
 	{
 		cout << "Error - bad format: missing space after piece" << endl;
 		return false;
 	}
 	int nextIndex = getPositionFromLine(pieceIndex + 1, line, row, col);
-	if (nextIndex == BAD_FORMAT_ERR)
+	if (nextIndex == BAD_FORMAT_ERR) //bad position
 		return false;
 	//check if position is legal
 	if ((row < 1 || row > ROWS) || (col < 1 || col > COLS))
@@ -260,7 +261,7 @@ bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row
 			return false;
 	}
 	//check that after position line is empty
-	if (!checkEmptyLine(nextIndex, line))
+	if (!checkEmptyLine(nextIndex, line)) //check no junk characters in line
 	{
 		cout << "Error: Bad format - junk characters after position" << endl;
 		jokerRep = JOKER_REP_ERROR;
@@ -288,7 +289,7 @@ void FilePlayerAlgorithm::getInitialPositions(int player, std::vector<unique_ptr
 	{
 		jokerRep = '#';
 		//skip empty lines
-		if (checkEmptyLine(0, line))
+		if (checkEmptyLine(0, line)) //skip empty lines
 		{
 			continue;
 		}
@@ -348,31 +349,25 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 	if (!checkEmptyLine(nextIndex, line1))
 	{
 
-		char new_rep = 'E';
+		char new_rep = 'E'; //empty rep
 		//skip all spaces until next char
 		RPSpoint point(0, 0);
-		RPSJokerChange* jc = new RPSJokerChange(new_rep, point);
 		nextIndex = getPieceFromLine(nextIndex, line1) + 1;
 		if (nextIndex == 0)
 		{
-			new_rep = 'E';
-			jc->setJokerNewRep('E');
-			return make_unique<RPSJokerChange>(*jc);
+			return make_unique<RPSJokerChange>(new_rep,point);
 		}
 		if (line1[nextIndex - 1] != JOKER)
 		{
 			cout << "Error: Bad format - Junk characters in line" << endl;
-			jc->setJokerNewRep('E');
-			return make_unique<RPSJokerChange>(*jc);
+			return make_unique<RPSJokerChange>(new_rep,point);
 		}
 		if (line1[nextIndex] != ':')
 		{
 			cout
 					<< "Error: Bad format - Joker  hard coded information not placed correctly - need to be followed by colon"
 					<< endl;
-			new_rep = 'E';
-			jc->setJokerNewRep('E');
-			return make_unique<RPSJokerChange>(*jc);
+			return make_unique<RPSJokerChange>(new_rep,point);
 		}
 
 		nextIndex++;
@@ -380,43 +375,38 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 		if (line1[nextIndex] != ' ')
 		{
 			cout << "Bad Format - missing space before joker change" << endl;
-			jc->setJokerNewRep('E');
-			return make_unique<RPSJokerChange>(*jc);
+			return make_unique<RPSJokerChange>(new_rep,point);
 		}
 		int x_joker ;
 		int y_joker ;
 		nextIndex = getPositionFromLine(nextIndex, line1, x_joker, y_joker);
 		if (nextIndex == BAD_FORMAT_ERR)
 		{
-			jc->setJokerNewRep('E');
-			return make_unique<RPSJokerChange>(*jc);
+			return make_unique<RPSJokerChange>(new_rep,point);
 		}
-		point.setX(y_joker);
-		point.setY(x_joker);
+		
 		nextIndex = 1 + getPieceFromLine(nextIndex, line1);
 		if (nextIndex == 0)
 		{
-			jc->setJokerNewRep('E');
-			return make_unique<RPSJokerChange>(*jc);
+			return make_unique<RPSJokerChange>(new_rep,point);
 		}
 		if (line1[nextIndex - 2] != ' ')
 		{
 			cout << "Bad Format - missing space before joker translation piece"
 				 << endl;
-			jc->setJokerNewRep('E');
-			return make_unique<RPSJokerChange>(*jc);
+			return make_unique<RPSJokerChange>(new_rep,point);
 		}
 		new_rep = line1[nextIndex - 1];
 		if (!checkEmptyLine(nextIndex, line1))
 		{
 			cout << "Error: Bad format - rest of line is not empty" << endl;
 
-			jc->setJokerNewRep('E');
-			return make_unique<RPSJokerChange>(*jc);
+			new_rep = 'E';
+			return make_unique<RPSJokerChange>(new_rep,point);
 		}
-		jc->setJokerNewRep(new_rep);
-		jc->setJokerChangePosition(point);
-		return make_unique<RPSJokerChange>(*jc);
+		point.setX(y_joker);
+		point.setY(x_joker);
+		return make_unique<RPSJokerChange>(new_rep,point);
 	}
 	else
 		return nullptr; //if no jokerChange - return Null;
