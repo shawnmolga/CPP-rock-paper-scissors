@@ -105,3 +105,6 @@ public:
     bool initGameMethod(string gameMethod);
     void PrintBoardToConsole();
 };
+
+
+
