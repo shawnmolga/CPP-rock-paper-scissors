@@ -1227,24 +1227,3 @@ bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile) 
 
     return true;
 }
-
-//Need to erase this function - only for debug!
-void RPSGame::PrintBoardToConsole() {
-    cout << "*******************PRINT THE BOARD:****************" << endl;
-    for (int i = 1; i <= ROWS; i++) {
-        for (int j = 1; j <= COLS; j++) {
-            if (gameBoard.board[j][i].getIsJoker()) {
-                if (Cell::isPlayerOnePiece(gameBoard.board[j][i])) {
-                    cout << " J ";
-                } else {
-                    cout << " j ";
-                }
-            } else if (gameBoard.board[j][i].getPiece() == 0) {
-                cout << " - ";
-            } else {
-                cout << " " << gameBoard.board[j][i].getPiece() << " ";
-            }
-        }
-        cout << endl;
-    }
-}
