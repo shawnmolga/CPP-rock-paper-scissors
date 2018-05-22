@@ -10,7 +10,7 @@
 AutoPlayerAlgorithm::AutoPlayerAlgorithm()
 {
 	cout << "creating autoPlayerAlgorithm" << endl;
-	gameBoard = AIBoard();
+	gameBoard = AIBoard(); //board for AI to learn about the game
 	myPlayerNum = -1;
 	opponentFlagsNumOnBoard = FLAGS_NUM;
 	opponentBombsNumOnBoard = BOMBS_NUM + JOKERS_NUM;	//we dont know if joker is now bomb or not
@@ -88,48 +88,62 @@ void AutoPlayerAlgorithm::positionJokers(int player, std::vector<unique_ptr<Piec
  */
 void AutoPlayerAlgorithm::positionUnmovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
-	cout<<"in positionUnmovingPieces"<<endl;
+	int x = getRandomNumInRange(0, COLS - 1);
+	int y = getRandomNumInRange(0, ROWS - 1);
+	bool shouldPositionRandomly = true;
+	int bombsPositioned = 0;							  //sum all bombs already positioned
+
+	//position all flags on board
+	positionFlagsOnBoard(player, vectorToFill, bombsPositioned);
+
+	if (bombsPositioned < BOMBS_NUM)
+	{
+		positionBombs(x, y, player, vectorToFill, BOMBS_NUM - bombsPositioned, shouldPositionRandomly);
+	}
+}
+
+/**
+    position flags in algorithm's board and fill positions in vector
+
+    @params: player - current player number
+    vectorToFill - vector of positions that will be filled
+    bombsPositioned - count bombs positioned around flags to know if we have left any bombs to position
+ */
+void AutoPlayerAlgorithm::positionFlagsOnBoard(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int& bombsPositioned){
 	bool isCellTaken = true;
 	bool hasOpponentNeighbor = true;
+	bool shouldPositionRandomly = false;
 	char piece = (player == 1 ? 'F' : 'f');
 	int x = getRandomNumInRange(0, COLS - 1);
 	int y = getRandomNumInRange(0, ROWS - 1);
-	bool shouldPositionRandomly = false;
 	int protectingBombsNum = BOMBS_NUM / (2 * FLAGS_NUM); //half will protect all flags and half will be spred randomly on board
-	int bombsPositioned = 0;							  //sum all bombs already positioned
 	if (protectingBombsNum < 1 && BOMBS_NUM > 0)
 	{ //prefer to protect flags
 		protectingBombsNum = 1;
 	}
-	//position all flags on board
-	for (int i = 0; i < FLAGS_NUM; ++i)
-	{
-		while (isCellTaken || hasOpponentNeighbor)
-		{
-			if (gameBoard.board[x][y].getPiece() == 0)
-			{
-				isCellTaken = false;
-				if (!checkIsOpponentNeighbors(x, y))
-				{
-					hasOpponentNeighbor = false;
-					AICell::updateCell(gameBoard.board[x][y], piece, false);
-					vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), '#'));
-					positionBombs(x, y, player, vectorToFill, protectingBombsNum, shouldPositionRandomly);
-					bombsPositioned += protectingBombsNum;
-				}
-			}
-			x = getRandomNumInRange(0, COLS - 1);
-			y = getRandomNumInRange(0, ROWS - 1);
-		}
-		isCellTaken = true;
-		hasOpponentNeighbor = true;
-	}
 
-	if (bombsPositioned < BOMBS_NUM)
-	{
-		shouldPositionRandomly = true;
-		positionBombs(x, y, player, vectorToFill, BOMBS_NUM - bombsPositioned, shouldPositionRandomly);
-	}
+	for (int i = 0; i < FLAGS_NUM; ++i)
+		{
+			while (isCellTaken || hasOpponentNeighbor)
+			{
+				if (gameBoard.board[x][y].getPiece() == 0)
+				{
+					isCellTaken = false;
+					if (!checkIsOpponentNeighbors(x, y))
+					{
+						hasOpponentNeighbor = false;
+						AICell::updateCell(gameBoard.board[x][y], piece, false);
+						vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), '#'));
+						positionBombs(x, y, player, vectorToFill, protectingBombsNum, shouldPositionRandomly);
+						bombsPositioned += protectingBombsNum;
+					}
+				}
+				x = getRandomNumInRange(0, COLS - 1);
+				y = getRandomNumInRange(0, ROWS - 1);
+			}
+			isCellTaken = true;
+			hasOpponentNeighbor = true;
+		}
 }
 
 /**
@@ -1128,6 +1142,41 @@ double AutoPlayerAlgorithm::calcFlagSaftey()
 }
 
 /**
+    add to counter if a given neighbor to flag is a protecting or enemy piece.
+    this is help-function to countProtectingPieces function.
+	@params: piece - neighbor to flag
+	x,y - neighbor location
+	protecting bombs - function will update this reference to bombs number that are flag's neighbors.
+	other protecting pieces - piece neighbors of flag that belong to same player
+	enemy pieces - opponent piece neighbors of flag
+ */
+void AutoPlayerAlgorithm::updateNeighborAsProtectorOrEnemy(char piece, int x, int y, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces){
+	bool isMyPiece;
+	if (piece != 0)
+	{
+		isMyPiece = gameBoard.board[x][y].isMyPiece(myPlayerNum);
+
+		if (toupper(piece) == 'B')
+		{
+			if (isMyPiece)
+			{
+				protectingBombs++;
+			}
+			else
+				enemyPieces++; //enemies piece is next to flag
+		}
+		else if (toupper(piece) != 'F')
+		{
+			if (isMyPiece)
+				otherProtectingPieces++;
+			else
+				enemyPieces++; //enemies piece is next to flag
+		}
+	}
+}
+
+
+/**
     calculates protectors and enemies surrounding a piece (current player's flag)
     for flag safety calculation function.
 	@params: i,j - flag's location.
@@ -1138,191 +1187,35 @@ double AutoPlayerAlgorithm::calcFlagSaftey()
 void AutoPlayerAlgorithm::countProtectingPieces(int i, int j, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces)
 
 {
-	//searchRight
-	bool isMyPiece;
+	//search down
 	char piece = j + 1 > ROWS - 1 ? 0 : gameBoard.board[i][j + 1].getPiece();
-	if (piece != 0)
-	{
-		isMyPiece = gameBoard.board[i][j + 1].isMyPiece(myPlayerNum);
+	updateNeighborAsProtectorOrEnemy(piece, i , j+1, protectingBombs, otherProtectingPieces, enemyPieces);
 
-		if (toupper(piece) == 'B')
-		{
-			if (isMyPiece)
-			{
-				protectingBombs++;
-			}
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-		else if (toupper(piece) != 'F')
-		{
-			if (isMyPiece)
-				otherProtectingPieces++;
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-	}
-	//searchLeft
+	//search up
 	piece = j - 1 < ROWS - 1 ? 0 : gameBoard.board[i][j - 1].getPiece();
-	if (piece != 0)
-	{
-		isMyPiece = gameBoard.board[i][j - 1].isMyPiece(myPlayerNum);
+	updateNeighborAsProtectorOrEnemy(piece, i , j-1, protectingBombs, otherProtectingPieces, enemyPieces);
 
-		if (toupper(piece) == 'B')
-		{
-			if (isMyPiece)
-			{
-				protectingBombs++;
-			}
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-		else if (toupper(piece) != 'F')
-		{
-			if (isMyPiece)
-				otherProtectingPieces++;
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-	}
-	//searchUp
+	//search left
 	piece = i - 1 < COLS - 1 ? 0 : gameBoard.board[i - 1][j].getPiece();
-	if (piece != 0)
-	{
-		isMyPiece = gameBoard.board[i - 1][j].isMyPiece(myPlayerNum);
+	updateNeighborAsProtectorOrEnemy(piece, i-1 , j, protectingBombs, otherProtectingPieces, enemyPieces);
 
-		if (toupper(piece) == 'B')
-		{
-			if (isMyPiece)
-			{
-				protectingBombs++;
-			}
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-		else if (toupper(piece) != 'F')
-		{
-			if (isMyPiece)
-				otherProtectingPieces++;
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-	}
-	//searchDown
+	//search right
 	piece = i + 1 > COLS ? 0 : gameBoard.board[i + 1][j].getPiece();
-	if (piece != 0)
-	{
-		isMyPiece = gameBoard.board[i + 1][j].isMyPiece(myPlayerNum);
+	updateNeighborAsProtectorOrEnemy(piece, i+1 , j, protectingBombs, otherProtectingPieces, enemyPieces);
 
-		if (toupper(piece) == 'B')
-		{
-			if (isMyPiece)
-			{
-				protectingBombs++;
-			}
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-		else if (toupper(piece) != 'F')
-		{
-			if (isMyPiece)
-				otherProtectingPieces++;
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-	}
 	//SearchDiagonal
 	piece = i - 1 < COLS - 1 || j - 1 < ROWS - 1 ? 0 : gameBoard.board[i - 1][j - 1].getPiece();
-	if (piece != 0)
-	{
-		isMyPiece = gameBoard.board[i - 1][j - 1].isMyPiece(myPlayerNum);
-
-		if (toupper(piece) == 'B')
-		{
-			if (isMyPiece)
-			{
-				protectingBombs++;
-			}
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-		else if (toupper(piece) != 'F')
-		{
-			if (isMyPiece)
-				otherProtectingPieces++;
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-	}
-
+	updateNeighborAsProtectorOrEnemy(piece, i - 1, j - 1, protectingBombs, otherProtectingPieces, enemyPieces);
+	//SearchDiagonal
 	piece = i + 1 > COLS - 1 || j - 1 < ROWS - 1 ? 0 : gameBoard.board[i + 1][j - 1].getPiece();
-	if (piece != 0)
-	{
-		isMyPiece = gameBoard.board[i + 1][j - 1].isMyPiece(myPlayerNum);
-
-		if (toupper(piece) == 'B')
-		{
-			if (isMyPiece)
-			{
-				protectingBombs++;
-			}
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-		else if (toupper(piece) != 'F')
-		{
-			if (isMyPiece)
-				otherProtectingPieces++;
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-	}
-
+	updateNeighborAsProtectorOrEnemy(piece, i + 1 , j - 1, protectingBombs, otherProtectingPieces, enemyPieces);
+	//SearchDiagonal
 	piece = i - 1 < COLS - 1 || j + 1 > ROWS - 1 ? 0 : gameBoard.board[i - 1][j + 1].getPiece();
-	if (piece != 0)
-	{
-		isMyPiece = gameBoard.board[i - 1][j + 1].isMyPiece(myPlayerNum);
-
-		if (toupper(piece) == 'B')
-		{
-			if (isMyPiece)
-			{
-				protectingBombs++;
-			}
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-		else if (toupper(piece) != 'F')
-		{
-			if (isMyPiece)
-				otherProtectingPieces++;
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-	}
-
+	updateNeighborAsProtectorOrEnemy(piece, i - 1 , j + 1, protectingBombs, otherProtectingPieces, enemyPieces);
+	//SearchDiagonal
 	piece = i + 1 > COLS - 1 || j + 1 > ROWS - 1 ? 0 : gameBoard.board[i + 1][j + 1].getPiece();
-	if (piece != 0)
-	{
-		isMyPiece = gameBoard.board[i + 1][j + 1].isMyPiece(myPlayerNum);
+	updateNeighborAsProtectorOrEnemy(piece, i + 1 , j + 1, protectingBombs, otherProtectingPieces, enemyPieces);
 
-		if (toupper(piece) == 'B')
-		{
-			if (isMyPiece)
-			{
-				protectingBombs++;
-			}
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-		else if (toupper(piece) != 'F')
-		{
-			if (isMyPiece)
-				otherProtectingPieces++;
-			else
-				enemyPieces++; //enemies piece is next to flag
-		}
-	}
 }
 
 /**
@@ -1510,49 +1403,37 @@ bool AutoPlayerAlgorithm::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
 	if ((from_x < 0 || from_x > COLS-1)
 			|| (to_x < 0 || to_x > COLS-1) || (from_y < 0 || from_y > ROWS-1)
 			|| (to_y < 0 || to_y > ROWS-1)) {
-		//		cout << "Error: illegal location on board" << endl;
 		return false;
 	}
 
 	if (from_x == to_x && from_y == to_y) {
-		//	cout << "Error: user MUST move one piece" << endl;
 		return false;
 	}
 
 	if (gameBoard.board.at(from_x).at(from_y).getPiece() == 0) {
-		//cout << "Error: there is no piece in this position" << endl;
 		return false;
 	}
 	else if ((isPlayer1 && islower(gameBoard.board.at(from_x).at(from_y).getPiece()))
 			|| (!isPlayer1 && isupper(gameBoard.board[from_x][from_y].getPiece()))) {
-		//cout << "Error: trying to move the opponent piece" << endl;
 		return false;
 	}
 
 	if (toupper(gameBoard.board.at(from_x).at(from_y).getPiece()) == BOMB
 			|| toupper(gameBoard.board[from_x][from_y].getPiece()) == FLAG) {
-		//cout << "Error: flag/bomb piece is not allowed to move" << endl;
 		return false;
 	}
 
 	if (to_x == from_x + 1 || to_x == from_x - 1) {
 		if (to_y != from_y) {
-			//cout<< "Error: illegal move - can move only one cell up/down/left/right "<< endl;
 			return false;
 		}
 	}
 	else if (to_y == from_y + 1 || to_y == from_y - 1) {
 		if (to_x != from_x) {
-			//cout
-			//<< "Error: illegal move - can move only one cell up/down/left/right"
-			//<< endl;
 			return false;
 		}
 	}
 	else {
-		//cout
-		//<< "Error: illegal move - can move only one cell up/down/left/right"
-		//<< endl;
 		return false;
 	}
 
