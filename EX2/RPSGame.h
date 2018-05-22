@@ -64,18 +64,20 @@ public:
     int checkNumOfPieces(int playerNum, bool isPieceOkPlayer1, bool isPieceOkPlayer2, int inputPiece, bool & isPlayerLegalFormat, int numOfPositionedPieces[]);
     void gameOverSetter(Player* currPlayer, Player* nextPlayer, bool isWinner1, bool isWinner2, GAME_OVER_TYPE type);
     void handleSwitchCase(char nextPlayerPiece, RPSFight &fights, Player* currPlayer, Player* nextPlayer, int x , int y,
-                          std::vector<unique_ptr<FightInfo>> &initFights, RPSFight *ptr, RPSpoint *currPos);
-    void handleNextPlayerPieceFlag(bool isCurrPlayerFlag, char currPlayerPiece, Player* currPlayer, Player* nextPlayer, int x , int y,
+                          std::vector<unique_ptr<FightInfo>> &initFights, RPSFight *ptr);
+
+
+        void handleNextPlayerPieceFlag(bool isCurrPlayerFlag, char currPlayerPiece, Player* currPlayer, Player* nextPlayer, int x , int y,
                                    std::vector<unique_ptr<FightInfo>> &initFights,
-                                   RPSFight *ptr, RPSpoint *currPos, bool isCurrPieceJoker, char currPiece, RPSFight &fights, int nextPlayerNum);
+                                   RPSFight *ptr, bool isCurrPieceJoker, char currPiece, RPSFight &fights, int nextPlayerNum);
     void handleNexPlayerBomb( char currPlayerPiece, Player* currPlayer, Player* nextPlayer, int x , int y,
-                              std::vector<unique_ptr<FightInfo>> &initFights, RPSFight *ptr, RPSpoint *currPos,
+                              std::vector<unique_ptr<FightInfo>> &initFights, RPSFight *ptr,
                               RPSFight &fights, int nextPlayerNum);
-    void handlePaperVsRock(Player* currPlayer,  int x , int y,
-                           std::vector<unique_ptr<FightInfo>> &initFights, RPSFight *ptr, RPSpoint *currPos,
+    void handlePaperVsRock(Player* currPlayer,
+                           std::vector<unique_ptr<FightInfo>> &initFights, RPSFight *ptr,
                            RPSFight &fights, int nextPlayerNum);
-    void handlePaperOrRockVsScissors(int i, Player* nextPlayer, int currPlayerNum,  int x , int y,
-                                     std::vector<unique_ptr<FightInfo>> &initFights, RPSFight *ptr, RPSpoint *currPos,
+    void handlePaperOrRockVsScissors(int i, Player* nextPlayer, int currPlayerNum,
+                                     std::vector<unique_ptr<FightInfo>> &initFights, RPSFight *ptr,
                                      RPSFight &fights);
 
     int checkPositionOnBoard(bool &isPlayerOneLegalFormat,bool &isPlayerTwoLegalFormat, RPSFight &fights, std::vector<unique_ptr<FightInfo>>& initFights);
