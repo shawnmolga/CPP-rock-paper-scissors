@@ -1064,7 +1064,7 @@ return (double)(ROWS+COLS) - (double)minimalDistance;
 int AutoPlayerAlgorithm::calcDistanceFromPiece(int piece_x, int piece_y, int my_x, int my_y)
 {
 	int distance;
-	int minimalDistance = INT_MAX; //to do: remove!
+	//int minimalDistance = INT_MAX; //to do: remove!
 	//there will be a fight with my piece vs unkown piece
 	if (willBeFight && my_x == piece_x && my_y == piece_y){
 		return 0;

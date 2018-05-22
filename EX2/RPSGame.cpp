@@ -237,7 +237,7 @@ int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTu
     if (move != nullptr) {
         xPiece = move->getFrom().getX();
     }
-    while ((nextPlayer == 1 ? isPlayerOneEOF : isPlayerTwoEOF) && xPiece != READ_LINE_ERR &&
+    while (!(nextPlayer == 1 ? isPlayerOneEOF : isPlayerTwoEOF) && xPiece != READ_LINE_ERR &&
            numOfMoves <= MAX_NUM_OF_MOVES) {
 
         isBadFormat = false;
