@@ -239,192 +239,6 @@ bool RPSGame::movePiece(unique_ptr<Move> &move,
 	}
 	return gameOverIntenral;
 }
-/*
-int RPSGame::makeMove()
-{
-	unique_ptr<Move> move = std::move(playerAlgoOne->getMove());
-	int xPiecePlayerOne = move->getFrom().getX();
-	int xPiecePlayerTwo = 1;
-	bool isPlayerOneTurn = true;
-	bool isGameOverInternal = false;
-	bool isBadFormat = false;
-	while (xPiecePlayerOne != -2 && xPiecePlayerOne != -3 && xPiecePlayerTwo != -2  && xPiecePlayerTwo != -3 && numOfMoves < MAX_NUM_OF_MOVES)
-	while (xPiecePlayerOne != EOF_MOVE_ERR && xPiecePlayerOne != READ_LINE_ERR && xPiecePlayerTwo != EOF_MOVE_ERR && xPiecePlayerTwo != READ_LINE_ERR && numOfMoves < MAX_NUM_OF_MOVES)
-	{
-		isBadFormat  = false;
-		isGameOverInternal = false;
-		if (xPiecePlayerOne != 0)
-		{
-			isPlayerOneTurn = true;
-			isGameOverInternal = movePiece(move,isPlayerOneTurn,isBadFormat);
-			cout<< "isGameOverInternal: " <<isGameOverInternal<<endl;
-			PrintBoardToConsole();
-			if (isGameOverInternal)
-			{
-				if(isBadFormat){
-					cout<<"enter isGameOverInternal"<<endl;
-					cout<<"ERROR AI: ILLEGAL MOVE"<<endl;
-					setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-				}
-				// cout<<"enter isGameOverInternal"<<endl;
-				// cout<<"ERROR AI: ILLEGAL MOVE"<<endl;
-				// setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-				break;
-			}
-		}
-		move = std::move(playerAlgoTwo->getMove());
-		xPiecePlayerTwo = move->getFrom().getX();
-		if (xPiecePlayerTwo != -2 && xPiecePlayerTwo != -3)
-		{
-			if (xPiecePlayerTwo != 0)
-			{
-				isPlayerOneTurn = false;
-				isGameOverInternal = movePiece(move,isPlayerOneTurn,isBadFormat);
-				cout<<"isGameOverInternal: "<<isGameOverInternal<<endl;
-				PrintBoardToConsole();
-				if (isGameOverInternal)
-				{
-					if(isBadFormat){
-						cout<<"enter isGameOverInternal"<<endl;
-						cout<<"ERROR AI: ILLEGAL MOVE"<<endl;
-						setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
-					}
-					// cout<<"enter isGameOverInternal"<<endl;
-					// cout<<"ERROR AI: ILLEGAL MOVE"<<endl;
-					// setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
-					break;
-				}
-			}
-		}
-		else if (xPiecePlayerTwo == -3)
-		{
-			cout << "Error while reading move file. Exiting game" << endl;
-			//we need to remeber to close the stream!!!
-			//playerAlgoTwo->closeStream();
-			//playerAlgoOne->closeStream();
-			return -1;
-		}
-		else
-		{
-			break;
-		}
-		move = playerAlgoOne->getMove();
-		//move2 = playerAlgoTwo->getMove();
-		xPiecePlayerOne = move->getFrom().getX();
-		//xPiecePlayerTwo = move2->getFrom().getX();
-	} //while
-	//game stopped
-	if(numOfMoves >=100){
-		setGameOver(0, TIE_NO_WINNER);
-		gameOverReason = TOO_MANY_MOVES ;
-		//playerAlgoTwo->closeStream();
-		//playerAlgoOne->closeStream();
-		return 0;
-	}
-	if (!isGameOverInternal)
-	{
-		if (xPiecePlayerOne == -2) //EOFcase player 1
-		{
-			move = playerAlgoTwo->getMove();
-			xPiecePlayerTwo = move->getFrom().getX();
-			//playerTwoJokerChange =playerAlgoTwo->getJokerChange();
-			while (xPiecePlayerTwo != -2 && xPiecePlayerTwo != -3)
-			{
-				isBadFormat = false;
-				if (xPiecePlayerTwo != 0)
-				{
-					isPlayerOneTurn = false;
-					isGameOverInternal = movePiece(move, isPlayerOneTurn,isBadFormat);
-					PrintBoardToConsole();
-					if (isGameOverInternal)
-					{
-						if(isBadFormat){
-							cout<<"enter isGameOverInternal"<<endl;
-							setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
-						}
-						cout<<"enter isGameOverInternal"<<endl;
-						return -1;
-					}
-				}
-				move = playerAlgoTwo->getMove();
-				xPiecePlayerTwo = move->getFrom().getX();
-			}
-			if (xPiecePlayerTwo == -3)
-			{
-				cout << "Error while reading move file. Exiting game" << endl;
-				//we need to remeber to close the stream!!!
-				//playerAlgoTwo->closeStream();
-				//playerAlgoOne->closeStream();
-				return -1;
-			}
-		}
-		else if (xPiecePlayerTwo == -2) //player 2 eof
-		{
-			//  move1 = playerAlgoOne->getMove();
-			//  xPiecePlayerOne = move1->getFrom().getX();
-			//playerOneJokerChange =playerAlgoOne->getJokerChange();
-			while (xPiecePlayerOne != -2 && xPiecePlayerOne != -3)
-			{
-				isBadFormat = false;
-				if (xPiecePlayerOne != 0)
-				{
-					isPlayerOneTurn = true;
-					isGameOverInternal = movePiece(move, isPlayerOneTurn,isBadFormat);
-					PrintBoardToConsole();
-					if (isGameOverInternal)
-					{
-						if(isBadFormat){
-							cout<<"enter isGameOverInternal"<<endl;
-							setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
-						}
-						return -1; //game over
-					}
-				}
-				move = playerAlgoOne->getMove();
-				xPiecePlayerOne = move->getFrom().getX();
-			}
-			if (xPiecePlayerOne == -3)
-			{
-				cout << "Error while reading move file. Exiting game" << endl;
-				//we need to remeber to close the stream!!!
-				//playerAlgoTwo->closeStream();
-				//playerAlgoOne->closeStream();
-				return -1;
-			}
-		}
-		//TODO : close the stream
-		isPlayerOneTurn = !isPlayerOneTurn;
-		bool doesGameOver = checkGameOver(true, isPlayerOneTurn);
-		if (!isGameOverInternal && !isGameOver && !doesGameOver)
-		{
-			if (isPlayerOneTurn)
-			{
-				if (!playerTwo.isLeftMovingPieces())
-				{
-					setGameOver(1, ALL_PIECES_EATEN);
-					//playerAlgoTwo->closeStream();
-					//playerAlgoOne->closeStream();
-					return 0;
-				}
-			}
-			else
-			{
-				if (!playerOne.isLeftMovingPieces())
-				{
-					setGameOver(2, ALL_PIECES_EATEN);
-					//playerAlgoTwo->closeStream();
-					//playerAlgoOne->closeStream();
-					return 0;
-				}
-			}
-			setGameOver(0, TIE_NO_WINNER);
-		}
-	}
-	//playerAlgoTwo->closeStream();
-	//playerAlgoOne->closeStream();
-	return 0;
-}
- */
 
 //returns 1 if we need to break out of while, 0 otherwise
 int RPSGame::handleNonEmptyMove(bool playerOneNonEmpty, std::unique_ptr<Move> &move, bool &isPlayerOneTurn, bool &isGameOverInternal, bool &isBadFormat)
@@ -585,7 +399,7 @@ int RPSGame::closeGame(bool &isGameOverInternal, int &xPiecePlayerOne, int &xPie
 			if (-1 == handleEOF(false, isBadFormat, isPlayerOneTurn, isGameOverInternal))
 				return ERROR_DURING_MOVE;
 		}
-		
+
 		if (numOfMoves >= 100)
 		{
 			setGameOver(0, TIE_NO_WINNER);
@@ -623,7 +437,6 @@ int RPSGame::closeGame(bool &isGameOverInternal, int &xPiecePlayerOne, int &xPie
  Return -1 if there is bad format error or -2 if there is getline error
  and 0 if everything is ok
  */
-
 int RPSGame::startGame()
 {
 	// std::vector<unique_ptr<PiecePosition>> vectorToFill1;
