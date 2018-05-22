@@ -34,7 +34,7 @@ using namespace std;
 #define DISCOVERY_WEIGHT 10
 #define REVEAL_WEIGHT 3
 #define FLAG_SAFTEY_WEUGHT 50
-#define DISTANCE_FROM_FLAG_WEIGHT 200  //change 200
+#define DISTANCE_FROM_FLAG_WEIGHT 200 
 #define DISTANCE_FROM_UNKNOWN_WEIGHT 100 //change 100
 
 #define PLAYER_ONE 1
