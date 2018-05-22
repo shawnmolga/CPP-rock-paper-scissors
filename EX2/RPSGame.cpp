@@ -313,7 +313,7 @@ int RPSGame::makeMove() {
         } else {
             xPiecePlayerTwo = move->getFrom().getX();
         }
-        if (isPlayerTwoEOF && xPiecePlayerTwo != READ_LINE_ERR) {
+        if (!isPlayerTwoEOF && xPiecePlayerTwo != READ_LINE_ERR) {
             if (xPiecePlayerTwo != EMPTY_LINE) {
                 if (-1 == handleNonEmptyMove(false, move, isPlayerOneTurn, isGameOverInternal, isBadFormat))
                     break;
