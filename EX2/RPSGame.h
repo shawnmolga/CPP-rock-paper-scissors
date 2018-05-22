@@ -53,8 +53,8 @@ public:
     //vector<vector<Cell>> board ;  //Noy move the board to be public. we need it in the algorithm
     string ToString(GAME_OVER_TYPE typeGame);
     void updateJokerMovingPieces();
-    int closeGame(bool & isGameOverInternal, int & xPiecePlayerOne, int & xPiecePlayerTwo, bool & isBadFormat, bool & isPlayerOneTurn);
-    int handleEOF(bool playerOneEOF, bool & isBadFormat, bool & isPlayerOneTurn, bool & isGameOverInternal);
+    int closeGame(bool & isGameOverInternal, bool & isBadFormat, bool & isPlayerOneTurn, bool isPlayerOneEOF, bool isPlayerTwoEOF);
+    int handleEOF(bool playerOneEOF, bool & isBadFormat, bool & isPlayerOneTurn, bool & isGameOverInternal, bool isPlayerOneEOF, bool isPlayerTwoEOF);
     int handleNonEmptyMove(bool playerOneNonEmpty,std::unique_ptr<Move> & move,bool &isPlayerOneTurn, bool &isGameOverInternal, bool &isBadFormat);
     bool checkDirectionOfMove(int from_x, int from_y, int to_x, int to_y);
     bool checkIfCellTaken(bool isPlayer1, int to_x, int to_y);
