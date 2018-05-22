@@ -439,7 +439,7 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 			return handleNonEmptyLine(local_line, from_x, from_y, to_x, to_y, from, to);
 
 	}
-		//If we reach eod we will return -2
+	//If we reach eod we will return -2
 	else if(player1Move.eof()){
 		from.setX(EOF_MOVE_ERR);
 	}

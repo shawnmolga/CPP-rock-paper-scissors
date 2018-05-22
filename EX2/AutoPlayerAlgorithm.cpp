@@ -29,9 +29,10 @@ void AutoPlayerAlgorithm::getInitialPositions(int player,
 {
 	myPlayerNum = player;
 	cout<<"BEFORE POSITIONING AI STUFF"<<endl;
-	positionUnmovingPieces(player, vectorToFill);
+	positionUnmovingPieces(player, vectorToFill); //TODO put it back!
 	positionMovingPieces(player, vectorToFill);
 	positionJokers(player, vectorToFill);
+
 }
 
 /**
@@ -890,8 +891,8 @@ double AutoPlayerAlgorithm::calcScore(double material, double discovery, double 
 	//	cout<<"reveal: "<<reveal<<endl;
 	//	cout<<"flag safety: "<<flagSaftey<<endl;
 	//	cout<<"distance 1: "<<distanceFromBombOrFlag<<endl;
-	cout<<"distance 2: "<<distanceFromUnknownPiece<<endl;
-	cout<<"in calc sore: "<<score<<endl;
+	//cout<<"distance 2: "<<distanceFromUnknownPiece<<endl;
+	//cout<<"in calc sore: "<<score<<endl;
 	return score;
 }
 
@@ -1050,7 +1051,6 @@ double AutoPlayerAlgorithm::calcDistanceFromUnknownPiece(int to_x, int to_y)
 			}
 		}
 	}
-	cout<<"***mminimal distance ***"<<minimalDistance<<endl;
 return (double)(ROWS+COLS) - (double)minimalDistance;
 //	return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
 }
@@ -1064,31 +1064,31 @@ return (double)(ROWS+COLS) - (double)minimalDistance;
 int AutoPlayerAlgorithm::calcDistanceFromPiece(int piece_x, int piece_y, int my_x, int my_y)
 {
 	int distance;
-
+	int minimalDistance = INT_MAX; //to do: remove!
 	//there will be a fight with my piece vs unkown piece
 	if (willBeFight && my_x == piece_x && my_y == piece_y){
 		return 0;
 	}
 	distance = abs(my_x - piece_x) + abs(my_y - piece_y);
 	return distance;
-
-	/*for (int i = 0; i < COLS; ++i)
-	{
-		for (int j = 0; j < ROWS; ++j)
-		{
-			bool isMyPiece = gameBoard.board[i][j].isMyPiece(myPlayerNum);
-			if (isMyPiece && gameBoard.board[i][j].checkIsMovingPiece())
-			{
-				distance = abs(i - piece_x) + abs(j - piece_y);
-				if (minimalDistance > distance){
-				cout<<gameBoard.board[i][j].getPiece()<<"i "<< i << " j "<< j<<endl;
-				minimalDistance = distance;
-				}
-			}
-		}
-	}
-	cout<<minimalDistance<<endl;
-	return minimalDistance;*/
+	// (void)my_x;
+	// (void)my_y;
+	// for (int i = 0; i < COLS; ++i)
+	// {
+	// 	for (int j = 0; j < ROWS; ++j)
+	// 	{
+	// 		bool isMyPiece = gameBoard.board[i][j].isMyPiece(myPlayerNum);
+	// 		if (isMyPiece && gameBoard.board[i][j].checkIsMovingPiece())
+	// 		{
+	// 			distance = abs(i - piece_x) + abs(j - piece_y);
+	// 			if (minimalDistance > distance){
+	// 			minimalDistance = distance;
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// cout<<minimalDistance<<endl;
+	// return minimalDistance;
 }
 
 /**
