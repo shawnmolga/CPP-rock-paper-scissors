@@ -352,7 +352,7 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 		char new_rep = 'E'; //empty rep
 		//skip all spaces until next char
 		RPSpoint point(0, 0);
-		nextIndex = getPieceFromLine(nextIndex, line1) + 1;
+		nextIndex = getPieceFromLine(nextIndex, line1) + 1; //get joker piece
 		if (nextIndex == 0)
 		{
 			return make_unique<RPSJokerChange>(new_rep,point);
@@ -372,7 +372,7 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 
 		nextIndex++;
 
-		if (line1[nextIndex] != ' ')
+		if (line1[nextIndex] != ' ') //missing space
 		{
 			cout << "Bad Format - missing space before joker change" << endl;
 			return make_unique<RPSJokerChange>(new_rep,point);
@@ -380,17 +380,17 @@ unique_ptr<JokerChange> FilePlayerAlgorithm::getJokerChange()
 		int x_joker ;
 		int y_joker ;
 		nextIndex = getPositionFromLine(nextIndex, line1, x_joker, y_joker);
-		if (nextIndex == BAD_FORMAT_ERR)
+		if (nextIndex == BAD_FORMAT_ERR) //position error
 		{
 			return make_unique<RPSJokerChange>(new_rep,point);
 		}
 		
-		nextIndex = 1 + getPieceFromLine(nextIndex, line1);
+		nextIndex = 1 + getPieceFromLine(nextIndex, line1); //get joker new rep
 		if (nextIndex == 0)
 		{
 			return make_unique<RPSJokerChange>(new_rep,point);
 		}
-		if (line1[nextIndex - 2] != ' ')
+		if (line1[nextIndex - 2] != ' ') //missing space
 		{
 			cout << "Bad Format - missing space before joker translation piece"
 				 << endl;
@@ -434,6 +434,7 @@ unique_ptr<Move> FilePlayerAlgorithm::handleNonEmptyLine(string local_line, int 
 	from.setX(from_x);
 	from.setY(from_y);
 
+	//check if there was a problem while parsing
 	bool isLackSpace = nextIndex != BAD_FORMAT_ERR ? (local_line[nextIndex] != ' ') : false;
 	if (nextIndex == BAD_FORMAT_ERR || isLackSpace)
 	{
@@ -476,17 +477,18 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 
 	RPSpoint from(from_x, from_y);
 	RPSpoint to(to_x, to_y);
-	if (getline(playerMoveFile, line1))
+	if (getline(playerMoveFile, line1)) //read player's move from file
 	{
 		string local_line;
 		copyString(local_line, line1);
-		if (checkEmptyLine(0, local_line))
+		if (checkEmptyLine(0, local_line)) //if empty move
 			from.setX(0);
 		else
+			//return move
 			return handleNonEmptyLine(local_line, from_x, from_y, to_x, to_y, from, to);
 
 	}
-	//If we reach eod we will return -2
+	//If we reach eof we will return nullptr
 	else if(playerMoveFile.eof()){
 		return nullptr;
 	}
