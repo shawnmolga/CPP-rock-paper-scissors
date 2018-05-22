@@ -12,7 +12,6 @@ RPSGame::~RPSGame() {
 }
 
 void RPSGame::updateJokerMovingPieces() {
-    PrintBoardToConsole();
     for (int i = 1; i <= COLS; ++i) {
         for (int j = 1; j <= ROWS; ++j) {
             if (gameBoard.board[i][j].getIsJoker()) {
@@ -1187,7 +1186,6 @@ void RPSGame::printOutputFile(const string &outputFile) {
 * Output- true if we successfuly init playerAlogrithms or false otherwise;
  */
 bool RPSGame::initGameMethod(string gameMethod) {
-    cout << "in initGameMethod" << endl;
     bool isPlayerOneUseFile = false;
     bool isPlayerTwoUseFile = false;
     if (gameMethod.compare("auto-vs-file") == 0) {
