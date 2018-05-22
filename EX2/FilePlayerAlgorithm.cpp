@@ -117,13 +117,13 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 		return -1;
 	}
 	int end = start + 1;
-	if ((size_t)end >= line.length()) //no row
+	if ((size_t)end >= line.length()) //there is no more characters in line - missing row
 	{
 		cout << "Error - bad format - missing position in line" << endl;
 		return -1;
 	}
 
-	while (line[end] != ' ')
+	while (line[end] != ' ') //skip spaces
 	{
 		if (!checkIfDigit(line[end]))
 		{
@@ -142,7 +142,7 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
 	string col_string = line.substr(start, size);
 	col = std::stoi(col_string);
 
-	//try to get col
+	//try to get row
 	size = 1;
 	if (line[end] != ' ')
 	{
