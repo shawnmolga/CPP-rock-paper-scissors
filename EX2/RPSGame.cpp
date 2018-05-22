@@ -664,7 +664,7 @@ RPSGame::locateOnBoard(int playerNum, std::vector <unique_ptr<PiecePosition>> &v
     bool isPieceOkPlayer2 = true;
     for (int i = 0; i < vectorSize; i++) {
         isJoker = false;
-        inputPiece = vectorToFill[i]->getPiece();
+        inputPiece = toupper(vectorToFill[i]->getPiece());
         // In case the line if bad forrmated
         if (inputPiece == BAD_FORMAT_POS_ERR) {
             isPlayerLegalFormat = false;
