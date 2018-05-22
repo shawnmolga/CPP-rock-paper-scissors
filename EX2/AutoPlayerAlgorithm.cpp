@@ -9,7 +9,6 @@
 
 AutoPlayerAlgorithm::AutoPlayerAlgorithm()
 {
-	cout << "creating autoPlayerAlgorithm" << endl;
 	gameBoard = AIBoard(); //board for AI to learn about the game
 	myPlayerNum = -1;
 	opponentFlagsNumOnBoard = FLAGS_NUM;
@@ -28,8 +27,7 @@ void AutoPlayerAlgorithm::getInitialPositions(int player,
 		std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	myPlayerNum = player;
-	cout<<"BEFORE POSITIONING AI STUFF"<<endl;
-	positionUnmovingPieces(player, vectorToFill); //TODO put it back!
+	positionUnmovingPieces(player, vectorToFill);
 	positionMovingPieces(player, vectorToFill);
 	positionJokers(player, vectorToFill);
 
@@ -43,7 +41,6 @@ void AutoPlayerAlgorithm::getInitialPositions(int player,
  */
 void AutoPlayerAlgorithm::positionMovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
-	cout<<"inside positionMovingPieces "<<endl;
 	positionPiecesRandomly(ROCKS_NUM, player == 1 ? 'R' : 'r', false, '#', vectorToFill);
 	positionPiecesRandomly(PAPERS_NUM, player == 1 ? 'P' : 'p', false,'#', vectorToFill);
 	positionPiecesRandomly(SCISSORS_NUM, player == 1 ? 'S' : 's', false,'#', vectorToFill);
@@ -57,7 +54,6 @@ void AutoPlayerAlgorithm::positionMovingPieces(int player, std::vector<unique_pt
  */
 void AutoPlayerAlgorithm::positionJokers(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
-	cout<<"inside positionJoker "<<endl;
 	for (int i=0; i<JOKERS_NUM; ++i){
 		int pieceNum = getRandomNumInRange(1, 4);
 		switch (pieceNum)
@@ -393,9 +389,6 @@ bool AutoPlayerAlgorithm::checkIsOpponentNeighbors(int x, int y)
 void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 		const std::vector<unique_ptr<FightInfo>> &fights)
 {
-	//delete after debug
-	cout<<"************AFTER NOTIFY-BEFORE UPDATE************"<<endl;
-	PrintBoardToConsole();
 	updateBoard(b);
 	for (int i = 0; i < (int)fights.size(); ++i)
 	{
@@ -404,8 +397,6 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 		char myPiece = toupper(fights[i]->getPiece(myPlayerNum)); //do we need this?
 		char opponentPiece = toupper(fights[i]->getPiece(myPlayerNum == 1 ? 2 : 1));
 		int winner = fights[i]->getWinner();
-
-		cout<<"###############FIGHTT RESULTS: position: "<<x<<" , "<<y<<" winner: "<<winner<<" my number: "<<myPlayerNum<<" my piece: "<<myPiece<<" opp piece: "<<opponentPiece<<endl;
 
 		if (winner == 0)
 		{
@@ -454,10 +445,6 @@ void AutoPlayerAlgorithm::notifyOnInitialBoard(const Board &b,
 	}
 
 	updateFlagProbability();
-
-	//delete after debug
-	cout<<"************AFTER NOTIFY************"<<endl;
-	PrintBoardToConsole();
 }
 
 /**
@@ -507,12 +494,6 @@ unique_ptr<Move> AutoPlayerAlgorithm::getMove()
 	getBestMove(from_x, from_y, to_x, to_y);
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
 
-	///delete after debug
-	cout<<"player number "<<myPlayerNum<<endl;
-	cout<<"MY MOVE: "<<from_x<<" "<<from_y<<" to "<<to_x<<" "<<to_y<<" my piece: "<<myCell.getPiece()<<endl;
-	cout<<"~~~~MY BOARD~~~~"<<endl;
-	PrintBoardToConsole();
-	cout<<"succeess"<<endl;
 	return move;
 }
 
@@ -524,13 +505,11 @@ unique_ptr<Move> AutoPlayerAlgorithm::getMove()
  */
 unique_ptr<JokerChange> AutoPlayerAlgorithm::getJokerChange()
 {
-	cout<<"START CHANGE"<<endl;
 	int joker_x = -1;
 	int joker_y = -1;
 	char newRep = -1;
 	char bestRep = newRep;
 	double score = calcScore(1, 0, 0, -1, -1);
-	cout<<"SCORE SUCCESS"<<endl;
 	for (int i = 0; i < COLS; ++i)
 	{
 		for (int j = 0; j < ROWS; ++j)
@@ -552,7 +531,6 @@ unique_ptr<JokerChange> AutoPlayerAlgorithm::getJokerChange()
 		return nullptr;
 
 	AICell::updateCell(gameBoard.board[joker_x][joker_y],bestRep,true);
-	cout<<"JOKER CHANGED: to "<<bestRep<<endl;
 	unique_ptr<JokerChange> jokerChange = make_unique<RPSJokerChange>(toupper(bestRep), RPSpoint(joker_x+1, joker_y+1));
 	return jokerChange;
 }
@@ -566,8 +544,6 @@ unique_ptr<JokerChange> AutoPlayerAlgorithm::getJokerChange()
  */
 void AutoPlayerAlgorithm::getBestMove(int &from_x, int &from_y, int &to_x, int &to_y)
 {
-	//cout<<"inside get best move~~~~~~~~~~~~"<<endl;
-	//bool isMyPiece = (myPlayerNum == 1);
 	double score;
 	int maxScore = INT_MIN;
 	for (int i = 0; i < COLS; ++i)
@@ -611,7 +587,6 @@ void AutoPlayerAlgorithm::getBestMove(int &from_x, int &from_y, int &to_x, int &
  */
 double AutoPlayerAlgorithm::getBestMoveForPiece(double score, const int &from_x, const int &from_y, int &to_x, int &to_y)
 {
-	//cout<<"INSIDE getBestMoveForPiece"<<endl;
 	int x = from_x; //col
 	int y = from_y; //row
 	int currScore;
@@ -620,7 +595,6 @@ double AutoPlayerAlgorithm::getBestMoveForPiece(double score, const int &from_x,
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x, from_y), RPSpoint(x, y + 1));
 	if (isLegalMove(move, myPlayerNum == 1))
 	{
-		// Cell prevCell = gameBoard.board[from_x][from_y];
 		currScore = tryMovePiece(move);
 		if (currScore > score)
 		{
@@ -886,13 +860,7 @@ double AutoPlayerAlgorithm::calcScore(double material, double discovery, double 
 	double score = MATERIAL_WEIGHT * material + DISCOVERY_WEIGHT * discovery + REVEAL_WEIGHT * reveal +
 			FLAG_SAFTEY_WEUGHT * flagSaftey + DISTANCE_FROM_FLAG_WEIGHT * distanceFromBombOrFlag +
 			DISTANCE_FROM_UNKNOWN_WEIGHT * distanceFromUnknownPiece;
-	//	cout<<"material: "<<material<<endl;
-	//	cout<<"discovery: "<<discovery<<endl;
-	//	cout<<"reveal: "<<reveal<<endl;
-	//	cout<<"flag safety: "<<flagSaftey<<endl;
-	//	cout<<"distance 1: "<<distanceFromBombOrFlag<<endl;
-	//cout<<"distance 2: "<<distanceFromUnknownPiece<<endl;
-	//cout<<"in calc sore: "<<score<<endl;
+
 	return score;
 }
 
@@ -905,16 +873,11 @@ double AutoPlayerAlgorithm::calcScore(double material, double discovery, double 
  */
 void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 {
-	cout<<"FIGHT RESULT"<<endl;
-
 	int x = fightInfo.getPosition().getX()-1;
 	int y = fightInfo.getPosition().getY()-1;
 	char myPiece = toupper(fightInfo.getPiece(myPlayerNum));
 	char opponentPiece = toupper(fightInfo.getPiece(myPlayerNum == 1 ? 2 : 1));
 	int winner = fightInfo.getWinner();
-
-	cout<<"###############FIGHTT RESULTS: position: "<<x<<" , "<<y<<" winner: "<<winner<<" my number: "<<myPlayerNum<<" my piece: "<<myPiece<<" opp piece: "<<opponentPiece<<endl;
-
 
 	//check if piece was known before and changed.
 	bool isJoker = (toupper(opponentCell.getPiece()) != opponentPiece && opponentCell.getPiece() != 0 && opponentCell.getPiece() != '#');
@@ -983,9 +946,6 @@ void AutoPlayerAlgorithm::notifyFightResult(const FightInfo &fightInfo)
 	}
 
 	updateFlagProbability();
-
-	cout<<"@@@@@@@@AFTER FIGHT"<<endl;
-	PrintBoardToConsole();
 }
 
 /**
@@ -1017,7 +977,6 @@ double AutoPlayerAlgorithm::calcDistanceFromBombOrFlag(int to_x, int to_y)
 			}
 		}
 	}
-	//cout<<"DISTANCE!:!:!!:!:!:"<<minimalDistance<<endl;
 	return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
 }
 
@@ -1367,7 +1326,6 @@ void AutoPlayerAlgorithm::updateBoard(const Board &b)
  */
 void AutoPlayerAlgorithm::notifyOnOpponentMove(const Move &move)
 {
-	cout<<"MOVE RESULT"<<endl;
 	int from_x = move.getFrom().getX()-1;
 	int from_y = move.getFrom().getY()-1;
 	int to_x = move.getTo().getX()-1;
@@ -1442,36 +1400,4 @@ bool AutoPlayerAlgorithm::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
 	}
 
 	return true;
-}
-
-//Need to erase this function - only for debug!
-void AutoPlayerAlgorithm::PrintBoardToConsole()
-{
-	cout << "*******************PRINT THE BOARD:****************" << endl;
-	for (int i = 0; i < ROWS; i++)
-	{
-		for (int j = 0; j < COLS; j++)
-		{
-			if (gameBoard.board[j][i].getIsJoker())
-			{
-				if (Cell::isPlayerOnePiece(gameBoard.board[j][i]))
-				{
-					cout << " J="<<gameBoard.board[j][i].getPiece();
-				}
-				else
-				{
-					cout << " j="<<gameBoard.board[j][i].getPiece();
-				}
-			}
-			else if (gameBoard.board[j][i].getPiece() == 0)
-			{
-				cout << " - ";
-			}
-			else
-			{
-				cout <<" "<< gameBoard.board[j][i].getPiece() << " ";
-			}
-		}
-		cout << endl;
-	}
 }
