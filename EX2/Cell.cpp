@@ -14,18 +14,22 @@ void Cell::updateCell(Cell &cell, char piece, bool isJoker)
 	cell.piece = piece;
 	cell.isJoker = isJoker;
 }
+
 void Cell::cleanCell(Cell &cell)
 {
 	updateCell(cell, 0, false);
 }
+
 char Cell::getPiece() const
 {
 	return piece;
 }
+
 bool Cell::getIsJoker() const
 {
 	return isJoker;
 }
+
 bool Cell::isPlayerOnePiece(Cell &cell)
 {
 	if(cell.getPiece() == toupper(cell.getPiece())){
