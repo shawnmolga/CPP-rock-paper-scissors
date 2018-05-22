@@ -502,7 +502,7 @@ unique_ptr<Move> FilePlayerAlgorithm::getMove()
 	}
 		//If we reach eod we will return -2
 	else if(player1Move.eof()){
-		from.setX(EOF_MOVE_ERR);
+		return nullptr;
 	}
 	else if(player1Move.bad())
 	{

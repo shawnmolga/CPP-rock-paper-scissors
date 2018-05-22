@@ -52,7 +52,6 @@ using namespace std;
 #define ERROR_DURING_MOVE -1
 #define JOKER_REP_ERROR -1
 #define BAD_FORMAT_ERR -1
-#define EOF_MOVE_ERR -2
 #define READ_LINE_ERR -3
 
 //position macros
