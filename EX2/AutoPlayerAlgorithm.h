@@ -51,16 +51,16 @@ public:
 	double tryMovePiece(unique_ptr<Move>& move);
 	double calcMaterial(Cell cell);
 	double calcDiscovery(AICell cell);
-	double calcScore(double material, double discovery, double reveal);
+	double calcScore(double material, double discovery, double reveal, int to_x, int to_y);
 	void countProtectingPieces(int i, int j, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces);
-	double calcDistanceFromBombOrFlag();
-	int calcDistanceFromPiece(int piece_x, int piece_y);
+	double calcDistanceFromBombOrFlag(int to_x, int to_y);
+	int calcDistanceFromPiece(int piece_x, int piece_y, int my_x, int my_y);
 	void updateFlagProbability();
 	bool tryToFight(int to_x, int to_y, char myPiece, bool isJoker, bool& isProbOne);
 	bool fight(int row, int col, char myPiece, char opponentPiece, bool isMyPieceJoker);
 	char shouldChangeJoker(double &score,int joker_x, int joker_y, bool amIPlayerOne);
 	double calcFlagSaftey();
-	double calcDistanceFromUnknownPiece();
+	double calcDistanceFromUnknownPiece(int to_x, int to_y);
 	int getRandomNumInRange(int start, int end);
 	void updateMovingPiece();
 	bool isLegalMove(unique_ptr<Move> &move, bool isPlayer1);
@@ -75,6 +75,7 @@ private:
 	int opponentMovingPieceNumOnBoard;
 	AICell opponentCell;
 	AICell myCell;
+	bool willBeFight;
 };
 
 
