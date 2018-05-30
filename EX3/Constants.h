@@ -61,3 +61,4 @@ using namespace std;
 #define GAME_OVER_SUCC 0
 #define MOVE_DONE_SUCC 0 
 #define EMPTY_LINE 0 
+

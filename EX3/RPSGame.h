@@ -46,7 +46,7 @@ private:
 	int numOfMoves;
 
 public:
-	RPSGame();
+	RPSGame(PlayerAlgorithm playerOne, PlayerAlgorithm playerTwo);
 	~RPSGame();
 	string ToString(GAME_OVER_TYPE typeGame);
 	void updateJokerMovingPieces();

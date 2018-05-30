@@ -1,9 +1,9 @@
 #include "RPSGame.h"
 
-RPSGame::RPSGame() : isGameOver(false), playerOne(Player(1)), playerTwo(Player(2)) {
+RPSGame::RPSGame(PlayerAlgorim playerOne, PlayerAlgorithm playerTwo) : isGameOver(false), playerOne(Player(1)), playerTwo(Player(2)) {
     gameBoard = RPSBoard();
-    playerAlgoOne = NULL;
-    playerAlgoTwo = NULL;
+    playerAlgoOne = playerOne;
+    playerAlgoTwo = playerTwo;
 }
 
 RPSGame::~RPSGame() {
@@ -1217,12 +1217,12 @@ bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile) 
     if (isPlayerOneUseFile) {
         playerAlgoOne = new FilePlayerAlgorithm(PLAYER_ONE_POSITION_FILENAME, PLAYER_ONE_MOVE_FILENAME);
     } else {
-        playerAlgoOne = new AutoPlayerAlgorithm();
+        playerAlgoOne = new RSPPlayer_204157861();
     }
     if (isPlayerTwoUseFile) {
         playerAlgoTwo = new FilePlayerAlgorithm(PLAYER_TWO_POSITION_FILENAME, PLAYER_TWO_MOVE_FILENAME);
     } else {
-        playerAlgoTwo = new AutoPlayerAlgorithm();
+        playerAlgoTwo = new RSPPlayer_204157861();
     }
 
     return true;
