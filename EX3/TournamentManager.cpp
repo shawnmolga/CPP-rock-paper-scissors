@@ -213,7 +213,10 @@ bool TournamentManager::isValidDir(const string & path)
 
 bool TournamentManager::loadAlgorithms(const string & path)
 {
- //TODO: !
+	FILE *dl;   // handle to read directory 
+    const char *command_str = "ls *.so";  // command string to get dynamic lib names
+    dl = popen(command_str, "r"); 
+
 }
 
 bool TournamentManager::isValidTournament(int argc, char *argv[])
