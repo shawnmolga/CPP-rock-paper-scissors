@@ -224,3 +224,34 @@ bool TournamentManager::isValidTournament(int argc, char *argv[])
 	}
 	return true;
 }
+
+bool TournamentManager::loadAlgorithemsFromPath() {
+	FILE *dl;   // handle to read directory
+	const char *command_str = "ls *.so";  // command string to get dynamic lib names
+	char in_buf[BUF_SIZE]; // input buffer for lib names
+	list<void *> dl_list; // list to hold handles for dynamic libs
+	list<void *>::iterator itr;
+	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator fitr;
+	// get the names of all the dynamic libs (.so  files) in the current dir
+	dl = popen(command_str, "r");
+	if(!dl){
+		cout << "Error: failed to open .so files" << endl;
+		return false;
+	}
+	void *dlib;
+	char name[BUF_SIZE];
+	while(fgets(in_buf, BUF_SIZE, dl)){
+		// trim off the whitespace
+		char *ws = strpbrk(in_buf, " \t\n");
+		if(ws) *ws = '\0';
+		// append ./ to the front of the lib name
+		sprintf(name, "./%s", in_buf);
+		dlib = dlopen(name, RTLD_NOW);
+		if(dlib == NULL){
+			cout << "Error: algorithm failed to open." << endl;
+			return false;
+		}
+		// add the handle to our list
+		dl_list.insert(dl_list.end(), dlib);
+	}
+}

@@ -11,9 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="da2d32cb-143c-46ff-86a6-ed00b66028c2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EX3/RSPPlayer_204157861.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX3/RSPPlayer_204157861.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EX3/TournamentManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX3/TournamentManager.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EX3/TournamentManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/EX3/TournamentManager.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX3/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX3/main.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,11 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="TournamentManager.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TournamentManager.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EX3/TournamentManager.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="47" column="44" selection-start-line="47" selection-start-column="28" selection-end-line="47" selection-end-column="44" />
+            <state relative-caret-position="17">
+              <caret line="45" column="17" selection-start-line="45" selection-start-column="16" selection-end-line="45" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -51,11 +51,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TournamentManager.h" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TournamentManager.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/EX3/TournamentManager.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="73">
-              <caret line="38" column="55" selection-start-line="38" selection-start-column="55" selection-end-line="38" selection-end-column="55" />
+            <state relative-caret-position="-366">
+              <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
             </state>
           </provider>
         </entry>
@@ -137,8 +137,8 @@
         <option value="$PROJECT_DIR$/EX3/ThreadPool.h.cpp" />
         <option value="$PROJECT_DIR$/EX3/ThreadPool.cpp" />
         <option value="$PROJECT_DIR$/EX3/ThreadPool.h" />
-        <option value="$PROJECT_DIR$/EX3/TournamentManager.h" />
         <option value="$PROJECT_DIR$/EX3/TournamentManager.cpp" />
+        <option value="$PROJECT_DIR$/EX3/TournamentManager.h" />
       </list>
     </option>
   </component>
@@ -232,7 +232,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="133877000" />
+    <option name="totallyTimeSpent" value="134336000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1293" height="693" extended-state="6" />
@@ -595,17 +595,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/EX3/TournamentManager.h">
+    <entry file="file://$PROJECT_DIR$/EX3/TournamentManager.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="73">
-          <caret line="38" column="55" selection-start-line="38" selection-start-column="55" selection-end-line="38" selection-end-column="55" />
+        <state relative-caret-position="17">
+          <caret line="45" column="17" selection-start-line="45" selection-start-column="16" selection-end-line="45" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/EX3/TournamentManager.cpp">
+    <entry file="file://$PROJECT_DIR$/EX3/TournamentManager.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="47" column="44" selection-start-line="47" selection-start-column="28" selection-end-line="47" selection-end-column="44" />
+        <state relative-caret-position="-366">
+          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
         </state>
       </provider>
     </entry>

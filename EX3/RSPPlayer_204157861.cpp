@@ -8,6 +8,7 @@
 #include "RSPPlayer_204157861.h"
 #include "AlgorithmRegistration.h"
 
+extern "C" {
 RSPPlayer_204157861::RSPPlayer_204157861()
 {
 	gameBoard = AIBoard(); //board for AI to learn about the game
@@ -16,6 +17,7 @@ RSPPlayer_204157861::RSPPlayer_204157861()
 	opponentBombsNumOnBoard = BOMBS_NUM + JOKERS_NUM;	//we dont know if joker is now bomb or not
 	opponentMovingPieceNumOnBoard = SCISSORS_NUM + ROCKS_NUM + PAPERS_NUM + JOKERS_NUM; //we dont know if joker is moving piece now or not
 	willBeFight = false;
+}
 }
 
 REGISTER_ALGORITHM(204157861)

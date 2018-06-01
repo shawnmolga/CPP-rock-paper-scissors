@@ -26,6 +26,10 @@
 #include <atomic>
 #include <vector>
 #include <thread>
+#include <dlfcn.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include "RPSGame.h"
 #include "ThreadPool.h"
 
@@ -35,8 +39,12 @@ class TournamentManager {
 	static TournamentManager tournamentManager;
 	static const int UNINITIALIZED_ARG = -1;
 	static const size_t DEFAULT_THREADS_NUM = 4;
+
 	int numOfThreads = DEFAULT_THREADS_NUM ;// if num_of_threads entered, reassign freeThreadsNum in checkTournamentArguments
 	ThreadPool pool; //initialized in startTournament()
+
+	// size of buffer for reading in directory entries
+	static unsigned int BUF_SIZE = 4096;
 
 	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>> idToAlgoInfo;
 	// private ctor
@@ -55,6 +63,7 @@ class TournamentManager {
 	string inputDirPath;
 	bool loadAlgorithms(const string & path);
     void startNewGame(const string &playerOneId, const string &playerTwoId);
+    bool loadAlgorithemsFromPath();
 public:
 	//manager is singleton
 	static TournamentManager::TournamentManager& getTournamentManager() {
