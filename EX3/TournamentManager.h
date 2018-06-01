@@ -41,8 +41,8 @@ class TournamentManager {
 	vector<string> algorithmsToPlay; //set of players that still didnt play 30 games
 	vector<string> algorithmsPlayed; //algorithms played 30 games
 
-	mutex playersPlayedMutex, idToAlgoInfoMutex;
-
+	mutex playersPlayedMutex, idToAlgoInfoMutex, updateScoreMutex;
+	void  updateScore(RPSGame & game,const string &playerOneId, const string &playerTwoId);
 	void getRandomPlayer(string &playerId, bool doesRestPlayersPlayed);
 	int getRandomNumInRange(int start, int end);
 	void getPlayersToPlay(string &playerOneId, string &playerTwoId);
@@ -57,6 +57,7 @@ public:
 	static TournamentManager::TournamentManager& getTournamentManager() {
 		return tournamentManager;
 	}
+	void printTornamentResult();
 	bool checkTournamentArguments(int argc, char * argv[]);
 	void registerAlgorithm(std::string id, std::function<std::unique_ptr<PlayerAlgorithm>()> factoryMethod);
 	bool isValidTournament(int argc, char *argv[]);

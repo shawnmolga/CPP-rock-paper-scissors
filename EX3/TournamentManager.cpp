@@ -42,13 +42,39 @@ void TournamentManager::startTournament()
 	}
 }
 
+void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, const string &playerTwoId){
+	int winnerNumPlayer;
+	string gameOverReason; // TODO: do we need this?
+	game.getWinnerInfo(winnerNumPlayer,gameOverReason);
+	unique_lock<mutex> lock(updateScoreMutex);
+	if(winnerNumPlayer == 1){
+		idToAlgoInfo[playerOneId]->score = idToAlgoInfo[playerOneId]->score + 3;
+
+	}
+	else if(winnerNumPlayer == 2){
+		idToAlgoInfo[playerTwoId]->score = idToAlgoInfo[playerTwoId]->score + 3;
+
+	}
+	else {
+		idToAlgoInfo[playerOneId]->score ++;	
+		idToAlgoInfo[playerTwoId]->score ++;
+	}
+	lock.unlock();
+}
+
 void TournamentManager::startNewGame(const string &playerOneId, const string &playerTwoId){
 	int winnerNumPlayer;
 	string gameOverReason;
 	RPSGame game = RPSGame(idToAlgoInfo[playerOneId], idToAlgoInfo[playerTwoId]);
 	game.startGame();
-	game.getWinnerInfo(winnerNumPlayer,gameOverReason);
+	updateScore(game, playerOneId,playerTwoId);
 	
+}
+
+void TournamentManager::printTornamentResult(){
+//iterating over the map and print the results 
+  for (std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator it=idToAlgoInfo.begin(); it!=idToAlgoInfo.end(); ++it)
+    std::cout << it->first << " " << it->second->score << '\n';
 }
 
 void TournamentManager::getPlayersToPlay(string &playerOneId, string &playerTwoId)
