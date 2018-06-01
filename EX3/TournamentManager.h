@@ -27,6 +27,7 @@
 #include <vector>
 #include <thread>
 #include "RPSGame.h"
+#include "ThreadPool.h"
 
 using namespace std;
 
@@ -34,6 +35,9 @@ class TournamentManager {
 	static TournamentManager tournamentManager;
 	static const int UNINITIALIZED_ARG = -1;
 	static const size_t DEFAULT_THREADS_NUM = 4;
+	int numOfThreads = DEFAULT_THREADS_NUM ;// if num_of_threads entered, reassign freeThreadsNum in checkTournamentArguments
+	ThreadPool pool; //initialized in startTournament()
+
 	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>> idToAlgoInfo;
 	// private ctor
 	TournamentManager() {}
@@ -47,7 +51,6 @@ class TournamentManager {
 	int getRandomNumInRange(int start, int end);
 	void getPlayersToPlay(string &playerOneId, string &playerTwoId);
 	void updatePlayerPlayed(const string& playerOneId, const string& playerTwoId);
-	size_t freeThreadsNum;
 	bool isValidDir(const string & path);
 	string inputDirPath;
 	bool loadAlgorithms(const string & path);

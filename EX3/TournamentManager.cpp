@@ -31,14 +31,13 @@ void TournamentManager::registerAlgorithm(std::string id, std::function<std::uni
 
 void TournamentManager::startTournament()
 {
+	ThreadPool pool(numOfThreads);
 	string playerOneId;
 	string playerTwoId;
 	while (algorithmsToPlay.size() != 0)
 	{
 		getPlayersToPlay(playerOneId, playerTwoId);
-		if(freeThreadsNum > 0){
-			thread t ();
-		}
+		pool.doJob (std::bind (startNewGame),playerOneId, playerTwoId ); //adds this game to "pool of jobs", when a thread is done the thread will do this job
 	}
 }
 
@@ -49,7 +48,6 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 	unique_lock<mutex> lock(updateScoreMutex);
 	if(winnerNumPlayer == 1){
 		idToAlgoInfo[playerOneId]->score = idToAlgoInfo[playerOneId]->score + 3;
-
 	}
 	else if(winnerNumPlayer == 2){
 		idToAlgoInfo[playerTwoId]->score = idToAlgoInfo[playerTwoId]->score + 3;
@@ -155,8 +153,8 @@ bool TournamentManager::checkTournamentArguments(int argc, char *argv[])
 			{
 				char *stringEnd = nullptr;
 				//strtoll convert string to int
-				freeThreadsNum = static_cast<size_t>(strtol(argv[++i], &stringEnd, 10)) - 1;
-				if (*stringEnd || freeThreadsNum < 0)
+				numOfThreads = static_cast<size_t>(strtol(argv[++i], &stringEnd, 10)) - 1;
+				if (*stringEnd || numOfThreads < 0)
 				{
 					std::cout << "Error: -threads flag value is not a valid positive integer." << std::endl;
 					return false;
@@ -188,7 +186,7 @@ bool TournamentManager::checkTournamentArguments(int argc, char *argv[])
 			return false;
 		}
 		inputDirPath = path;
-		freeThreadsNum = (freeThreadsNum == UNINITIALIZED_ARG) ?  (DEFAULT_THREADS_NUM - 1) : freeThreadsNum;
+		numOfThreads = (numOfThreads == UNINITIALIZED_ARG) ?  (DEFAULT_THREADS_NUM - 1) : numOfThreads;
 		return true;
 }
 

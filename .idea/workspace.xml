@@ -11,12 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="da2d32cb-143c-46ff-86a6-ed00b66028c2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/Player.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/Tests/test7/player1.rps_board" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/Tests/test7/player1.rps_board" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/Tests/test7/player1.rps_moves" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/Tests/test7/player1.rps_moves" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/Tests/test7/player2.rps_board" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/Tests/test7/player2.rps_board" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/Tests/test7/player2.rps_moves" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/Tests/test7/player2.rps_moves" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX2/Tests/test8/rps.output" beforeDir="false" afterPath="$PROJECT_DIR$/EX2/Tests/test8/rps.output" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EX3/TournamentManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX3/TournamentManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EX3/TournamentManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/EX3/TournamentManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EX3/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX3/main.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,74 +24,47 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="RPSGame.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EX2/RPSGame.cpp">
+      <file leaf-file-name="TournamentManager.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/EX3/TournamentManager.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6815">
-              <caret line="497" column="12" selection-start-line="497" selection-start-column="12" selection-end-line="497" selection-end-column="12" />
+            <state relative-caret-position="169">
+              <caret line="47" column="44" selection-start-line="47" selection-start-column="28" selection-end-line="47" selection-end-column="44" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AutoPlayerAlgorithm.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp">
+      <file leaf-file-name="ThreadPool.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/EX3/ThreadPool.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="67">
-              <caret line="1062" column="3" lean-forward="true" selection-start-line="1062" selection-start-column="3" selection-end-line="1062" selection-end-column="3" />
+            <state relative-caret-position="102">
+              <caret line="18" selection-start-line="18" selection-end-line="18" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RPSGame.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EX2/RPSGame.h">
+      <file leaf-file-name="ThreadPool.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/EX3/ThreadPool.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="67" selection-start-line="67" selection-end-line="67" />
+            <state relative-caret-position="187">
+              <caret line="11" column="46" selection-start-line="11" selection-start-column="46" selection-end-line="11" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TournamentManager.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/EX3/TournamentManager.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="73">
+              <caret line="38" column="55" selection-start-line="38" selection-start-column="55" selection-end-line="38" selection-end-column="55" />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EX2/main.cpp">
+        <entry file="file://$PROJECT_DIR$/EX3/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="29" selection-start-line="22" selection-start-column="15" selection-end-line="22" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FilePlayerAlgorithm.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EX2/FilePlayerAlgorithm.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7922">
-              <caret line="466" column="31" selection-start-line="466" selection-start-column="31" selection-end-line="466" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Player.cpp" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/EX2/Player.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="27" column="17" lean-forward="true" selection-start-line="27" selection-start-column="17" selection-end-line="27" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RPSBoard.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EX2/RPSBoard.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="33" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="33" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RPSJokerChange.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/EX2/RPSJokerChange.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
+            <state relative-caret-position="164">
+              <caret line="12" column="32" selection-start-line="12" selection-start-column="15" selection-end-line="12" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -103,11 +73,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>checkgameOv</find>
-      <find>startGame</find>
-      <find>startG</find>
-      <find>locateon</find>
-      <find>checkposition</find>
       <find>checkBadFormat</find>
       <find>checkbad</find>
       <find>start</find>
@@ -133,6 +98,11 @@
       <find>handlePaperOrRockVsScissors</find>
       <find>while (!is</find>
       <find>minimaldi</find>
+      <find>checkTournamentArguments</find>
+      <find>threads</find>
+      <find>lock_</find>
+      <find>startt</find>
+      <find>size_t</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -163,6 +133,12 @@
         <option value="$PROJECT_DIR$/EX2/RPSGame.cpp" />
         <option value="$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.cpp" />
         <option value="$PROJECT_DIR$/EX2/Player.cpp" />
+        <option value="$PROJECT_DIR$/EX3/main.cpp" />
+        <option value="$PROJECT_DIR$/EX3/ThreadPool.h.cpp" />
+        <option value="$PROJECT_DIR$/EX3/ThreadPool.cpp" />
+        <option value="$PROJECT_DIR$/EX3/ThreadPool.h" />
+        <option value="$PROJECT_DIR$/EX3/TournamentManager.h" />
+        <option value="$PROJECT_DIR$/EX3/TournamentManager.cpp" />
       </list>
     </option>
   </component>
@@ -190,6 +166,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -200,13 +177,12 @@
             <path>
               <item name="CPP-PRJ" type="b2602c69:ProjectViewProjectNode" />
               <item name="CPP-PRJ" type="462c0819:PsiDirectoryNode" />
-              <item name="EX2" type="462c0819:PsiDirectoryNode" />
+              <item name="EX3" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -256,7 +232,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="128550000" />
+    <option name="totallyTimeSpent" value="133877000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1293" height="693" extended-state="6" />
@@ -292,48 +268,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/EX2/RPSGame.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="110" selection-start-line="110" selection-end-line="110" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/FilePlayerAlgorithm.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="101">
-          <caret line="479" column="31" selection-start-line="479" selection-end-line="480" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/RPSGame.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7905">
-          <caret line="465" column="34" selection-start-line="465" selection-start-column="34" selection-end-line="465" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/AutoPlayerAlgorithm.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="24" selection-start-line="1" selection-start-column="24" selection-end-line="1" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/RPSMove.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EX2/Move.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/EX2/Board.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
@@ -634,6 +568,44 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="274">
           <caret line="27" column="17" lean-forward="true" selection-start-line="27" selection-start-column="17" selection-end-line="27" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX3/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="12" column="32" selection-start-line="12" selection-start-column="15" selection-end-line="12" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX3/ThreadPool.h.cpp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX3/ThreadPool.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX3/ThreadPool.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="46" selection-start-line="11" selection-start-column="46" selection-end-line="11" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX3/TournamentManager.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="73">
+          <caret line="38" column="55" selection-start-line="38" selection-start-column="55" selection-end-line="38" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EX3/TournamentManager.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="47" column="44" selection-start-line="47" selection-start-column="28" selection-end-line="47" selection-end-column="44" />
         </state>
       </provider>
     </entry>
