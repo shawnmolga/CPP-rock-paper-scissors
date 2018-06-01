@@ -16,6 +16,7 @@
 #include "FilePlayerAlgorithm.h"
 #include "Player.h"
 #include "RSPPlayer_204157861.h"
+#include "PlayerAlgorithmInfo.h"
 
 
 enum GAME_OVER_TYPE
@@ -35,8 +36,8 @@ enum GAME_OVER_TYPE
 
 class RPSGame{
 private:
-	PlayerAlgorithm * playerAlgoOne;
-	PlayerAlgorithm * playerAlgoTwo;
+	unique_ptr <PlayerAlgorithm> playerAlgoOne;
+	unique_ptr <PlayerAlgorithm> playerAlgoTwo;
 	bool isGameOver;
 	string gameMethod; //i.e. auto-vs-auto ..
 	Player playerOne;
@@ -46,7 +47,7 @@ private:
 	int numOfMoves;
 
 public:
-	RPSGame(PlayerAlgorithm playerOne, PlayerAlgorithm playerTwo);
+	RPSGame(unique_ptr <PlayerAlgorithmInfo> & playerOne, unique_ptr <PlayerAlgorithmInfo> & playerTwo);
 	~RPSGame();
 	string ToString(GAME_OVER_TYPE typeGame);
 	void updateJokerMovingPieces();
@@ -75,6 +76,7 @@ public:
 	void gameOverSetter(Player* currPlayer, Player* nextPlayer, bool isWinner1, bool isWinner2, GAME_OVER_TYPE type);
 	void resetGameResults();
 	void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
+	void getWinnerInfo(int & winnerNumPlayer,string & gameOverReason );
 
 	//fight functions and help-functions
 	void handleSwitchCase(char nextPlayerPiece, RPSFight &fights, Player* currPlayer, Player* nextPlayer, int x , int y,

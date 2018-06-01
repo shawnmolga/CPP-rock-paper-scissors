@@ -25,6 +25,8 @@
 #include "dirent.h"
 #include <atomic>
 #include <vector>
+#include <thread>
+#include "RPSGame.h"
 
 using namespace std;
 
@@ -49,8 +51,7 @@ class TournamentManager {
 	bool isValidDir(const string & path);
 	string inputDirPath;
 	bool loadAlgorithms(const string & path);
-	void startNewGame();
-
+    void startNewGame(const string &playerOneId, const string &playerTwoId);
 public:
 	//manager is singleton
 	static TournamentManager::TournamentManager& getTournamentManager() {

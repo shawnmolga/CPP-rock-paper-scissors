@@ -43,8 +43,12 @@ void TournamentManager::startTournament()
 }
 
 void TournamentManager::startNewGame(const string &playerOneId, const string &playerTwoId){
+	int winnerNumPlayer;
+	string gameOverReason;
 	RPSGame game = RPSGame(idToAlgoInfo[playerOneId], idToAlgoInfo[playerTwoId]);
 	game.startGame();
+	game.getWinnerInfo(winnerNumPlayer,gameOverReason);
+	
 }
 
 void TournamentManager::getPlayersToPlay(string &playerOneId, string &playerTwoId)

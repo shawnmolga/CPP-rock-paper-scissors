@@ -1,14 +1,11 @@
 #include "RPSGame.h"
 
-RPSGame::RPSGame(PlayerAlgorim playerOne, PlayerAlgorithm playerTwo) : isGameOver(false), playerOne(Player(1)), playerTwo(Player(2)) {
+RPSGame::RPSGame(unique_ptr <PlayerAlgorithmInfo> & playerOne, unique_ptr <PlayerAlgorithmInfo> & playerTwo) : isGameOver(false), playerOne(Player(1)), playerTwo(Player(2)), playerAlgoOne(playerOne->getPlayerAlgorithm()), playerAlgoTwo(playerTwo->getPlayerAlgorithm()) {
     gameBoard = RPSBoard();
-    playerAlgoOne = playerOne;
-    playerAlgoTwo = playerTwo;
 }
 
 RPSGame::~RPSGame() {
-    delete (playerAlgoOne);
-    delete (playerAlgoTwo);
+
 }
 
 void RPSGame::updateJokerMovingPieces() {
@@ -1148,6 +1145,19 @@ void RPSGame::printBoardToFile(ofstream &output) {
     return;
 }
 
+void RPSGame::getWinnerInfo(int & winnerNumPlayer,string & gameOverReason ) {
+    if(playerOne.getIsWinner()){
+        winnerNumPlayer = 1;
+    }
+    else if(playerTwo.getIsWinner()){
+        winnerNumPlayer = 2;
+    }
+    else {
+        winnerNumPlayer = 0;
+    }
+    gameOverReason = ToString(getGameOverReason());
+}
+
 /*
 * This function prints the board to the file.
 * Input - output file name
@@ -1215,14 +1225,14 @@ bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile) 
     }
 
     if (isPlayerOneUseFile) {
-        playerAlgoOne = new FilePlayerAlgorithm(PLAYER_ONE_POSITION_FILENAME, PLAYER_ONE_MOVE_FILENAME);
+        playerAlgoOne = FilePlayerAlgorithm(PLAYER_ONE_POSITION_FILENAME, PLAYER_ONE_MOVE_FILENAME);
     } else {
-        playerAlgoOne = new RSPPlayer_204157861();
+        playerAlgoOne =  RSPPlayer_204157861();
     }
     if (isPlayerTwoUseFile) {
-        playerAlgoTwo = new FilePlayerAlgorithm(PLAYER_TWO_POSITION_FILENAME, PLAYER_TWO_MOVE_FILENAME);
+        playerAlgoTwo = FilePlayerAlgorithm(PLAYER_TWO_POSITION_FILENAME, PLAYER_TWO_MOVE_FILENAME);
     } else {
-        playerAlgoTwo = new RSPPlayer_204157861();
+        playerAlgoTwo = RSPPlayer_204157861();
     }
 
     return true;
