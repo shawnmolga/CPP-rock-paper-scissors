@@ -51,7 +51,8 @@ class TournamentManager {
 	int numOfRegisteredPlayers; //we want to make players play between them in uniformly probability
 	vector<string> algorithmsToPlay; //set of players that still didnt play 30 games
 	vector<string> algorithmsPlayed; //algorithms played 30 games
-
+	list<void *> dl_list; // list to hold handles for dynamic libs
+	list<void *>::iterator itr;
 	mutex playersPlayedMutex, idToAlgoInfoMutex, updateScoreMutex;
 	void  updateScore(RPSGame & game,const string &playerOneId, const string &playerTwoId);
 	void getRandomPlayer(string &playerId, bool doesRestPlayersPlayed);
@@ -62,6 +63,7 @@ class TournamentManager {
 	string inputDirPath;
     void startNewGame(const string &playerOneId, const string &playerTwoId);
     bool loadAlgorithemsFromPath();
+    void closeAlgorithemLibs()
 public:
 	//manager is singleton
 	static TournamentManager& getTournamentManager() {

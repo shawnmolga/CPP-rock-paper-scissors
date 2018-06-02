@@ -43,6 +43,7 @@ void TournamentManager::startTournament()
 		//if the if wont change we need to do : ref(playerOneId), ref(playerTwoID)
 		pool.doJob (std::bind(startNewGame,playerOneId, playerTwoId)); //adds this game to "pool of jobs", when a thread is done the thread will do this job
 	}
+	closeAlgorithemLibs();
 }
 
 void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, const string &playerTwoId){
@@ -228,10 +229,8 @@ bool TournamentManager::isValidTournament(int argc, char *argv[])
 
 bool TournamentManager::loadAlgorithemsFromPath() {
 	FILE *dl;   // handle to read directory
-	const char *command_str = "ls *.so";  // command string to get dynamic lib names
+	const char *command_str = "ls" + inputDirPath + "*.so";  // command string to get dynamic lib names
 	char in_buf[BUF_SIZE]; // input buffer for lib names
-	list<void *> dl_list; // list to hold handles for dynamic libs
-	list<void *>::iterator itr;
 	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator fitr;
 	// get the names of all the dynamic libs (.so  files) in the current dir
 	dl = popen(command_str, "r");
@@ -240,10 +239,10 @@ bool TournamentManager::loadAlgorithemsFromPath() {
 		return false;
 	}
 	void *dlib;
-	char name[BUF_SIZE];
+	char name[1024];
 	while(fgets(in_buf, BUF_SIZE, dl)){
 		// trim off the whitespace
-		char *ws = strpbrk(in_buf, " \t\n");
+		char *ws = strpbrk(in_buf, " \t\n"); //until new name
 		if(ws) *ws = '\0';
 		// append ./ to the front of the lib name
 		sprintf(name, "./%s", in_buf);
@@ -256,4 +255,11 @@ bool TournamentManager::loadAlgorithemsFromPath() {
 		dl_list.insert(dl_list.end(), dlib);
 	}
 	return true;
+}
+
+void TournamentManager::closeAlgorithemLibs() {
+	// close all the dynamic libs we opened
+	for(itr=dl_list.begin(); itr!=dl_list.end(); itr++){
+		dlclose(*itr);
+	}
 }
