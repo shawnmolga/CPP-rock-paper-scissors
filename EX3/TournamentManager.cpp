@@ -7,7 +7,7 @@
 
 #include "TournamentManager.h"
 
-TournamentManager::TournamentManager(){
+TournamentManager::TournamentManager() {
 	numOfRegisteredPlayers = 0;
 }
 
@@ -31,6 +31,12 @@ void TournamentManager::registerAlgorithm(std::string id, std::function<std::uni
 	}
 }
 
+void TournamentManager::startNewGame(const string &playerOneId, const string &playerTwoId){
+	RPSGame game (idToAlgoInfo[playerOneId], idToAlgoInfo[playerTwoId]);
+	game.startGame();
+	updateScore(game, playerOneId,playerTwoId);
+}
+
 void TournamentManager::startTournament()
 {
 	ThreadPool pool(numOfThreads);
@@ -39,9 +45,10 @@ void TournamentManager::startTournament()
 	while (algorithmsToPlay.size() != 0)
 	{
 		getPlayersToPlay(playerOneId, playerTwoId);
-		//bind parameters to function
 		//if the if wont change we need to do : ref(playerOneId), ref(playerTwoID)
-		pool.doJob (std::bind(startNewGame,playerOneId, playerTwoId)); //adds this game to "pool of jobs", when a thread is done the thread will do this job
+		//bind parameters to function
+		auto bindFunction = std::bind(startNewGame,this,playerOneId, playerTwoId);
+		pool.doJob (bindFunction); //adds this game to "pool of jobs", when a thread is done the thread will do this job
 	}
 	closeAlgorithemLibs();
 }
@@ -62,12 +69,6 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 		idToAlgoInfo[playerTwoId]->score ++;
 	}
 	lock.unlock();
-}
-
-void TournamentManager::startNewGame(const string &playerOneId, const string &playerTwoId){
-	RPSGame game = RPSGame(idToAlgoInfo[playerOneId], idToAlgoInfo[playerTwoId]);
-	game.startGame();
-	updateScore(game, playerOneId,playerTwoId);
 }
 
 void TournamentManager::printTornamentResult(){
