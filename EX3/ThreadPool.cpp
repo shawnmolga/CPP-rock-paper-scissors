@@ -2,7 +2,7 @@
 // Created by shawn on 1/06/2018.
 //
 
-#include ThreadPool.h
+#include "ThreadPool.h"
 
 ThreadPool::ThreadPool (int numOftThreads) : shutdown_ (false)
 {
@@ -12,7 +12,7 @@ ThreadPool::ThreadPool (int numOftThreads) : shutdown_ (false)
         //function "bind" binds the function "threadEntry" to the input variables that we send, "i"
 }
 
-~ThreadPool ()
+ThreadPool::~ThreadPool ()
 {
     {
         // Unblock any threads and tell them to stop
@@ -21,10 +21,10 @@ ThreadPool::ThreadPool (int numOftThreads) : shutdown_ (false)
         condVar_.notify_all();
     }
     for (auto& thread : vectorOfThreads)
-        thread.join();
+        thread.join(); //wait until main thread will finish
 }
 
-void doJob (std::function <void (void)> func)
+void ThreadPool::doJob (std::function <void (void)> func)
 {
     // Place a job on the queue and unblock a thread
     std::unique_lock <std::mutex> l (lock_);
@@ -32,7 +32,7 @@ void doJob (std::function <void (void)> func)
     condVar_.notify_one();
 }
 
-void threadEntry (int i)
+void ThreadPool::threadEntry (int i)
 {
     std::function <void (void)> job;
     while (1)
@@ -44,11 +44,11 @@ void threadEntry (int i)
         if (jobs_.empty ())
         {
             // No jobs to do and we are shutting down
-            std::cerr << "Thread " << i << " terminates" << std::endl;//todo delete this
+            cerr << "Thread " << i << " terminates" << endl;//todo delete this
             return;
         }
 
-        std::cerr << "Thread " << i << " does a job" << std::endl;//todo delete this
+        cerr << "Thread " << i << " does a job" << std::endl;//todo delete this
         job = std::move (jobs_.front ());
         jobs_.pop();
 
