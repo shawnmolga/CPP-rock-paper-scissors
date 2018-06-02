@@ -4,6 +4,7 @@ RPSGame::RPSGame(const unique_ptr <PlayerAlgorithmInfo> & playerOne,const unique
     gameBoard = RPSBoard();
 }
 
+
 RPSGame::~RPSGame() {
 
 }

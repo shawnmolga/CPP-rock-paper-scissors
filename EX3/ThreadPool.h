@@ -22,7 +22,7 @@ public:
     ThreadPool (int numOftThreads);
     ~ThreadPool();
     void doJob (std::function <void (void)> func);
-
+    ThreadPool();
 
 private:
     std::mutex lock_;
