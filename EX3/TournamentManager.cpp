@@ -219,7 +219,7 @@ bool TournamentManager::loadAlgorithms(const string & path)
 
 bool TournamentManager::isValidTournament(int argc, char *argv[])
 {
-	if(!checkTournamentArguments(argc, argv) || !loadAlgorithms(inputDirPath)){
+	if(!checkTournamentArguments(argc, argv) || !loadAlgorithemsFromPath()){
 		return false;
 	}
 	return true;

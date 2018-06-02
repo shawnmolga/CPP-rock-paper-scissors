@@ -11,8 +11,9 @@ int main(int argc, char *argv[])
 	TournamentManager& manager = TournamentManager::getTournamentManager();
 
 	if(manager.isValidTournament(argc,argv)){
-		manager.startTournament();
-		manager.printTornamentResult();
+		cout << "number of players are :" << manager.idToAlgoInfo.size() << endl;
+		//manager.startTournament();
+		//manager.printTornamentResult();
 	}
 	// // check number of arg
 	// if (argc != 2)
