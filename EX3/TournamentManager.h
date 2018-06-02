@@ -63,7 +63,7 @@ class TournamentManager {
 	string inputDirPath;
     void startNewGame(const string &playerOneId, const string &playerTwoId);
     bool loadAlgorithemsFromPath();
-    void closeAlgorithemLibs()
+    void closeAlgorithemLibs();
 public:
 	//manager is singleton
 	static TournamentManager& getTournamentManager() {
