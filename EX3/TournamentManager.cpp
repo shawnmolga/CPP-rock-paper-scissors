@@ -37,7 +37,9 @@ void TournamentManager::startTournament()
 	while (algorithmsToPlay.size() != 0)
 	{
 		getPlayersToPlay(playerOneId, playerTwoId);
-		pool.doJob (std::bind (startNewGame),playerOneId, playerTwoId ); //adds this game to "pool of jobs", when a thread is done the thread will do this job
+		//bind parameters to function
+		//if the if wont change we need to do : ref(playerOneId), ref(playerTwoID)
+		pool.doJob (std::bind(startNewGame,playerOneId, playerTwoId)); //adds this game to "pool of jobs", when a thread is done the thread will do this job
 	}
 }
 
@@ -51,7 +53,6 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 	}
 	else if(winnerNumPlayer == 2){
 		idToAlgoInfo[playerTwoId]->score = idToAlgoInfo[playerTwoId]->score + 3;
-
 	}
 	else {
 		idToAlgoInfo[playerOneId]->score ++;	
@@ -66,7 +67,6 @@ void TournamentManager::startNewGame(const string &playerOneId, const string &pl
 	RPSGame game = RPSGame(idToAlgoInfo[playerOneId], idToAlgoInfo[playerTwoId]);
 	game.startGame();
 	updateScore(game, playerOneId,playerTwoId);
-	
 }
 
 void TournamentManager::printTornamentResult(){
@@ -234,7 +234,7 @@ bool TournamentManager::loadAlgorithemsFromPath() {
 	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator fitr;
 	// get the names of all the dynamic libs (.so  files) in the current dir
 	dl = popen(command_str, "r");
-	if(!dl){
+	if(!dl) {
 		cout << "Error: failed to open .so files" << endl;
 		return false;
 	}

@@ -36,6 +36,8 @@ RPSpoint.o: RPSpoint.cpp RPSpoint.h Point.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 AICell.o: AICell.cpp AICell.h Cell.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
+ThreadPool.o : ThreadPool.cpp 
+	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 AIBoard.o: AIBoard.cpp AIBoard.h Board.h Constants.h AICell.h Point.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 clean:

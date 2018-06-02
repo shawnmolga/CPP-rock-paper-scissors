@@ -44,11 +44,11 @@ class TournamentManager {
 	ThreadPool pool; //initialized in startTournament()
 
 	// size of buffer for reading in directory entries
-	static unsigned int BUF_SIZE = 4096;
+	static const unsigned int BUF_SIZE = 4096;
 
 	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>> idToAlgoInfo;
 	// private ctor
-	TournamentManager() {}
+	TournamentManager();
 	int numOfRegisteredPlayers; //we want to make players play between them in uniformly probability
 	vector<string> algorithmsToPlay; //set of players that still didnt play 30 games
 	vector<string> algorithmsPlayed; //algorithms played 30 games
