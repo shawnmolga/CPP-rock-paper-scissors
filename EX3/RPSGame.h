@@ -47,7 +47,7 @@ private:
 	int numOfMoves;
 
 public:
-	RPSGame(unique_ptr <PlayerAlgorithmInfo> & playerOne, unique_ptr <PlayerAlgorithmInfo> & playerTwo);
+	RPSGame(const unique_ptr<PlayerAlgorithmInfo>& playerOne, const unique_ptr<PlayerAlgorithmInfo> & playerTwo);
 	~RPSGame();
 	string ToString(GAME_OVER_TYPE typeGame);
 	void updateJokerMovingPieces();

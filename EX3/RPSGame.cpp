@@ -1,6 +1,6 @@
 #include "RPSGame.h"
 
-RPSGame::RPSGame(unique_ptr <PlayerAlgorithmInfo> & playerOne, unique_ptr <PlayerAlgorithmInfo> & playerTwo) : isGameOver(false), playerOne(Player(1)), playerTwo(Player(2)), playerAlgoOne(playerOne->getPlayerAlgorithm()), playerAlgoTwo(playerTwo->getPlayerAlgorithm()) {
+RPSGame::RPSGame(const unique_ptr <PlayerAlgorithmInfo> & playerOne,const unique_ptr <PlayerAlgorithmInfo> & playerTwo) : isGameOver(false), playerOne(Player(1)), playerTwo(Player(2)), playerAlgoOne(playerOne->getPlayerAlgorithm()), playerAlgoTwo(playerTwo->getPlayerAlgorithm()) {
     gameBoard = RPSBoard();
 }
 
