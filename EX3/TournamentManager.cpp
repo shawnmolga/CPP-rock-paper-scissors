@@ -193,13 +193,11 @@ bool TournamentManager::checkTournamentArguments(int argc, char *argv[])
 
 bool TournamentManager::isValidDir(const string & path)
 {
-	(void)path;
 	DIR *dir;
 	//struct dirent *ent;
-	std::string str;
 	char * writable = new char[path.size() + 1];
-	std::copy(str.begin(), str.end(), writable);
-	writable[str.size()] = '\0'; // don't forget the terminating 0
+	std::copy(path.begin(), path.end(), writable);
+	writable[path.size()] = '\0'; // don't forget the terminating 0
 // don't forget to free the string after finished using it
 	if ((dir = opendir(writable)) != NULL)
 	{
@@ -229,7 +227,13 @@ bool TournamentManager::isValidTournament(int argc, char *argv[])
 
 bool TournamentManager::loadAlgorithemsFromPath() {
 	FILE *dl;   // handle to read directory
-	const char *command_str = "ls" + inputDirPath + "*.so";  // command string to get dynamic lib names
+	string command =  "ls" + inputDirPath + "*.so";
+	//preapre the case from std::string to std::char * 
+	char * writable = new char[command.size() + 1];
+	std::copy(command.begin(), command.end(), writable);
+	writable[command.size()] = '\0'; // don't forget the terminating 0
+	const char *command_str = writable; // command string to get dynamic lib names
+	delete [] writable; //delete out temp string
 	char in_buf[BUF_SIZE]; // input buffer for lib names
 	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator fitr;
 	// get the names of all the dynamic libs (.so  files) in the current dir
