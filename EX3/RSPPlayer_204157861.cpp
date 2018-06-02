@@ -15,7 +15,11 @@ RSPPlayer_204157861::RSPPlayer_204157861()
 	myPlayerNum = -1;
 	opponentFlagsNumOnBoard = FLAGS_NUM;
 	opponentBombsNumOnBoard = BOMBS_NUM + JOKERS_NUM;	//we dont know if joker is now bomb or not
+	opponentPapersNumOnBoard = PAPERS_NUM + JOKERS_NUM;	//we dont know if joker is now bomb or not
+	opponentScissorsNumOnBoard = SCISSORS_NUM + JOKERS_NUM;	//we dont know if joker is now bomb or not
+	opponentRocksNumOnBoard = ROCKS_NUM + JOKERS_NUM;	//we dont know if joker is now bomb or not
 	opponentMovingPieceNumOnBoard = SCISSORS_NUM + ROCKS_NUM + PAPERS_NUM + JOKERS_NUM; //we dont know if joker is moving piece now or not
+	opponentJokersNumOnBoard = JOKERS_NUM;
 	willBeFight = false;
 }
 }
@@ -406,13 +410,7 @@ void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 		if (winner == 0)
 		{
 			AICell::cleanCell(gameBoard.board[x][y]);
-
-			if (opponentPiece == 'B')
-				opponentBombsNumOnBoard--;
-			else if (opponentPiece == 'F')
-				opponentFlagsNumOnBoard--;
-			else
-				opponentMovingPieceNumOnBoard--;
+			updateOpponentPiece(opponentPiece, false, x, y, false);
 		}
 		else if (winner != myPlayerNum)
 		{ //opponent won
@@ -425,8 +423,10 @@ void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 			else {
 				AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? tolower(opponentPiece) : opponentPiece, false);
 				//if it is not a bomb and not a flag - than it is moving piece
+				gameBoard.board[x][y].isJokerKnown = false;
 				gameBoard.board[x][y].isMovingPieceKnown = true;
 				gameBoard.board[x][y].isMovingPiece = true;
+				updateOpponentPiece(opponentPiece, true, x, y, false);
 			}
 		}
 		else
@@ -434,42 +434,165 @@ void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 			if (myPiece == 'B')
 				AICell::cleanCell(gameBoard.board[x][y]);
 			//if i won so opponent piece must not be a bomb
-			if (opponentPiece == 'F')
-				opponentFlagsNumOnBoard--;
-			else //must be moving piece
-				opponentMovingPieceNumOnBoard--;
+			updateOpponentPiece(opponentPiece, false,x ,y, false);
 			AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? myPiece : tolower(myPiece), gameBoard.board[x][y].getIsJoker());
 		}
 
 
 	}
 
-	if (opponentMovingPieceNumOnBoard == 0)
+	if (opponentMovingPieceNumOnBoard == getKnownMovingPiecesNumOnBoard())
 	{ //we can mark all pieces as not moving pieces !!!
 		updateMovingPiece();
 	}
 
-	updateFlagProbability();
+	updateProbabilities();
 }
 
 /**
-    AI algorithm update for each opponent piece its probability to represent a flag.
+    AI algorithm update cell after a fight with piece probability.
+
+    @param: piece - opponent's piece
+    isOpponentWin - true - if opponent won fight. else - false.
+    x,y - cell location
  */
-void RSPPlayer_204157861::updateFlagProbability()
+
+void RSPPlayer_204157861::updateOpponentPiece(char piece, bool isOpponentWin, int x, int y, bool isJoker) {
+
+	if (isOpponentWin) {
+		gameBoard.board[x][y].rockProbability = 0;
+		gameBoard.board[x][y].paperProbability = 0;
+		gameBoard.board[x][y].scissorsProbability = 0;
+		switch (piece) { //update real probability
+			case 'R':
+				gameBoard.board[x][y].rockProbability = 1;
+				return;
+			case 'P':
+				gameBoard.board[x][y].paperProbability = 1;
+				return;
+			case 'S':
+				gameBoard.board[x][y].scissorsProbability = 1;
+				return;
+			}
+		return;
+	}
+	//else - opponent lost piece and we can study from it
+
+	if (isJoker && piece != FLAG) { //all counters should be -1
+		opponentRocksNumOnBoard--;
+		opponentBombsNumOnBoard--;
+		opponentPapersNumOnBoard--;
+		opponentScissorsNumOnBoard--;
+		opponentJokersNumOnBoard--;
+		opponentMovingPieceNumOnBoard--;
+
+		int knownJokersNum = getKnownJokersNumOnBoard();
+
+		if (opponentJokersNumOnBoard == knownJokersNum) {
+			updateNoJokersLeft();
+		}
+
+		return;
+	}
+
+	switch (piece) {
+	case 'B':
+		opponentBombsNumOnBoard--;
+		return;
+	case 'F':
+		opponentFlagsNumOnBoard--;
+		return;
+	case 'R':
+		opponentRocksNumOnBoard--;
+		break;
+	case 'P':
+		opponentPapersNumOnBoard--;
+		break;
+	case 'S':
+		opponentScissorsNumOnBoard--;
+		break;
+	}
+	opponentMovingPieceNumOnBoard--;
+}
+
+int RSPPlayer_204157861::getKnownJokersNumOnBoard() {
+
+	int knownJokers = 0;
+
+	for(int i=0; i<COLS; ++i) {
+		for (int j=0; j<ROWS; ++j) {
+			if (gameBoard.board[i][j].getPiece() == 0) continue;
+
+			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum) && gameBoard.board[i][j].isJokerKnown && gameBoard.board[i][j].isJoker)
+				knownJokers++;
+		}
+	}
+
+	return knownJokers;
+}
+
+int RSPPlayer_204157861::getKnownMovingPiecesNumOnBoard() {
+
+	int knownPieces = 0;
+
+	for(int i=0; i<COLS; ++i) {
+		for (int j=0; j<ROWS; ++j) {
+			if (gameBoard.board[i][j].getPiece() == 0) continue;
+
+			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum) && gameBoard.board[i][j].isMovingPieceKnown && gameBoard.board[i][j].isMovingPiece)
+				knownPieces++;
+		}
+	}
+
+	return knownPieces;
+}
+
+/**
+    AI algorithm update for each opponent piece its probability to represent a certain piece.
+    updates probabilities that are not 1 or 0.
+ */
+void RSPPlayer_204157861::updateProbabilities()
 {
-	int unkownPiecesNum = 0;
+//	if (opponentJokersNumOnBoard > 0) {
+//		removeEatenJokersFromCounters();
+//	}
+
+	int unknownFlags = opponentFlagsNumOnBoard;
+	int unknownPapers = opponentPapersNumOnBoard;
+	int unknownRocks = opponentRocksNumOnBoard;
+	int unknownScissors = opponentScissorsNumOnBoard;
+	int unknownPiecesNum = 0;
+
 	for (int i = 0; i < COLS; ++i)
 	{
 		for (int j = 0; j < ROWS; ++j)
 		{
 			if (gameBoard.board[i][j].flagProbability != 0 && gameBoard.board[i][j].flagProbability != 1)
 			{
-				unkownPiecesNum++; //count pieces that we dont know if there are flags or not
+				unknownPiecesNum++; //count pieces that we dont know if there are flags or not
+			}
+			else { //known piece
+				if (gameBoard.board[i][j].flagProbability == 1) {
+					unknownFlags--;
+				}
+				else {
+					switch (gameBoard.board[i][j].getPiece()) {
+					case 'P':
+						unknownPapers--;
+						break;
+					case 'R':
+						unknownRocks--;
+						break;
+					case 'S':
+						unknownScissors--;
+						break;
+					}
+				}
 			}
 		}
 	}
 
-	if (unkownPiecesNum == 0)
+	if (unknownPiecesNum == 0)
 		return; //probabilities are 1 or 0
 
 	//update probability
@@ -477,12 +600,80 @@ void RSPPlayer_204157861::updateFlagProbability()
 	{
 		for (int j = 0; j < ROWS; ++j)
 		{
-			if (gameBoard.board[i][j].flagProbability != 0)
+			/*if (gameBoard.board[i][j].flagProbability != 0)
 			{
-				gameBoard.board[i][j].flagProbability = FLAGS_NUM / unkownPiecesNum;
+				gameBoard.board[i][j].flagProbability = (double)FLAGS_NUM / (double)unkownPiecesNum;
+			}*/
+
+			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum) && gameBoard.board[i][j].getPiece() == '#') {
+				//update probabilities
+				gameBoard.board[i][j].flagProbability = gameBoard.board[i][j].flagProbability != 0 ? (double)unknownFlags / (double)unknownPiecesNum : gameBoard.board[i][j].flagProbability;
+				gameBoard.board[i][j].paperProbability = gameBoard.board[i][j].paperProbability != 0 ? (double)unknownPapers / (double)unknownPiecesNum : gameBoard.board[i][j].paperProbability;
+				gameBoard.board[i][j].rockProbability = gameBoard.board[i][j].rockProbability != 0 ? (double)unknownRocks / (double)unknownPiecesNum : gameBoard.board[i][j].rockProbability;
+				gameBoard.board[i][j].scissorsProbability = gameBoard.board[i][j].scissorsProbability != 0 ? (double)unknownScissors / (double)unknownPiecesNum : gameBoard.board[i][j].scissorsProbability;
 			}
+
+			updateIfProbOne(i,j);
 		}
 	}
+}
+
+void RSPPlayer_204157861::updateIfProbOne(int x, int y) {
+	bool isJoker = gameBoard.board[x][y].getIsJoker();
+	if (gameBoard.board[x][y].flagProbability == 1) {
+		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 'f' : 'F', isJoker);
+		gameBoard.board[x][y].isMovingPieceKnown = true;
+		gameBoard.board[x][y].isMovingPiece = false;
+		return;
+	}
+	if (gameBoard.board[x][y].paperProbability == 1) {
+		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 'p' : 'P', isJoker);
+	}
+	else if (gameBoard.board[x][y].rockProbability == 1) {
+		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 'r' : 'R', isJoker);
+	}
+	else if (gameBoard.board[x][y].scissorsProbability == 1) {
+		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 's' : 'S', isJoker);
+	}
+	gameBoard.board[x][y].isMovingPieceKnown = true;
+	gameBoard.board[x][y].isMovingPiece = true;
+	return;
+}
+
+void RSPPlayer_204157861::removeEatenJokersFromCounters() {
+	int jokersEaten = 0;
+			if (opponentBombsNumOnBoard < opponentJokersNumOnBoard) {
+				jokersEaten = (opponentJokersNumOnBoard - opponentBombsNumOnBoard);
+				opponentJokersNumOnBoard -= jokersEaten;
+				opponentPapersNumOnBoard -= jokersEaten;
+				opponentRocksNumOnBoard -= jokersEaten;
+				opponentScissorsNumOnBoard -= jokersEaten;
+				opponentMovingPieceNumOnBoard -= jokersEaten;
+			}
+			if (opponentPapersNumOnBoard < opponentJokersNumOnBoard) {
+				jokersEaten = (opponentJokersNumOnBoard - opponentPapersNumOnBoard);
+				opponentJokersNumOnBoard -= jokersEaten;
+				opponentBombsNumOnBoard -= jokersEaten;
+				opponentRocksNumOnBoard -= jokersEaten;
+				opponentScissorsNumOnBoard -= jokersEaten;
+				opponentMovingPieceNumOnBoard -= jokersEaten;
+			}
+			if (opponentRocksNumOnBoard < JOKERS_NUM) {
+				jokersEaten += (opponentJokersNumOnBoard - opponentRocksNumOnBoard);
+				opponentJokersNumOnBoard -= jokersEaten;
+				opponentPapersNumOnBoard -= jokersEaten;
+				opponentBombsNumOnBoard -= jokersEaten;
+				opponentScissorsNumOnBoard -= jokersEaten;
+				opponentMovingPieceNumOnBoard -= jokersEaten;
+			}
+			if (opponentScissorsNumOnBoard < JOKERS_NUM) {
+				jokersEaten += (opponentJokersNumOnBoard - opponentScissorsNumOnBoard);
+				opponentJokersNumOnBoard -= jokersEaten;
+				opponentPapersNumOnBoard -= jokersEaten;
+				opponentRocksNumOnBoard -= jokersEaten;
+				opponentBombsNumOnBoard -= jokersEaten;
+				opponentMovingPieceNumOnBoard -= jokersEaten;
+			}
 }
 
 /**
@@ -727,13 +918,33 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 bool RSPPlayer_204157861::tryToFight(int to_x, int to_y, char myPiece, bool isJoker, bool& isProbOne)
 {
 	char opponentPiece = gameBoard.board[to_x][to_y].getPiece();
-	if (opponentPiece != '#')
-	{ //we know the opponent piece so we can simulate fight normally
+	if (opponentPiece != '#' && gameBoard.board[to_x][to_y].isJokerKnown && !gameBoard.board[to_x][to_y].isJoker)
+	{
+		//we know the opponent piece so we can simulate fight normally
 		isProbOne = true;
 		return fight(to_x, to_y, myPiece, opponentPiece, isJoker);
 	}
 	else
 	{
+		if (opponentPiece != '#' && (!gameBoard.board[to_x][to_y].isJokerKnown || gameBoard.board[to_x][to_y].isJoker)) {
+			if (!gameBoard.board[to_x][to_y].isJokerKnown) {
+				//3/16 odd that joker was changed and we lose
+				int prob = getRandomNumInRange(1, 100);
+				if (prob < 19)
+				{ //guess i will lose in fight
+					if (gameBoard.board[to_x][to_y].isMovingPieceKnown && !gameBoard.board[to_x][to_y].isMovingPiece)
+					{
+						AICell::cleanCell(gameBoard.board[to_x][to_y]);
+					}
+					return true; //lose
+				}
+				else
+				{ //guess i won
+					AICell::updateCell(gameBoard.board[to_x][to_y], myPiece,isJoker);
+					return false; //win
+				}
+			}
+		}
 		int prob = getRandomNumInRange(1, 100);
 		if (prob < 50)
 		{ //guess i will lose in fight
@@ -885,33 +1096,35 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 	int winner = fightInfo.getWinner();
 
 	//check if piece was known before and changed.
-	bool isJoker = (toupper(opponentCell.getPiece()) != opponentPiece && opponentCell.getPiece() != 0 && opponentCell.getPiece() != '#');
+	bool isJoker = opponentCell.getIsJoker() || (toupper(opponentCell.getPiece()) != opponentPiece && opponentCell.getPiece() != 0 && opponentCell.getPiece() != '#');
 
 	if (winner == 0)
 	{
-		if (opponentPiece == 'B') {
-			opponentBombsNumOnBoard--;
-			if (isJoker) //for removing extra pieces as jokers unkown
-				opponentMovingPieceNumOnBoard--;
-		}
-		else if (opponentPiece == 'F')
-			opponentFlagsNumOnBoard--;
-		else {
-			opponentMovingPieceNumOnBoard--;
-			if (isJoker) //for removing extra pieces as jokers unkown
-				opponentBombsNumOnBoard--;
-		}
+		updateOpponentPiece(opponentPiece,false,x,y,isJoker);
+//		if (opponentPiece == 'B') {
+//			opponentBombsNumOnBoard--;
+//			if (isJoker) //for removing extra pieces as jokers unkown
+//				opponentMovingPieceNumOnBoard--;
+//		}
+//		else if (opponentPiece == 'F')
+//			opponentFlagsNumOnBoard--;
+//		else {
+//			opponentMovingPieceNumOnBoard--;
+//			if (isJoker) //for removing extra pieces as jokers unkown
+//				opponentBombsNumOnBoard--;
+//		}
 		Cell::cleanCell(gameBoard.board[x][y]);
 	}
-	else if (winner != myPlayerNum)
+	else if (winner != myPlayerNum) //opponent won
 	{   //opponent won
 		//not a flag - cant win
 		gameBoard.board[x][y].flagProbability = 0;
+		updateOpponentPiece(opponentPiece,true,x,y,isJoker);
 		if (opponentPiece == 'B')
 		{
-			opponentBombsNumOnBoard--;
-			if (isJoker) //for removing extra pieces as jokers unkown
-				opponentMovingPieceNumOnBoard--;
+//			opponentBombsNumOnBoard--;
+//			if (isJoker) //for removing extra pieces as jokers unkown
+//				opponentMovingPieceNumOnBoard--;
 			Cell::cleanCell(gameBoard.board[x][y]);
 		}
 		else {
@@ -923,18 +1136,12 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 
 		if (isJoker)
 			gameBoard.board[x][y].isJokerKnown = true;
-
+			gameBoard.board[x][y].isJoker = true;
 	}
 	else
 	{   //i won
 		//if i won so opponent piece must not be a bomb
-		if (opponentPiece == 'F')
-			opponentFlagsNumOnBoard--;
-		else {
-			opponentMovingPieceNumOnBoard--;
-			if (isJoker) //for removing extra pieces as jokers unkown
-				opponentBombsNumOnBoard--;
-		}
+		updateOpponentPiece(opponentPiece,false,x,y,isJoker);
 		if (toupper(myPiece) == 'B')
 		{
 			Cell::cleanCell(gameBoard.board[x][y]);
@@ -945,12 +1152,12 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 		}
 	}
 
-	if (opponentMovingPieceNumOnBoard == 0)
+	if (opponentMovingPieceNumOnBoard == getKnownMovingPiecesNumOnBoard())
 	{ //we can mark all pieces as not moving pieces !!!
 		updateMovingPiece();
 	}
 
-	updateFlagProbability();
+	updateProbabilities();
 }
 
 /**
@@ -1287,6 +1494,27 @@ void RSPPlayer_204157861::updateMovingPiece()
 	}
 }
 
+void RSPPlayer_204157861::updateNoJokersLeft()
+{
+	for (int i = 0; i < COLS; ++i)
+	{
+		for (int j = 0; j < ROWS; ++j)
+		{
+			if (gameBoard.board[i][j].getPiece() == 0) //empty cell
+				continue;
+			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum))
+			{ //this is opponent's piece
+				if (gameBoard.board[i][j].isJokerKnown && gameBoard.board[i][j].isJoker)
+				{
+					continue;
+				}
+				gameBoard.board[i][j].isJokerKnown = true;
+				gameBoard.board[i][j].isJoker = false;
+			}
+		}
+	}
+}
+
 /**
 	update AI board after manager notified on board's positions.
 	@params: b - board given by manager
@@ -1321,6 +1549,17 @@ void RSPPlayer_204157861::notifyOnOpponentMove(const Move &move)
 	//in case i am the only player plays - can happen only in auto-vs-file mode when move file is over before victory
 	if (gameBoard.board[from_x][from_y].isMyPiece(myPlayerNum))
 		return;
+
+	//if piece was known as a bomb - than this is a joker
+	if (fromCell.isMovingPieceKnown && !fromCell.isMovingPiece) {
+		fromCell.isJokerKnown = true;
+		fromCell.isJoker = true;
+	}
+	//we know for sure this is a moving piece
+	fromCell.isMovingPiece = true;
+	fromCell.isMovingPieceKnown = true;
+	fromCell.flagProbability = 0;
+
 	//in case there is no fight we can update the AI board
 	if (gameBoard.board[to_x][to_y].getPiece() == 0){
 		AICell::updateCell(gameBoard.board[to_x][to_y], fromCell.getPiece(), fromCell.getIsJoker());
@@ -1332,6 +1571,8 @@ void RSPPlayer_204157861::notifyOnOpponentMove(const Move &move)
 		myCell = gameBoard.board[to_x][to_y];
 	}
 	AICell::cleanCell(gameBoard.board[from_x][from_y]);
+
+	updateProbabilities();
 }
 
 /**

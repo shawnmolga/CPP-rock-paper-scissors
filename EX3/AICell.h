@@ -13,7 +13,11 @@ class AICell : public Cell {
 	bool isJokerKnown;
 	bool isMovingPieceKnown;
 	bool isMovingPiece;
-	int	flagProbability;
+	double flagProbability;
+	double paperProbability;
+	double scissorsProbability;
+	double rockProbability;
+	double jokerProbability;
 	//int x;
 	//int y;
 	//void setX(int x);

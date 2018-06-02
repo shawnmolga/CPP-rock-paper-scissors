@@ -68,20 +68,30 @@ public:
 	void getBestMove(int &fromRow, int &fromCol, int &toRow, int &toCol);
 	double getBestMoveForPiece(double score, const int &fromRow,const int &fromCol, int &toRow, int &toCol);
 	double tryMovePiece(unique_ptr<Move>& move);
-	void updateFlagProbability();
+	void updateProbabilities();
 	bool tryToFight(int to_x, int to_y, char myPiece, bool isJoker, bool& isProbOne);
 	bool fight(int row, int col, char myPiece, char opponentPiece, bool isMyPieceJoker);
 	char shouldChangeJoker(double &score,int joker_x, int joker_y, bool amIPlayerOne);
 	int getRandomNumInRange(int start, int end);
 	void updateMovingPiece();
 	void updateNeighborAsProtectorOrEnemy(char piece, int x, int y, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces);
-	
+	void updateOpponentPiece(char piece, bool isOpponentWin, int x, int y, bool isJoker);
+	void removeEatenJokersFromCounters();
+	void updateIfProbOne(int x, int y);
+	void updateNoJokersLeft();
+	int getKnownJokersNumOnBoard();
+	int getKnownMovingPiecesNumOnBoard();
+
 private:
 	int myPlayerNum;
 	//opponent piece counters
 	int opponentBombsNumOnBoard;
 	int opponentFlagsNumOnBoard;
+	int opponentPapersNumOnBoard;
+	int opponentScissorsNumOnBoard;
+	int opponentRocksNumOnBoard;
 	int opponentMovingPieceNumOnBoard;
+	int opponentJokersNumOnBoard;
 	//for future fight
 	AICell opponentCell;
 	AICell myCell;

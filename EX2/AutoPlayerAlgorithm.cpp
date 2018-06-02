@@ -474,7 +474,7 @@ void AutoPlayerAlgorithm::updateFlagProbability()
 		{
 			if (gameBoard.board[i][j].flagProbability != 0)
 			{
-				gameBoard.board[i][j].flagProbability = FLAGS_NUM / unkownPiecesNum;
+				gameBoard.board[i][j].flagProbability = (double)FLAGS_NUM / (double)unkownPiecesNum;
 			}
 		}
 	}
