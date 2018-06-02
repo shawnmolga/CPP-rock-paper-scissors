@@ -1,7 +1,7 @@
 /*
  * PlayerAlgorithmInfo.h
  *
- *  Created on: 30 боай 2018
+ *  Created on: 30 пїЅпїЅпїЅпїЅ 2018
  *      Author: OR
  */
 
@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <map>
 #include <functional>
+#include <atomic>
 #include "PlayerAlgorithm.h"
 
 using namespace std;

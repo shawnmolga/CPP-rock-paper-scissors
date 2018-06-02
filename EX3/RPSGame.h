@@ -36,15 +36,16 @@ enum GAME_OVER_TYPE
 
 class RPSGame{
 private:
-	unique_ptr <PlayerAlgorithm> playerAlgoOne;
-	unique_ptr <PlayerAlgorithm> playerAlgoTwo;
 	bool isGameOver;
-	string gameMethod; //i.e. auto-vs-auto ..
 	Player playerOne;
 	Player playerTwo;
+	unique_ptr <PlayerAlgorithm> playerAlgoOne;
+	unique_ptr <PlayerAlgorithm> playerAlgoTwo;
+	string gameMethod; //i.e. auto-vs-auto ..
 	RPSBoard gameBoard;
 	GAME_OVER_TYPE gameOverReason;
 	int numOfMoves;
+//RPSGame::RPSGame(const unique_ptr <PlayerAlgorithmInfo> & playerOne,const unique_ptr <PlayerAlgorithmInfo> & playerTwo) : isGameOver(false), playerOne(Player(1)), playerTwo(Player(2)), playerAlgoOne(playerOne->getPlayerAlgorithm()), playerAlgoTwo(playerTwo->getPlayerAlgorithm()) {
 
 public:
 	RPSGame(const unique_ptr<PlayerAlgorithmInfo>& playerOne, const unique_ptr<PlayerAlgorithmInfo> & playerTwo);
@@ -64,8 +65,8 @@ public:
 			std::vector<unique_ptr<FightInfo>> &initFights  );
 
 	//game status functions and help-functios
-	bool initGameMethod(string gameMethod);
-	bool initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
+	//bool initGameMethod(string gameMethod);
+	//bool initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
 	int startGame();
 	int locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>> &vectorToFill, bool &isPlayerLegalFormat, int numOfPositionedPieces[], RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights);
 	void printBoardToFile(ofstream & output);

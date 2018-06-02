@@ -46,7 +46,6 @@ class TournamentManager {
 	// size of buffer for reading in directory entries
 	static const unsigned int BUF_SIZE = 4096;
 
-	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>> idToAlgoInfo;
 	// private ctor
 	TournamentManager();
 	int numOfRegisteredPlayers; //we want to make players play between them in uniformly probability
@@ -61,12 +60,11 @@ class TournamentManager {
 	void updatePlayerPlayed(const string& playerOneId, const string& playerTwoId);
 	bool isValidDir(const string & path);
 	string inputDirPath;
-	bool loadAlgorithms(const string & path);
     void startNewGame(const string &playerOneId, const string &playerTwoId);
     bool loadAlgorithemsFromPath();
 public:
 	//manager is singleton
-	static TournamentManager::TournamentManager& getTournamentManager() {
+	static TournamentManager& getTournamentManager() {
 		return tournamentManager;
 	}
 	void printTornamentResult();
@@ -75,6 +73,7 @@ public:
 	bool isValidTournament(int argc, char *argv[]);
 	~TournamentManager();
 	void startTournament();
+	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>> idToAlgoInfo;
 
 };
 

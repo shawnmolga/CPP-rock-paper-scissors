@@ -19,8 +19,8 @@ using namespace std;
 class ThreadPool
 {
 public:
-    ThreadPool (int numOfThreads) : shutdown_ (false){}
-    ~ThreadPool(){}
+    ThreadPool (int numOftThreads);
+    ~ThreadPool();
     void doJob (std::function <void (void)> func);
 
 

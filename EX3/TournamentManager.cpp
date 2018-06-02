@@ -7,11 +7,13 @@
 
 #include "TournamentManager.h"
 
-TournamentManager TournamentManager::tournamentManager;
+TournamentManager::TournamentManager(){
+	numOfRegisteredPlayers = 0;
+}
 
 TournamentManager::~TournamentManager()
 {
-	numOfRegisteredPlayers = 0; //not multi threaded since there is only one thread in this point - registration point
+	//numOfRegisteredPlayers = 0; //not multi threaded since there is only one thread in this point - registration point
 }
 
 void TournamentManager::registerAlgorithm(std::string id, std::function<std::unique_ptr<PlayerAlgorithm>()> factoryMethod)
@@ -62,8 +64,6 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 }
 
 void TournamentManager::startNewGame(const string &playerOneId, const string &playerTwoId){
-	int winnerNumPlayer;
-	string gameOverReason;
 	RPSGame game = RPSGame(idToAlgoInfo[playerOneId], idToAlgoInfo[playerTwoId]);
 	game.startGame();
 	updateScore(game, playerOneId,playerTwoId);
@@ -192,11 +192,18 @@ bool TournamentManager::checkTournamentArguments(int argc, char *argv[])
 
 bool TournamentManager::isValidDir(const string & path)
 {
+	(void)path;
 	DIR *dir;
-	struct dirent *ent;
-	if ((dir = opendir(".")) != NULL)
+	//struct dirent *ent;
+	std::string str;
+	char * writable = new char[path.size() + 1];
+	std::copy(str.begin(), str.end(), writable);
+	writable[str.size()] = '\0'; // don't forget the terminating 0
+// don't forget to free the string after finished using it
+	if ((dir = opendir(writable)) != NULL)
 	{
 		closedir(dir);
+		delete[] writable;
 		return true;
 	}
 	else
@@ -204,17 +211,11 @@ bool TournamentManager::isValidDir(const string & path)
 		std::cout
 			<< "Unable to open temp dirList file in working directory, Exit from Game."
 			<< std::endl;
+			delete[] writable;
 		return false;
 	}
+	delete[] writable;
 	return false;
-}
-
-bool TournamentManager::loadAlgorithms(const string & path)
-{
-	FILE *dl;   // handle to read directory 
-    const char *command_str = "ls *.so";  // command string to get dynamic lib names
-    dl = popen(command_str, "r"); 
-
 }
 
 bool TournamentManager::isValidTournament(int argc, char *argv[])
@@ -254,4 +255,5 @@ bool TournamentManager::loadAlgorithemsFromPath() {
 		// add the handle to our list
 		dl_list.insert(dl_list.end(), dlib);
 	}
+	return true;
 }

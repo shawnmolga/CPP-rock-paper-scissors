@@ -25,7 +25,8 @@ FilePlayerAlgorithm.o: FilePlayerAlgorithm.cpp FilePlayerAlgorithm.h PlayerAlgor
 #libcircle.so: circle.o
 #	g++ -shared -Wl,-soname,libcircle.so -o libcircle.so circle.o
 RSPPlayer_204157861.so: RSPPlayer_204157861.cpp RPSPiecePosition.h Constants.h
-	$(COMP) -shared -Wl,-soname,RSPPlayer_204157861.so $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
+	$(COMP) -shared -Wl,-soname,RSPPlayer_204157861.so $(CPP_COMP_FLAG) 
+	#-c $*.cpp -mcmodel=large
 RPSBoard.o: RPSBoard.cpp RPSBoard.h Board.h Constants.h Cell.h Point.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
 RPSFight.o: RPSFight.cpp RPSFight.h FightInfo.h Point.h RPSpoint.h

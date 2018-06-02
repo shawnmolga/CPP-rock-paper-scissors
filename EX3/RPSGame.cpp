@@ -1191,49 +1191,49 @@ void RPSGame::printOutputFile(const string &outputFile) {
     return;
 }
 
-/*
-* Input - game method.
-* Output- true if we successfuly init playerAlogrithms or false otherwise;
- */
-bool RPSGame::initGameMethod(string gameMethod) {
-    bool isPlayerOneUseFile = false;
-    bool isPlayerTwoUseFile = false;
-    if (gameMethod.compare("auto-vs-file") == 0) {
-        isPlayerTwoUseFile = true;
-    } else if (gameMethod.compare("file-vs-auto") == 0) {
-        isPlayerOneUseFile = true;
-    } else if (gameMethod.compare("auto-vs-auto") == 0) {
-        return initPlayersAlgo(isPlayerOneUseFile, isPlayerTwoUseFile);
-    } else if (gameMethod.compare("file-vs-file") == 0) {
-        isPlayerOneUseFile = true;
-        isPlayerTwoUseFile = true;
-    } else {
-        cout << "Error: Illegal game method." << endl;
-        return false;
-    }
-    return initPlayersAlgo(isPlayerOneUseFile, isPlayerTwoUseFile);
-}
+// /*
+// * Input - game method.
+// * Output- true if we successfuly init playerAlogrithms or false otherwise;
+//  */
+// bool RPSGame::initGameMethod(string gameMethod) {
+//     bool isPlayerOneUseFile = false;
+//     bool isPlayerTwoUseFile = false;
+//     if (gameMethod.compare("auto-vs-file") == 0) {
+//         isPlayerTwoUseFile = true;
+//     } else if (gameMethod.compare("file-vs-auto") == 0) {
+//         isPlayerOneUseFile = true;
+//     } else if (gameMethod.compare("auto-vs-auto") == 0) {
+//         return initPlayersAlgo(isPlayerOneUseFile, isPlayerTwoUseFile);
+//     } else if (gameMethod.compare("file-vs-file") == 0) {
+//         isPlayerOneUseFile = true;
+//         isPlayerTwoUseFile = true;
+//     } else {
+//         cout << "Error: Illegal game method." << endl;
+//         return false;
+//     }
+//     return initPlayersAlgo(isPlayerOneUseFile, isPlayerTwoUseFile);
+// }
 
-/*
-* Input - two boolean parameters that indicated if the players are using file play mode
-* Output- true if we successfuly init playerAlogrithms or false otherwise;
-*/
-bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile) {
-    if (isPlayerOneUseFile || isPlayerTwoUseFile) {
-        if (!isAllGameFilesExists(isPlayerOneUseFile, isPlayerTwoUseFile))
-            return false;
-    }
+// /*
+// * Input - two boolean parameters that indicated if the players are using file play mode
+// * Output- true if we successfuly init playerAlogrithms or false otherwise;
+// */
+// bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile) {
+//     if (isPlayerOneUseFile || isPlayerTwoUseFile) {
+//         if (!isAllGameFilesExists(isPlayerOneUseFile, isPlayerTwoUseFile))
+//             return false;
+//     }
 
-    if (isPlayerOneUseFile) {
-        playerAlgoOne = FilePlayerAlgorithm(PLAYER_ONE_POSITION_FILENAME, PLAYER_ONE_MOVE_FILENAME);
-    } else {
-        playerAlgoOne =  RSPPlayer_204157861();
-    }
-    if (isPlayerTwoUseFile) {
-        playerAlgoTwo = FilePlayerAlgorithm(PLAYER_TWO_POSITION_FILENAME, PLAYER_TWO_MOVE_FILENAME);
-    } else {
-        playerAlgoTwo = RSPPlayer_204157861();
-    }
+//     if (isPlayerOneUseFile) {
+//         playerAlgoOne = FilePlayerAlgorithm(PLAYER_ONE_POSITION_FILENAME, PLAYER_ONE_MOVE_FILENAME);
+//     } else {
+//         playerAlgoOne =   RSPPlayer_204157861();
+//     }
+//     if (isPlayerTwoUseFile) {
+//         playerAlgoTwo = FilePlayerAlgorithm(PLAYER_TWO_POSITION_FILENAME, PLAYER_TWO_MOVE_FILENAME);
+//     } else {
+//         playerAlgoTwo = RSPPlayer_204157861();
+//     }
 
-    return true;
-}
+//     return true;
+// }
