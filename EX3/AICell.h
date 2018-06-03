@@ -25,4 +25,4 @@ class AICell : public Cell {
 	void initAIFields();
 	static void updateCellKnowlage(AICell & cell, const AICell & fromCell);
 	bool isMyPiece(int myPlayerNum);
-};
+	};

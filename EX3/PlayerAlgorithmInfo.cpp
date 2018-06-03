@@ -1,7 +1,7 @@
 /*
  * PlayerAlgorithmInfo.cpp
  *
- *  Created on: 30 боай 2018
+ *  Created on: 30 пїЅпїЅпїЅпїЅ 2018
  *      Author: OR
  */
 
@@ -11,6 +11,8 @@ PlayerAlgorithmInfo::PlayerAlgorithmInfo(std::function<std::unique_ptr<PlayerAlg
 	getPlayerAlgorithm = _getPlayerAlgorithm;
 	int score = 0;
 	int gamesPlayed = 0;
+	(void) score; //to fix compilation error: unused variable
+	(void) gamesPlayed; //to fix compilation error: unused variable
 
 }
 

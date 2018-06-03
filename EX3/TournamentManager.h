@@ -31,7 +31,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "RPSGame.h"
-#include "ThreadPool.h"
 
 using namespace std;
 
@@ -41,9 +40,12 @@ class TournamentManager {
 	static const size_t DEFAULT_THREADS_NUM = 4;
 
 	int numOfThreads = DEFAULT_THREADS_NUM ;// if num_of_threads entered, reassign freeThreadsNum in checkTournamentArguments
-	ThreadPool pool; //initialized in startTournament()
+	//ThreadPool pool; //initialized in startTournament()
+    std::vector<std::thread> threadPool_vector;
 
-	// size of buffer for reading in directory entries
+    void threadEntry();
+
+        // size of buffer for reading in directory entries
 	static const unsigned int BUF_SIZE = 4096;
 
 	// private ctor
@@ -53,7 +55,7 @@ class TournamentManager {
 	vector<string> algorithmsPlayed; //algorithms played 30 games
 	list<void *> dl_list; // list to hold handles for dynamic libs
 	list<void *>::iterator itr;
-	mutex playersPlayedMutex, idToAlgoInfoMutex, updateScoreMutex;
+	mutex playersPlayedMutex, idToAlgoInfoMutex, updateScoreMutex, algorithmsToPlayMutex;
 	void  updateScore(RPSGame & game,const string &playerOneId, const string &playerTwoId);
 	void getRandomPlayer(string &playerId, bool doesRestPlayersPlayed);
 	int getRandomNumInRange(int start, int end);
@@ -64,7 +66,8 @@ class TournamentManager {
     void startNewGame(const string &playerOneId, const string &playerTwoId);
     bool loadAlgorithemsFromPath();
     void closeAlgorithemLibs();
-public:
+
+    public:
 	//manager is singleton
 	static TournamentManager& getTournamentManager() {
 		return tournamentManager;

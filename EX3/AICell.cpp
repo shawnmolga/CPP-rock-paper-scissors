@@ -26,6 +26,9 @@ void AICell::updateCellKnowlage(AICell & cell,const AICell & fromCell) {
 	cell.isMovingPiece = fromCell.isMovingPiece;
 }
 
+
+
+
 bool AICell::isMyPiece(int myPlayerNum){
 	char piece = getPiece();
 	if (piece == 0 || piece == '#')

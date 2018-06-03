@@ -7,6 +7,10 @@
 ThreadPool::ThreadPool(int numOftThreads) : shutdown_(false)
 {
     vectorOfThreads.reserve(numOftThreads); //frees enough space in memory for numOfThread elements
+
+
+
+
     for (int i = 0; i < numOftThreads; ++i)
         vectorOfThreads.emplace_back(std::bind(&ThreadPool::threadEntry, this, i)); //like "push_back" but different
                                                                                     //function "bind" binds the function "threadEntry" to the input variables that we send, "i"
@@ -33,6 +37,7 @@ void ThreadPool::doJob(std::function<void(void)> func)
     jobs_.emplace(std::move(func));
     condVar_.notify_one();
 }
+
 
 void ThreadPool::threadEntry(int i)
 {

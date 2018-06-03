@@ -37,6 +37,7 @@ void TournamentManager::startNewGame(const string &playerOneId, const string &pl
 	updateScore(game, playerOneId,playerTwoId);
 }
 
+/*OLD VERSION
 void TournamentManager::startTournament()
 {
 	ThreadPool pool(numOfThreads);
@@ -51,7 +52,39 @@ void TournamentManager::startTournament()
 		pool.doJob (bindFunction); //adds this game to "pool of jobs", when a thread is done the thread will do this job
 	}
 	closeAlgorithemLibs();
+}*/
+
+void TournamentManager::startTournament()
+{
+	//ThreadPool pool(numOfThreads);
+	if (numOfThreads > 0){
+		for (int i = 0; i < numOfThreads; i ++){
+			threadPool_vector.emplace_back(&TournamentManager::threadEntry, this); //like "push_back" but different
+		}
+		for (auto & thread : threadPool_vector) {
+			thread.join(); // wait for all threads to finish
+		}
+	}
+	else
+		threadEntry();
+	closeAlgorithemLibs();
 }
+
+void TournamentManager::threadEntry(){
+	string playerOneId;
+	string playerTwoId;
+	//todo: lock before checking if there are games to be played
+	algorithmsToPlayMutex.lock();
+	while (!algorithmsToPlay.empty()){
+		getPlayersToPlay(playerOneId, playerTwoId); //locked - only one thread can enter this function at a time
+		//todo unlock
+		algorithmsToPlayMutex.unlock();
+		startNewGame(playerOneId,playerTwoId);
+		algorithmsToPlayMutex.lock();//must be locked before checking while
+	}
+
+}
+
 
 void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, const string &playerTwoId){
 	int winnerNumPlayer;
@@ -206,16 +239,12 @@ bool TournamentManager::isValidDir(const string & path)
 		delete[] writable;
 		return true;
 	}
-	else
-	{
-		std::cout
+	std::cout
 			<< "Unable to open temp dirList file in working directory, Exit from Game."
 			<< std::endl;
 			delete[] writable;
-		return false;
-	}
-	delete[] writable;
 	return false;
+
 }
 
 bool TournamentManager::isValidTournament(int argc, char *argv[])

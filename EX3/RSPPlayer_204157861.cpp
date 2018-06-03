@@ -523,7 +523,7 @@ int RSPPlayer_204157861::getKnownJokersNumOnBoard() {
 		for (int j=0; j<ROWS; ++j) {
 			if (gameBoard.board[i][j].getPiece() == 0) continue;
 
-			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum) && gameBoard.board[i][j].isJokerKnown && gameBoard.board[i][j].isJoker)
+			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum) && gameBoard.board[i][j].isJokerKnown && gameBoard.board[i][j].getIsJoker())
 				knownJokers++;
 		}
 	}
@@ -918,7 +918,7 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 bool RSPPlayer_204157861::tryToFight(int to_x, int to_y, char myPiece, bool isJoker, bool& isProbOne)
 {
 	char opponentPiece = gameBoard.board[to_x][to_y].getPiece();
-	if (opponentPiece != '#' && gameBoard.board[to_x][to_y].isJokerKnown && !gameBoard.board[to_x][to_y].isJoker)
+	if (opponentPiece != '#' && gameBoard.board[to_x][to_y].isJokerKnown && !gameBoard.board[to_x][to_y].getIsJoker())
 	{
 		//we know the opponent piece so we can simulate fight normally
 		isProbOne = true;
@@ -926,7 +926,7 @@ bool RSPPlayer_204157861::tryToFight(int to_x, int to_y, char myPiece, bool isJo
 	}
 	else
 	{
-		if (opponentPiece != '#' && (!gameBoard.board[to_x][to_y].isJokerKnown || gameBoard.board[to_x][to_y].isJoker)) {
+		if (opponentPiece != '#' && (!gameBoard.board[to_x][to_y].isJokerKnown || gameBoard.board[to_x][to_y].getIsJoker())) {
 			if (!gameBoard.board[to_x][to_y].isJokerKnown) {
 				//3/16 odd that joker was changed and we lose
 				int prob = getRandomNumInRange(1, 100);
@@ -1134,9 +1134,12 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 			gameBoard.board[x][y].isMovingPiece = true;
 		}
 
-		if (isJoker)
+		if (isJoker) {
 			gameBoard.board[x][y].isJokerKnown = true;
-			gameBoard.board[x][y].isJoker = true;
+			//gameBoard.board[x][y].getIsJoker() = true; todo setter
+			gameBoard.board[x][y].setIsJoker(true);
+		}
+
 	}
 	else
 	{   //i won
@@ -1504,12 +1507,14 @@ void RSPPlayer_204157861::updateNoJokersLeft()
 				continue;
 			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum))
 			{ //this is opponent's piece
-				if (gameBoard.board[i][j].isJokerKnown && gameBoard.board[i][j].isJoker)
+				if (gameBoard.board[i][j].isJokerKnown && gameBoard.board[i][j].getIsJoker())
 				{
 					continue;
 				}
 				gameBoard.board[i][j].isJokerKnown = true;
-				gameBoard.board[i][j].isJoker = false;
+				//gameBoard.board[i][j].isJoker = false;//todo : setJoker
+				gameBoard.board[i][j].setIsJoker(false);
+
 			}
 		}
 	}
@@ -1553,7 +1558,8 @@ void RSPPlayer_204157861::notifyOnOpponentMove(const Move &move)
 	//if piece was known as a bomb - than this is a joker
 	if (fromCell.isMovingPieceKnown && !fromCell.isMovingPiece) {
 		fromCell.isJokerKnown = true;
-		fromCell.isJoker = true;
+		//fromCell.isJoker = true;//todo setter
+		fromCell.setIsJoker(true); //shawn added // todo check this
 	}
 	//we know for sure this is a moving piece
 	fromCell.isMovingPiece = true;
