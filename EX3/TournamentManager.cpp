@@ -7,19 +7,14 @@
 
 #include "TournamentManager.h"
 
-
+TournamentManager TournamentManager::tournamentManagerSingelton;
 TournamentManager::TournamentManager() {
 	numOfRegisteredPlayers = 0;
-
 }
  
 TournamentManager::~TournamentManager()
 {
 	//numOfRegisteredPlayers = 0; //not multi threaded since there is only one thread in this point - registration point
-}
-
-TournamentManager & TournamentManager::getTournamentManager() {
-	return tournamentManagerSingelton;
 }
 
 void TournamentManager::registerAlgorithm(std::string id, std::function<std::unique_ptr<PlayerAlgorithm>()> factoryMethod)
