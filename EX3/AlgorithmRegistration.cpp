@@ -1,7 +1,7 @@
 /*
  * AlgorithmRegistration.cpp
  *
- *  Created on: 30 боай 2018
+ *  Created on: 30 пїЅпїЅпїЅпїЅ 2018
  *      Author: OR
  */
 

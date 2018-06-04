@@ -35,7 +35,8 @@
 using namespace std;
 
 class TournamentManager {
-	static TournamentManager tournamentManager;
+	static TournamentManager tournamentManagerSingelton;
+	static const int counterGet = 0;
 	static const int UNINITIALIZED_ARG = -1;
 	static const size_t DEFAULT_THREADS_NUM = 4;
 
@@ -69,9 +70,7 @@ class TournamentManager {
 
     public:
 	//manager is singleton
-	static TournamentManager& getTournamentManager() {
-		return tournamentManager;
-	}
+	static TournamentManager & getTournamentManager();
 	void printTornamentResult();
 	bool checkTournamentArguments(int argc, char * argv[]);
 	void registerAlgorithm(std::string id, std::function<std::unique_ptr<PlayerAlgorithm>()> factoryMethod);

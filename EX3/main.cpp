@@ -8,7 +8,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	TournamentManager& manager = TournamentManager::getTournamentManager();
+	TournamentManager & manager = TournamentManager::getTournamentManager();
 
 	if(manager.isValidTournament(argc,argv)){
 		cout << "number of players are :" << manager.idToAlgoInfo.size() << endl;
