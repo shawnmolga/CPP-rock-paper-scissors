@@ -166,7 +166,7 @@ int TournamentManager::getRandomNumInRange(int start, int end)
 
 bool TournamentManager::checkTournamentArguments(int argc, char *argv[])
 {
-	std::string path = ".";
+	std::string path = ".";//TODO: CHECK THIS
 
 	if (argc > 5)
 	{
@@ -221,6 +221,7 @@ bool TournamentManager::checkTournamentArguments(int argc, char *argv[])
 			std::cout << "Wrong path: " << path << std::endl;
 			return false;
 		}
+		cout << path << endl;
 		inputDirPath = path;
 		numOfThreads = (numOfThreads == UNINITIALIZED_ARG) ?  (DEFAULT_THREADS_NUM - 1) : numOfThreads;
 		return true;
@@ -258,19 +259,14 @@ bool TournamentManager::isValidTournament(int argc, char *argv[])
 
 bool TournamentManager::loadAlgorithemsFromPath() {
 	FILE *dl;   // handle to read directory
-	string command =  "ls" + inputDirPath + "*.so";
-	//preapre the case from std::string to std::char * 
-	char * writable = new char[command.size() + 1];
-	std::copy(command.begin(), command.end(), writable);
-	writable[command.size()] = '\0'; // don't forget the terminating 0
-	const char *command_str = writable; // command string to get dynamic lib names
-	delete [] writable; //delete out temp string
+	string command =  "ls *.so 2>&1"; //TODO: CHECK THIS
+	cout << command <<endl;
 	char in_buf[BUF_SIZE]; // input buffer for lib names
-	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator fitr;
+//	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator fitr;
 	// get the names of all the dynamic libs (.so  files) in the current dir
-	dl = popen(command_str, "r");
+	dl = popen(command.c_str(), "r");
 	if(!dl) {
-		cout << "Error: failed to open .so files" << endl;
+		cout << "Error: failed to find .so files" << endl;
 		return false;
 	}
 	void *dlib;
