@@ -5,8 +5,6 @@ CPP_COMP_FLAG = -std=c++14 -Wall -Wextra \
 -Werror -pedantic-errors -DNDEBUG -shared -fPIC -rdynamic -ldl -pthread -lpthread
 LIBS = -ldl -lm
 
-all: rps_lib rps_tournament
-
 rps_tournament: $(OBJS)
 		$(COMP) $(OBJS) -o $(EXEC) -ldl -pthread -lpthread -rdynamic 
 main.o: main.cpp Constants.h RPSGame.h  #put dependencies here!
@@ -17,7 +15,7 @@ Player.o: Player.cpp Player.h Constants.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
 RPSGame.o: RPSGame.cpp RPSGame.h Cell.h Point.h RPSBoard.h RPSFight.h RPSMove.h RPSJokerChange.h RPSBoard.h RPSpoint.h PiecePosition.h FilePlayerAlgorithm.h Player.h  PlayerAlgorithmInfo.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
-FilePlayerAlgorithm.o: FilePlayerAlgorithm.cpp FilePlayerAlgorithm.h PlayerAlgorithm.h RPSPiecePosition.h RPSpoint.h FightInfo.h RPSMove.h RPSJokerChange.h
+FilePlayerAlgorithm.o: FilePlayerAlgorithm.cpp FilePlayerAlgorithm.h Constants.h PlayerAlgorithm.h RPSPiecePosition.h RPSpoint.h FightInfo.h RPSMove.h RPSJokerChange.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
 TournamentManager.o: TournamentManager.cpp TournamentManager.h PlayerAlgorithm.h PlayerAlgorithmInfo.h Constants.h RPSGame.h 
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp  -mcmodel=large
@@ -47,6 +45,10 @@ PlayerAlgorithmInfo.o:  PlayerAlgorithmInfo.cpp PlayerAlgorithmInfo.h PlayerAlgo
 rps_lib: RSPPlayer_204157861.cpp RSPPlayer_204157861.h Constants.h RPSPiecePosition.h RPSpoint.h RPSJokerChange.h PlayerAlgorithm.h AIBoard.h RPSMove.h AlgorithmRegistration.h 
 		$(COMP) $(CPP_COMP_FLAG) RSPPlayer_204157861.cpp RPSPiecePosition.cpp RPSpoint.cpp RPSJokerChange.cpp AIBoard.cpp RPSBoard.cpp RPSMove.cpp AICell.cpp Cell.cpp -shared -fPIC -rdynamic -mcmodel=large -o RSPPlayer_204157861.so
 	
+rps_lib2: RSPPlayer_204157862.cpp RSPPlayer_204157862.h Constants.h RPSPiecePosition.h RPSpoint.h RPSJokerChange.h PlayerAlgorithm.h AIBoard.h RPSMove.h AlgorithmRegistration.h 
+		$(COMP) $(CPP_COMP_FLAG) RSPPlayer_204157862.cpp RPSPiecePosition.cpp RPSpoint.cpp RPSJokerChange.cpp AIBoard.cpp RPSBoard.cpp RPSMove.cpp AICell.cpp Cell.cpp -shared -fPIC -rdynamic -mcmodel=large -o RSPPlayer_204157862.so
+
+all: rps_lib rps_lib2 rps_tournament
 	
 clean:
 	rm -f *.o *.so $(EXEC) 

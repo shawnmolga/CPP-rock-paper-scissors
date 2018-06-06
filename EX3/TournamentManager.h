@@ -69,6 +69,7 @@ class TournamentManager {
     void closeAlgorithemLibs();
  	TournamentManager(const TournamentManager&) = delete;
 	TournamentManager& operator=(const TournamentManager&)	= delete;
+	void singleThreadEntry();
 	
     public:
 	//manager is singleton

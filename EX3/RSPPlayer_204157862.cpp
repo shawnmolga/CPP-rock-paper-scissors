@@ -1,14 +1,14 @@
 /*
- * RSPPlayer_204157861.cpp
+ * RSPPlayer_204157862.cpp
  *
  *  Created on: 2 ���� 2018
  *      Author: OR
  */
 
-#include "RSPPlayer_204157861.h"
+#include "RSPPlayer_204157862.h"
 #include "AlgorithmRegistration.h"
 
-RSPPlayer_204157861::RSPPlayer_204157861()
+RSPPlayer_204157862::RSPPlayer_204157862()
 {
 	gameBoard = AIBoard(); //board for AI to learn about the game
 	myPlayerNum = -1;
@@ -22,7 +22,7 @@ RSPPlayer_204157861::RSPPlayer_204157861()
 	willBeFight = false;
 }
 
-REGISTER_ALGORITHM(204157861)
+REGISTER_ALGORITHM(204157862)
 
 /**
     game manager will use this function to get positions of pieces to locate on board.
@@ -30,7 +30,7 @@ REGISTER_ALGORITHM(204157861)
     @params: player - current player number
     vectorToFill - vector of positions that will be filled
  */
-void RSPPlayer_204157861::getInitialPositions(int player,
+void RSPPlayer_204157862::getInitialPositions(int player,
 		std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	myPlayerNum = player;
@@ -46,7 +46,7 @@ void RSPPlayer_204157861::getInitialPositions(int player,
     @params: player - current player number
     vectorToFill - vector of positions that will be filled
  */
-void RSPPlayer_204157861::positionMovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
+void RSPPlayer_204157862::positionMovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	positionPiecesRandomly(ROCKS_NUM, player == 1 ? 'R' : 'r', false, '#', vectorToFill);
 	positionPiecesRandomly(PAPERS_NUM, player == 1 ? 'P' : 'p', false,'#', vectorToFill);
@@ -59,7 +59,7 @@ void RSPPlayer_204157861::positionMovingPieces(int player, std::vector<unique_pt
     @params: player - current player number
     vectorToFill - vector of positions that will be filled
  */
-void RSPPlayer_204157861::positionJokers(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
+void RSPPlayer_204157862::positionJokers(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	for (int i=0; i<JOKERS_NUM; ++i){
 		int pieceNum = getRandomNumInRange(1, 4);
@@ -90,7 +90,7 @@ void RSPPlayer_204157861::positionJokers(int player, std::vector<unique_ptr<Piec
     @params: player - current player number
     vectorToFill - vector of positions that will be filled
  */
-void RSPPlayer_204157861::positionUnmovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
+void RSPPlayer_204157862::positionUnmovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	int x = getRandomNumInRange(0, COLS - 1);
 	int y = getRandomNumInRange(0, ROWS - 1);
@@ -113,7 +113,7 @@ void RSPPlayer_204157861::positionUnmovingPieces(int player, std::vector<unique_
     vectorToFill - vector of positions that will be filled
     bombsPositioned - count bombs positioned around flags to know if we have left any bombs to position
  */
-void RSPPlayer_204157861::positionFlagsOnBoard(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int& bombsPositioned){
+void RSPPlayer_204157862::positionFlagsOnBoard(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int& bombsPositioned){
 	bool isCellTaken = true;
 	bool hasOpponentNeighbor = true;
 	bool shouldPositionRandomly = false;
@@ -157,7 +157,7 @@ void RSPPlayer_204157861::positionFlagsOnBoard(int player, std::vector<unique_pt
     end - range end
     @return random number from given range
  */
-int RSPPlayer_204157861::getRandomNumInRange(int start, int end)
+int RSPPlayer_204157862::getRandomNumInRange(int start, int end)
 {
 	std::random_device rd;								  // obtain a random number from hardware
 	std::mt19937 eng(rd());								  // seed the generator
@@ -172,7 +172,7 @@ int RSPPlayer_204157861::getRandomNumInRange(int start, int end)
     flag_x , flag_y - flag's position
     @return: true - empty neighbor cell was found, false - otherwise.
  */
-bool RSPPlayer_204157861::findEmptyNeigbor(int &x, int &y, int flag_x, int flag_y)
+bool RSPPlayer_204157862::findEmptyNeigbor(int &x, int &y, int flag_x, int flag_y)
 {
 
 	char piece;
@@ -231,7 +231,7 @@ bool RSPPlayer_204157861::findEmptyNeigbor(int &x, int &y, int flag_x, int flag_
     shouldPositionRandomly - false - bombs should be positioned as flag's neighbor.
     true - otherwise.
  */
-void RSPPlayer_204157861::positionBombs(int flag_x, int flag_y, int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int bombsToPosition, bool shouldPositionRandomly)
+void RSPPlayer_204157862::positionBombs(int flag_x, int flag_y, int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int bombsToPosition, bool shouldPositionRandomly)
 {
 	char piece = (player == 1 ? 'B' : 'b');
 	int x;
@@ -271,7 +271,7 @@ void RSPPlayer_204157861::positionBombs(int flag_x, int flag_y, int player, std:
     player - current player number.
     vectorToFill - vector of positions that will be filled
  */
-void RSPPlayer_204157861::positionPiecesRandomly(int pieceNum, char piece, bool isJoker, char pieceRep, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
+void RSPPlayer_204157862::positionPiecesRandomly(int pieceNum, char piece, bool isJoker, char pieceRep, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
 	bool isCellTaken = true;
 	int x = getRandomNumInRange(0, COLS - 1);
@@ -307,7 +307,7 @@ void RSPPlayer_204157861::positionPiecesRandomly(int pieceNum, char piece, bool 
     @params: piece - piece to check
     @return: true - this is opponent piece, false - otherwise.
  */
-bool RSPPlayer_204157861::isOpponentPiece(char piece)
+bool RSPPlayer_204157862::isOpponentPiece(char piece)
 {
 	if (piece == '#')
 		return true;
@@ -328,7 +328,7 @@ bool RSPPlayer_204157861::isOpponentPiece(char piece)
 @param: relevant y and x
 @return: true if this is a legal position and  false otherwise
  */
-bool RSPPlayer_204157861::isLegalPosition(int x, int y)
+bool RSPPlayer_204157862::isLegalPosition(int x, int y)
 {
 	if (x > COLS - 1 || y > ROWS - 1 || x < 0 || y < 0)
 	{
@@ -343,7 +343,7 @@ bool RSPPlayer_204157861::isLegalPosition(int x, int y)
     @params: x,y - piece position to check its neighbors.
     @return: true if an opponent nieghbour is located there and otherwise false
  */
-bool RSPPlayer_204157861::checkIsOpponentNeighbors(int x, int y)
+bool RSPPlayer_204157862::checkIsOpponentNeighbors(int x, int y)
 {
 	char piece;
 
@@ -393,7 +393,7 @@ bool RSPPlayer_204157861::checkIsOpponentNeighbors(int x, int y)
     @params: b - Board instance to get board positions
     fights - vector of all fight results that occur after piece positioning.
  */
-void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
+void RSPPlayer_204157862::notifyOnInitialBoard(const Board &b,
 		const std::vector<unique_ptr<FightInfo>> &fights)
 {
 	updateBoard(b);
@@ -455,7 +455,7 @@ void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
     x,y - cell location
  */
 
-void RSPPlayer_204157861::updateOpponentPiece(char piece, bool isOpponentWin, int x, int y, bool isJoker) {
+void RSPPlayer_204157862::updateOpponentPiece(char piece, bool isOpponentWin, int x, int y, bool isJoker) {
 
 	if (isOpponentWin) {
 		gameBoard.board[x][y].rockProbability = 0;
@@ -513,7 +513,7 @@ void RSPPlayer_204157861::updateOpponentPiece(char piece, bool isOpponentWin, in
 	opponentMovingPieceNumOnBoard--;
 }
 
-int RSPPlayer_204157861::getKnownJokersNumOnBoard() {
+int RSPPlayer_204157862::getKnownJokersNumOnBoard() {
 
 	int knownJokers = 0;
 
@@ -529,7 +529,7 @@ int RSPPlayer_204157861::getKnownJokersNumOnBoard() {
 	return knownJokers;
 }
 
-int RSPPlayer_204157861::getKnownMovingPiecesNumOnBoard() {
+int RSPPlayer_204157862::getKnownMovingPiecesNumOnBoard() {
 
 	int knownPieces = 0;
 
@@ -549,7 +549,7 @@ int RSPPlayer_204157861::getKnownMovingPiecesNumOnBoard() {
     AI algorithm update for each opponent piece its probability to represent a certain piece.
     updates probabilities that are not 1 or 0.
  */
-void RSPPlayer_204157861::updateProbabilities()
+void RSPPlayer_204157862::updateProbabilities()
 {
 //	if (opponentJokersNumOnBoard > 0) {
 //		removeEatenJokersFromCounters();
@@ -616,7 +616,7 @@ void RSPPlayer_204157861::updateProbabilities()
 	}
 }
 
-void RSPPlayer_204157861::updateIfProbOne(int x, int y) {
+void RSPPlayer_204157862::updateIfProbOne(int x, int y) {
 	bool isJoker = gameBoard.board[x][y].getIsJoker();
 	if (gameBoard.board[x][y].flagProbability == 1) {
 		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 'f' : 'F', isJoker);
@@ -638,7 +638,7 @@ void RSPPlayer_204157861::updateIfProbOne(int x, int y) {
 	return;
 }
 
-void RSPPlayer_204157861::removeEatenJokersFromCounters() {
+void RSPPlayer_204157862::removeEatenJokersFromCounters() {
 	int jokersEaten = 0;
 			if (opponentBombsNumOnBoard < opponentJokersNumOnBoard) {
 				jokersEaten = (opponentJokersNumOnBoard - opponentBombsNumOnBoard);
@@ -679,7 +679,7 @@ void RSPPlayer_204157861::removeEatenJokersFromCounters() {
 
     @return: move - chosen move to play
  */
-unique_ptr<Move> RSPPlayer_204157861::getMove()
+unique_ptr<Move> RSPPlayer_204157862::getMove()
 {
 	int from_x = -3;
 	int from_y = -3;
@@ -697,7 +697,7 @@ unique_ptr<Move> RSPPlayer_204157861::getMove()
     @return: nullptr - if joker was not changed.
     instance represents joker's change - otherwise.
  */
-unique_ptr<JokerChange> RSPPlayer_204157861::getJokerChange()
+unique_ptr<JokerChange> RSPPlayer_204157862::getJokerChange()
 {
 	int joker_x = -1;
 	int joker_y = -1;
@@ -736,7 +736,7 @@ unique_ptr<JokerChange> RSPPlayer_204157861::getJokerChange()
     @params: from_x,from_y - from where to move
     to_x,to_y - to where to move
  */
-void RSPPlayer_204157861::getBestMove(int &from_x, int &from_y, int &to_x, int &to_y)
+void RSPPlayer_204157862::getBestMove(int &from_x, int &from_y, int &to_x, int &to_y)
 {
 	double score;
 	int maxScore = INT_MIN;
@@ -779,7 +779,7 @@ void RSPPlayer_204157861::getBestMove(int &from_x, int &from_y, int &to_x, int &
     from_x,from_y - from where to move
     to_x,to_y - to where to move
  */
-double RSPPlayer_204157861::getBestMoveForPiece(double score, const int &from_x, const int &from_y, int &to_x, int &to_y)
+double RSPPlayer_204157862::getBestMoveForPiece(double score, const int &from_x, const int &from_y, int &to_x, int &to_y)
 {
 	int x = from_x; //col
 	int y = from_y; //row
@@ -849,7 +849,7 @@ double RSPPlayer_204157861::getBestMoveForPiece(double score, const int &from_x,
     @params: move - move to play
     @return: score - score of current move that was tried.
  */
-double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
+double RSPPlayer_204157862::tryMovePiece(unique_ptr<Move> &move)
 {
 	int from_x = move->getFrom().getX();
 	int from_y = move->getFrom().getY();
@@ -913,7 +913,7 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
     @return: true - current player lost (my player)
     else - false.
  */
-bool RSPPlayer_204157861::tryToFight(int to_x, int to_y, char myPiece, bool isJoker, bool& isProbOne)
+bool RSPPlayer_204157862::tryToFight(int to_x, int to_y, char myPiece, bool isJoker, bool& isProbOne)
 {
 	char opponentPiece = gameBoard.board[to_x][to_y].getPiece();
 	if (opponentPiece != '#' && gameBoard.board[to_x][to_y].isJokerKnown && !gameBoard.board[to_x][to_y].getIsJoker())
@@ -970,7 +970,7 @@ bool RSPPlayer_204157861::tryToFight(int to_x, int to_y, char myPiece, bool isJo
     @return: true - current player lost a piece (my player)
     else - false.
  */
-bool RSPPlayer_204157861::fight(int x, int y, char myPiece, char opponentPiece, bool isMyPieceJoker)
+bool RSPPlayer_204157862::fight(int x, int y, char myPiece, char opponentPiece, bool isMyPieceJoker)
 {
 
 	char myPieceRep = toupper(myPiece);
@@ -1050,7 +1050,7 @@ bool RSPPlayer_204157861::fight(int x, int y, char myPiece, char opponentPiece, 
     reveal - score represents if i should reveal my piece by moving it.
     @return: total score of current move result.
  */
-double RSPPlayer_204157861::calcScore(double material, double discovery, double reveal, int to_x, int to_y)
+double RSPPlayer_204157862::calcScore(double material, double discovery, double reveal, int to_x, int to_y)
 {
 	bool isJoker = false;
 	if (to_x != -1 && to_y != -1){
@@ -1085,7 +1085,7 @@ double RSPPlayer_204157861::calcScore(double material, double discovery, double 
     @params: fightInfo - includes pieces participated in fight, who won and in which location
     the fight was.
  */
-void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
+void RSPPlayer_204157862::notifyFightResult(const FightInfo &fightInfo)
 {
 	int x = fightInfo.getPosition().getX()-1;
 	int y = fightInfo.getPosition().getY()-1;
@@ -1166,7 +1166,7 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 	@params: to_x,to_y: location of my moved piece (new location)
     @return: distance from closest piece of mine to a flag or bomb normalized to 1.
  */
-double RSPPlayer_204157861::calcDistanceFromBombOrFlag(int to_x, int to_y)
+double RSPPlayer_204157862::calcDistanceFromBombOrFlag(int to_x, int to_y)
 {
 	int distance;
 	int minimalDistance = ROWS + COLS;
@@ -1199,7 +1199,7 @@ double RSPPlayer_204157861::calcDistanceFromBombOrFlag(int to_x, int to_y)
 	@params: to_x,to_y: location of my moved piece (new location)
     @return: distance from closest piece of mine to an unkown piece.
  */
-double RSPPlayer_204157861::calcDistanceFromUnknownPiece(int to_x, int to_y)
+double RSPPlayer_204157862::calcDistanceFromUnknownPiece(int to_x, int to_y)
 {
 	int distance;
 	int minimalDistance = ROWS + COLS;
@@ -1232,7 +1232,7 @@ return (double)(ROWS+COLS) - (double)minimalDistance;
 	my_x,my_y - location of my piece to calculate the distance from it to opponent's unkown piece
     @return: distance from my pieces to a piece.
  */
-int RSPPlayer_204157861::calcDistanceFromPiece(int piece_x, int piece_y, int my_x, int my_y)
+int RSPPlayer_204157862::calcDistanceFromPiece(int piece_x, int piece_y, int my_x, int my_y)
 {
 	int distance;
 	//there will be a fight with my piece vs unknown piece
@@ -1251,7 +1251,7 @@ int RSPPlayer_204157861::calcDistanceFromPiece(int piece_x, int piece_y, int my_
     @return: score of flag's safety between -1 to 1. can be negative if there is opponent neighbors
     to my flag.
  */
-double RSPPlayer_204157861::calcFlagSaftey()
+double RSPPlayer_204157862::calcFlagSaftey()
 {
 	int protectingBombs = 0; //bombs neighbors to flag counter
 	int otherProtectingPieces = 0; //moving pieces neighbors flag counter
@@ -1302,7 +1302,7 @@ double RSPPlayer_204157861::calcFlagSaftey()
 	other protecting pieces - piece neighbors of flag that belong to same player
 	enemy pieces - opponent piece neighbors of flag
  */
-void RSPPlayer_204157861::updateNeighborAsProtectorOrEnemy(char piece, int x, int y, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces){
+void RSPPlayer_204157862::updateNeighborAsProtectorOrEnemy(char piece, int x, int y, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces){
 	bool isMyPiece;
 	if (piece != 0)
 	{
@@ -1336,7 +1336,7 @@ void RSPPlayer_204157861::updateNeighborAsProtectorOrEnemy(char piece, int x, in
 	other protecting pieces - piece neighbors of flag that belong to same player
 	enemy pieces - opponent piece neighbors of flag
  */
-void RSPPlayer_204157861::countProtectingPieces(int i, int j, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces)
+void RSPPlayer_204157862::countProtectingPieces(int i, int j, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces)
 
 {
 	//search down
@@ -1376,7 +1376,7 @@ void RSPPlayer_204157861::countProtectingPieces(int i, int j, int &protectingBom
 
     @return: score between 0 to 1.
  */
-double RSPPlayer_204157861::calcMaterial(Cell cell)
+double RSPPlayer_204157862::calcMaterial(Cell cell)
 {
 	if (cell.getIsJoker())
 	{
@@ -1402,7 +1402,7 @@ double RSPPlayer_204157861::calcMaterial(Cell cell)
 
     @return: discovery parameter score between 0 to 1.
  */
-double RSPPlayer_204157861::calcDiscovery(AICell cell)
+double RSPPlayer_204157862::calcDiscovery(AICell cell)
 {
 	int isFlagKnown = cell.flagProbability == 0 ? 0 : 1;
 	int isJokerKnown = cell.isJokerKnown ? 0 : 1;
@@ -1421,7 +1421,7 @@ double RSPPlayer_204157861::calcDiscovery(AICell cell)
     @return: new representation of highest score board state after joker change.
     if it is better not to do a joker change - return -1.
  */
-char RSPPlayer_204157861::shouldChangeJoker(double &score, int joker_x, int joker_y, bool amIPlayerOne)
+char RSPPlayer_204157862::shouldChangeJoker(double &score, int joker_x, int joker_y, bool amIPlayerOne)
 {
 	char oldRep = gameBoard.board[joker_x][joker_y].getPiece();
 	char origRep = oldRep;
@@ -1474,7 +1474,7 @@ char RSPPlayer_204157861::shouldChangeJoker(double &score, int joker_x, int joke
 /**
     when AI algorithm is sure - changes all opponent's unknown pieces to moving pieces.
  */
-void RSPPlayer_204157861::updateMovingPiece()
+void RSPPlayer_204157862::updateMovingPiece()
 {
 	for (int i = 0; i < COLS; ++i)
 	{
@@ -1495,7 +1495,7 @@ void RSPPlayer_204157861::updateMovingPiece()
 	}
 }
 
-void RSPPlayer_204157861::updateNoJokersLeft()
+void RSPPlayer_204157862::updateNoJokersLeft()
 {
 	for (int i = 0; i < COLS; ++i)
 	{
@@ -1522,7 +1522,7 @@ void RSPPlayer_204157861::updateNoJokersLeft()
 	update AI board after manager notified on board's positions.
 	@params: b - board given by manager
  */
-void RSPPlayer_204157861::updateBoard(const Board &b)
+void RSPPlayer_204157862::updateBoard(const Board &b)
 {
 	for (int i = 0; i < COLS; ++i)
 	{
@@ -1541,7 +1541,7 @@ void RSPPlayer_204157861::updateBoard(const Board &b)
 	manager will ue this function to notify AI on opponent's move. and AI will
 	use this data to update its board and learn about the game.
  */
-void RSPPlayer_204157861::notifyOnOpponentMove(const Move &move)
+void RSPPlayer_204157862::notifyOnOpponentMove(const Move &move)
 {
 	int from_x = move.getFrom().getX()-1;
 	int from_y = move.getFrom().getY()-1;
@@ -1584,7 +1584,7 @@ void RSPPlayer_204157861::notifyOnOpponentMove(const Move &move)
 
     @return: true - move is legal. else - false.
  */
-bool RSPPlayer_204157861::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
+bool RSPPlayer_204157862::isLegalMove(unique_ptr<Move> &move, bool isPlayer1) {
 	//get move positions
 	int from_x = move->getFrom().getX();
 	int from_y = move->getFrom().getY();

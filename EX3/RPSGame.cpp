@@ -4,11 +4,6 @@ RPSGame::RPSGame(const unique_ptr <PlayerAlgorithmInfo> & playerOne,const unique
     gameBoard = RPSBoard();
 }
 
-
-RPSGame::~RPSGame() {
-
-}
-
 void RPSGame::updateJokerMovingPieces() {
     for (int i = 1; i <= COLS; ++i) {
         for (int j = 1; j <= ROWS; ++j) {
@@ -126,6 +121,7 @@ bool RPSGame::movePiece(unique_ptr <Move> &move,
     int to_y = move->getTo().getY();     //row
     if (!isLegalMove(move, isPlayerOneTurn)) //checking if the move we received is legal
     {
+    	cout<<"inside is legal move"<<endl;
         if (isPlayerOneTurn) {
             setGameOver(2, WRONG_MOVE_FILE_FORMAT_ONE);
         } else
@@ -294,6 +290,7 @@ int RPSGame::makeMove() {
     bool isPlayerOneTurn = true;
     bool isGameOverInternal = false;
     bool isBadFormat = false;
+    cout<<"got move"<<endl;
 
     while (!isPlayerOneEOF && xPiecePlayerOne != READ_LINE_ERR && !isPlayerTwoEOF && xPiecePlayerTwo != READ_LINE_ERR &&
            numOfMoves <= MAX_NUM_OF_MOVES)
@@ -396,10 +393,12 @@ int RPSGame::startGame() {
     }
     bool isPlayerOneTurn = true;
     bool isAboutToMove = true;
+    cout<<"inside start game"<<endl;
     if (checkGameOver(isAboutToMove, isPlayerOneTurn)) {
         return GAME_OVER_SUCC;
     }
     //If we got here the board is initialized! now we need to make a move.
+    cout<<"before make move"<<endl;
     return makeMove();
 }
 
@@ -1117,7 +1116,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
                              isCurrPieceJoker);
         }
     }
-    free(ptr);
+    delete(ptr);
     return checkGameOver(false, isPlayerOneTurn);
 }
 
@@ -1146,7 +1145,7 @@ void RPSGame::printBoardToFile(ofstream &output) {
     return;
 }
 
-void RPSGame::getWinnerInfo(int & winnerNumPlayer,string & gameOverReason ) {
+void RPSGame::getWinnerInfo(int & winnerNumPlayer) {
     if(playerOne.getIsWinner()){
         winnerNumPlayer = 1;
     }
@@ -1156,7 +1155,7 @@ void RPSGame::getWinnerInfo(int & winnerNumPlayer,string & gameOverReason ) {
     else {
         winnerNumPlayer = 0;
     }
-    gameOverReason = ToString(getGameOverReason());
+    //gameOverReason = ToString(getGameOverReason());
 }
 
 /*

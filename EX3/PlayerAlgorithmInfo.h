@@ -24,7 +24,6 @@ using namespace std;
 class PlayerAlgorithmInfo {
 public:
 	PlayerAlgorithmInfo(std::function<std::unique_ptr<PlayerAlgorithm>()> _getPlayerAlgorithm);
-	virtual ~PlayerAlgorithmInfo();
 	std::function<std::unique_ptr<PlayerAlgorithm>()> getPlayerAlgorithm;
 	atomic<int> score;
 	atomic<int> gamesPlayed;
