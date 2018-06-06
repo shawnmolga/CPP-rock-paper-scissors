@@ -259,7 +259,10 @@ bool TournamentManager::isValidTournament(int argc, char *argv[])
 
 bool TournamentManager::loadAlgorithemsFromPath() {
 	FILE *dl;   // handle to read directory
-	string command =  "ls *.so 2>&1"; //TODO: CHECK THIS
+	if (inputDirPath.compare(".") == 0) {
+		inputDirPath = "";
+	}
+	string command =  "ls " + inputDirPath + "*.so 2>&1"; //TODO: CHECK THIS
 	cout << command <<endl;
 	char in_buf[BUF_SIZE]; // input buffer for lib names
 //	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator fitr;

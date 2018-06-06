@@ -1,17 +1,15 @@
 COMP = g++-5.3.0
 #put all your object files here
-OBJS = AlgorithmRegistration.o Cell.o main.o Player.o RPSGame.o FilePlayerAlgorithm.o libRSPPlayer_204157861.so RPSBoard.o RPSFight.o RPSJokerChange.o RPSMove.o RPSPiecePosition.o RPSpoint.o AICell.o AIBoard.o TournamentManager.o PlayerAlgorithmInfo.o RSPPlayer_204157861.o
+OBJS = AlgorithmRegistration.o Cell.o main.o Player.o RPSGame.o FilePlayerAlgorithm.o RPSBoard.o RPSFight.o RPSJokerChange.o RPSMove.o RPSPiecePosition.o RPSpoint.o AICell.o AIBoard.o TournamentManager.o PlayerAlgorithmInfo.o
 #The executabel filename DON'T CHANGE
 EXEC = ex3
-LIBS = -ldl
-
-THREAD_FLAG = -pthread
+LIBS = -ldl -lm
 
 CPP_COMP_FLAG = -std=c++14 -Wall -Wextra \
--Werror -pedantic-errors -DNDEBUG 
+-Werror -pedantic-errors -DNDEBUG -shared -fPIC -rdynamic -ldl -pthread -lpthread
 
-$(EXEC): $(OBJS)
-	$(COMP) $(OBJS) -o $@ $(THREAD_FLAG) $(LIBS)
+tournament: $(OBJS)
+		$(COMP) $(OBJS) -o $(EXEC) -ldl -pthread -lpthread -rdynamic 
 #a rule for building a simple c++ source file
 #use g++ -MM main.cpp to see dependencies
 main.o: main.cpp Constants.h RPSGame.h  #put dependencies here!
@@ -24,13 +22,6 @@ RPSGame.o: RPSGame.cpp RPSGame.h Cell.h Point.h RPSBoard.h RPSFight.h RPSMove.h 
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
 FilePlayerAlgorithm.o: FilePlayerAlgorithm.cpp FilePlayerAlgorithm.h PlayerAlgorithm.h RPSPiecePosition.h RPSpoint.h FightInfo.h RPSMove.h RPSJokerChange.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
-#libcircle.so: circle.o
-#	g++ -shared -Wl,-soname,libcircle.so -o libcircle.so circle.o
-
-RSPPlayer_204157861.o: RSPPlayer_204157861.cpp RSPPlayer_204157861.h AICell.h PlayerAlgorithm.h Constants.h RPSPiecePosition.h RPSpoint.h RPSJokerChange.h AIBoard.h RPSMove.h 
-	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large 
-libRSPPlayer_204157861.so: RSPPlayer_204157861.o
-	$(COMP) $(CPP_COMP_FLAG) -shared -Wl,-soname,libRSPPlayer_204157861.so -o libRSPPlayer_204157861.so RSPPlayer_204157861.o
 TournamentManager.o: TournamentManager.cpp TournamentManager.h PlayerAlgorithm.h PlayerAlgorithmInfo.h Constants.h RPSGame.h 
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp  -mcmodel=large
 AlgorithmRegistration.o: AlgorithmRegistration.cpp AlgorithmRegistration.h PlayerAlgorithm.h TournamentManager.h
@@ -55,5 +46,9 @@ AIBoard.o: AIBoard.cpp AIBoard.h Board.h Constants.h AICell.h Point.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
 PlayerAlgorithmInfo.o:  PlayerAlgorithmInfo.cpp PlayerAlgorithmInfo.h PlayerAlgorithm.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
+	
+algo_libs: RSPPlayer_204157861.cpp RSPPlayer_204157861.h  AICell.h PlayerAlgorithm.h Constants.h RPSPiecePosition.h RPSpoint.h RPSJokerChange.h AIBoard.h RPSMove.h AlgorithmRegistration.h 
+		$(COMP) $(CPP_COMP_FLAG) RSPPlayer_204157861.cpp AICell.cpp RPSPiecePosition.cpp RPSpoint.cpp RPSJokerChange.cpp AIBoard.cpp RPSMove.cpp AlgorithmRegistration.cpp -shared -fPIC -rdynamic -mcmodel=large -o RSPPlayer_204157861.so
+
 clean:
 	rm -f $(OBJS) $(EXEC)
