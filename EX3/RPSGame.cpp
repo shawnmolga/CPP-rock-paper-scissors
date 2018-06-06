@@ -197,6 +197,7 @@ int RPSGame::handleNonEmptyMove(bool playerOneNonEmpty, std::unique_ptr <Move> &
     else
         isPlayerOneTurn = false;
     isGameOverInternal = movePiece(move, isPlayerOneTurn, isBadFormat, false);
+    cout<<"IS game Over Internal 1"<<isGameOverInternal<<endl;
     if (isGameOverInternal) {
         if (isBadFormat) {
             if (playerOneNonEmpty)
@@ -240,6 +241,7 @@ int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTu
             else
                 isPlayerOneTurn = true;
             isGameOverInternal = movePiece(move, isPlayerOneTurn, isBadFormat, true);
+            cout<<"is game Over internal 2"<<endl;
             if (isGameOverInternal) {
                 if (isBadFormat) {
                     if (playerOneEOF) {
@@ -279,7 +281,7 @@ int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTu
 int RPSGame::makeMove() {
     bool isPlayerOneEOF = false;
     bool isPlayerTwoEOF = false;
-    int xPiecePlayerOne;
+    int xPiecePlayerOne = 0; //initalize xPiecePlayerOne need to verify!
     unique_ptr <Move> move = std::move(playerAlgoOne->getMove());
     if (move == nullptr) {
         isPlayerOneEOF = true;
@@ -290,7 +292,7 @@ int RPSGame::makeMove() {
     bool isPlayerOneTurn = true;
     bool isGameOverInternal = false;
     bool isBadFormat = false;
-    cout<<"got move"<<endl;
+    cout<<"got move 1"<<endl;
 
     while (!isPlayerOneEOF && xPiecePlayerOne != READ_LINE_ERR && !isPlayerTwoEOF && xPiecePlayerTwo != READ_LINE_ERR &&
            numOfMoves <= MAX_NUM_OF_MOVES)
@@ -298,9 +300,12 @@ int RPSGame::makeMove() {
         isBadFormat = false;
         isGameOverInternal = false;
         if (xPiecePlayerOne != 0) {
-            if (-1 == handleNonEmptyMove(true, move, isPlayerOneTurn, isGameOverInternal, isBadFormat))
+            if (-1 == handleNonEmptyMove(true, move, isPlayerOneTurn, isGameOverInternal, isBadFormat)){
+                cout<<"handleNonEmptyMove 1"<<endl;
                 break;
+            }
         }
+    cout<<"got move 2"<<endl;
         move = std::move(playerAlgoTwo->getMove());
         if (move == nullptr) {
             isPlayerTwoEOF = true;
@@ -310,15 +315,17 @@ int RPSGame::makeMove() {
         if (!isPlayerTwoEOF && xPiecePlayerTwo != READ_LINE_ERR) {
             if (xPiecePlayerTwo != EMPTY_LINE) {
                 if (-1 == handleNonEmptyMove(false, move, isPlayerOneTurn, isGameOverInternal, isBadFormat))
+                    cout<<"handleNonEmptyMove 2"<<endl;
                     break;
             }
+        cout<<"got move 3"<<endl;
         }
         else if (xPiecePlayerTwo == READ_LINE_ERR) {
             return ERROR_DURING_MOVE;
         } else {
             break;
         }
-
+        cout<<"got move 4"<<endl;
         move = playerAlgoOne->getMove();
         if (move == nullptr) {
             isPlayerOneEOF = true;
@@ -326,6 +333,7 @@ int RPSGame::makeMove() {
             xPiecePlayerOne = move->getFrom().getX();
         }
     }
+            cout<<"got move 5"<<endl;
     if (-1 == closeGame(isGameOverInternal, isBadFormat, isPlayerOneTurn, isPlayerOneEOF, isPlayerTwoEOF))
         return -1;
     return MOVE_DONE_SUCC;
@@ -343,13 +351,18 @@ int RPSGame::closeGame(bool &isGameOverInternal, bool &isBadFormat, bool &isPlay
     if (!isGameOverInternal) {
         if (isPlayerOneEOF) //EOFcase player 1
         {
-            if (-1 == handleEOF(true, isBadFormat, isPlayerOneTurn, isGameOverInternal, isPlayerOneEOF, isPlayerTwoEOF))
+            if (-1 == handleEOF(true, isBadFormat, isPlayerOneTurn, isGameOverInternal, isPlayerOneEOF, isPlayerTwoEOF)){
+                cout<<"handleEOF returned closeGame1"<<endl;
                 return ERROR_DURING_MOVE;
+            }
         } else if (isPlayerTwoEOF) //player 2 eof
         {
             if (-1 ==
-                handleEOF(false, isBadFormat, isPlayerOneTurn, isGameOverInternal, isPlayerOneEOF, isPlayerTwoEOF))
-                return ERROR_DURING_MOVE;
+                handleEOF(false, isBadFormat, isPlayerOneTurn, isGameOverInternal, isPlayerOneEOF, isPlayerTwoEOF)){
+                      cout<<"handleEOF returned closeGame2"<<endl;
+
+                        return ERROR_DURING_MOVE;
+                }
         }
 
         if (numOfMoves >= 100) {
