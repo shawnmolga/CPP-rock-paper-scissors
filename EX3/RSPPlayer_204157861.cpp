@@ -1425,7 +1425,7 @@ char RSPPlayer_204157861::shouldChangeJoker(double &score, int joker_x, int joke
 {
 	char oldRep = gameBoard.board[joker_x][joker_y].getPiece();
 	char origRep = oldRep;
-	char newRep;
+	char newRep = 0;
 	char bestRep = -1;
 	double currScore;
 	double material = calcMaterial(gameBoard.board[joker_x][joker_y]);
@@ -1455,6 +1455,7 @@ char RSPPlayer_204157861::shouldChangeJoker(double &score, int joker_x, int joke
 			break;
 		}
 
+		origRep = newRep;
 		Cell::updateCell(gameBoard.board[joker_x][joker_y],newRep, true);
 		currScore = calcScore(material, discovery, reveal, joker_x, joker_y);
 

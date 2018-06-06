@@ -214,7 +214,8 @@ int RPSGame::handleNonEmptyMove(bool playerOneNonEmpty, std::unique_ptr <Move> &
  */
 int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTurn, bool &isGameOverInternal,
                        bool isPlayerOneEOF, bool isPlayerTwoEOF) {
-    std::unique_ptr <Move> move;
+	cout<<"I AM IN EOF PART"<<endl;
+	std::unique_ptr <Move> move;
     int nextPlayer = 2;
     if (isPlayerOneEOF) {
         move = playerAlgoTwo->getMove();
@@ -230,6 +231,7 @@ int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTu
     if (move != nullptr) {
         xPiece = move->getFrom().getX();
     }
+    cout<<"XPIECE is "<<xPiece<<endl;
     while (!(nextPlayer == 1 ? isPlayerOneEOF : isPlayerTwoEOF) && xPiece != READ_LINE_ERR &&
            numOfMoves <= MAX_NUM_OF_MOVES) {
 
@@ -265,6 +267,7 @@ int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTu
         if (move != nullptr) {
             xPiece = move->getFrom().getX();
         }
+        cout<<"XPIECE is "<<xPiece<<endl;
     }
     if (xPiece == READ_LINE_ERR) {
         cout << "Error while reading move file. Exiting game" << endl;
@@ -295,6 +298,7 @@ int RPSGame::makeMove() {
     while (!isPlayerOneEOF && xPiecePlayerOne != READ_LINE_ERR && !isPlayerTwoEOF && xPiecePlayerTwo != READ_LINE_ERR &&
            numOfMoves <= MAX_NUM_OF_MOVES)
     {
+    	cout<<"doing move"<<endl;
         isBadFormat = false;
         isGameOverInternal = false;
         if (xPiecePlayerOne != 0) {
