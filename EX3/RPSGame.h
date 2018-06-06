@@ -80,18 +80,18 @@ public:
 
 	//fight functions and help-functions
 	void handleSwitchCase(char nextPlayerPiece, RPSFight &fights, Player* currPlayer, Player* nextPlayer, int x , int y,
-			std::vector<unique_ptr<FightInfo>> &initFights, RPSFight *ptr);
+			std::vector<unique_ptr<FightInfo>> &initFights,unique_ptr <RPSFight> &ptr);
 	void handleNextPlayerPieceFlag(bool isCurrPlayerFlag, char currPlayerPiece, Player* currPlayer, Player* nextPlayer, int x , int y,
 			std::vector<unique_ptr<FightInfo>> &initFights,
-			RPSFight *ptr, bool isCurrPieceJoker, char currPiece, RPSFight &fights, int nextPlayerNum);
+			unique_ptr <RPSFight> &ptr, bool isCurrPieceJoker, char currPiece, RPSFight &fights, int nextPlayerNum);
 	void handleNexPlayerBomb( char currPlayerPiece, Player* currPlayer, Player* nextPlayer, int x , int y,
-			std::vector<unique_ptr<FightInfo>> &initFights, RPSFight *ptr,
+			std::vector<unique_ptr<FightInfo>> &initFights, unique_ptr <RPSFight> &ptr,
 			RPSFight &fights, int nextPlayerNum);
 	void handlePaperVsRock(Player* currPlayer,
-			std::vector<unique_ptr<FightInfo>> &initFights, RPSFight *ptr,
+			std::vector<unique_ptr<FightInfo>> &initFights, unique_ptr <RPSFight> &ptr,
 			RPSFight &fights, int nextPlayerNum);
 	void handlePaperOrRockVsScissors(int i, Player* nextPlayer, int currPlayerNum,
-			std::vector<unique_ptr<FightInfo>> &initFights, RPSFight *ptr,
+			std::vector<unique_ptr<FightInfo>> &initFights, unique_ptr <RPSFight> &ptr,
 			RPSFight &fights);
 	bool fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool isCurrPieceJoker,RPSFight & fights,std::vector<unique_ptr<FightInfo>> &initFights,RPSpoint posOne,RPSpoint posTwo);
 
