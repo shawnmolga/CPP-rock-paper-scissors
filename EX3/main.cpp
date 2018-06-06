@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -12,8 +13,8 @@ int main(int argc, char *argv[])
 
 	if(manager.isValidTournament(argc,argv)){
 		cout << "number of players are :" << manager.idToAlgoInfo.size() << endl;
-		//manager.startTournament();
-		//manager.printTornamentResult();
+		manager.startTournament();
+		manager.printTornamentResult();
 	}
 	// // check number of arg
 	// if (argc != 2)

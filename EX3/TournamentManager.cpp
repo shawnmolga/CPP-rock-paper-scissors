@@ -280,6 +280,7 @@ bool TournamentManager::loadAlgorithemsFromPath() {
 		if(ws) *ws = '\0';
 		// append ./ to the front of the lib name
 		sprintf(name, "./%s", in_buf);
+		cout << name << "HEY" << endl;
 		dlib = dlopen(name, RTLD_NOW);
 		if(dlib == NULL){
 			cout << "Error: algorithm failed to open." << endl;
