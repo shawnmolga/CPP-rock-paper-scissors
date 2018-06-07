@@ -755,6 +755,10 @@ void RSPPlayer_204157862::getBestMove(int &from_x, int &from_y, int &to_x, int &
 			}
 		}
 	}
+	//if (from_x ==-3)<<return!
+	if(from_x == -3){
+		return;
+	}
 	myCell = gameBoard.board[from_x][from_y];
 	//make move
 	if (gameBoard.board[to_x][to_y].getPiece() == 0)

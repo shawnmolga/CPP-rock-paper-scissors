@@ -65,6 +65,7 @@ void TournamentManager::startTournament()
 }*/
 
 void TournamentManager::printAlgoToPlay(){
+	cout<<"size: " <<(int)algorithmsToPlay.size()<<endl;
 	for(int i=0;i<(int)algorithmsToPlay.size();i++){	
 		cout<<algorithmsToPlay[i]<<endl;
 	}

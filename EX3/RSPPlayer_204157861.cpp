@@ -681,10 +681,12 @@ void RSPPlayer_204157861::removeEatenJokersFromCounters() {
  */
 unique_ptr<Move> RSPPlayer_204157861::getMove()
 {
+	cout<<"inside getMove"<<endl;
 	int from_x = -3;
 	int from_y = -3;
 	int to_x = -3;
 	int to_y = -3;
+	cout<<"before getMove"<<endl;
 	getBestMove(from_x, from_y, to_x, to_y);
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
 
@@ -738,6 +740,7 @@ unique_ptr<JokerChange> RSPPlayer_204157861::getJokerChange()
  */
 void RSPPlayer_204157861::getBestMove(int &from_x, int &from_y, int &to_x, int &to_y)
 {
+	cout<<"inside get best move"<<endl;
 	double score;
 	int maxScore = INT_MIN;
 	for (int i = 0; i < COLS; ++i)
@@ -754,6 +757,9 @@ void RSPPlayer_204157861::getBestMove(int &from_x, int &from_y, int &to_x, int &
 				from_y = j;
 			}
 		}
+	}
+	if(from_x == -3){
+		return;
 	}
 	myCell = gameBoard.board[from_x][from_y];
 	//make move

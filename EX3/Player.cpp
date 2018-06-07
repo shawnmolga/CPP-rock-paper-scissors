@@ -1,7 +1,6 @@
 #include "Player.h"
 
-Player::Player(int num) :
-		playerNum(num), score(0), isWinner(false) {
+Player::Player(int num) :playerNum(num), score(0), isWinner(false) {
 	numOfPieces = new int[6];
 	for (int i = 0; i < 6; i++) {
 		numOfPieces[i] = 0;
@@ -50,6 +49,7 @@ void Player::setIsPlayerTurn(bool turn) {
 }
 
 Player::~Player() {
+	cout<<"in players delete"<<endl;
 	delete[] numOfPieces;
 }
 
