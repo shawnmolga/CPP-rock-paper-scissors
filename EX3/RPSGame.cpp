@@ -1080,6 +1080,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
     }
     char currPlayerPiece = toupper(currPiece);
     char nextPlayerPiece = toupper(gameBoard.board.at(x).at(y).getPiece());
+    bool isNextPlayerPieceJoker = gameBoard.board.at(x).at(y).getIsJoker();
     ptr->setPlayerOnePiece(currPlayerNum == 1 ? currPlayerPiece : nextPlayerPiece);
     ptr->setPlayerTwoPiece(nextPlayerNum == 1 ? currPlayerPiece : nextPlayerPiece);
     ptr->setPosition(*NextPlayerPos);
@@ -1100,7 +1101,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
     //case 3: current player's piece is flag and there is another piece on board
     else if (currPlayerPiece == FLAG)
         handleNextPlayerPieceFlag(true, nextPlayerPiece, nextPlayer, currPlayer, x, y,
-                                  initFights, ptr, isCurrPieceJoker, currPiece, fights, nextPlayerNum);
+                                  initFights, ptr, isNextPlayerPieceJoker, nextPlayerPiece, fights, nextPlayerNum);
 
     //case 4: there is bomb and current player has another piece
     else if (nextPlayerPiece == BOMB)
