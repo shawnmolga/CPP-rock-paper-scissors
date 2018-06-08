@@ -738,7 +738,7 @@ unique_ptr<JokerChange> RSPPlayer_204157861::getJokerChange()
  */
 void RSPPlayer_204157861::getBestMove(int &from_x, int &from_y, int &to_x, int &to_y)
 {
-	double score;
+	double score = 0;
 	int maxScore = INT_MIN;
 	for (int i = 0; i < COLS; ++i)
 	{
