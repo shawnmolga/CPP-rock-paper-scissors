@@ -1434,7 +1434,7 @@ char RSPPlayer_204157861::shouldChangeJoker(double &score, int joker_x, int joke
 	char origRep = oldRep;
 	char newRep = 0;
 	char bestRep = -1;
-	double currScore;
+	double currScore = score;
 	double material = calcMaterial(gameBoard.board[joker_x][joker_y]);
 	double discovery = 0;
 	double reveal = 0;
