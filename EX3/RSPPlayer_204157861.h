@@ -68,7 +68,7 @@ public:
 	void getBestMove(int &fromRow, int &fromCol, int &toRow, int &toCol);
 	double getBestMoveForPiece(double score, const int &fromRow,const int &fromCol, int &toRow, int &toCol);
 	double tryMovePiece(unique_ptr<Move>& move);
-	void updateProbabilities();
+	void updateProbabilities(bool resetProbabilities, int x, int y);
 	bool tryToFight(int to_x, int to_y, char myPiece, bool isJoker, bool& isProbOne);
 	bool fight(int row, int col, char myPiece, char opponentPiece, bool isMyPieceJoker);
 	char shouldChangeJoker(double &score,int joker_x, int joker_y, bool amIPlayerOne);

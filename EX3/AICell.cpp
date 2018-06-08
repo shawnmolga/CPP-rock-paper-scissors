@@ -17,10 +17,15 @@ void AICell::initAIFields() {
 	this->jokerProbability = (double)JOKERS_NUM / (double)TOTAL_PIECES_NUM;
 	this->isJokerKnown = false;
 	this->isMovingPieceKnown = false;
+	this->isMovingPiece = false;
 }
 
 void AICell::updateCellKnowlage(AICell & cell,const AICell & fromCell) {
 	cell.flagProbability = fromCell.flagProbability;
+	cell.paperProbability = fromCell.paperProbability;
+	cell.scissorsProbability = fromCell.scissorsProbability;
+	cell.rockProbability = fromCell.rockProbability;
+	cell.jokerProbability = fromCell.jokerProbability;
 	cell.isJokerKnown = fromCell.isJokerKnown;
 	cell.isMovingPieceKnown = fromCell.isMovingPieceKnown;
 	cell.isMovingPiece = fromCell.isMovingPiece;
