@@ -312,6 +312,8 @@ int RPSGame::makeMove() {
             }
         }
         else if (xPiecePlayerTwo == READ_LINE_ERR) {
+            cout<<"READ_LINE_ERR"<<endl;
+            PrintBoardToConsole();
             return ERROR_DURING_MOVE;
         } else {
             break;
@@ -323,8 +325,13 @@ int RPSGame::makeMove() {
             xPiecePlayerOne = move->getFrom().getX();
         }
     }
-    if (-1 == closeGame(isGameOverInternal, isBadFormat, isPlayerOneTurn, isPlayerOneEOF, isPlayerTwoEOF))
+    if (-1 == closeGame(isGameOverInternal, isBadFormat, isPlayerOneTurn, isPlayerOneEOF, isPlayerTwoEOF)){
+            cout<<"END_OF_GAME"<<endl;
+            PrintBoardToConsole();
         return -1;
+    }
+    cout<<"END_OF_GAME"<<endl;
+    PrintBoardToConsole();
     return MOVE_DONE_SUCC;
 }
 
@@ -1115,6 +1122,38 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
         }
     }
     return checkGameOver(false, isPlayerOneTurn);
+}
+
+//Need to erase this function - only for debug!
+void RPSGame::PrintBoardToConsole()
+{
+	cout << "*******************PRINT THE BOARD:****************" << endl;
+	for (int i = 1; i <= ROWS; i++)
+	{
+		for (int j = 1; j <= COLS; j++)
+		{
+			if (gameBoard.board[j][i].getIsJoker())
+			{
+				if (Cell::isPlayerOnePiece(gameBoard.board[j][i]))
+				{
+					cout << " J ";
+				}
+				else
+				{
+					cout << " j ";
+				}
+			}
+			else if (gameBoard.board[j][i].getPiece() == 0)
+			{
+				cout << " - ";
+			}
+			else
+			{
+				cout <<" "<< gameBoard.board[j][i].getPiece() << " ";
+			}
+		}
+		cout << endl;
+	}
 }
 
 /*

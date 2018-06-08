@@ -568,10 +568,7 @@ void  RSPPlayer_204157862::getBestMove(int &from_x, int &from_y, int &to_x, int 
 			}
 		}
 	}
-
 	cout<<"myCell"<<endl;
-	cout<<"from_x: "<<from_x<<endl;
-	cout<<"from_y: "<<from_y<<endl;
 	myCell = gameBoard.board[from_x][from_y];
 	//make move
 	cout<<"myCell"<<endl;
@@ -580,16 +577,13 @@ void  RSPPlayer_204157862::getBestMove(int &from_x, int &from_y, int &to_x, int 
 		cout<<"gameBoard.board[to_x][to_y]"<<endl;
 		Cell::updateCell(gameBoard.board[to_x][to_y], gameBoard.board[from_x][from_y].getPiece(),
 				gameBoard.board[from_x][from_y].getIsJoker());
-		cout<<"after update cell"<<endl;
 		AICell::updateCellKnowlage(gameBoard.board[to_x][to_y], gameBoard.board[from_x][from_y]);
 	}
 	else
 	{ //there is going to be a fight
-		cout<<"mycell"<<endl;
 		myCell = gameBoard.board[from_x][from_y];
 		opponentCell = gameBoard.board[to_x][to_y];
 	}
-	cout<<"cleanCell"<<endl;
 	AICell::cleanCell(gameBoard.board[from_x][from_y]);
 }
 

@@ -64,8 +64,8 @@ void TournamentManager::startTournament()
 	closeAlgorithemLibs();
 }*/
 
+
 void TournamentManager::printAlgoToPlay(){
-	cout<<"size: " <<(int)algorithmsToPlay.size()<<endl;
 	for(int i=0;i<(int)algorithmsToPlay.size();i++){	
 		cout<<algorithmsToPlay[i]<<endl;
 	}
@@ -84,9 +84,7 @@ void TournamentManager::startTournament()
 		//}
 	}
 	else
-		singleThreadEntry();
-		//threadEntry();
-	//printTornamentResult();
+		threadEntry();
 	cout<<"DONE!"<<endl;
 }
 
@@ -96,13 +94,7 @@ void TournamentManager::threadEntry(){
 	//todo: lock before checking if there are games to be played
 	algorithmsToPlayMutex.lock();
 	while (!algorithmsToPlay.empty()){
-		cout<<"**********************"<<endl;
-		cout<<"Algorithems to play"<<endl;
 		printAlgoToPlay();
-		cout<<"how many times i playes"<<endl;
-		cout<<idToAlgoInfo["204157862"]->gamesPlayed<<endl;
-		cout<<idToAlgoInfo["204157861"]->gamesPlayed<<endl;
-		cout<<"**********************"<<endl;
 		getPlayersToPlay(playerOneId, playerTwoId); //locked - only one thread can enter this function at a time
 		//todo unlock
 		algorithmsToPlayMutex.unlock();
@@ -115,23 +107,21 @@ void TournamentManager::threadEntry(){
 	algorithmsToPlayMutex.unlock();
 }
 
-void TournamentManager::singleThreadEntry(){
-	string playerOneId;
-	string playerTwoId;
-	for (int i=0; i<30; ++i){
-			getPlayersToPlay(playerOneId, playerTwoId); //locked - only one thread can enter this function at a time
-			cout<<"before new game in for number "<<i<<endl;
-			startNewGame("204157861","204157862");
-			cout<<"after new game in for number "<<i<<endl;
-		}
-}
+// void TournamentManager::singleThreadEntry(){
+// 	string playerOneId;
+// 	string playerTwoId;
+// 	for (int i=0; i<30; ++i){
+// 			getPlayersToPlay(playerOneId, playerTwoId); //locked - only one thread can enter this function at a time
+// 			cout<<"before new game in for number "<<i<<endl;
+// 			startNewGame("204157861","204157862");
+// 			cout<<"after new game in for number "<<i<<endl;
+// 		}
+// }
 
 
 void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, const string &playerTwoId){
-	cout<<"updating score"<<endl;
 	int winnerNumPlayer;
 	game.getWinnerInfo(winnerNumPlayer);
-	cout<<"took player info"<<endl;
 	//unique_lock<mutex> lock(updateScoreMutex);
 	if(winnerNumPlayer == 1){
 		idToAlgoInfo[playerOneId]->score = idToAlgoInfo[playerOneId]->score + 3;
@@ -143,7 +133,6 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 		idToAlgoInfo[playerOneId]->score ++;	
 		idToAlgoInfo[playerTwoId]->score ++;
 	}
-	cout<<"updating ended"<<endl;
 	//lock.unlock();
 }
 
@@ -159,7 +148,6 @@ void TournamentManager::getPlayersToPlay(string &playerOneId, string &playerTwoI
 	{
 		playerOneId = algorithmsToPlay[0];
 		getRandomPlayer(playerTwoId, true);
-		cout<<"PLAY WITH ONE MORE TIMES"<<endl;
 	}
 	else
 	{
@@ -179,7 +167,6 @@ void TournamentManager::updatePlayerPlayed(const string &playerOneId, const stri
 	lock.unlock();
 	if (idToAlgoInfo[playerOneId]->gamesPlayed == 30)
 	{
-		cout<<"played 30 times"<<endl;
 		unique_lock<mutex> lock(playersPlayedMutex);
 		algorithmsPlayed.push_back(playerOneId);
 		algorithmsToPlay.erase(find(algorithmsToPlay.begin(),algorithmsToPlay.end(),playerOneId));
@@ -188,13 +175,11 @@ void TournamentManager::updatePlayerPlayed(const string &playerOneId, const stri
 
 	if (idToAlgoInfo[playerTwoId]->gamesPlayed == 30)
 	{
-		cout<<"player 2 played 30 times"<<endl;
 		unique_lock<mutex> lock(playersPlayedMutex);
 		algorithmsPlayed.push_back(playerTwoId);
 		algorithmsToPlay.erase(find(algorithmsToPlay.begin(),algorithmsToPlay.end(),playerTwoId));
 		lock.unlock();
 	}
-	cout<<"going out from update"<<endl;
 }
 
 void TournamentManager::getRandomPlayer(string &playerId, bool doesRestPlayersPlayed)

@@ -62,7 +62,7 @@ public:
 	int insertToBoard(int playerNum, int x, int y,char inputPiece, bool & isPlayerLegalFormat, bool & isJoker,
 			unique_ptr<PiecePosition> & piecePos, RPSFight &fights,
 			std::vector<unique_ptr<FightInfo>> &initFights  );
-
+	void PrintBoardToConsole();
 	//game status functions and help-functios
 	//bool initGameMethod(string gameMethod);
 	//bool initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
