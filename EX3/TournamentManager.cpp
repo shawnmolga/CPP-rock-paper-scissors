@@ -135,6 +135,7 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 	}
 	unique_lock<mutex> lock(updateScoreMutex);
 	cout<<"***************************"<<endl;
+	cout<<"gameOverReason: "<<gameOverReason<<endl;
 	cout<<"idToAlgoInfo[playerOneId]:" <<idToAlgoInfo[playerOneId]->score<<endl;
 	cout<<"idToAlgoInfo[playerTwoId]:" <<idToAlgoInfo[playerTwoId]->score<<endl;
 	printTornamentResult();
