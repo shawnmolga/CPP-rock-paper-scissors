@@ -403,7 +403,6 @@ int RPSGame::startGame() {
         return GAME_OVER_SUCC;
     }
     //If we got here the board is initialized! now we need to make a move.
-    cout<<"before make move"<<endl;
     return makeMove();
 }
 
@@ -1181,7 +1180,7 @@ void RPSGame::printBoardToFile(ofstream &output) {
     return;
 }
 
-void RPSGame::getWinnerInfo(int & winnerNumPlayer) {
+void RPSGame::getWinnerInfo(int & winnerNumPlayer, string & gameOverReason) {
     if(playerOne.getIsWinner()){
         winnerNumPlayer = 1;
     }
@@ -1191,7 +1190,7 @@ void RPSGame::getWinnerInfo(int & winnerNumPlayer) {
     else {
         winnerNumPlayer = 0;
     }
-    //gameOverReason = ToString(getGameOverReason());
+    gameOverReason = ToString(getGameOverReason());
 }
 
 /*
