@@ -35,3 +35,9 @@ bool AICell::isMyPiece(int myPlayerNum){
 		return false;
 	return myPlayerNum == 1 ? isupper(piece) : islower(piece);
 }
+
+void AICell::resetKnowlage() {
+	isJokerKnown = false;
+	isMovingPieceKnown = false;
+	isMovingPiece = false;
+}

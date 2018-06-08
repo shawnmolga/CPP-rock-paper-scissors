@@ -565,7 +565,7 @@ void RSPPlayer_204157861::updateProbabilities()
 	{
 		for (int j = 0; j < ROWS; ++j)
 		{
-			if (gameBoard.board[i][j].flagProbability != 0 && gameBoard.board[i][j].flagProbability != 1)
+			if (!gameBoard.board[i][j].isMovingPieceKnown)
 			{
 				unknownPiecesNum++; //count pieces that we dont know if there are flags or not
 			}
@@ -1118,6 +1118,7 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 //				opponentBombsNumOnBoard--;
 //		}
 		Cell::cleanCell(gameBoard.board[x][y]);
+		gameBoard.board[x][y].resetKnowlage();
 	}
 	else if (winner != myPlayerNum) //opponent won
 	{   //opponent won
@@ -1130,12 +1131,14 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 //			if (isJoker) //for removing extra pieces as jokers unkown
 //				opponentMovingPieceNumOnBoard--;
 			Cell::cleanCell(gameBoard.board[x][y]);
+			gameBoard.board[x][y].resetKnowlage();
 		}
 		else {
 			AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? tolower(opponentPiece) : opponentPiece, isJoker);
 			//if it is not a bomb and not a flag - than it is moving piece
 			gameBoard.board[x][y].isMovingPieceKnown = true;
 			gameBoard.board[x][y].isMovingPiece = true;
+			gameBoard.board[x][y].isJokerKnown = false;
 		}
 
 		if (isJoker) {
@@ -1152,6 +1155,7 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 		if (toupper(myPiece) == 'B')
 		{
 			Cell::cleanCell(gameBoard.board[x][y]);
+			gameBoard.board[x][y].resetKnowlage();
 		}
 		else
 		{ // update win
@@ -1582,6 +1586,7 @@ void RSPPlayer_204157861::notifyOnOpponentMove(const Move &move)
 		myCell = gameBoard.board[to_x][to_y];
 	}
 	AICell::cleanCell(gameBoard.board[from_x][from_y]);
+	gameBoard.board[from_x][from_y].resetKnowlage();
 
 	updateProbabilities();
 }
