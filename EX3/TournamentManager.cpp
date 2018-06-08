@@ -121,8 +121,8 @@ void TournamentManager::threadEntry(){
 
 void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, const string &playerTwoId){
 	int winnerNumPlayer;
-	game.getWinnerInfo(winnerNumPlayer);
-	//unique_lock<mutex> lock(updateScoreMutex);
+	string gameOverReason;
+	game.getWinnerInfo(winnerNumPlayer,gameOverReason);
 	if(winnerNumPlayer == 1){
 		idToAlgoInfo[playerOneId]->score = idToAlgoInfo[playerOneId]->score + 3;
 	}
@@ -133,7 +133,13 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 		idToAlgoInfo[playerOneId]->score ++;	
 		idToAlgoInfo[playerTwoId]->score ++;
 	}
-	//lock.unlock();
+	unique_lock<mutex> lock(updateScoreMutex);
+	cout<<"***************************"<<endl;
+	cout<<"idToAlgoInfo[playerOneId]:" <<idToAlgoInfo[playerOneId]->score<<endl;
+	cout<<"idToAlgoInfo[playerTwoId]:" <<idToAlgoInfo[playerTwoId]->score<<endl;
+	printTornamentResult();
+	cout<<"***************************"<<endl;
+	lock.unlock();
 }
 
 void TournamentManager::printTornamentResult(){

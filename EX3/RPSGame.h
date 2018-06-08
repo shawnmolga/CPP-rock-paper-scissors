@@ -76,7 +76,7 @@ public:
 	void gameOverSetter(Player* currPlayer, Player* nextPlayer, bool isWinner1, bool isWinner2, GAME_OVER_TYPE type);
 	void resetGameResults();
 	void setGameOver(int winnerNumber, GAME_OVER_TYPE type);
-	void getWinnerInfo(int & winnerNumPlayer);
+	void getWinnerInfo(int & winnerNumPlayer,string & gameOverReason);
 
 	//fight functions and help-functions
 	void handleSwitchCase(char nextPlayerPiece, RPSFight &fights, Player* currPlayer, Player* nextPlayer, int x , int y,
