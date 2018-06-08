@@ -37,14 +37,14 @@ void TournamentManager::registerAlgorithm(std::string id, std::function<std::uni
 }
 
 void TournamentManager::startNewGame(const string &playerOneId, const string &playerTwoId){
-	cout<<"making new game"<<endl;
+	//cout<<"making new game"<<endl;
 	RPSGame game (idToAlgoInfo[playerOneId], idToAlgoInfo[playerTwoId]);
-	cout<<"starting new game"<<endl;
-	cout<<"players are: "<<playerOneId<<" , "<<playerTwoId<<endl;
+	//cout<<"starting new game"<<endl;
+	//cout<<"players are: "<<playerOneId<<" , "<<playerTwoId<<endl;
 	game.startGame();
-	cout<<"ended game"<<endl;
+	//cout<<"ended game"<<endl;
 	updateScore(game, playerOneId,playerTwoId);
-	cout<<"ended all"<<endl;
+	//cout<<"ended all"<<endl;
 }
 
 /*OLD VERSION
@@ -94,7 +94,7 @@ void TournamentManager::threadEntry(){
 	//todo: lock before checking if there are games to be played
 	algorithmsToPlayMutex.lock();
 	while (!algorithmsToPlay.empty()){
-		printAlgoToPlay();
+		//printAlgoToPlay();
 		getPlayersToPlay(playerOneId, playerTwoId); //locked - only one thread can enter this function at a time
 		//todo unlock
 		algorithmsToPlayMutex.unlock();
@@ -124,10 +124,14 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 	string gameOverReason;
 	game.getWinnerInfo(winnerNumPlayer,gameOverReason);
 	if(winnerNumPlayer == 1){
+		unique_lock<mutex> lock(updateScoreMutex);
 		idToAlgoInfo[playerOneId]->score = idToAlgoInfo[playerOneId]->score + 3;
+		lock.unlock();
 	}
 	else if(winnerNumPlayer == 2){
+		unique_lock<mutex> lock(updateScoreMutex);
 		idToAlgoInfo[playerTwoId]->score = idToAlgoInfo[playerTwoId]->score + 3;
+		lock.unlock();
 	}
 	else {
 		idToAlgoInfo[playerOneId]->score ++;	
@@ -201,6 +205,7 @@ int TournamentManager::getRandomNumInRange(int start, int end)
 	std::random_device rd;								// obtain a random number from hardware
 	std::mt19937 eng(rd());								// seed the generator
 	std::uniform_int_distribution<> yDistr(start, end); // define the range
+	//cout<<"start: "<<start<<"end: "<<end<<" in line 208 RSP204157861"<<endl;
 	return yDistr(eng);
 }
 
@@ -261,7 +266,7 @@ bool TournamentManager::checkTournamentArguments(int argc, char *argv[])
 			std::cout << "Wrong path: " << path << std::endl;
 			return false;
 		}
-		cout << path << endl;
+		//cout << path << endl;
 		inputDirPath = path;
 		numOfThreads = (numOfThreads == UNINITIALIZED_ARG) ?  (DEFAULT_THREADS_NUM - 1) : numOfThreads;
 		return true;
@@ -303,7 +308,7 @@ bool TournamentManager::loadAlgorithemsFromPath() {
 		inputDirPath = "";
 	}
 	string command =  "ls " + inputDirPath + "*.so 2>&1"; //TODO: CHECK THIS
-	cout << command <<endl;
+	//cout << command <<endl;
 	char in_buf[BUF_SIZE]; // input buffer for lib names
 //	std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator fitr;
 	// get the names of all the dynamic libs (.so  files) in the current dir
@@ -320,7 +325,7 @@ bool TournamentManager::loadAlgorithemsFromPath() {
 		if(ws) *ws = '\0';
 		// append ./ to the front of the lib name
 		sprintf(name, "./%s", in_buf);
-		cout << name << "HEY" << endl;
+		//cout << name << "HEY" << endl;
 		dlib = dlopen(name, RTLD_NOW);
 		if(dlib == NULL){
 			cout << "Error: algorithm failed to open." << endl;
@@ -329,6 +334,12 @@ bool TournamentManager::loadAlgorithemsFromPath() {
 		// add the handle to our list
 		dl_list.insert(dl_list.end(), dlib);
 	}
+
+	if(idToAlgoInfo.size() < 2) {
+		cout << "Error: low number of players listed. Usage: please register at least 2 algorithms to tournament."<<endl;
+		return false;
+	}
+
 	return true;
 }
 

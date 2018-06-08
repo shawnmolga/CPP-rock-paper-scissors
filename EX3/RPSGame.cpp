@@ -168,7 +168,7 @@ bool RPSGame::movePiece(unique_ptr <Move> &move,
             }
         } else if (!gameBoard.board[x_joker][y_joker].getIsJoker()) { //if the original peice is not a joker
             cout << "Error: Piece specified is not joker" << endl;
-            PrintBoardToConsole();
+            //PrintBoardToConsole();
             cout<<"x_joker:"<<x_joker<<endl;
             cout<<"y_joker:"<<y_joker<<endl;
 
@@ -208,8 +208,8 @@ int RPSGame::handleNonEmptyMove(bool playerOneNonEmpty, std::unique_ptr <Move> &
             else
                 setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
         }
-        cout<<"inside handleNonEmptyMove"<<endl;
-        PrintBoardToConsole();
+        //cout<<"inside handleNonEmptyMove"<<endl;
+        //PrintBoardToConsole();
         return -1;
     }
     return 0;
@@ -318,8 +318,8 @@ int RPSGame::makeMove() {
             }
         }
         else if (xPiecePlayerTwo == READ_LINE_ERR) {
-            cout<<"READ_LINE_ERR"<<endl;
-            PrintBoardToConsole();
+            //cout<<"READ_LINE_ERR"<<endl;
+            //PrintBoardToConsole();
             //return ERROR_DURING_MOVE;
             break;
         }
@@ -331,12 +331,12 @@ int RPSGame::makeMove() {
         }
     }
     if (-1 == closeGame(isGameOverInternal, isBadFormat, isPlayerOneTurn, isPlayerOneEOF, isPlayerTwoEOF)){
-            cout<<"END_OF_GAME"<<endl;
-            PrintBoardToConsole();
+            //cout<<"END_OF_GAME"<<endl;
+            //PrintBoardToConsole();
         return -1;
     }
-    cout<<"END_OF_GAME"<<endl;
-    PrintBoardToConsole();
+    //cout<<"END_OF_GAME"<<endl;
+    //PrintBoardToConsole();
     return MOVE_DONE_SUCC;
 }
 
@@ -431,8 +431,8 @@ bool RPSGame::isLegalMove(unique_ptr <Move> &move, bool isPlayer1) {
     //check to see if there is a piece in the sepcified coordinates in the Move object
     if (gameBoard.board.at(from_x).at(from_y).getPiece() == 0) {
         cout << "Error: there is no piece in this position" << endl;
-        PrintBoardToConsole();
-        cout<<"isPlayer1:  "<<isPlayer1<<endl;
+        //PrintBoardToConsole();
+        //cout<<"isPlayer1:  "<<isPlayer1<<endl;
         cout << "from col: " << from_x << "from row: " <<from_y << " to_x: " << to_x << " to_y: " <<to_y <<endl;
         return false;
 
@@ -1143,7 +1143,7 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
         }
     }
     else{
-        cout <<"Error in fight !!!!!!!!!!!!!!!!!!!!!!!!"<<currPlayerPiece << ", "<<nextPlayerPiece<<endl;
+        //cout <<"Error in fight !!!!!!!!!!!!!!!!!!!!!!!!"<<currPlayerPiece << ", "<<nextPlayerPiece<<endl;
     }
     return checkGameOver(false, isPlayerOneTurn);
 }

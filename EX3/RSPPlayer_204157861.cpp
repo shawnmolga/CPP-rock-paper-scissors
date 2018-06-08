@@ -161,6 +161,7 @@ int RSPPlayer_204157861::getRandomNumInRange(int start, int end)
 {
 	std::random_device rd;								  // obtain a random number from hardware
 	std::mt19937 eng(rd());								  // seed the generator
+	//cout<<"start: "<<start<<"end: "<<end<<" in line 164 RSP204157861"<<endl;
 	std::uniform_int_distribution<> yDistr(start, end); // define the range
 	return yDistr(eng);
 }
@@ -396,9 +397,9 @@ bool RSPPlayer_204157861::checkIsOpponentNeighbors(int x, int y)
 void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 		const std::vector<unique_ptr<FightInfo>> &fights)
 {
-	cout<<"notify on initial board"<<endl;
+	//cout<<"notify on initial board"<<endl;
 	updateBoard(b);
-	cout<<"vector size"<<(int)fights.size()<<endl;
+	//cout<<"vector size"<<(int)fights.size()<<endl;
 	for (int i = 0; i < (int)fights.size(); ++i)
 	{
 		int x = fights[i]->getPosition().getX()-1; //col
@@ -406,7 +407,7 @@ void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 		char myPiece = toupper(fights[i]->getPiece(myPlayerNum)); //do we need this?
 		char opponentPiece = toupper(fights[i]->getPiece(myPlayerNum == 1 ? 2 : 1));
 		int winner = fights[i]->getWinner();
-		cout<<"fight number: "<<i << " x,y:"<<x << "," <<y<< " mypiece: "<<myPiece<<" opponent piece: "<<opponentPiece<<" winner: "<< winner<<endl;
+		//cout<<"fight number: "<<i << " x,y:"<<x << "," <<y<< " mypiece: "<<myPiece<<" opponent piece: "<<opponentPiece<<" winner: "<< winner<<endl;
 		if (winner == 0)
 		{
 			AICell::cleanCell(gameBoard.board[x][y]);
@@ -639,6 +640,10 @@ void RSPPlayer_204157861::updateProbabilities(bool resetProbability, int x, int 
 }
 
 void RSPPlayer_204157861::updateIfProbOne(int x, int y) {
+
+	if (gameBoard.board[x][y].isMyPiece(myPlayerNum)) return;
+	if (gameBoard.board[x][y].getPiece() == 0) return;
+
 	bool isJoker = gameBoard.board[x][y].getIsJoker();
 	if (gameBoard.board[x][y].flagProbability == 1) {
 		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 'f' : 'F', isJoker);
@@ -709,7 +714,8 @@ unique_ptr<Move> RSPPlayer_204157861::getMove()
 	int to_y = -3;
 	getBestMove(from_x, from_y, to_x, to_y);
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
-	cout<<"in getMove"<<endl;
+	//cout<<"in getMove"<<endl;
+	cout<<from_x<<","<<from_y<<" to "<<to_x<<","<<to_y<<endl;
 	PrintBoardToConsole();
 	return move;
 }
@@ -761,7 +767,7 @@ unique_ptr<JokerChange> RSPPlayer_204157861::getJokerChange()
  */
 void RSPPlayer_204157861::getBestMove(int &from_x, int &from_y, int &to_x, int &to_y)
 {
-	double score = 0;
+	double score = INT_MIN;
 	int maxScore = INT_MIN;
 	for (int i = 0; i < COLS; ++i)
 	{
@@ -778,9 +784,9 @@ void RSPPlayer_204157861::getBestMove(int &from_x, int &from_y, int &to_x, int &
 			}
 		}
 	}
-	cout<<"inside getBestMove"<<endl;
-	cout<<"from_x:"<<from_x<< " from y: "<<from_y<< " to_x: "<< to_x <<"to y: " << to_y<< endl;
-	cout<<"from_y:"<<from_y<<endl;
+	//cout<<"inside getBestMove"<<endl;
+	//cout<<"from_x:"<<from_x<< " from y: "<<from_y<< " to_x: "<< to_x <<"to y: " << to_y<< endl;
+	//cout<<"from_y:"<<from_y<<endl;
 
 	if(from_x == -3){
 		return;
@@ -930,9 +936,9 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 	//return board to be as it was
 	AICell::updateCell(gameBoard.board[from_x][from_y], myCell.getPiece(),
 			myCell.getIsJoker());
+	AICell::updateCellKnowlage(gameBoard.board[from_x][from_y], myCell);
 	AICell::updateCell(gameBoard.board[to_x][to_y], opponentCell.getPiece(),
 			opponentCell.getIsJoker());
-	AICell::updateCellKnowlage(gameBoard.board[from_x][from_y], myCell);
 	AICell::updateCellKnowlage(gameBoard.board[to_x][to_y], opponentCell);
 	return score;
 }
@@ -1586,11 +1592,11 @@ void RSPPlayer_204157861::updateBoard(const Board &b)
 				Cell::updateCell(gameBoard.board[i][j], '#', false);
 			}
 			if(gameBoard.board[i][j].isMyPiece(myPlayerNum)){
-				cout<<"i:"<<i<<" j: "<<j<<" has "<<b.getPlayer(p)<<endl;
+				//cout<<"i:"<<i<<" j: "<<j<<" has "<<b.getPlayer(p)<<endl;
 			}
 		}
 	}
-	PrintBoardToConsole();
+	//PrintBoardToConsole();
 }
 
 
