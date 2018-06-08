@@ -116,6 +116,7 @@ bool RPSGame::movePiece(unique_ptr <Move> &move,
         return true;
 
     numOfMoves++; // we increment the numerator for each move
+    cout<<"numOfMoves: "<<numOfMoves<<endl;
     int from_x = move->getFrom().getX(); //col
     int from_y = move->getFrom().getY(); //row
     int to_x = move->getTo().getX();     //col
@@ -237,7 +238,7 @@ int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTu
         xPiece = move->getFrom().getX();
     }
     while (!(nextPlayer == 1 ? isPlayerOneEOF : isPlayerTwoEOF) && xPiece != READ_LINE_ERR &&
-           numOfMoves <= MAX_NUM_OF_MOVES) {
+           numOfMoves < MAX_NUM_OF_MOVES) { //changes!
 
         isBadFormat = false;
         if (xPiece != EMPTY_LINE) {
@@ -295,9 +296,10 @@ int RPSGame::makeMove() {
     bool isPlayerOneTurn = true;
     bool isGameOverInternal = false;
     bool isBadFormat = false;
+
     while (!isPlayerOneEOF && xPiecePlayerOne != READ_LINE_ERR && !isPlayerTwoEOF && xPiecePlayerTwo != READ_LINE_ERR &&
-           numOfMoves <= MAX_NUM_OF_MOVES)
-    {
+           numOfMoves < MAX_NUM_OF_MOVES) //CHANGES??
+    { 
         isBadFormat = false;
         isGameOverInternal = false;
         if (xPiecePlayerOne != 0) {
