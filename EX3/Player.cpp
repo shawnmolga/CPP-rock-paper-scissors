@@ -49,7 +49,6 @@ void Player::setIsPlayerTurn(bool turn) {
 }
 
 Player::~Player() {
-	cout<<"in players delete"<<endl;
 	delete[] numOfPieces;
 }
 

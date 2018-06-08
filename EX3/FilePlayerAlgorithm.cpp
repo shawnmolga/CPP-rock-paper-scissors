@@ -253,7 +253,10 @@ bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row
 	//check if position is legal
 	if ((row < 1 || row > ROWS) || (col < 1 || col > COLS))
 	{
+		
 		cout << "Error: illegal location on board" << endl;
+		cout<<"ROW: "<<row<<endl;
+		cout<<"COL: "<<col<<endl;
 		return false;
 	}
 	if (piece == 'J') {

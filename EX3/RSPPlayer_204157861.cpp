@@ -396,7 +396,9 @@ bool RSPPlayer_204157861::checkIsOpponentNeighbors(int x, int y)
 void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 		const std::vector<unique_ptr<FightInfo>> &fights)
 {
+	cout<<"notify on initial board"<<endl;
 	updateBoard(b);
+	cout<<"vector size"<<(int)fights.size()<<endl;
 	for (int i = 0; i < (int)fights.size(); ++i)
 	{
 		int x = fights[i]->getPosition().getX()-1; //col
@@ -404,7 +406,7 @@ void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 		char myPiece = toupper(fights[i]->getPiece(myPlayerNum)); //do we need this?
 		char opponentPiece = toupper(fights[i]->getPiece(myPlayerNum == 1 ? 2 : 1));
 		int winner = fights[i]->getWinner();
-
+		cout<<"fight number: "<<i << " x,y:"<<x << "," <<y<< " mypiece: "<<myPiece<<" opponent piece: "<<opponentPiece<<" winner: "<< winner<<endl;
 		if (winner == 0)
 		{
 			AICell::cleanCell(gameBoard.board[x][y]);
@@ -573,7 +575,7 @@ void RSPPlayer_204157861::updateProbabilities(bool resetProbability, int x, int 
 	{
 		for (int j = 0; j < ROWS; ++j)
 		{
-			if (!gameBoard.board[i][j].isMovingPieceKnown)
+			if (gameBoard.board[i][j].flagProbability != 0 && gameBoard.board[i][j].flagProbability != 1)
 			{
 				unknownPiecesNum++; //count pieces that we dont know if there are flags or not
 			}
@@ -707,7 +709,8 @@ unique_ptr<Move> RSPPlayer_204157861::getMove()
 	int to_y = -3;
 	getBestMove(from_x, from_y, to_x, to_y);
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
-
+	cout<<"in getMove"<<endl;
+	PrintBoardToConsole();
 	return move;
 }
 
@@ -775,6 +778,10 @@ void RSPPlayer_204157861::getBestMove(int &from_x, int &from_y, int &to_x, int &
 			}
 		}
 	}
+	cout<<"inside getBestMove"<<endl;
+	cout<<"from_x:"<<from_x<< " from y: "<<from_y<< " to_x: "<< to_x <<"to y: " << to_y<< endl;
+	cout<<"from_y:"<<from_y<<endl;
+
 	if(from_x == -3){
 		return;
 	}
@@ -1171,7 +1178,6 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 			//if it is not a bomb and not a flag - than it is moving piece
 			gameBoard.board[x][y].isMovingPieceKnown = true;
 			gameBoard.board[x][y].isMovingPiece = true;
-			gameBoard.board[x][y].isJokerKnown = false;
 		}
 
 		if (isJoker) {
@@ -1471,7 +1477,7 @@ char RSPPlayer_204157861::shouldChangeJoker(double &score, int joker_x, int joke
 	char origRep = oldRep;
 	char newRep = 0;
 	char bestRep = -1;
-	double currScore = score;
+	double currScore;
 	double material = calcMaterial(gameBoard.board[joker_x][joker_y]);
 	double discovery = 0;
 	double reveal = 0;
@@ -1578,7 +1584,43 @@ void RSPPlayer_204157861::updateBoard(const Board &b)
 			{ //not empty - must be opponent piece
 				Cell::updateCell(gameBoard.board[i][j], '#', false);
 			}
+			if(gameBoard.board[i][j].isMyPiece(myPlayerNum)){
+				cout<<"i:"<<i<<" j: "<<j<<" has "<<b.getPlayer(p)<<endl;
+			}
 		}
+	}
+	PrintBoardToConsole();
+}
+
+
+void RSPPlayer_204157861::PrintBoardToConsole()
+{
+	cout << "*******************PRINT THE BOARD RSPPlayer_204157861:****************" << endl;
+	for (int i = 0; i < ROWS; i++)
+	{
+		for (int j = 0; j < COLS; j++)
+		{
+			if (gameBoard.board[j][i].getIsJoker())
+			{
+				if (Cell::isPlayerOnePiece(gameBoard.board[j][i]))
+				{
+					cout << " J ";
+				}
+				else
+				{
+					cout << " j ";
+				}
+			}
+			else if (gameBoard.board[j][i].getPiece() == 0)
+			{
+				cout << " - ";
+			}
+			else
+			{
+				cout <<" "<< gameBoard.board[j][i].getPiece() << " ";
+			}
+		}
+		cout << endl;
 	}
 }
 

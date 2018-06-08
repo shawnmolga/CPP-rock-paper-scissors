@@ -1218,7 +1218,7 @@ char  RSPPlayer_204157861::shouldChangeJoker(double &score, int joker_x, int jok
 {
 	char oldRep = gameBoard.board[joker_x][joker_y].getPiece();
 	char origRep = oldRep;
-	char newRep;
+	char newRep ;
 	char bestRep = -1;
 	double currScore;
 	double material = calcMaterial(gameBoard.board[joker_x][joker_y]);
