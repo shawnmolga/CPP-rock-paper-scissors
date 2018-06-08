@@ -420,6 +420,7 @@ bool RPSGame::isLegalMove(unique_ptr <Move> &move, bool isPlayer1) {
     if ((from_x < 1 || from_x > COLS) || (to_x < 1 || to_x > COLS) || (from_y < 1 || from_y > ROWS) ||
         (to_y < 1 || to_y > ROWS)) {
         cout << "Error: illegal location on board" << endl;
+        cout << "from col: " << from_x << "from row: " <<from_y << " to_x: " << to_x << " to_y: " <<to_y <<endl;
         return false;
     }
     //checks  if the Move object we got actually moves an object on the board
@@ -432,7 +433,7 @@ bool RPSGame::isLegalMove(unique_ptr <Move> &move, bool isPlayer1) {
         cout << "Error: there is no piece in this position" << endl;
         PrintBoardToConsole();
         cout<<"isPlayer1:  "<<isPlayer1<<endl;
-        cout << "from_x:" <<from_x <<"from_y:" << from_y << endl;
+        cout << "from col: " << from_x << "from row: " <<from_y << " to_x: " << to_x << " to_y: " <<to_y <<endl;
         return false;
 
     }
@@ -469,6 +470,8 @@ bool RPSGame::checkIfCellTaken(bool isPlayer1, int to_x, int to_y) {
                 cout
                         << "Error: you are trying to move to a cell taken by your own piece"
                         << endl;
+                        
+        cout << " to_x: " << to_x << " to_y: " <<to_y <<endl;
                 return false;
             }
         } else {
@@ -476,6 +479,8 @@ bool RPSGame::checkIfCellTaken(bool isPlayer1, int to_x, int to_y) {
                 cout
                         << "Error: you are trying to move to a cell taken by your own piece"
                         << endl;
+                        
+        cout << " to_x: " << to_x << " to_y: " <<to_y <<endl;
                 return false;
             }
         }
@@ -993,9 +998,15 @@ RPSGame::handleNextPlayerPieceFlag(bool isCurrPlayerFlag, char currPlayerPiece, 
                          isCurrPieceJoker);
     }
 
-    fights.setWinner(currPlayerNum);
+    fights.setWinner(currPlayerNum); //change the winnet to 0!
     ptr->setWinner(currPlayerNum);
+        if (currPlayerPiece == BOMB) {
+    fights.setWinner(0);
+    ptr->setWinner(0);
+    } 
     initFights.push_back(make_unique<RPSFight>(*ptr));
+
+    
 }
 
 
@@ -1016,8 +1027,10 @@ void RPSGame::handleNexPlayerBomb(char currPlayerPiece, Player *currPlayer, Play
     }
     //bomb won and exploded so cell is empty now
     Cell::updateCell(gameBoard.board.at(x).at(y), 0, false);
-    fights.setWinner(nextPlayerNum);
+    fights.setWinner(nextPlayerNum); //TODO : change back!!!!!
     ptr->setWinner(nextPlayerNum);
+    fights.setWinner(0);
+    ptr->setWinner(0); 
     initFights.push_back(make_unique<RPSFight>(*ptr));
 }
 
@@ -1127,6 +1140,9 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
             Cell::updateCell(gameBoard.board.at(x).at(y), currPiece,
                              isCurrPieceJoker);
         }
+    }
+    else{
+        cout <<"Error in fight !!!!!!!!!!!!!!!!!!!!!!!!"<<currPlayerPiece << ", "<<nextPlayerPiece<<endl;
     }
     return checkGameOver(false, isPlayerOneTurn);
 }
