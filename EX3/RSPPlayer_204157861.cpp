@@ -900,6 +900,7 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 	{
 		Cell::updateCell(gameBoard.board[to_x][to_y], gameBoard.board[from_x][from_y].getPiece(),
 				gameBoard.board[from_x][from_y].getIsJoker());
+		AICell::updateCellKnowlage(gameBoard.board[to_x][to_y], gameBoard.board[from_x][from_y]);
 		Cell::cleanCell(gameBoard.board[from_x][from_y]);
 		gameBoard.board[from_x][from_y].resetKnowlage();
 		updateProbabilities(true,from_x,from_y);
