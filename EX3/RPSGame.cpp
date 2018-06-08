@@ -320,8 +320,7 @@ int RPSGame::makeMove() {
         else if (xPiecePlayerTwo == READ_LINE_ERR) {
             cout<<"READ_LINE_ERR"<<endl;
             PrintBoardToConsole();
-            return ERROR_DURING_MOVE;
-        } else {
+            //return ERROR_DURING_MOVE;
             break;
         }
         move = playerAlgoOne->getMove();
