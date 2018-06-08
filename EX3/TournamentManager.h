@@ -40,7 +40,7 @@ class TournamentManager {
 	static const int UNINITIALIZED_ARG = -1;
 	static const size_t DEFAULT_THREADS_NUM = 4;
 
-	int numOfThreads = DEFAULT_THREADS_NUM ;// if num_of_threads entered, reassign freeThreadsNum in checkTournamentArguments
+	int numOfThreads = DEFAULT_THREADS_NUM ;// if num_of_threads entered, reassign ThreadsNum in checkTournamentArguments
 	//ThreadPool pool; //initialized in startTournament()
     std::vector<std::thread> threadPool_vector;
 

@@ -168,6 +168,10 @@ bool RPSGame::movePiece(unique_ptr <Move> &move,
             }
         } else if (!gameBoard.board[x_joker][y_joker].getIsJoker()) { //if the original peice is not a joker
             cout << "Error: Piece specified is not joker" << endl;
+            PrintBoardToConsole();
+            cout<<"x_joker:"<<x_joker<<endl;
+            cout<<"y_joker:"<<y_joker<<endl;
+
             isBadFormat = true;
             return true;
         }
@@ -204,6 +208,8 @@ int RPSGame::handleNonEmptyMove(bool playerOneNonEmpty, std::unique_ptr <Move> &
             else
                 setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
         }
+        cout<<"inside handleNonEmptyMove"<<endl;
+        PrintBoardToConsole();
         return -1;
     }
     return 0;
@@ -425,6 +431,9 @@ bool RPSGame::isLegalMove(unique_ptr <Move> &move, bool isPlayer1) {
     //check to see if there is a piece in the sepcified coordinates in the Move object
     if (gameBoard.board.at(from_x).at(from_y).getPiece() == 0) {
         cout << "Error: there is no piece in this position" << endl;
+        PrintBoardToConsole();
+        cout<<"isPlayer1:  "<<isPlayer1<<endl;
+        cout << "from_x:" <<from_x <<"from_y:" << from_y << endl;
         return false;
 
     }

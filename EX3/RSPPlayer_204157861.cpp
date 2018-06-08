@@ -686,6 +686,8 @@ unique_ptr<Move> RSPPlayer_204157861::getMove()
 	int to_x = -3;
 	int to_y = -3;
 	getBestMove(from_x, from_y, to_x, to_y);
+
+
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
 
 	return move;
