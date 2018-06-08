@@ -453,7 +453,7 @@ void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 		updateMovingPiece();
 	}
 
-	updateProbabilities();
+	updateProbabilities(false,0,0);
 }
 
 /**
