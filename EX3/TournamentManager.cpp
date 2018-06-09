@@ -78,13 +78,9 @@ void TournamentManager::startTournament()
 			threadPool_vector.emplace_back(&TournamentManager::threadEntry, this); //like "push_back" but different
 			threadPool_vector[i].join();
 		}
-		//for (auto & thread : threadPool_vector) {
-		//	cout<<"inside for"<<endl;
-		//	thread.join(); // wait for all threads to finish
-		//}
 	}
 	else
-		singleThreadEntry();
+		threadEntry();
 	cout<<"DONE!"<<endl;
 }
 
@@ -139,8 +135,11 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 	unique_lock<mutex> lock(updateScoreMutex);
 	cout<<"***************************"<<endl;
 	cout<<"gameOverReason: "<<gameOverReason<<endl;
-	cout<<"idToAlgoInfo[playerOneId]:" <<idToAlgoInfo[playerOneId]->score<<endl;
-	cout<<"idToAlgoInfo[playerTwoId]:" <<idToAlgoInfo[playerTwoId]->score<<endl;
+	cout<<playerOneId<<":"  <<idToAlgoInfo[playerOneId]->score<<endl;
+	cout<<playerOneId<<":"<< "played games are: "<<idToAlgoInfo[playerOneId]->gamesPlayed<<endl;
+	cout<<playerTwoId<<":" <<idToAlgoInfo[playerTwoId]->score<<endl;
+	cout<<playerTwoId<<":" <<"played games are: " <<idToAlgoInfo[playerTwoId]->gamesPlayed<<endl;
+
 	printTornamentResult();
 	cout<<"***************************"<<endl;
 	lock.unlock();

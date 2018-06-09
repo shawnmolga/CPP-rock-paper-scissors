@@ -794,8 +794,8 @@ void RSPPlayer_204157861::getBestMove(int &from_x, int &from_y, int &to_x, int &
 			}
 		}
 	}
-	//cout<<"inside getBestMove"<<endl;
-	//cout<<"from_x:"<<from_x<< " from y: "<<from_y<< " to_x: "<< to_x <<"to y: " << to_y<< endl;
+	// cout<<"inside getBestMove"<<endl;
+	// cout<<"from_x:"<<from_x<< " from y: "<<from_y<< " to_x: "<< to_x <<"to y: " << to_y<< endl;
 	//cout<<"from_y:"<<from_y<<endl;
 
 	if(from_x == -3){
@@ -943,7 +943,6 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 		score = INT_MAX;
 	}
 	else{
-		cout<<"material: "<< material<< " discovery:"<< discovery<<" reveal:"<<reveal<<endl;
 		score = calcScore(material, discovery, reveal, to_x, to_y);
 		willBeFight = false;
 	}
@@ -1177,7 +1176,6 @@ bool RSPPlayer_204157861::fight(int x, int y, char myPiece, char opponentPiece, 
  */
 double RSPPlayer_204157861::calcScore(double material, double discovery, double reveal, int to_x, int to_y)
 {
-	cout<<"inside calc score"<< to_x <<","<< to_y<<endl;
 	/*bool isJoker = false;
 	if (to_x != -1 && to_y != -1){
 		if (gameBoard.board[to_x][to_y].isMyPiece(myPlayerNum) && gameBoard.board[to_x][to_y].getIsJoker()){
@@ -1203,7 +1201,6 @@ double RSPPlayer_204157861::calcScore(double material, double discovery, double 
 	double score = MATERIAL_WEIGHT * material + DISCOVERY_WEIGHT * discovery + REVEAL_WEIGHT * reveal +
 			FLAG_SAFTEY_WEUGHT * flagSaftey + DISTANCE_FROM_FLAG_WEIGHT * distanceFromCriticalPiece +
 			DISTANCE_FROM_UNKNOWN_WEIGHT * distanceFromUnknownPiece;
-	cout<<"move: " << to_x << ","<<to_y<<" score : " <<score<<endl;
 	return score;
 }
 
@@ -1261,7 +1258,6 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 		else {
 			AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? tolower(opponentPiece) : opponentPiece, isJoker);
 			//if it is not a bomb and not a flag - than it is moving piece
-			cout<<"here?"<<endl;
 			gameBoard.board[x][y].isMovingPieceKnown = true;
 			gameBoard.board[x][y].isMovingPiece = true;
 		}
@@ -1359,7 +1355,6 @@ double RSPPlayer_204157861::calcDistanceFromBombOrFlag(int to_x, int to_y)
 			}
 		}
 	}
-	cout<<"calcDistanceFromBombOrFlag: " << to_x << ","<<to_y<< " : "<<minimalDistance<<endl;
 	//return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
 	return (double)(ROWS + COLS - minimalDistance);
 }
@@ -1387,7 +1382,6 @@ double RSPPlayer_204157861::calcDistanceFromUnknownPiece(int to_x, int to_y)
 			{
 				if (!gameBoard.board[i][j].isMovingPieceKnown)
 				{
-					cout<<"calcDistanceFromUnknownPiece into cond: " << to_x << ","<<to_y<< " : "<<"i:  "<< i <<" j:" <<j<<endl;
 					distance = calcDistanceFromPiece(i, j, to_x, to_y);
 					if (minimalDistance > distance)
 						minimalDistance = distance;
@@ -1395,7 +1389,6 @@ double RSPPlayer_204157861::calcDistanceFromUnknownPiece(int to_x, int to_y)
 			}
 		}
 	}
-cout<<"calcDistanceFromUnknownPiece: " << to_x << ","<<to_y<< " : "<<minimalDistance<<endl;
 return (double)(ROWS+COLS) - (double)minimalDistance;
 }
 
@@ -1409,9 +1402,7 @@ int RSPPlayer_204157861::calcDistanceFromPiece(int piece_x, int piece_y, int my_
 {
 	int distance = ROWS + COLS;
 	//there will be a fight with my piece vs unknown piece
-	cout<<"will be fight: "<<willBeFight<<endl;
 	if (willBeFight && my_x == piece_x && my_y == piece_y){
-		cout<<"YAAAAAAAAAAS"<<endl;
 		return 0;
 	}
 	distance = abs(my_x - piece_x) + abs(my_y - piece_y);
