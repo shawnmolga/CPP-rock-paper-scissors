@@ -779,7 +779,7 @@ void RSPPlayer_204157861::getBestMove(int &from_x, int &from_y, int &to_x, int &
 		for (int j = 0; j < ROWS; ++j)
 		{
 			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum)) continue;
-			if (!gameBoard.board[i][j].checkIsMovingPiece()) continue;
+			if (!gameBoard.board[i][j].checkIsMovingPiece()) continue; 
 			score = getBestMoveForPiece(maxScore, i, j, to_x, to_y);
 			if (maxScore < score)
 			{
@@ -937,6 +937,7 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 		score = INT_MAX;
 	}
 	else{
+		cout<<"material: "<< material<< " discovery:"<< discovery<<" reveal:"<<reveal<<endl;
 		score = calcScore(material, discovery, reveal, to_x, to_y);
 		willBeFight = false;
 	}
@@ -1171,6 +1172,7 @@ bool RSPPlayer_204157861::fight(int x, int y, char myPiece, char opponentPiece, 
  */
 double RSPPlayer_204157861::calcScore(double material, double discovery, double reveal, int to_x, int to_y)
 {
+	cout<<"inside calc score"<< to_x <<","<< to_y<<endl;
 	bool isJoker = false;
 	if (to_x != -1 && to_y != -1){
 		if (gameBoard.board[to_x][to_y].isMyPiece(myPlayerNum) && gameBoard.board[to_x][to_y].getIsJoker()){
@@ -1196,7 +1198,7 @@ double RSPPlayer_204157861::calcScore(double material, double discovery, double 
 	double score = MATERIAL_WEIGHT * material + DISCOVERY_WEIGHT * discovery + REVEAL_WEIGHT * reveal +
 			FLAG_SAFTEY_WEUGHT * flagSaftey + DISTANCE_FROM_FLAG_WEIGHT * distanceFromCriticalPiece +
 			DISTANCE_FROM_UNKNOWN_WEIGHT * distanceFromUnknownPiece;
-
+	cout<<"move: " << to_x << ","<<to_y<<" score : " <<score<<endl;
 	return score;
 }
 
@@ -1350,6 +1352,7 @@ double RSPPlayer_204157861::calcDistanceFromBombOrFlag(int to_x, int to_y)
 			}
 		}
 	}
+	cout<<"calcDistanceFromBombOrFlag: " << to_x << ","<<to_y<< " : "<<minimalDistance<<endl;
 	return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
 }
 
@@ -1383,6 +1386,7 @@ double RSPPlayer_204157861::calcDistanceFromUnknownPiece(int to_x, int to_y)
 			}
 		}
 	}
+cout<<"calcDistanceFromUnknownPiece: " << to_x << ","<<to_y<< " : "<<minimalDistance<<endl;
 return (double)(ROWS+COLS) - (double)minimalDistance;
 }
 

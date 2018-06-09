@@ -37,7 +37,7 @@ public:
 	virtual void notifyFightResult(const FightInfo& fightInfo) override; // called only if there was a fight
 	virtual unique_ptr<Move> getMove() override;
 	virtual unique_ptr<JokerChange> getJokerChange() override; // nullptr if no change is requested
-
+	char getOpponentPieceByHighestProbability(int x, int y);
 	//position functions and help functions
 	void positionUnmovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
 	void positionBombs(int flagRow, int flagCol, int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int bombsToPosition, bool shouldPositionRandomly);

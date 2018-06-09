@@ -84,7 +84,7 @@ void TournamentManager::startTournament()
 		//}
 	}
 	else
-		threadEntry();
+		singleThreadEntry();
 	cout<<"DONE!"<<endl;
 }
 
@@ -107,16 +107,15 @@ void TournamentManager::threadEntry(){
 	algorithmsToPlayMutex.unlock();
 }
 
-// void TournamentManager::singleThreadEntry(){
-// 	string playerOneId;
-// 	string playerTwoId;
-// 	for (int i=0; i<30; ++i){
-// 			getPlayersToPlay(playerOneId, playerTwoId); //locked - only one thread can enter this function at a time
-// 			cout<<"before new game in for number "<<i<<endl;
-// 			startNewGame("204157861","204157862");
-// 			cout<<"after new game in for number "<<i<<endl;
-// 		}
-// }
+void TournamentManager::singleThreadEntry(){
+	string playerOneId;
+	string playerTwoId;
+	getPlayersToPlay(playerOneId, playerTwoId); //locked - only one thread can enter this function at a time
+	cout<<"before new game "<<endl;
+	startNewGame("204157861","204664999");
+	cout<<"after new game  "<<endl;
+		
+}
 
 
 void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, const string &playerTwoId){
