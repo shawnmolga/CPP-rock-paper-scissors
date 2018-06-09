@@ -60,6 +60,7 @@ public:
 	double calcScore(double material, double discovery, double reveal, int to_x, int to_y);
 	void countProtectingPieces(int i, int j, int &protectingBombs, int &otherProtectingPieces, int &enemyPieces);
 	double calcDistanceFromBombOrFlag(int to_x, int to_y);
+	double calcDistanceFromMovingPiece(int to_x, int to_y);
 	int calcDistanceFromPiece(int piece_x, int piece_y, int my_x, int my_y);
 	double calcFlagSaftey();
 	double calcDistanceFromUnknownPiece(int to_x, int to_y);
