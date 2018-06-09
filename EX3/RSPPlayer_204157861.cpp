@@ -523,7 +523,7 @@ void RSPPlayer_204157861::updateOpponentPiece(char piece, bool isOpponentWin, in
 	}
 	opponentMovingPieceNumOnBoard--;
 
-	if (opponentFlagsNumOnBoard == 0) {
+	if (opponentFlagsNumOnBoard > opponentMovingPieceNumOnBoard) {
 		eatMovingPiecesMode = true;
 	}
 }
@@ -1179,6 +1179,9 @@ double RSPPlayer_204157861::calcScore(double material, double discovery, double 
 	}
 	double flagSaftey = calcFlagSaftey();
 	double distanceFromCriticalPiece = to_x == -1 ? 0 : calcDistanceFromBombOrFlag(to_x,to_y);
+	if (eatMovingPiecesMode && to_x != -1) {
+		distanceFromCriticalPiece = calcDistanceFromMovingPiece(to_x,to_y);
+	}
 	double distanceFromUnknownPiece = to_x == -1 ? 0 : calcDistanceFromUnknownPiece(to_x,to_y);
 
 	//we dont want to defend opponent's flag with bombs !!
@@ -1284,6 +1287,38 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 	}
 
 	updateProbabilities(false,0,0);
+}
+
+/**
+    calculate the shortest path from a piece of mine to an opponent's moving piece
+	@params: to_x,to_y: location of my moved piece (new location)
+    @return: distance from closest piece of mine to a flag or bomb normalized to 1.
+ */
+double RSPPlayer_204157861::calcDistanceFromMovingPiece(int to_x, int to_y)
+{
+	int distance = ROWS + COLS;
+	int minimalDistance = ROWS + COLS;
+	//find bomb or flag
+	for (int i = 0; i < COLS; ++i)
+	{
+		for (int j = 0; j < ROWS; ++j)
+		{
+			char piece = gameBoard.board[i][j].getPiece();
+			if (piece == 0)
+				continue;
+			bool isMyPiece = gameBoard.board[i][j].isMyPiece(myPlayerNum);
+			if (!isMyPiece)
+			{
+				if (gameBoard.board[i][j].isMovingPieceKnown && gameBoard.board[i][j].isMovingPiece)
+				{
+					distance = calcDistanceFromPiece(i, j, to_x, to_y);
+					if (minimalDistance > distance)
+						minimalDistance = distance;
+				}
+			}
+		}
+	}
+	return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
 }
 
 /**
