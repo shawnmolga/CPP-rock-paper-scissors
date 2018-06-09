@@ -720,8 +720,8 @@ void RSPPlayer_204157861::updateProbabilities(bool resetProbability, int x, int 
 			}
 		}
 	}
-	cout<<"unknownPiecesNum: "<<unknownPiecesNum<<" unknown moving pieces: "<<unknownMovingPieceNum<<" unknown unmoving pieces: "<<unknownunmovingPieces <<endl;
-	cout<<"unkown flags: "<< unknownFlags<<" unkown papers: "<<unknownPapers<<" unkown rocks: "<<unknownRocks<<"unknown scissors: "<<unknownScissors<<endl;
+	//cout<<"unknownPiecesNum: "<<unknownPiecesNum<<" unknown moving pieces: "<<unknownMovingPieceNum<<" unknown unmoving pieces: "<<unknownunmovingPieces <<endl;
+	//cout<<"unkown flags: "<< unknownFlags<<" unkown papers: "<<unknownPapers<<" unkown rocks: "<<unknownRocks<<"unknown scissors: "<<unknownScissors<<endl;
 	if (unknownPiecesNum == 0 && (unknownMovingPieceNum == 0 || unknownunmovingPieces == 0))
 		return; //probabilities are 1 or 0
 
