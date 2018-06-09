@@ -71,7 +71,8 @@ public:
 	void printBoardToFile(ofstream & output);
 	void printOutputFile(const string &outputFile);
 	void updateJokerChange(char prevJokerRep, char newRep, bool isPlayerOne);
-	int closeGame(bool & isGameOverInternal, bool & isBadFormat, bool & isPlayerOneTurn, bool isPlayerOneEOF, bool isPlayerTwoEOF);
+	int closeGame(bool &isGameOverInternal, bool &isBadFormat, bool &isPlayerOneTurn, bool isPlayerOneEOF,
+                       bool isPlayerTwoEOF, bool hasNoMovingPiecePlayerOne, bool hasNoMovingPiecePlayerTwo);	
 	int handleEOF(bool playerOneEOF, bool & isBadFormat, bool & isPlayerOneTurn, bool & isGameOverInternal, bool isPlayerOneEOF, bool isPlayerTwoEOF);
 	void gameOverSetter(Player* currPlayer, Player* nextPlayer, bool isWinner1, bool isWinner2, GAME_OVER_TYPE type);
 	void resetGameResults();
@@ -103,6 +104,7 @@ public:
 	bool checkPieceOverflow(int numOfPieces[]);
 	bool checkGameOver(bool isBeforeMove, bool isPlayerOneTurn);
 	bool countNumOfPieces(const int playerNum,int numOfPositionedPieces[],const int piece );
+	bool checkMovingPieceLeft(int playerNum);
 
 	GAME_OVER_TYPE getGameOverReason(){
 		return gameOverReason;

@@ -101,7 +101,6 @@ void TournamentManager::threadEntry(){
 		//print should be removed
 		//printTornamentResult();
 	}
-
 	algorithmsToPlayMutex.unlock();
 }
 
