@@ -1464,6 +1464,14 @@ double RSPPlayer_204157861::calcDistanceFromMovingPiece(int to_x, int to_y)
 					if (minimalDistance > distance)
 						minimalDistance = distance;
 				}
+
+				else if (!gameBoard.board[i][j].isMovingPieceKnown && (gameBoard.board[i][j].paperProbability > 0.5 ||
+						gameBoard.board[i][j].rockProbability > 0.5 || gameBoard.board[i][j].scissorsProbability > 0.5))
+				{
+					distance = calcDistanceFromPiece(i, j, to_x, to_y);
+					if (minimalDistance > distance)
+						minimalDistance = distance;
+				}
 			}
 		}
 	}
@@ -1492,6 +1500,13 @@ double RSPPlayer_204157861::calcDistanceFromBombOrFlag(int to_x, int to_y)
 			if (!isMyPiece)
 			{
 				if (gameBoard.board[i][j].isMovingPieceKnown && !gameBoard.board[i][j].isMovingPiece)
+				{
+					distance = calcDistanceFromPiece(i, j, to_x, to_y);
+					if (minimalDistance > distance)
+						minimalDistance = distance;
+				}
+
+				else if (!gameBoard.board[i][j].isMovingPieceKnown && gameBoard.board[i][j].flagProbability > 0.5)
 				{
 					distance = calcDistanceFromPiece(i, j, to_x, to_y);
 					if (minimalDistance > distance)
