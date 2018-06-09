@@ -79,6 +79,45 @@ void RSPPlayer_204157861::locateMovingPiecesOnCorners(int& rocksNum,int& papersN
 	}
 }
 
+void RSPPlayer_204157861::positionFlagDefenders(int& rocksNum,int& papersNum,int& scissorsNum,std::vector<unique_ptr<PiecePosition>> &vectorToFill) {
+	int x;
+	int y;
+	char piece;
+	while (findEmptyNeigbor(x,y,flag_x,flag_y)) {
+		int pieceKind = getRandomNumInRange(1,3);
+		switch (pieceKind) {
+		case 1:
+			if (rocksNum > 1){
+				piece = myPlayerNum == 1 ? 'R' : 'r';
+				Cell::updateCell(gameBoard.board[x][y], piece, false);
+				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), '#'));
+				rocksNum--;
+				break;
+			}
+		case 2:
+			if (papersNum > 1){
+				piece = myPlayerNum == 1 ? 'P' : 'p';
+				Cell::updateCell(gameBoard.board[x][y], piece, false);
+				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), '#'));
+				papersNum--;
+				break;
+			}
+		case 3:
+			if (scissorsNum > 1) {
+				piece = myPlayerNum == 1 ? 'S' : 's';
+				Cell::updateCell(gameBoard.board[x][y], piece, false);
+				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), '#'));
+				scissorsNum--;
+				break;
+			}
+		}
+
+		if (rocksNum <= 1 && papersNum <= 1 && scissorsNum <= 1)
+			return;
+	}
+}
+
+
 /**
     fill vector in positions of all moving pieces of current player and position them on algorithm's board
 
@@ -91,6 +130,7 @@ void RSPPlayer_204157861::positionMovingPieces(int player, std::vector<unique_pt
 	int papersNum = PAPERS_NUM;
 	int scissorsNum = SCISSORS_NUM;
 	locateMovingPiecesOnCorners(rocksNum,papersNum,scissorsNum,vectorToFill);
+	positionFlagDefenders(rocksNum,papersNum,scissorsNum,vectorToFill);
 	positionPiecesRandomly(rocksNum, player == 1 ? 'R' : 'r', false, '#', vectorToFill);
 	positionPiecesRandomly(papersNum, player == 1 ? 'P' : 'p', false,'#', vectorToFill);
 	positionPiecesRandomly(scissorsNum, player == 1 ? 'S' : 's', false,'#', vectorToFill);
@@ -190,9 +230,11 @@ void RSPPlayer_204157861::positionFlagsOnBoard(int player, std::vector<unique_pt
 	int y = getRandomNumInRange(0, ROWS - 1);
 	//bool cornerAvailable = findAvailableCorner(x,y);
 	int protectingBombsNum = BOMBS_NUM / (2 * FLAGS_NUM); //half will protect all flags and half will be spred randomly on board
+	bool canProtectOne = false;
 	if (protectingBombsNum < 1 && BOMBS_NUM > 0)
 	{ //prefer to protect flags
 		protectingBombsNum = 1;
+		canProtectOne = true;
 	}
 
 	for (int i = 0; i < FLAGS_NUM; ++i)
@@ -209,6 +251,9 @@ void RSPPlayer_204157861::positionFlagsOnBoard(int player, std::vector<unique_pt
 						vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), '#'));
 						positionBombs(x, y, player, vectorToFill, protectingBombsNum, shouldPositionRandomly);
 						bombsPositioned += protectingBombsNum;
+						if (canProtectOne) {
+							protectingBombsNum = 0;
+						}
 					}
 				}
 				x = getRandomNumInRange(0, COLS - 1);
@@ -217,6 +262,10 @@ void RSPPlayer_204157861::positionFlagsOnBoard(int player, std::vector<unique_pt
 			isCellTaken = true;
 			hasOpponentNeighbor = true;
 		}
+
+	//save one flag location
+	flag_x = x;
+	flag_y = y;
 }
 
 /**
@@ -307,6 +356,8 @@ void RSPPlayer_204157861::positionBombs(int flag_x, int flag_y, int player, std:
 	int x;
 	int y;
 	int bombsPositioned = 0;
+
+	if (bombsToPosition == 0) return;
 
 	if (!shouldPositionRandomly)
 	{
@@ -1475,8 +1526,8 @@ double RSPPlayer_204157861::calcDistanceFromMovingPiece(int to_x, int to_y)
 			}
 		}
 	}
-	return ROWS + COLS - minimalDistance;
-	//return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
+	//return ROWS + COLS - minimalDistance;
+	return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
 }
 
 /**
@@ -1516,8 +1567,8 @@ double RSPPlayer_204157861::calcDistanceFromBombOrFlag(int to_x, int to_y)
 		}
 	}
 	//cout<<"calcDistanceFromBombOrFlag: " << to_x << ","<<to_y<< " : "<<minimalDistance<<endl;
-	//return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
-	return (double)(ROWS + COLS - minimalDistance);
+	return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
+	//return (double)(ROWS + COLS - minimalDistance);
 }
 
 /**
@@ -1551,7 +1602,7 @@ double RSPPlayer_204157861::calcDistanceFromUnknownPiece(int to_x, int to_y)
 		}
 	}
 //cout<<"calcDistanceFromUnknownPiece: " << to_x << ","<<to_y<< " : "<<minimalDistance<<endl;
-return (double)(ROWS+COLS) - (double)minimalDistance;
+return ((double)(ROWS+COLS) - (double)minimalDistance)/(double)(ROWS+COLS);
 }
 
 /**

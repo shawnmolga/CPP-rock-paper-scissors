@@ -47,6 +47,8 @@ public:
 	bool findEmptyNeigbor(int &row, int &col, int flagRow, int flagCol);
 	bool findAvailableCorner(int& x,int& y);
 	void locateMovingPiecesOnCorners(int& rocksNum,int& PapersNum,int& ScissorsNum,std::vector<unique_ptr<PiecePosition>> &vectorToFill);
+	void positionFlagDefenders(int& rocksNum,int& PapersNum,int& ScissorsNum,std::vector<unique_ptr<PiecePosition>> &vectorToFill);
+
 	//legality check
 	bool isLegalPosition(int row, int col);
 	bool checkIsOpponentNeighbors(int row, int col);
@@ -101,6 +103,8 @@ private:
 	AICell myCell;
 	bool willBeFight;
 	bool eatMovingPiecesMode;
+	int flag_x;
+	int flag_y;
 };
 
 

@@ -306,6 +306,9 @@ bool TournamentManager::loadAlgorithemsFromPath() {
 	if (inputDirPath.compare(".") == 0) {
 		inputDirPath = "";
 	}
+	else {
+		inputDirPath = "/"+inputDirPath;
+	}
 	string command =  "ls " + inputDirPath + "*.so 2>&1"; //TODO: CHECK THIS
 	//cout << command <<endl;
 	char in_buf[BUF_SIZE]; // input buffer for lib names
@@ -313,7 +316,7 @@ bool TournamentManager::loadAlgorithemsFromPath() {
 	// get the names of all the dynamic libs (.so  files) in the current dir
 	dl = popen(command.c_str(), "r");
 	if(!dl) {
-		cout << "Error: failed to find .so files" << endl;
+		cout << "Error: failed to find .so files in path: " << inputDirPath << endl;
 		return false;
 	}
 	void *dlib;
