@@ -540,6 +540,7 @@ void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 void RSPPlayer_204157861::updateOpponentPiece(char piece, bool isOpponentWin, int x, int y, bool isJoker) {
 
 	if (isOpponentWin) {
+		gameBoard.board[x][y].flagProbability = 0;
 		gameBoard.board[x][y].rockProbability = 0;
 		gameBoard.board[x][y].paperProbability = 0;
 		gameBoard.board[x][y].scissorsProbability = 0;
@@ -568,8 +569,15 @@ void RSPPlayer_204157861::updateOpponentPiece(char piece, bool isOpponentWin, in
 
 		int knownJokersNum = getKnownJokersNumOnBoard();
 
+		eatMovingPiecesMode = (opponentFlagsNumOnBoard > opponentMovingPieceNumOnBoard) ? true : false;
+
 		if (opponentJokersNumOnBoard == knownJokersNum) {
 			updateNoJokersLeft();
+		}
+
+		if (opponentMovingPieceNumOnBoard == getKnownMovingPiecesNumOnBoard())
+		{ //we can mark all pieces as not moving pieces !!!
+				updateMovingPiece();
 		}
 
 		return;
@@ -580,6 +588,7 @@ void RSPPlayer_204157861::updateOpponentPiece(char piece, bool isOpponentWin, in
 		opponentBombsNumOnBoard--;
 		return;
 	case 'F':
+		eatMovingPiecesMode = (opponentFlagsNumOnBoard > opponentMovingPieceNumOnBoard) ? true : false;
 		opponentFlagsNumOnBoard--;
 		return;
 	case 'R':
@@ -594,9 +603,12 @@ void RSPPlayer_204157861::updateOpponentPiece(char piece, bool isOpponentWin, in
 	}
 	opponentMovingPieceNumOnBoard--;
 
-	if (opponentFlagsNumOnBoard > opponentMovingPieceNumOnBoard) {
-		eatMovingPiecesMode = true;
+	if (opponentMovingPieceNumOnBoard == getKnownMovingPiecesNumOnBoard())
+	{ //we can mark all pieces as not moving pieces !!!
+		updateMovingPiece();
 	}
+
+	eatMovingPiecesMode = (opponentFlagsNumOnBoard > opponentMovingPieceNumOnBoard) ? true : false;
 }
 
 int RSPPlayer_204157861::getKnownJokersNumOnBoard() {
@@ -642,54 +654,83 @@ void RSPPlayer_204157861::updateProbabilities(bool resetProbability, int x, int 
 //	}
 
 	int unknownFlags = opponentFlagsNumOnBoard;
-	int unknownPapers = opponentPapersNumOnBoard;
-	int unknownRocks = opponentRocksNumOnBoard;
-	int unknownScissors = opponentScissorsNumOnBoard;
+	int unknownPapers = opponentPapersNumOnBoard-opponentJokersNumOnBoard;
+	int unknownRocks = opponentRocksNumOnBoard-opponentJokersNumOnBoard;
+	int unknownScissors = opponentScissorsNumOnBoard-opponentJokersNumOnBoard;
 	int unknownJokers = opponentJokersNumOnBoard;
 	int unknownPiecesNum = 0;
+	int unknownMovingPieceNum = 0;
+	int unknownunmovingPieces = 0;
 
 	for (int i = 0; i < COLS; ++i)
 	{
 		for (int j = 0; j < ROWS; ++j)
 		{
-			if (gameBoard.board[i][j].flagProbability != 0 && gameBoard.board[i][j].flagProbability != 1)
+			if (gameBoard.board[i][j].getPiece() == 0) continue;
+			else if (gameBoard.board[i][j].isMyPiece(myPlayerNum)) continue;
+
+			else if (gameBoard.board[i][j].getPiece() == '#')
 			{
-				unknownPiecesNum++; //count pieces that we dont know if there are flags or not
+				//unknownPiecesNum++; //count pieces that we dont know if there are flags or not
+				if (gameBoard.board[i][j].isMovingPieceKnown) {
+					if (gameBoard.board[i][j].isMovingPiece) {
+						unknownMovingPieceNum++;
+					}
+					else {
+						unknownunmovingPieces++;
+					}
+				}
+				else {
+					unknownPiecesNum++;
+				}
+
+
 			}
 			else { //known piece
 				if (gameBoard.board[i][j].flagProbability == 1) {
 					unknownFlags--;
 				}
 				else {
-					switch (gameBoard.board[i][j].getPiece()) {
+					switch (toupper(gameBoard.board[i][j].getPiece())) {
 					case 'P':
 						unknownPapers--;
+						if (unknownPapers < 0) {
+							unknownPapers = 0;
+						}
 						break;
 					case 'R':
 						unknownRocks--;
+						if (unknownRocks < 0) {
+							unknownRocks = 0;
+						}
 						break;
 					case 'S':
 						unknownScissors--;
+						if (unknownScissors < 0) {
+							unknownScissors = 0;
+						}
 						break;
 					}
 
-					if (gameBoard.board[i][j].jokerProbability == 1){
+					if (gameBoard.board[i][j].isJokerKnown && gameBoard.board[i][j].getIsJoker()){
 						unknownJokers--;
 					}
 				}
 			}
 		}
 	}
-
-	if (unknownPiecesNum == 0)
+	cout<<"unknownPiecesNum: "<<unknownPiecesNum<<" unknown moving pieces: "<<unknownMovingPieceNum<<" unknown unmoving pieces: "<<unknownunmovingPieces <<endl;
+	cout<<"unkown flags: "<< unknownFlags<<" unkown papers: "<<unknownPapers<<" unkown rocks: "<<unknownRocks<<"unknown scissors: "<<unknownScissors<<endl;
+	if (unknownPiecesNum == 0 && (unknownMovingPieceNum == 0 || unknownunmovingPieces == 0))
 		return; //probabilities are 1 or 0
 
 	if (resetProbability) {
-		gameBoard.board[x][y].flagProbability = (double)unknownFlags / (double)unknownPiecesNum;
-		gameBoard.board[x][y].paperProbability = (double)unknownPapers / (double)unknownPiecesNum;
-		gameBoard.board[x][y].rockProbability = (double)unknownRocks / (double)unknownPiecesNum;
-		gameBoard.board[x][y].scissorsProbability = (double)unknownScissors / (double)unknownPiecesNum;
-		gameBoard.board[x][y].jokerProbability = (double)unknownJokers / (double)unknownPiecesNum;
+		gameBoard.board[x][y].flagProbability = (double)unknownFlags / (double)(unknownPiecesNum+unknownunmovingPieces);
+		gameBoard.board[x][y].paperProbability = (double)unknownPapers / (double)(unknownPiecesNum+unknownMovingPieceNum);
+		gameBoard.board[x][y].rockProbability = (double)unknownRocks / (double)(unknownPiecesNum+unknownMovingPieceNum);
+		gameBoard.board[x][y].scissorsProbability = (double)unknownScissors / (double)(unknownPiecesNum+unknownMovingPieceNum);
+		gameBoard.board[x][y].jokerProbability = (double)unknownJokers / (double)(unknownPiecesNum + unknownMovingPieceNum + unknownunmovingPieces + unknownJokers);
+		return;
 	}
 
 	//update probability
@@ -704,10 +745,12 @@ void RSPPlayer_204157861::updateProbabilities(bool resetProbability, int x, int 
 
 			if (!gameBoard.board[i][j].isMyPiece(myPlayerNum) && gameBoard.board[i][j].getPiece() == '#') {
 				//update probabilities
-				gameBoard.board[i][j].flagProbability = gameBoard.board[i][j].flagProbability != 0 ? (double)unknownFlags / (double)unknownPiecesNum : gameBoard.board[i][j].flagProbability;
-				gameBoard.board[i][j].paperProbability = gameBoard.board[i][j].paperProbability != 0 ? (double)unknownPapers / (double)unknownPiecesNum : gameBoard.board[i][j].paperProbability;
-				gameBoard.board[i][j].rockProbability = gameBoard.board[i][j].rockProbability != 0 ? (double)unknownRocks / (double)unknownPiecesNum : gameBoard.board[i][j].rockProbability;
-				gameBoard.board[i][j].scissorsProbability = gameBoard.board[i][j].scissorsProbability != 0 ? (double)unknownScissors / (double)unknownPiecesNum : gameBoard.board[i][j].scissorsProbability;
+				if (gameBoard.board[i][j].flagProbability == 1 || gameBoard.board[i][j].paperProbability == 1 || gameBoard.board[i][j].rockProbability == 1 || gameBoard.board[i][j].scissorsProbability == 1)
+					continue;
+				gameBoard.board[i][j].flagProbability = gameBoard.board[i][j].flagProbability != 0 ? (double)unknownFlags / (double)(unknownPiecesNum+unknownunmovingPieces): gameBoard.board[i][j].flagProbability;
+				gameBoard.board[i][j].paperProbability = gameBoard.board[i][j].paperProbability != 0 ? (double)unknownPapers / (double)(unknownPiecesNum+unknownMovingPieceNum) : gameBoard.board[i][j].paperProbability;
+				gameBoard.board[i][j].rockProbability = gameBoard.board[i][j].rockProbability != 0 ? (double)unknownRocks / (double)(unknownPiecesNum+unknownMovingPieceNum) : gameBoard.board[i][j].rockProbability;
+				gameBoard.board[i][j].scissorsProbability = gameBoard.board[i][j].scissorsProbability != 0 ? (double)unknownScissors / (double)(unknownPiecesNum+unknownMovingPieceNum) : gameBoard.board[i][j].scissorsProbability;
 			}
 
 			updateIfProbOne(i,j);
@@ -722,22 +765,26 @@ void RSPPlayer_204157861::updateIfProbOne(int x, int y) {
 
 	bool isJoker = gameBoard.board[x][y].getIsJoker();
 	if (gameBoard.board[x][y].flagProbability == 1) {
+		cout<<"thinks "<<x<<","<<y<<" is flag"<<endl;
 		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 'f' : 'F', isJoker);
 		gameBoard.board[x][y].isMovingPieceKnown = true;
 		gameBoard.board[x][y].isMovingPiece = false;
 		return;
 	}
 	if (gameBoard.board[x][y].paperProbability == 1) {
+		cout<<"thinks "<<x<<","<<y<<" is paper"<<endl;
 		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 'p' : 'P', isJoker);
 		gameBoard.board[x][y].isMovingPieceKnown = true;
 			gameBoard.board[x][y].isMovingPiece = true;
 	}
 	else if (gameBoard.board[x][y].rockProbability == 1) {
+		cout<<"thinks "<<x<<","<<y<<" is rock"<<endl;
 		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 'r' : 'R', isJoker);
 		gameBoard.board[x][y].isMovingPieceKnown = true;
 			gameBoard.board[x][y].isMovingPiece = true;
 	}
 	else if (gameBoard.board[x][y].scissorsProbability == 1) {
+		cout<<"thinks "<<x<<","<<y<<" is scissors"<<endl;
 		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 's' : 'S', isJoker);
 		gameBoard.board[x][y].isMovingPieceKnown = true;
 			gameBoard.board[x][y].isMovingPiece = true;
@@ -1429,7 +1476,7 @@ double RSPPlayer_204157861::calcDistanceFromBombOrFlag(int to_x, int to_y)
 			}
 		}
 	}
-	cout<<"calcDistanceFromBombOrFlag: " << to_x << ","<<to_y<< " : "<<minimalDistance<<endl;
+	//cout<<"calcDistanceFromBombOrFlag: " << to_x << ","<<to_y<< " : "<<minimalDistance<<endl;
 	//return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
 	return (double)(ROWS + COLS - minimalDistance);
 }
@@ -1464,7 +1511,7 @@ double RSPPlayer_204157861::calcDistanceFromUnknownPiece(int to_x, int to_y)
 			}
 		}
 	}
-cout<<"calcDistanceFromUnknownPiece: " << to_x << ","<<to_y<< " : "<<minimalDistance<<endl;
+//cout<<"calcDistanceFromUnknownPiece: " << to_x << ","<<to_y<< " : "<<minimalDistance<<endl;
 return (double)(ROWS+COLS) - (double)minimalDistance;
 }
 

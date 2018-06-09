@@ -224,11 +224,13 @@ int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTu
     int nextPlayer = 2;
     if (isPlayerOneEOF) {
         move = playerAlgoTwo->getMove();
+        PrintBoardToConsole();
         if (move == nullptr)
             isPlayerTwoEOF = true;
     } else {
         nextPlayer = 1;
         move = playerAlgoOne->getMove();
+        PrintBoardToConsole();
         if (move == nullptr)
             isPlayerOneEOF = true;
     }
@@ -260,11 +262,13 @@ int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTu
         if (isPlayerOneEOF) {
             nextPlayer = 2;
             move = playerAlgoTwo->getMove();
+            PrintBoardToConsole();
             if (move == nullptr)
                 isPlayerTwoEOF = true;
         } else {
             nextPlayer = 1;
             move = playerAlgoOne->getMove();
+            PrintBoardToConsole();
             if (move == nullptr)
                 isPlayerOneEOF = true;
         }
@@ -286,6 +290,7 @@ int RPSGame::makeMove() {
     bool isPlayerTwoEOF = false;
     int xPiecePlayerOne = 0; //initalize xPiecePlayerOne need to verify!
     unique_ptr <Move> move = std::move(playerAlgoOne->getMove());
+    PrintBoardToConsole();
     if (move == nullptr) {
         isPlayerOneEOF = true;
     } else {
@@ -307,6 +312,7 @@ int RPSGame::makeMove() {
             }
         }
         move = std::move(playerAlgoTwo->getMove());
+        PrintBoardToConsole();
         if (move == nullptr) {
             isPlayerTwoEOF = true;
         } else {
@@ -325,6 +331,7 @@ int RPSGame::makeMove() {
             break;
         }
         move = playerAlgoOne->getMove();
+        PrintBoardToConsole();
         if (move == nullptr) {
             isPlayerOneEOF = true;
         } else {
