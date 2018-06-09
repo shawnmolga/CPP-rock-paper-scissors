@@ -116,7 +116,6 @@ bool RPSGame::movePiece(unique_ptr <Move> &move,
         return true;
 
     numOfMoves++; // we increment the numerator for each move
-    cout<<"numOfMoves: "<<numOfMoves<<endl;
     int from_x = move->getFrom().getX(); //col
     int from_y = move->getFrom().getY(); //row
     int to_x = move->getTo().getX();     //col
