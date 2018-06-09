@@ -68,10 +68,8 @@ class TournamentManager {
     void startNewGame(const string &playerOneId, const string &playerTwoId);
     bool loadAlgorithemsFromPath();
     void closeAlgorithemLibs();
-	void printAlgoToPlay();
  	TournamentManager(const TournamentManager&) = delete;
 	TournamentManager& operator=(const TournamentManager&)	= delete;
-	void singleThreadEntry();
 	
     public:
 	//manager is singleton

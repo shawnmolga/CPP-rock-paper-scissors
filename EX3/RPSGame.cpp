@@ -187,10 +187,6 @@ bool RPSGame::movePiece(unique_ptr<Move> &move,
         else if (!gameBoard.board[x_joker][y_joker].getIsJoker())
         { //if the original peice is not a joker
             cout << "Error: Piece specified is not joker" << endl;
-            //PrintBoardToConsole();
-            cout << "x_joker:" << x_joker << endl;
-            cout << "y_joker:" << y_joker << endl;
-
             isBadFormat = true;
             return true;
         }
@@ -233,8 +229,6 @@ int RPSGame::handleNonEmptyMove(bool playerOneNonEmpty, std::unique_ptr<Move> &m
             else
                 setGameOver(1, WRONG_MOVE_FILE_FORMAT_TWO);
         }
-        //cout<<"inside handleNonEmptyMove"<<endl;
-        //PrintBoardToConsole();
         return -1;
     }
     return 0;
@@ -253,7 +247,6 @@ int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTu
     if (isPlayerOneEOF)
     {
         move = playerAlgoTwo->getMove();
-        PrintBoardToConsole();
         if (move == nullptr)
             isPlayerTwoEOF = true;
     }
@@ -261,7 +254,6 @@ int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTu
     {
         nextPlayer = 1;
         move = playerAlgoOne->getMove();
-        PrintBoardToConsole();
         if (move == nullptr)
             isPlayerOneEOF = true;
     }
@@ -311,7 +303,6 @@ int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTu
         {
             nextPlayer = 2;
             move = playerAlgoTwo->getMove();
-            PrintBoardToConsole();
             if (move == nullptr)
                 isPlayerTwoEOF = true;
         }
@@ -319,7 +310,6 @@ int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTu
         {
             nextPlayer = 1;
             move = playerAlgoOne->getMove();
-            PrintBoardToConsole();
             if (move == nullptr)
                 isPlayerOneEOF = true;
         }
@@ -356,7 +346,6 @@ bool RPSGame::checkMovingPieceLeft(int playerNum)
     {
         if (!playerOne.isLeftMovingPieces()) //player one has no moving pieces
         {
-            cout<<"no left move for player 1"<<endl;
             return false;
         }
         return true;
@@ -365,7 +354,6 @@ bool RPSGame::checkMovingPieceLeft(int playerNum)
     {
         if (!playerTwo.isLeftMovingPieces()) //player two has no moving pieces
         {
-            cout<<"no left move for player 2"<<endl;
             return false;
         }
         return true;
@@ -382,7 +370,6 @@ int RPSGame::makeMove()
     bool isPlayerTwoEOF = false;
     int xPiecePlayerOne = 0; //initalize xPiecePlayerOne need to verify!
     unique_ptr<Move> move = std::move(playerAlgoOne->getMove());
-    PrintBoardToConsole();
     if (move == nullptr)
     {
         isPlayerOneEOF = true;
@@ -424,7 +411,6 @@ int RPSGame::makeMove()
             }
         }
         move = std::move(playerAlgoTwo->getMove());
-        PrintBoardToConsole();
         if (move == nullptr)
         {
             isPlayerTwoEOF = true;
@@ -443,13 +429,9 @@ int RPSGame::makeMove()
         }
         else if (xPiecePlayerTwo == READ_LINE_ERR)
         {
-            //cout<<"READ_LINE_ERR"<<endl;
-            //PrintBoardToConsole();
-            //return ERROR_DURING_MOVE;
             break;
         }
         move = playerAlgoOne->getMove();
-        PrintBoardToConsole();
         if (move == nullptr)
         {
             isPlayerOneEOF = true;
@@ -462,13 +444,8 @@ int RPSGame::makeMove()
 
     if (-1 == closeGame(isGameOverInternal, isBadFormat, isPlayerOneTurn, isPlayerOneEOF, isPlayerTwoEOF, hasNoMovingPiecePlayerOne, hasNoMovingPiecePlayerTwo))
     {
-        //cout<<"END_OF_GAME"<<endl;
-        //PrintBoardToConsole();
         return -1;
     }
-    //cout<<"END_OF_GAME"<<endl;
-    //PrintBoardToConsole();
-
     return MOVE_DONE_SUCC;
 }
 
@@ -597,8 +574,6 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
     if (gameBoard.board.at(from_x).at(from_y).getPiece() == 0)
     {
         cout << "Error: there is no piece in this position" << endl;
-        //PrintBoardToConsole();
-        //cout<<"isPlayer1:  "<<isPlayer1<<endl;
         cout << "from col: " << from_x << "from row: " << from_y << " to_x: " << to_x << " to_y: " << to_y << endl;
         return false;
     }
@@ -641,8 +616,6 @@ bool RPSGame::checkIfCellTaken(bool isPlayer1, int to_x, int to_y)
                 cout
                     << "Error: you are trying to move to a cell taken by your own piece"
                     << endl;
-
-                cout << " to_x: " << to_x << " to_y: " << to_y << endl;
                 return false;
             }
         }
@@ -653,8 +626,6 @@ bool RPSGame::checkIfCellTaken(bool isPlayer1, int to_x, int to_y)
                 cout
                     << "Error: you are trying to move to a cell taken by your own piece"
                     << endl;
-
-                cout << " to_x: " << to_x << " to_y: " << to_y << endl;
                 return false;
             }
         }
@@ -1526,50 +1497,3 @@ void RPSGame::printOutputFile(const string &outputFile)
     output.close();
     return;
 }
-
-// /*
-// * Input - game method.
-// * Output- true if we successfuly init playerAlogrithms or false otherwise;
-//  */
-// bool RPSGame::initGameMethod(string gameMethod) {
-//     bool isPlayerOneUseFile = false;
-//     bool isPlayerTwoUseFile = false;
-//     if (gameMethod.compare("auto-vs-file") == 0) {
-//         isPlayerTwoUseFile = true;
-//     } else if (gameMethod.compare("file-vs-auto") == 0) {
-//         isPlayerOneUseFile = true;
-//     } else if (gameMethod.compare("auto-vs-auto") == 0) {
-//         return initPlayersAlgo(isPlayerOneUseFile, isPlayerTwoUseFile);
-//     } else if (gameMethod.compare("file-vs-file") == 0) {
-//         isPlayerOneUseFile = true;
-//         isPlayerTwoUseFile = true;
-//     } else {
-//         cout << "Error: Illegal game method." << endl;
-//         return false;
-//     }
-//     return initPlayersAlgo(isPlayerOneUseFile, isPlayerTwoUseFile);
-// }
-
-// /*
-// * Input - two boolean parameters that indicated if the players are using file play mode
-// * Output- true if we successfuly init playerAlogrithms or false otherwise;
-// */
-// bool RPSGame::initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile) {
-//     if (isPlayerOneUseFile || isPlayerTwoUseFile) {
-//         if (!isAllGameFilesExists(isPlayerOneUseFile, isPlayerTwoUseFile))
-//             return false;
-//     }
-
-//     if (isPlayerOneUseFile) {
-//         playerAlgoOne = FilePlayerAlgorithm(PLAYER_ONE_POSITION_FILENAME, PLAYER_ONE_MOVE_FILENAME);
-//     } else {
-//         playerAlgoOne =   RSPPlayer_204157861();
-//     }
-//     if (isPlayerTwoUseFile) {
-//         playerAlgoTwo = FilePlayerAlgorithm(PLAYER_TWO_POSITION_FILENAME, PLAYER_TWO_MOVE_FILENAME);
-//     } else {
-//         playerAlgoTwo = RSPPlayer_204157861();
-//     }
-
-//     return true;
-// }

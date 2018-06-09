@@ -38,38 +38,9 @@ void TournamentManager::registerAlgorithm(std::string id, std::function<std::uni
 }
 
 void TournamentManager::startNewGame(const string &playerOneId, const string &playerTwoId){
-	//cout<<"making new game"<<endl;
 	RPSGame game (idToAlgoInfo[playerOneId], idToAlgoInfo[playerTwoId]);
-	//cout<<"starting new game"<<endl;
-	//cout<<"players are: "<<playerOneId<<" , "<<playerTwoId<<endl;
 	game.startGame();
-	//cout<<"ended game"<<endl;
 	updateScore(game, playerOneId,playerTwoId);
-	//cout<<"ended all"<<endl;
-}
-
-/*OLD VERSION
-void TournamentManager::startTournament()
-{
-	ThreadPool pool(numOfThreads);
-	string playerOneId;
-	string playerTwoId;
-	while (algorithmsToPlay.size() != 0)
-	{
-		getPlayersToPlay(playerOneId, playerTwoId);
-		//if the if wont change we need to do : ref(playerOneId), ref(playerTwoID)
-		//bind parameters to function
-		auto bindFunction = std::bind(startNewGame,this,playerOneId, playerTwoId);
-		pool.doJob (bindFunction); //adds this game to "pool of jobs", when a thread is done the thread will do this job
-	}
-	closeAlgorithemLibs();
-}*/
-
-
-void TournamentManager::printAlgoToPlay(){
-	for(int i=0;i<(int)algorithmsToPlay.size();i++){	
-		cout<<algorithmsToPlay[i]<<endl;
-	}
 }
 
 void TournamentManager::startTournament()
@@ -83,7 +54,6 @@ void TournamentManager::startTournament()
 	}
 	else
 		threadEntry();
-	cout<<"DONE!"<<endl;
 }
 
 void TournamentManager::threadEntry(){
@@ -92,26 +62,13 @@ void TournamentManager::threadEntry(){
 	//todo: lock before checking if there are games to be played
 	algorithmsToPlayMutex.lock();
 	while (!algorithmsToPlay.empty()){
-		//printAlgoToPlay();
 		getPlayersToPlay(playerOneId, playerTwoId); //locked - only one thread can enter this function at a time
 		//todo unlock
 		algorithmsToPlayMutex.unlock();
 		startNewGame(playerOneId,playerTwoId);
-		algorithmsToPlayMutex.lock();//must be locked before checking while
-		//print should be removed
-		//printTornamentResult();
+		algorithmsToPlayMutex.lock();///must be locked before check while!
 	}
 	algorithmsToPlayMutex.unlock();
-}
-
-void TournamentManager::singleThreadEntry(){
-	string playerOneId;
-	string playerTwoId;
-	getPlayersToPlay(playerOneId, playerTwoId); //locked - only one thread can enter this function at a time
-	cout<<"before new game "<<endl;
-	startNewGame("204157861","204664999");
-	cout<<"after new game  "<<endl;
-		
 }
 
 
@@ -147,13 +104,6 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 	cout<<"***************************"<<endl;
 	lock.unlock();
 }
-
-
-/*void TournamentManager::printTornamentResult(){
-	//iterating over the map and print the results 
-	// for (std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator it=idToAlgoInfo.begin(); it!=idToAlgoInfo.end(); ++it)
-    // std::cout << it->first << " " << it->second->score << '\n';
-}*/
 
 void TournamentManager::printTornamentResult(){
 std::vector<std::pair<std::string, int>> pairs;
@@ -224,7 +174,6 @@ int TournamentManager::getRandomNumInRange(int start, int end)
 	std::random_device rd;								// obtain a random number from hardware
 	std::mt19937 eng(rd());								// seed the generator
 	std::uniform_int_distribution<> yDistr(start, end); // define the range
-	//cout<<"start: "<<start<<"end: "<<end<<" in line 208 RSP204157861"<<endl;
 	return yDistr(eng);
 }
 
@@ -285,7 +234,6 @@ bool TournamentManager::checkTournamentArguments(int argc, char *argv[])
 			std::cout << "Wrong path: " << path << std::endl;
 			return false;
 		}
-		//cout << path << endl;
 		inputDirPath = path;
 		numOfThreads = (numOfThreads == UNINITIALIZED_ARG) ?  (DEFAULT_THREADS_NUM - 1) : numOfThreads;
 		return true;

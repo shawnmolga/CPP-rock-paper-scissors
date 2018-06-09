@@ -134,7 +134,6 @@ void RSPPlayer_204157861::positionMovingPieces(int player, std::vector<unique_pt
 	positionPiecesRandomly(rocksNum, player == 1 ? 'R' : 'r', false, '#', vectorToFill);
 	positionPiecesRandomly(papersNum, player == 1 ? 'P' : 'p', false,'#', vectorToFill);
 	positionPiecesRandomly(scissorsNum, player == 1 ? 'S' : 's', false,'#', vectorToFill);
-	PrintBoardToConsole();
 }
 
 /**
@@ -840,26 +839,22 @@ void RSPPlayer_204157861::updateIfProbOne(int x, int y) {
 
 	bool isJoker = gameBoard.board[x][y].getIsJoker();
 	if (gameBoard.board[x][y].flagProbability == 1) {
-		cout<<"thinks "<<x<<","<<y<<" is flag"<<endl;
 		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 'f' : 'F', isJoker);
 		gameBoard.board[x][y].isMovingPieceKnown = true;
 		gameBoard.board[x][y].isMovingPiece = false;
 		return;
 	}
 	if (gameBoard.board[x][y].paperProbability == 1) {
-		cout<<"thinks "<<x<<","<<y<<" is paper"<<endl;
 		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 'p' : 'P', isJoker);
 		gameBoard.board[x][y].isMovingPieceKnown = true;
 			gameBoard.board[x][y].isMovingPiece = true;
 	}
 	else if (gameBoard.board[x][y].rockProbability == 1) {
-		cout<<"thinks "<<x<<","<<y<<" is rock"<<endl;
 		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 'r' : 'R', isJoker);
 		gameBoard.board[x][y].isMovingPieceKnown = true;
 			gameBoard.board[x][y].isMovingPiece = true;
 	}
 	else if (gameBoard.board[x][y].scissorsProbability == 1) {
-		cout<<"thinks "<<x<<","<<y<<" is scissors"<<endl;
 		AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? 's' : 'S', isJoker);
 		gameBoard.board[x][y].isMovingPieceKnown = true;
 			gameBoard.board[x][y].isMovingPiece = true;
@@ -916,9 +911,6 @@ unique_ptr<Move> RSPPlayer_204157861::getMove()
 	int to_y = -3;
 	getBestMove(from_x, from_y, to_x, to_y);
 	unique_ptr<Move> move = make_unique<RPSMove>(RPSpoint(from_x+1, from_y+1), RPSpoint(to_x+1, to_y+1));
-	//cout<<"in getMove"<<endl;
-	cout<<from_x<<","<<from_y<<" to "<<to_x<<","<<to_y<<endl;
-	PrintBoardToConsole();
 	return move;
 }
 
@@ -991,7 +983,6 @@ void RSPPlayer_204157861::getBestMove(int &from_x, int &from_y, int &to_x, int &
 	//cout<<"from_y:"<<from_y<<endl;
 
 	if(from_x == -3){
-		cout<<"NO PIECE TO MOVE"<<endl;
 		return;
 	}
 	myCell = gameBoard.board[from_x][from_y];
@@ -1915,11 +1906,9 @@ void RSPPlayer_204157861::updateBoard(const Board &b)
 				Cell::updateCell(gameBoard.board[i][j], '#', false);
 			}
 			if(gameBoard.board[i][j].isMyPiece(myPlayerNum)){
-				//cout<<"i:"<<i<<" j: "<<j<<" has "<<b.getPlayer(p)<<endl;
 			}
 		}
 	}
-	//PrintBoardToConsole();
 }
 
 
