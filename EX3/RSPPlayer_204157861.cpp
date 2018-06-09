@@ -41,6 +41,44 @@ void RSPPlayer_204157861::getInitialPositions(int player,
 
 }
 
+void RSPPlayer_204157861::locateMovingPiecesOnCorners(int& rocksNum,int& papersNum,int& scissorsNum,std::vector<unique_ptr<PiecePosition>> &vectorToFill) {
+	int x;
+	int y;
+	char piece;
+	while (findAvailableCorner(x,y)) {
+		int pieceKind = getRandomNumInRange(1,3);
+		switch (pieceKind) {
+		case 1:
+			if (rocksNum > 1){
+				piece = myPlayerNum == 1 ? 'R' : 'r';
+				Cell::updateCell(gameBoard.board[x][y], piece, false);
+				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), '#'));
+				rocksNum--;
+				break;
+			}
+		case 2:
+			if (papersNum > 1){
+				piece = myPlayerNum == 1 ? 'P' : 'p';
+				Cell::updateCell(gameBoard.board[x][y], piece, false);
+				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), '#'));
+				papersNum--;
+				break;
+			}
+		case 3:
+			if (scissorsNum > 1) {
+				piece = myPlayerNum == 1 ? 'S' : 's';
+				Cell::updateCell(gameBoard.board[x][y], piece, false);
+				vectorToFill.push_back(make_unique<RPSPiecePosition>(RPSpoint(x+1, y+1), toupper(piece), '#'));
+				scissorsNum--;
+				break;
+			}
+		}
+
+		if (rocksNum <= 1 && papersNum <= 1 && scissorsNum <= 1)
+			return;
+	}
+}
+
 /**
     fill vector in positions of all moving pieces of current player and position them on algorithm's board
 
@@ -49,9 +87,14 @@ void RSPPlayer_204157861::getInitialPositions(int player,
  */
 void RSPPlayer_204157861::positionMovingPieces(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill)
 {
-	positionPiecesRandomly(ROCKS_NUM, player == 1 ? 'R' : 'r', false, '#', vectorToFill);
-	positionPiecesRandomly(PAPERS_NUM, player == 1 ? 'P' : 'p', false,'#', vectorToFill);
-	positionPiecesRandomly(SCISSORS_NUM, player == 1 ? 'S' : 's', false,'#', vectorToFill);
+	int rocksNum = ROCKS_NUM;
+	int papersNum = PAPERS_NUM;
+	int scissorsNum = SCISSORS_NUM;
+	locateMovingPiecesOnCorners(rocksNum,papersNum,scissorsNum,vectorToFill);
+	positionPiecesRandomly(rocksNum, player == 1 ? 'R' : 'r', false, '#', vectorToFill);
+	positionPiecesRandomly(papersNum, player == 1 ? 'P' : 'p', false,'#', vectorToFill);
+	positionPiecesRandomly(scissorsNum, player == 1 ? 'S' : 's', false,'#', vectorToFill);
+	PrintBoardToConsole();
 }
 
 /**
@@ -107,6 +150,30 @@ void RSPPlayer_204157861::positionUnmovingPieces(int player, std::vector<unique_
 	}
 }
 
+bool RSPPlayer_204157861::findAvailableCorner(int& x,int& y) {
+	if (gameBoard.board[0][0].getPiece() == 0 && !checkIsOpponentNeighbors(0,0)) {
+		x=0;
+		y=0;
+		return true;
+	}
+	if (gameBoard.board[0][ROWS-1].getPiece() == 0 && !checkIsOpponentNeighbors(0,ROWS-1)) {
+		x=0;
+		y=ROWS-1;
+		return true;
+	}
+	if (gameBoard.board[COLS-1][0].getPiece() == 0 && !checkIsOpponentNeighbors(COLS-1,0)) {
+		x=COLS-1;
+		y=0;
+		return true;
+	}
+	if (gameBoard.board[COLS-1][ROWS-1].getPiece() == 0 && !checkIsOpponentNeighbors(COLS-1,ROWS-1)) {
+		x=COLS-1;
+		y=ROWS-1;
+		return true;
+	}
+	return false;
+}
+
 /**
     position flags in algorithm's board and fill positions in vector
 
@@ -121,6 +188,7 @@ void RSPPlayer_204157861::positionFlagsOnBoard(int player, std::vector<unique_pt
 	char piece = (player == 1 ? 'F' : 'f');
 	int x = getRandomNumInRange(0, COLS - 1);
 	int y = getRandomNumInRange(0, ROWS - 1);
+	//bool cornerAvailable = findAvailableCorner(x,y);
 	int protectingBombsNum = BOMBS_NUM / (2 * FLAGS_NUM); //half will protect all flags and half will be spred randomly on board
 	if (protectingBombsNum < 1 && BOMBS_NUM > 0)
 	{ //prefer to protect flags
@@ -311,6 +379,9 @@ void RSPPlayer_204157861::positionPiecesRandomly(int pieceNum, char piece, bool 
  */
 bool RSPPlayer_204157861::isOpponentPiece(char piece)
 {
+	if (piece == 0)
+		return false;
+
 	if (piece == '#')
 		return true;
 
@@ -942,7 +1013,7 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 		score = INT_MAX;
 	}
 	else{
-		cout<<"material: "<< material<< " discovery:"<< discovery<<" reveal:"<<reveal<<endl;
+		//cout<<"material: "<< material<< " discovery:"<< discovery<<" reveal:"<<reveal<<endl;
 		score = calcScore(material, discovery, reveal, to_x, to_y);
 		willBeFight = false;
 	}
@@ -1177,7 +1248,7 @@ bool RSPPlayer_204157861::fight(int x, int y, char myPiece, char opponentPiece, 
  */
 double RSPPlayer_204157861::calcScore(double material, double discovery, double reveal, int to_x, int to_y)
 {
-	cout<<"inside calc score"<< to_x <<","<< to_y<<endl;
+	//cout<<"inside calc score"<< to_x <<","<< to_y<<endl;
 	/*bool isJoker = false;
 	if (to_x != -1 && to_y != -1){
 		if (gameBoard.board[to_x][to_y].isMyPiece(myPlayerNum) && gameBoard.board[to_x][to_y].getIsJoker()){
@@ -1203,7 +1274,7 @@ double RSPPlayer_204157861::calcScore(double material, double discovery, double 
 	double score = MATERIAL_WEIGHT * material + DISCOVERY_WEIGHT * discovery + REVEAL_WEIGHT * reveal +
 			FLAG_SAFTEY_WEUGHT * flagSaftey + DISTANCE_FROM_FLAG_WEIGHT * distanceFromCriticalPiece +
 			DISTANCE_FROM_UNKNOWN_WEIGHT * distanceFromUnknownPiece;
-	cout<<"move: " << to_x << ","<<to_y<<" score : " <<score<<endl;
+	//cout<<"move: " << to_x << ","<<to_y<<" score : " <<score<<endl;
 	return score;
 }
 
@@ -1407,9 +1478,9 @@ int RSPPlayer_204157861::calcDistanceFromPiece(int piece_x, int piece_y, int my_
 {
 	int distance = ROWS + COLS;
 	//there will be a fight with my piece vs unknown piece
-	cout<<"will be fight: "<<willBeFight<<endl;
+	//cout<<"will be fight: "<<willBeFight<<endl;
 	if (willBeFight && my_x == piece_x && my_y == piece_y){
-		cout<<"YAAAAAAAAAAS"<<endl;
+		//cout<<"YAAAAAAAAAAS"<<endl;
 		return 0;
 	}
 	distance = abs(my_x - piece_x) + abs(my_y - piece_y);
