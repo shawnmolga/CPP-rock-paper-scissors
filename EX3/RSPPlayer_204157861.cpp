@@ -1173,10 +1173,10 @@ bool RSPPlayer_204157861::fight(int x, int y, char myPiece, char opponentPiece, 
 double RSPPlayer_204157861::calcScore(double material, double discovery, double reveal, int to_x, int to_y)
 {
 	cout<<"inside calc score"<< to_x <<","<< to_y<<endl;
-	//bool isJoker = false;
+	bool isJoker = false;
 	if (to_x != -1 && to_y != -1){
 		if (gameBoard.board[to_x][to_y].isMyPiece(myPlayerNum) && gameBoard.board[to_x][to_y].getIsJoker()){
-			//isJoker = true;
+			isJoker = true;
 		}
 	}
 	double flagSaftey = calcFlagSaftey();
