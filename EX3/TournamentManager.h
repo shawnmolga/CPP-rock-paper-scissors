@@ -31,6 +31,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "RPSGame.h"
+#include <set>
 
 using namespace std;
 
@@ -77,6 +78,7 @@ class TournamentManager {
 	static TournamentManager & getTournamentManager(){
 		return tournamentManagerSingelton;
 	}
+	void copyString(string & src, string toCopy);
 	void printTornamentResult();
 	bool checkTournamentArguments(int argc, char * argv[]);
 	void registerAlgorithm(std::string id, std::function<std::unique_ptr<PlayerAlgorithm>()> factoryMethod);

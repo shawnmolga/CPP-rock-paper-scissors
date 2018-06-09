@@ -25,7 +25,7 @@ class PlayerAlgorithmInfo {
 public:
 	PlayerAlgorithmInfo(std::function<std::unique_ptr<PlayerAlgorithm>()> _getPlayerAlgorithm);
 	std::function<std::unique_ptr<PlayerAlgorithm>()> getPlayerAlgorithm;
-	atomic<int> score;
+	int score;
 	atomic<int> gamesPlayed;
 };
 

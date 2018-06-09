@@ -12,6 +12,7 @@ TournamentManager::TournamentManager() {
 	numOfRegisteredPlayers = 0;
 }
 
+
 TournamentManager::~TournamentManager()
 {
 	for (std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator it=idToAlgoInfo.begin(); it!=idToAlgoInfo.end(); ++it) {
@@ -70,6 +71,7 @@ void TournamentManager::printAlgoToPlay(){
 		cout<<algorithmsToPlay[i]<<endl;
 	}
 }
+
 void TournamentManager::startTournament()
 {
 	//ThreadPool pool(numOfThreads);
@@ -129,8 +131,10 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 		lock.unlock();
 	}
 	else {
+		unique_lock<mutex> lock(updateScoreMutex);
 		idToAlgoInfo[playerOneId]->score ++;	
 		idToAlgoInfo[playerTwoId]->score ++;
+		lock.unlock();
 	}
 	unique_lock<mutex> lock(updateScoreMutex);
 	cout<<"***************************"<<endl;
@@ -145,10 +149,28 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 	lock.unlock();
 }
 
+
+/*void TournamentManager::printTornamentResult(){
+	//iterating over the map and print the results 
+	// for (std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator it=idToAlgoInfo.begin(); it!=idToAlgoInfo.end(); ++it)
+    // std::cout << it->first << " " << it->second->score << '\n';
+}*/
+
 void TournamentManager::printTornamentResult(){
-//iterating over the map and print the results 
-	for (std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator it=idToAlgoInfo.begin(); it!=idToAlgoInfo.end(); ++it)
-    std::cout << it->first << " " << it->second->score << '\n';
+std::vector<std::pair<std::string, int>> pairs;
+	pairs.reserve(idToAlgoInfo.size());
+	for (std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator it=idToAlgoInfo.begin(); it!=idToAlgoInfo.end(); ++it){
+		int score = it->second->score;
+		string src;
+		pairs.push_back(make_pair(it->first,score));
+	}
+	sort(pairs.begin(), pairs.end(), [=](std::pair<string,int>& a, std::pair<string,int>& b)
+	{
+    return a.second > b.second;	
+	});
+	for(int i=0;i<(int)pairs.size();i++){
+		std::cout << pairs[i].first << " " << pairs[i].second << '\n';
+	}
 }
 
 void TournamentManager::getPlayersToPlay(string &playerOneId, string &playerTwoId)

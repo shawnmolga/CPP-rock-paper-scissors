@@ -1429,6 +1429,7 @@ double RSPPlayer_204157861::calcDistanceFromBombOrFlag(int to_x, int to_y)
 			}
 		}
 	}
+		cout<<"calcDistanceFromBombOrFlag: "<<minimalDistance<<endl;
 	//return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
 	return (double)(ROWS + COLS - minimalDistance);
 }
@@ -1463,6 +1464,7 @@ double RSPPlayer_204157861::calcDistanceFromUnknownPiece(int to_x, int to_y)
 			}
 		}
 	}
+	cout<<"calcDistanceFromUnknownPiece: "<<minimalDistance<<endl;
 return (double)(ROWS+COLS) - (double)minimalDistance;
 }
 
