@@ -45,7 +45,8 @@ public:
 	void positionJokers(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill);
 	void positionFlagsOnBoard(int player, std::vector<unique_ptr<PiecePosition>> &vectorToFill, int& bombsPositioned);
 	bool findEmptyNeigbor(int &row, int &col, int flagRow, int flagCol);
-
+	bool findAvailableCorner(int& x,int& y);
+	void locateMovingPiecesOnCorners(int& rocksNum,int& PapersNum,int& ScissorsNum,std::vector<unique_ptr<PiecePosition>> &vectorToFill);
 	//legality check
 	bool isLegalPosition(int row, int col);
 	bool checkIsOpponentNeighbors(int row, int col);
