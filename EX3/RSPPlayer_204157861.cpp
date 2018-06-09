@@ -552,6 +552,7 @@ void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 				AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? tolower(opponentPiece) : opponentPiece, false);
 				//if it is not a bomb and not a flag - than it is moving piece
 				gameBoard.board[x][y].isJokerKnown = false;
+				cout<<"notifyOnInitialBoard"<<endl;
 				gameBoard.board[x][y].isMovingPieceKnown = true;
 				gameBoard.board[x][y].isMovingPiece = true;
 				updateOpponentPiece(opponentPiece, true, x, y, false);
@@ -793,8 +794,8 @@ void RSPPlayer_204157861::updateProbabilities(bool resetProbability, int x, int 
 			}
 		}
 	}
-	cout<<"unknownPiecesNum: "<<unknownPiecesNum<<" unknown moving pieces: "<<unknownMovingPieceNum<<" unknown unmoving pieces: "<<unknownunmovingPieces <<endl;
-	cout<<"unkown flags: "<< unknownFlags<<" unkown papers: "<<unknownPapers<<" unkown rocks: "<<unknownRocks<<"unknown scissors: "<<unknownScissors<<endl;
+	//cout<<"unknownPiecesNum: "<<unknownPiecesNum<<" unknown moving pieces: "<<unknownMovingPieceNum<<" unknown unmoving pieces: "<<unknownunmovingPieces <<endl;
+	//cout<<"unkown flags: "<< unknownFlags<<" unkown papers: "<<unknownPapers<<" unkown rocks: "<<unknownRocks<<"unknown scissors: "<<unknownScissors<<endl;
 	if (unknownPiecesNum == 0 && (unknownMovingPieceNum == 0 || unknownunmovingPieces == 0))
 		return; //probabilities are 1 or 0
 
@@ -985,8 +986,8 @@ void RSPPlayer_204157861::getBestMove(int &from_x, int &from_y, int &to_x, int &
 			}
 		}
 	}
-	//cout<<"inside getBestMove"<<endl;
-	//cout<<"from_x:"<<from_x<< " from y: "<<from_y<< " to_x: "<< to_x <<"to y: " << to_y<< endl;
+	// cout<<"inside getBestMove"<<endl;
+	// cout<<"from_x:"<<from_x<< " from y: "<<from_y<< " to_x: "<< to_x <<"to y: " << to_y<< endl;
 	//cout<<"from_y:"<<from_y<<endl;
 
 	if(from_x == -3){
@@ -1086,7 +1087,7 @@ double RSPPlayer_204157861::getBestMoveForPiece(double score, const int &from_x,
 /**
     move piece to get its score and then undo the move.
 
-    @params: move - move to play
+    @params: move - move to playcd 
     @return: score - score of current move that was tried.
  */
 double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
@@ -1139,7 +1140,6 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 		score = calcScore(material, discovery, reveal, to_x, to_y);
 		willBeFight = false;
 	}
-
 	//return board to be as it was
 	AICell::updateCell(gameBoard.board[from_x][from_y], myCell.getPiece(),
 			myCell.getIsJoker());
@@ -1374,7 +1374,7 @@ double RSPPlayer_204157861::calcScore(double material, double discovery, double 
 	/*bool isJoker = false;
 	if (to_x != -1 && to_y != -1){
 		if (gameBoard.board[to_x][to_y].isMyPiece(myPlayerNum) && gameBoard.board[to_x][to_y].getIsJoker()){
-			isJoker = true;
+			//isJoker = true;
 		}
 	}*/
 	double flagSaftey = calcFlagSaftey();
@@ -1617,7 +1617,6 @@ int RSPPlayer_204157861::calcDistanceFromPiece(int piece_x, int piece_y, int my_
 	//there will be a fight with my piece vs unknown piece
 	//cout<<"will be fight: "<<willBeFight<<endl;
 	if (willBeFight && my_x == piece_x && my_y == piece_y){
-		//cout<<"YAAAAAAAAAAS"<<endl;
 		return 0;
 	}
 	distance = abs(my_x - piece_x) + abs(my_y - piece_y);
@@ -1808,7 +1807,7 @@ char RSPPlayer_204157861::shouldChangeJoker(double &score, int joker_x, int joke
 	char origRep = oldRep;
 	char newRep = 0;
 	char bestRep = -1;
-	double currScore;
+	double currScore =0; //NEED to change back?
 	double material = calcMaterial(gameBoard.board[joker_x][joker_y]);
 	double discovery = 0;
 	double reveal = 0;

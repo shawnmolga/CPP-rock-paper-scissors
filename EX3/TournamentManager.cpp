@@ -12,6 +12,7 @@ TournamentManager::TournamentManager() {
 	numOfRegisteredPlayers = 0;
 }
 
+
 TournamentManager::~TournamentManager()
 {
 	for (std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator it=idToAlgoInfo.begin(); it!=idToAlgoInfo.end(); ++it) {
@@ -70,6 +71,7 @@ void TournamentManager::printAlgoToPlay(){
 		cout<<algorithmsToPlay[i]<<endl;
 	}
 }
+
 void TournamentManager::startTournament()
 {
 	//ThreadPool pool(numOfThreads);
@@ -78,13 +80,9 @@ void TournamentManager::startTournament()
 			threadPool_vector.emplace_back(&TournamentManager::threadEntry, this); //like "push_back" but different
 			threadPool_vector[i].join();
 		}
-		//for (auto & thread : threadPool_vector) {
-		//	cout<<"inside for"<<endl;
-		//	thread.join(); // wait for all threads to finish
-		//}
 	}
 	else
-		singleThreadEntry();
+		threadEntry();
 	cout<<"DONE!"<<endl;
 }
 
@@ -133,23 +131,46 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 		lock.unlock();
 	}
 	else {
+		unique_lock<mutex> lock(updateScoreMutex);
 		idToAlgoInfo[playerOneId]->score ++;	
 		idToAlgoInfo[playerTwoId]->score ++;
+		lock.unlock();
 	}
 	unique_lock<mutex> lock(updateScoreMutex);
 	cout<<"***************************"<<endl;
 	cout<<"gameOverReason: "<<gameOverReason<<endl;
-	cout<<"idToAlgoInfo[playerOneId]:" <<idToAlgoInfo[playerOneId]->score<<endl;
-	cout<<"idToAlgoInfo[playerTwoId]:" <<idToAlgoInfo[playerTwoId]->score<<endl;
+	cout<<playerOneId<<":"  <<idToAlgoInfo[playerOneId]->score<<endl;
+	cout<<playerOneId<<":"<< "played games are: "<<idToAlgoInfo[playerOneId]->gamesPlayed<<endl;
+	cout<<playerTwoId<<":" <<idToAlgoInfo[playerTwoId]->score<<endl;
+	cout<<playerTwoId<<":" <<"played games are: " <<idToAlgoInfo[playerTwoId]->gamesPlayed<<endl;
+
 	printTornamentResult();
 	cout<<"***************************"<<endl;
 	lock.unlock();
 }
 
+
+/*void TournamentManager::printTornamentResult(){
+	//iterating over the map and print the results 
+	// for (std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator it=idToAlgoInfo.begin(); it!=idToAlgoInfo.end(); ++it)
+    // std::cout << it->first << " " << it->second->score << '\n';
+}*/
+
 void TournamentManager::printTornamentResult(){
-//iterating over the map and print the results 
-	for (std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator it=idToAlgoInfo.begin(); it!=idToAlgoInfo.end(); ++it)
-    std::cout << it->first << " " << it->second->score << '\n';
+std::vector<std::pair<std::string, int>> pairs;
+	pairs.reserve(idToAlgoInfo.size());
+	for (std::map<std::string, unique_ptr<PlayerAlgorithmInfo>>::iterator it=idToAlgoInfo.begin(); it!=idToAlgoInfo.end(); ++it){
+		int score = it->second->score;
+		string src;
+		pairs.push_back(make_pair(it->first,score));
+	}
+	sort(pairs.begin(), pairs.end(), [=](std::pair<string,int>& a, std::pair<string,int>& b)
+	{
+    return a.second > b.second;	
+	});
+	for(int i=0;i<(int)pairs.size();i++){
+		std::cout << pairs[i].first << " " << pairs[i].second << '\n';
+	}
 }
 
 void TournamentManager::getPlayersToPlay(string &playerOneId, string &playerTwoId)

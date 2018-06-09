@@ -30,7 +30,7 @@ using namespace std;
 #define JOKER 'J'
 #define FLAG 'F'
 
-#define MATERIAL_WEIGHT 8
+#define MATERIAL_WEIGHT 8 
 #define DISCOVERY_WEIGHT 10
 #define REVEAL_WEIGHT 3
 #define FLAG_SAFTEY_WEUGHT 50
