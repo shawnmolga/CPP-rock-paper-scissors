@@ -65,6 +65,8 @@ public:
 	double calcDistanceFromUnknownPiece(int to_x, int to_y);
 
 	//AI learning functions
+	char getOpponentPieceByHighestProbability(int x, int y);
+	bool fightByProbabilities(int x, int y, char myPiece, char opponentPiece, bool isMyPieceJoker);
 	void updateBoard(const Board &b);
 	void getBestMove(int &fromRow, int &fromCol, int &toRow, int &toCol);
 	double getBestMoveForPiece(double score, const int &fromRow,const int &fromCol, int &toRow, int &toCol);
@@ -97,6 +99,7 @@ private:
 	AICell opponentCell;
 	AICell myCell;
 	bool willBeFight;
+	bool eatMovingPiecesMode;
 };
 
 

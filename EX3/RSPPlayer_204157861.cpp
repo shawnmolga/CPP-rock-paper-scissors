@@ -20,6 +20,7 @@ RSPPlayer_204157861::RSPPlayer_204157861()
 	opponentMovingPieceNumOnBoard = SCISSORS_NUM + ROCKS_NUM + PAPERS_NUM + JOKERS_NUM; //we dont know if joker is moving piece now or not
 	opponentJokersNumOnBoard = JOKERS_NUM;
 	willBeFight = false;
+	eatMovingPiecesMode = false;
 }
 
 REGISTER_ALGORITHM(204157861)
@@ -521,6 +522,10 @@ void RSPPlayer_204157861::updateOpponentPiece(char piece, bool isOpponentWin, in
 		break;
 	}
 	opponentMovingPieceNumOnBoard--;
+
+	if (opponentFlagsNumOnBoard == 0) {
+		eatMovingPiecesMode = true;
+	}
 }
 
 int RSPPlayer_204157861::getKnownJokersNumOnBoard() {
@@ -928,6 +933,9 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 	{
 		score = INT_MIN;
 	}
+	else if (eatMovingPiecesMode && !lostPieceInFight && opponentCell.isMovingPieceKnown && opponentCell.isMovingPiece) {
+		score = INT_MAX;
+	}
 	else{
 		cout<<"material: "<< material<< " discovery:"<< discovery<<" reveal:"<<reveal<<endl;
 		score = calcScore(material, discovery, reveal, to_x, to_y);
@@ -960,13 +968,23 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 bool RSPPlayer_204157861::tryToFight(int to_x, int to_y, char myPiece, bool isJoker, bool& isProbOne)
 {
 	char opponentPiece = gameBoard.board[to_x][to_y].getPiece();
-	if (opponentPiece != '#' && gameBoard.board[to_x][to_y].isJokerKnown && !gameBoard.board[to_x][to_y].getIsJoker())
+	bool isOpponentJoker = gameBoard.board[to_x][to_y].isJokerKnown && gameBoard.board[to_x][to_y].getIsJoker();
+	if (opponentPiece != '#' && !isOpponentJoker)
 	{
 		//we know the opponent piece so we can simulate fight normally
 		isProbOne = true;
 		return fight(to_x, to_y, myPiece, opponentPiece, isJoker);
 	}
-	else
+	else {
+		int prob = getRandomNumInRange(1,100);
+		if (opponentPiece != '#' && prob < 15) { //might be a joker that changed piece rep
+			return fight(to_x, to_y, myPiece, opponentPiece, isJoker);
+		}
+		opponentPiece = getOpponentPieceByHighestProbability(to_x, to_y);
+		return fight(to_x, to_y, myPiece, opponentPiece, isJoker);
+	}
+
+	/*else
 	{
 		if (opponentPiece != '#' && (!gameBoard.board[to_x][to_y].isJokerKnown || gameBoard.board[to_x][to_y].getIsJoker())) {
 			if (!gameBoard.board[to_x][to_y].isJokerKnown) {
@@ -1005,7 +1023,57 @@ bool RSPPlayer_204157861::tryToFight(int to_x, int to_y, char myPiece, bool isJo
 			AICell::updateCell(gameBoard.board[to_x][to_y], myPiece,isJoker);
 			return false; //win
 		}
+	}*/
+
+}
+
+/**
+    perform a fight with my moving piece against opponent's piece.
+
+    @params: x,y - fight position
+    myPiece - my piece to participate the fight at
+    opponentPiece - opponent piece to participate the fight at
+    isMyPiecejoker - is my piece joker - true, else - false.
+    @return: true - current player lost a piece (my player)
+    else - false.
+ */
+
+char RSPPlayer_204157861::getOpponentPieceByHighestProbability(int x, int y){
+	char winner = 0;
+	double paperProb = gameBoard.board[x][y].paperProbability;
+	double rockProb = gameBoard.board[x][y].rockProbability;
+	double scissorsProb = gameBoard.board[x][y].scissorsProbability;
+	double flagProb = gameBoard.board[x][y].flagProbability;
+
+	double maxProb = -1.0;
+
+	if (flagProb > maxProb) {
+		maxProb = flagProb;
+		winner = myPlayerNum == 1 ? 'f' : 'F';
 	}
+
+	if (paperProb > maxProb) {
+		maxProb = paperProb;
+		winner = myPlayerNum == 1 ? 'p' : 'P';
+	}
+
+	if (rockProb > maxProb) {
+		maxProb = rockProb;
+		winner = myPlayerNum == 1 ? 'r' : 'R';
+	}
+
+	if (scissorsProb > maxProb) {
+		maxProb = scissorsProb;
+		winner = myPlayerNum == 1 ? 's' : 'S';
+	}
+
+	if ((1.0-(flagProb+paperProb+rockProb+scissorsProb)) > maxProb) {
+		maxProb = 1.0-(flagProb+paperProb+rockProb+scissorsProb);
+		winner = myPlayerNum == 1 ? 'b' : 'B';
+	}
+
+	return winner;
+
 }
 
 /**
@@ -1112,20 +1180,20 @@ double RSPPlayer_204157861::calcScore(double material, double discovery, double 
 		}
 	}
 	double flagSaftey = calcFlagSaftey();
-	double distanceFromBombOrFlag = to_x == -1 ? 0 : calcDistanceFromBombOrFlag(to_x,to_y);
+	double distanceFromCriticalPiece = to_x == -1 ? 0 : calcDistanceFromBombOrFlag(to_x,to_y);
 	double distanceFromUnknownPiece = to_x == -1 ? 0 : calcDistanceFromUnknownPiece(to_x,to_y);
 
 	//we dont want to defend opponent's flag with bombs !!
-	if (distanceFromBombOrFlag > 0.9 || distanceFromUnknownPiece > 0.9){
+	/*if (distanceFromCriticalPiece > 0.9 || distanceFromUnknownPiece > 0.9){
 		if (isJoker && !gameBoard.board[to_x][to_y].checkIsMovingPiece()){
-			distanceFromBombOrFlag = 0;
+			distanceFromCriticalPiece = 0;
 			distanceFromUnknownPiece = 0;
 		}
 
-	}
+	}*/
 
 	double score = MATERIAL_WEIGHT * material + DISCOVERY_WEIGHT * discovery + REVEAL_WEIGHT * reveal +
-			FLAG_SAFTEY_WEUGHT * flagSaftey + DISTANCE_FROM_FLAG_WEIGHT * distanceFromBombOrFlag +
+			FLAG_SAFTEY_WEUGHT * flagSaftey + DISTANCE_FROM_FLAG_WEIGHT * distanceFromCriticalPiece +
 			DISTANCE_FROM_UNKNOWN_WEIGHT * distanceFromUnknownPiece;
 	cout<<"move: " << to_x << ","<<to_y<<" score : " <<score<<endl;
 	return score;
