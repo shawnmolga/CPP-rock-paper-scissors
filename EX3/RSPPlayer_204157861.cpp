@@ -430,6 +430,7 @@ void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 				AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? tolower(opponentPiece) : opponentPiece, false);
 				//if it is not a bomb and not a flag - than it is moving piece
 				gameBoard.board[x][y].isJokerKnown = false;
+				cout<<"notifyOnInitialBoard"<<endl;
 				gameBoard.board[x][y].isMovingPieceKnown = true;
 				gameBoard.board[x][y].isMovingPiece = true;
 				updateOpponentPiece(opponentPiece, true, x, y, false);
@@ -889,7 +890,7 @@ double RSPPlayer_204157861::getBestMoveForPiece(double score, const int &from_x,
 /**
     move piece to get its score and then undo the move.
 
-    @params: move - move to play
+    @params: move - move to playcd 
     @return: score - score of current move that was tried.
  */
 double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
@@ -941,7 +942,6 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 		score = calcScore(material, discovery, reveal, to_x, to_y);
 		willBeFight = false;
 	}
-
 	//return board to be as it was
 	AICell::updateCell(gameBoard.board[from_x][from_y], myCell.getPiece(),
 			myCell.getIsJoker());
@@ -1256,6 +1256,7 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 		else {
 			AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? tolower(opponentPiece) : opponentPiece, isJoker);
 			//if it is not a bomb and not a flag - than it is moving piece
+			cout<<"here?"<<endl;
 			gameBoard.board[x][y].isMovingPieceKnown = true;
 			gameBoard.board[x][y].isMovingPiece = true;
 		}
@@ -1381,6 +1382,7 @@ double RSPPlayer_204157861::calcDistanceFromUnknownPiece(int to_x, int to_y)
 			{
 				if (!gameBoard.board[i][j].isMovingPieceKnown)
 				{
+					cout<<"calcDistanceFromUnknownPiece into cond: " << to_x << ","<<to_y<< " : "<<"i:  "<< i <<" j:" <<j<<endl;
 					distance = calcDistanceFromPiece(i, j, to_x, to_y);
 					if (minimalDistance > distance)
 						minimalDistance = distance;
@@ -1593,7 +1595,7 @@ char RSPPlayer_204157861::shouldChangeJoker(double &score, int joker_x, int joke
 	char origRep = oldRep;
 	char newRep = 0;
 	char bestRep = -1;
-	double currScore;
+	double currScore =0; //NEED to change back?
 	double material = calcMaterial(gameBoard.board[joker_x][joker_y]);
 	double discovery = 0;
 	double reveal = 0;
