@@ -20,7 +20,6 @@ class Cell
 		static bool isPlayerOnePiece(Cell& cell);
 		static void updateCell(Cell& cell, char piece, bool isJoker);
 		bool checkIsMovingPiece();
-
 		void setIsJoker(bool isJoker_){
 			isJoker = isJoker_;
 		}
