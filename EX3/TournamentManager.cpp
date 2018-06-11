@@ -38,6 +38,7 @@ void TournamentManager::registerAlgorithm(std::string id, std::function<std::uni
 }
 
 void TournamentManager::startNewGame(const string &playerOneId, const string &playerTwoId){
+	cout << "player one is: " << playerOneId <<" , player 2 is: " << playerTwoId << endl;
 	RPSGame game (idToAlgoInfo[playerOneId], idToAlgoInfo[playerTwoId]);
 	game.startGame();
 	updateScore(game, playerOneId,playerTwoId);

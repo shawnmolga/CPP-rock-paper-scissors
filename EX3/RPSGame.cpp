@@ -6,9 +6,27 @@ RPSGame::RPSGame(const unique_ptr<PlayerAlgorithmInfo> &playerOne, const unique_
     numOfMoves = 0;
 }
 
-void RPSGame::updateJokerMovingPieces()
+void RPSGame::updateJokerPieceRep(int playerNum, char rep)
 {
-    for (int i = 1; i <= COLS; ++i)
+	int pieceIndex = -1;
+	 switch (toupper(rep))
+	                {
+	                case ROCK:
+	                    pieceIndex = 0;
+	                    break;
+	                case PAPER:
+	                    pieceIndex = 1;
+	                    break;
+	                case SCISSOR:
+	                    pieceIndex = 2;
+	                    break;
+	                case BOMB:
+	                    pieceIndex = 3;
+	                    break;
+	                }
+
+	 playerNum == 1 ? playerOne.setNumOfPieces(pieceIndex,playerOne.numOfPieces[pieceIndex] + 1) : playerTwo.setNumOfPieces(pieceIndex,playerTwo.numOfPieces[pieceIndex] + 1);
+   /* for (int i = 1; i <= COLS; ++i)
     {
         for (int j = 1; j <= ROWS; ++j)
         {
@@ -38,7 +56,7 @@ void RPSGame::updateJokerMovingPieces()
                                                                                      1);
             }
         }
-    }
+    }*/
 }
 
 /*
@@ -593,8 +611,17 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
     //check to see if there is a piece in the sepcified coordinates in the Move object
     if (gameBoard.board.at(from_x).at(from_y).getPiece() == 0)
     {
-        cout << "Error: there is no piece in this position" << endl;
-        return false;
+    	cout << "Error: there is no piece in this position" << endl;
+    	cout << "Error: illegal location on board" << endl;
+    	cout << from_x << "," << from_y << endl;
+    	cout << to_x << "," << to_y << endl;
+    	cout << "is player one?" << isPlayer1 << endl;
+    	cout<<"playerOne"<<playerOne.isLeftMovingPieces(true)<<endl;
+    	cout<<"playerTwo"<<playerTwo.isLeftMovingPieces(true)<<endl;
+
+    	PrintBoardToConsole();
+
+    	return false;
     }
     //checks whether the piece we want to move belongs to the player from who we received the move
     else if ((isPlayer1 && islower(gameBoard.board.at(from_x).at(from_y).getPiece())) ||
@@ -799,8 +826,10 @@ int RPSGame::insertToBoard(int playerNum, int x, int y, char inputPiece, bool &i
         }
         else
         {
-            if (isJoker)
+            if (isJoker) {
                 Cell::updateCell(gameBoard.board.at(x).at(y), piecePos->getJokerRep(), isJoker);
+                //updateJokerPieceRep(playerNum, piecePos->getJokerRep());
+            }
             else
                 Cell::updateCell(gameBoard.board.at(x).at(y), inputPiece, isJoker);
         }
@@ -882,7 +911,8 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
             x = vectorToFill[i]->getPosition().getX();
             y = vectorToFill[i]->getPosition().getY();
             if (vectorToFill[i]->getJokerRep() != '#'){
-                cout<<"Joker Of player:"<<playerNum<<endl;
+                //cout<<"Joker Of player:"<<playerNum<<endl;
+            	updateJokerPieceRep(playerNum, vectorToFill[i]->getJokerRep());
                 isJoker = true;
             }
 
@@ -942,21 +972,22 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
     playerAlgoOne->getInitialPositions(1, vectorToFillPlayerOne);
     playerAlgoTwo->getInitialPositions(2, vectorToFillPlayerTwo);
     //NEED TO ERASE
-    PrintBoardToConsole();
+    //PrintBoardToConsole();
     //NEED TO ERASE
     int numOfPositionedPieces[6] = {0};
 
     //check player One Format
     int resultPlayerOne = locateOnBoard(1, vectorToFillPlayerOne, isPlayerOneLegalFormat, numOfPositionedPieces, fights,
                                         initFights);
-    cout<<"BEFORE UPDATE!!!"<<endl;
-    playerOne.isLeftMovingPieces(true);
-    updateJokerMovingPieces();
+    //cout<<"BEFORE UPDATE!!!"<<endl;
+    //playerOne.isLeftMovingPieces(true);
+    //updateJokerMovingPieces();
     memset(numOfPositionedPieces, 0, sizeof(numOfPositionedPieces)); // for automatically-allocated arrays
     int resultPlayerTwo = locateOnBoard(2, vectorToFillPlayerTwo, isPlayerTwoLegalFormat, numOfPositionedPieces, fights,
                                         initFights);
-    playerTwo.isLeftMovingPieces(true);
-    updateJokerMovingPieces();
+    //delete this
+    //playerTwo.isLeftMovingPieces(true);
+    //updateJokerMovingPieces();
     if (resultPlayerOne == BAD_FORMAT_POS_ERR || resultPlayerOne == READ_LINE_POS_ERR)
     {
         return BAD_FORMAT_POS_ERR;
@@ -1041,10 +1072,10 @@ int RPSGame::checkBadFormat()
     }
     const RPSBoard gameBoardConst = gameBoard;
     //NEED TO ERASE
-    cout<<"After update:"<<endl;
-    PrintBoardToConsole();
-    playerOne.isLeftMovingPieces(true);
-    playerTwo.isLeftMovingPieces(true);
+    //cout<<"After update:"<<endl;
+    //PrintBoardToConsole();
+    //playerOne.isLeftMovingPieces(true);
+    //playerTwo.isLeftMovingPieces(true);
     //NEED TO ERASE
 
     playerAlgoOne->notifyOnInitialBoard(gameBoardConst, initFights);
@@ -1415,11 +1446,11 @@ void RPSGame::PrintBoardToConsole()
             {
                 if (Cell::isPlayerOnePiece(gameBoard.board[j][i]))
                 {
-                    cout << " J ";
+                    cout << " J="<<gameBoard.board[j][i].getPiece();
                 }
                 else
                 {
-                    cout << " j ";
+                    cout << " j="<<gameBoard.board[j][i].getPiece();
                 }
             }
             else if (gameBoard.board[j][i].getPiece() == 0)

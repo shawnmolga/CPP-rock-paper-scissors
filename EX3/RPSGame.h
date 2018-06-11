@@ -50,8 +50,8 @@ private:
 public:
 	RPSGame(const unique_ptr<PlayerAlgorithmInfo>& playerOne, const unique_ptr<PlayerAlgorithmInfo> & playerTwo);
 	string ToString(GAME_OVER_TYPE typeGame);
-	void updateJokerMovingPieces();
-
+	//void updateJokerMovingPieces();
+	void updateJokerPieceRep(int playerNum, char pieceRep);
 	//move functions and help-functions
 	int handleNonEmptyMove(bool playerOneNonEmpty,std::unique_ptr<Move> & move,bool &isPlayerOneTurn, bool &isGameOverInternal, bool &isBadFormat);
 	bool checkDirectionOfMove(int from_x, int from_y, int to_x, int to_y);
