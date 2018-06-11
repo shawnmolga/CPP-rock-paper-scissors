@@ -13,7 +13,6 @@
 #include "RPSBoard.h"
 #include "RPSpoint.h"
 #include "PiecePosition.h"
-#include "FilePlayerAlgorithm.h"
 #include "Player.h"
 #include "RSPPlayer_204157861.h"
 #include "PlayerAlgorithmInfo.h"
@@ -63,9 +62,6 @@ public:
 			unique_ptr<PiecePosition> & piecePos, RPSFight &fights,
 			std::vector<unique_ptr<FightInfo>> &initFights  );
 	void PrintBoardToConsole();
-	//game status functions and help-functios
-	//bool initGameMethod(string gameMethod);
-	//bool initPlayersAlgo(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
 	int startGame();
 	int locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>> &vectorToFill, bool &isPlayerLegalFormat, int numOfPositionedPieces[], RPSFight &fights, std::vector<unique_ptr<FightInfo>> &initFights);
 	void printBoardToFile(ofstream & output);
@@ -97,7 +93,6 @@ public:
 	bool fight(bool isPlayerOneTurn, int row, int col, char currPiece, bool isCurrPieceJoker,RPSFight & fights,std::vector<unique_ptr<FightInfo>> &initFights,RPSpoint posOne,RPSpoint posTwo);
 
 	//legality format checks functions
-	bool isAllGameFilesExists(bool isPlayerOneUseFile, bool isPlayerTwoUseFile);
 	int checkBadFormat();
 	int checkPositionOnBoard(bool &isPlayerOneLegalFormat,bool &isPlayerTwoLegalFormat, RPSFight &fights, std::vector<unique_ptr<FightInfo>>& initFights);
 	int checkNumOfPieces(int playerNum, bool isPieceOkPlayer1, bool isPieceOkPlayer2, int inputPiece, bool & isPlayerLegalFormat, int numOfPositionedPieces[]);

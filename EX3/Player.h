@@ -22,7 +22,7 @@ class Player
 	bool getIsPlayerTurn() const;
 	void setIsWinner(bool isWinner);
 	void setScore(int updateScore);
-	bool isLeftMovingPieces(bool toPrint)const;
+	bool isLeftMovingPieces()const;
 	void setIsPlayerTurn(bool turn );
 	void setNumOfPieces(int index,int value);
 
