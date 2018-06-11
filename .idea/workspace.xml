@@ -12,9 +12,6 @@
     <list default="true" id="da2d32cb-143c-46ff-86a6-ed00b66028c2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EX4/GameBoard.h" beforeDir="false" afterPath="$PROJECT_DIR$/EX4/GameBoard.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX4/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/EX4/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX4/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/EX4/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EX4/unit_test_util.h" beforeDir="false" afterPath="$PROJECT_DIR$/EX4/unit_test_util.h" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,8 +25,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EX4/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="416">
-              <caret line="52" column="19" selection-start-line="52" selection-start-column="19" selection-end-line="52" selection-end-column="19" />
+            <state relative-caret-position="867">
+              <caret line="51" column="35" selection-start-line="51" selection-start-column="32" selection-end-line="51" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -55,11 +52,11 @@
       <file leaf-file-name="GameBoard.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/EX4/GameBoard.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="79" column="54" selection-start-line="79" selection-start-column="54" selection-end-line="79" selection-end-column="54" />
+            <state relative-caret-position="307">
+              <caret line="241" column="4" selection-start-line="241" selection-start-column="4" selection-end-line="241" selection-end-column="4" />
               <folding>
                 <element signature="e#204#263#0" expanded="true" />
-                <element signature="e#1918#2510#0" />
+                <element signature="e#385#449#1" />
               </folding>
             </state>
           </provider>
@@ -78,10 +75,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>startGame</find>
-      <find>auto</find>
-      <find>isjoker</find>
-      <find>isJoker</find>
       <find>startT</find>
       <find>aicell</find>
       <find>aicell::</find>
@@ -108,6 +101,10 @@
       <find>currCols</find>
       <find>cout</find>
       <find>while</find>
+      <find>!=</find>
+      <find>playerPieces</find>
+      <find>gameBoadImp</find>
+      <find>GameBoardImp</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -201,11 +198,6 @@
             <path>
               <item name="CPP-PRJ" type="b2602c69:ProjectViewProjectNode" />
               <item name="CPP-PRJ" type="462c0819:PsiDirectoryNode" />
-              <item name="EX3" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CPP-PRJ" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CPP-PRJ" type="462c0819:PsiDirectoryNode" />
               <item name="EX4" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -265,7 +257,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="199839000" />
+    <option name="totallyTimeSpent" value="203169000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1293" height="693" extended-state="6" />
@@ -301,6 +293,17 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/EX4/GameBoard.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="109" column="24" selection-start-line="109" selection-start-column="20" selection-end-line="109" selection-end-column="24" />
+          <folding>
+            <element signature="e#204#263#0" expanded="true" />
+            <element signature="e#385#449#1" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/EX2/Player.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
@@ -402,20 +405,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/EX3/ThreadPool.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-193">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EX3/ThreadPool.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="18" selection-start-line="29" selection-start-column="9" selection-end-line="29" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/EX3/ThreadPool.cpp" />
+    <entry file="file://$PROJECT_DIR$/EX3/ThreadPool.h" />
     <entry file="file://$PROJECT_DIR$/EX3/PlayerAlgorithmInfo.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -469,9 +460,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="356">
           <caret line="942" column="5" lean-forward="true" selection-start-line="942" selection-start-column="5" selection-end-line="942" selection-end-column="5" />
-          <folding>
-            <element signature="e#85#117#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -582,13 +570,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/EX4/Cell.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/EX4/Cell.h" />
     <entry file="file://$PROJECT_DIR$/EX4/Piece.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="42">
@@ -615,9 +597,6 @@
         <state relative-caret-position="-153" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/EX3/Move.h">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/EX4/Piece.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -627,18 +606,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/EX4/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="52" column="19" selection-start-line="52" selection-start-column="19" selection-end-line="52" selection-end-column="19" />
+        <state relative-caret-position="867">
+          <caret line="51" column="35" selection-start-line="51" selection-start-column="32" selection-end-line="51" selection-end-column="35" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/EX4/GameBoard.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="79" column="54" selection-start-line="79" selection-start-column="54" selection-end-line="79" selection-end-column="54" />
+        <state relative-caret-position="307">
+          <caret line="241" column="4" selection-start-line="241" selection-start-column="4" selection-end-line="241" selection-end-column="4" />
           <folding>
             <element signature="e#204#263#0" expanded="true" />
-            <element signature="e#1918#2510#0" />
+            <element signature="e#385#449#1" />
           </folding>
         </state>
       </provider>
