@@ -728,7 +728,8 @@ double  RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 bool  RSPPlayer_204157861::tryToFight(int to_x, int to_y, char myPiece, bool isJoker, bool& isProbOne)
 {
 	char opponentPiece = gameBoard.board[to_x][to_y].getPiece();
-	if (opponentPiece != '#')
+	bool isOpponentJoker = (gameBoard.board[to_x][to_y].isJokerKnown && gameBoard.board[to_x][to_y].isJoker);
+	if (opponentPiece != '#' && !isOpponentJoker)
 	{ //we know the opponent piece so we can simulate fight normally
 		isProbOne = true;
 		return fight(to_x, to_y, myPiece, opponentPiece, isJoker);
@@ -736,7 +737,7 @@ bool  RSPPlayer_204157861::tryToFight(int to_x, int to_y, char myPiece, bool isJ
 	else
 	{
 		int prob = getRandomNumInRange(1, 100);
-		if (prob < 50)
+		/*if (prob < 50)
 		{ //guess i will lose in fight
 			if (gameBoard.board[to_x][to_y].isMovingPieceKnown && !gameBoard.board[to_x][to_y].isMovingPiece)
 			{
@@ -748,7 +749,8 @@ bool  RSPPlayer_204157861::tryToFight(int to_x, int to_y, char myPiece, bool isJ
 		{ //guess i won
 			AICell::updateCell(gameBoard.board[to_x][to_y], myPiece,isJoker);
 			return false; //win
-		}
+		}*/
+		double
 	}
 }
 
@@ -1199,7 +1201,7 @@ double  RSPPlayer_204157861::calcDiscovery(AICell cell)
 {
 	int isFlagKnown = cell.flagProbability == 0 ? 0 : 1;
 	int isJokerKnown = cell.isJokerKnown ? 0 : 1;
-	int isMovingPiece = cell.isMovingPiece ? 0 : 1;
+	int isMovingPiece = cell.isMovingPieceKnown ? 0 : 1;
 
 	return (double)(isFlagKnown + isJokerKnown + isMovingPiece) / 3.0; //normalized to one
 }

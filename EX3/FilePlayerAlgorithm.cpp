@@ -198,7 +198,6 @@ int FilePlayerAlgorithm::getPositionFromLine(int start, const string &line,
     false - piece representation is not legal.
  */
 bool FilePlayerAlgorithm::handleJokerPiece(string line,int & nextIndex, char & jokerRep) {
-
 	if ((size_t) nextIndex >= line.length()) { //no joker representation in line - we've reached end of line
 		cout << "Error - bad format: missing joker rep piece" << endl;
 		return false;
@@ -255,8 +254,7 @@ bool FilePlayerAlgorithm::getPositionAndRepFromLine(const string &line, int &row
 	{
 		
 		cout << "Error: illegal location on board" << endl;
-		cout<<"ROW: "<<row<<endl;
-		cout<<"COL: "<<col<<endl;
+		cout<<"row"<<row<<","<<"col"<<","<<col<<endl;
 		return false;
 	}
 	if (piece == 'J') {

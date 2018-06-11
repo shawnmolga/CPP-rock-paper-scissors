@@ -16,7 +16,13 @@ void Player::setIsWinner(bool win) {
 	isWinner = win;
 }
 
-bool Player::isLeftMovingPieces() const {
+bool Player::isLeftMovingPieces(bool toPrint) const {
+		if(toPrint){
+		cout<<"playerNumber:"<<playerNum<<endl;
+		for(int i=0;i<6;++i){
+			cout<<"i: "<<i<<"value:"<<numOfPieces[i]<<endl;
+		}
+	}
 	for (int i = 0; i < 6; ++i) {
 		if (i == 3 || i == 4 || i == 5)
 			continue;

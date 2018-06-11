@@ -39,7 +39,7 @@ public:
     virtual int getPieceFromLine(int start, const string &line);
     virtual int getPositionFromLine(int start, const string &line, int &row, int &col);
     bool getPositionAndRepFromLine(const string &line, int &row, int &col, char &jokerRep, char &piece);
-    void copyString(string & src, string toCopy);
+    void copyString(string & src, string to);
     bool checkEmptyLine(int start, const string &line);
     unique_ptr<Move> handleNonEmptyLine(string local_line, int & from_x, int & from_y, int & to_x, int & to_y,  RPSpoint& from, RPSpoint& to);
 

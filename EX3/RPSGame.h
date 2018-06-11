@@ -50,8 +50,8 @@ private:
 public:
 	RPSGame(const unique_ptr<PlayerAlgorithmInfo>& playerOne, const unique_ptr<PlayerAlgorithmInfo> & playerTwo);
 	string ToString(GAME_OVER_TYPE typeGame);
-	void updateJokerMovingPieces();
-
+	//void updateJokerMovingPieces();
+	void updateJokerPieceRep(int playerNum, char pieceRep);
 	//move functions and help-functions
 	int handleNonEmptyMove(bool playerOneNonEmpty,std::unique_ptr<Move> & move,bool &isPlayerOneTurn, bool &isGameOverInternal, bool &isBadFormat);
 	bool checkDirectionOfMove(int from_x, int from_y, int to_x, int to_y);
@@ -71,7 +71,8 @@ public:
 	void printBoardToFile(ofstream & output);
 	void printOutputFile(const string &outputFile);
 	void updateJokerChange(char prevJokerRep, char newRep, bool isPlayerOne);
-	int closeGame(bool & isGameOverInternal, bool & isBadFormat, bool & isPlayerOneTurn, bool isPlayerOneEOF, bool isPlayerTwoEOF);
+	int closeGame(bool &isGameOverInternal, bool &isBadFormat, bool &isPlayerOneTurn, bool isPlayerOneEOF,
+                       bool isPlayerTwoEOF, bool hasNoMovingPiecePlayerOne, bool hasNoMovingPiecePlayerTwo);	
 	int handleEOF(bool playerOneEOF, bool & isBadFormat, bool & isPlayerOneTurn, bool & isGameOverInternal, bool isPlayerOneEOF, bool isPlayerTwoEOF);
 	void gameOverSetter(Player* currPlayer, Player* nextPlayer, bool isWinner1, bool isWinner2, GAME_OVER_TYPE type);
 	void resetGameResults();
@@ -103,6 +104,7 @@ public:
 	bool checkPieceOverflow(int numOfPieces[]);
 	bool checkGameOver(bool isBeforeMove, bool isPlayerOneTurn);
 	bool countNumOfPieces(const int playerNum,int numOfPositionedPieces[],const int piece );
+	bool checkMovingPieceLeft(int playerNum);
 
 	GAME_OVER_TYPE getGameOverReason(){
 		return gameOverReason;
