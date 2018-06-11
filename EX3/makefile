@@ -35,8 +35,6 @@ RPSpoint.o: RPSpoint.cpp RPSpoint.h Point.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
 AICell.o: AICell.cpp AICell.h Cell.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
-#ThreadPool.o : ThreadPool.cpp
-#	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
 AIBoard.o: AIBoard.cpp AIBoard.h Board.h Constants.h AICell.h Point.h RPSpoint.h
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp -mcmodel=large
 PlayerAlgorithmInfo.o:  PlayerAlgorithmInfo.cpp PlayerAlgorithmInfo.h PlayerAlgorithm.h

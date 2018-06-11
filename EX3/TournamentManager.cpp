@@ -53,7 +53,18 @@ void TournamentManager::startTournament()
 		}
 	}
 	else
-		threadEntry();
+				singleThreadEntry();
+}
+
+void TournamentManager::singleThreadEntry(){
+	string playerOneId;
+	string playerTwoId;
+	getPlayersToPlay(playerOneId, playerTwoId); //locked - only one thread can enter this function at a time
+	cout<<"before new game "<<endl;
+	cout<<"playerOneId: "<<playerOneId<<endl;
+	cout<<"playerTwoId: "<<playerTwoId<<endl;
+	startNewGame("204157861","204664999");
+	cout<<"after new game  "<<endl;	
 }
 
 void TournamentManager::threadEntry(){
@@ -92,17 +103,6 @@ void  TournamentManager::updateScore(RPSGame & game,const string &playerOneId, c
 		idToAlgoInfo[playerTwoId]->score ++;
 		lock.unlock();
 	}
-	unique_lock<mutex> lock(updateScoreMutex);
-	cout<<"***************************"<<endl;
-	cout<<"gameOverReason: "<<gameOverReason<<endl;
-	cout<<playerOneId<<":"  <<idToAlgoInfo[playerOneId]->score<<endl;
-	cout<<playerOneId<<":"<< "played games are: "<<idToAlgoInfo[playerOneId]->gamesPlayed<<endl;
-	cout<<playerTwoId<<":" <<idToAlgoInfo[playerTwoId]->score<<endl;
-	cout<<playerTwoId<<":" <<"played games are: " <<idToAlgoInfo[playerTwoId]->gamesPlayed<<endl;
-
-	printTornamentResult();
-	cout<<"***************************"<<endl;
-	lock.unlock();
 }
 
 void TournamentManager::printTornamentResult(){

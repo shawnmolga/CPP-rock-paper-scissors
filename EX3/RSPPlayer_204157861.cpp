@@ -278,7 +278,6 @@ int RSPPlayer_204157861::getRandomNumInRange(int start, int end)
 {
 	std::random_device rd;								  // obtain a random number from hardware
 	std::mt19937 eng(rd());								  // seed the generator
-	//cout<<"start: "<<start<<"end: "<<end<<" in line 164 RSP204157861"<<endl;
 	std::uniform_int_distribution<> yDistr(start, end); // define the range
 	return yDistr(eng);
 }
@@ -529,7 +528,6 @@ void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 		char myPiece = toupper(fights[i]->getPiece(myPlayerNum)); //do we need this?
 		char opponentPiece = toupper(fights[i]->getPiece(myPlayerNum == 1 ? 2 : 1));
 		int winner = fights[i]->getWinner();
-		//cout<<"fight number: "<<i << " x,y:"<<x << "," <<y<< " mypiece: "<<myPiece<<" opponent piece: "<<opponentPiece<<" winner: "<< winner<<endl;
 		if (winner == 0)
 		{
 			AICell::cleanCell(gameBoard.board[x][y]);
@@ -551,7 +549,6 @@ void RSPPlayer_204157861::notifyOnInitialBoard(const Board &b,
 				AICell::updateCell(gameBoard.board[x][y], myPlayerNum == 1 ? tolower(opponentPiece) : opponentPiece, false);
 				//if it is not a bomb and not a flag - than it is moving piece
 				gameBoard.board[x][y].isJokerKnown = false;
-				cout<<"notifyOnInitialBoard"<<endl;
 				gameBoard.board[x][y].isMovingPieceKnown = true;
 				gameBoard.board[x][y].isMovingPiece = true;
 				updateOpponentPiece(opponentPiece, true, x, y, false);
@@ -723,10 +720,6 @@ int RSPPlayer_204157861::getKnownMovingPiecesNumOnBoard() {
  */
 void RSPPlayer_204157861::updateProbabilities(bool resetProbability, int x, int y)
 {
-//	if (opponentJokersNumOnBoard > 0) {
-//		removeEatenJokersFromCounters();
-//	}
-
 	int unknownFlags = opponentFlagsNumOnBoard;
 	int unknownPapers = opponentPapersNumOnBoard-opponentJokersNumOnBoard;
 	int unknownRocks = opponentRocksNumOnBoard-opponentJokersNumOnBoard;
@@ -1127,7 +1120,6 @@ double RSPPlayer_204157861::tryMovePiece(unique_ptr<Move> &move)
 		score = INT_MAX;
 	}
 	else{
-		//cout<<"material: "<< material<< " discovery:"<< discovery<<" reveal:"<<reveal<<endl;
 		score = calcScore(material, discovery, reveal, to_x, to_y);
 		willBeFight = false;
 	}
@@ -1412,18 +1404,6 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 	if (winner == 0)
 	{
 		updateOpponentPiece(opponentPiece,false,x,y,isJoker);
-//		if (opponentPiece == 'B') {
-//			opponentBombsNumOnBoard--;
-//			if (isJoker) //for removing extra pieces as jokers unkown
-//				opponentMovingPieceNumOnBoard--;
-//		}
-//		else if (opponentPiece == 'F')
-//			opponentFlagsNumOnBoard--;
-//		else {
-//			opponentMovingPieceNumOnBoard--;
-//			if (isJoker) //for removing extra pieces as jokers unkown
-//				opponentBombsNumOnBoard--;
-//		}
 		Cell::cleanCell(gameBoard.board[x][y]);
 		gameBoard.board[x][y].resetKnowlage();
 		updateProbabilities(true, x, y);
@@ -1436,8 +1416,6 @@ void RSPPlayer_204157861::notifyFightResult(const FightInfo &fightInfo)
 		if (opponentPiece == 'B')
 		{
 			opponentBombsNumOnBoard--;
-//			if (isJoker) //for removing extra pieces as jokers unkown
-//				opponentMovingPieceNumOnBoard--;
 			Cell::cleanCell(gameBoard.board[x][y]);
 			gameBoard.board[x][y].resetKnowlage();
 			updateProbabilities(true, x, y);
@@ -1557,10 +1535,9 @@ double RSPPlayer_204157861::calcDistanceFromBombOrFlag(int to_x, int to_y)
 			}
 		}
 	}
-	//cout<<"calcDistanceFromBombOrFlag: " << to_x << ","<<to_y<< " : "<<minimalDistance<<endl;
 	return (double)(ROWS + COLS - minimalDistance) / (double)(ROWS + COLS);
-	//return (double)(ROWS + COLS - minimalDistance);
 }
+
 
 /**
     calculate the shortest path from a piece of mine to an opponent's piece
@@ -1592,9 +1569,9 @@ double RSPPlayer_204157861::calcDistanceFromUnknownPiece(int to_x, int to_y)
 			}
 		}
 	}
-//cout<<"calcDistanceFromUnknownPiece: " << to_x << ","<<to_y<< " : "<<minimalDistance<<endl;
 return ((double)(ROWS+COLS) - (double)minimalDistance)/(double)(ROWS+COLS);
 }
+
 
 /**
     calculate a the shortest path from my pieces to a given piece.
@@ -1605,14 +1582,13 @@ return ((double)(ROWS+COLS) - (double)minimalDistance)/(double)(ROWS+COLS);
 int RSPPlayer_204157861::calcDistanceFromPiece(int piece_x, int piece_y, int my_x, int my_y)
 {
 	int distance = ROWS + COLS;
-	//there will be a fight with my piece vs unknown piece
-	//cout<<"will be fight: "<<willBeFight<<endl;
 	if (willBeFight && my_x == piece_x && my_y == piece_y){
 		return 0;
 	}
 	distance = abs(my_x - piece_x) + abs(my_y - piece_y);
 	return distance;
 }
+
 
 /**
     a parameter calculated for scoring function.
@@ -1663,6 +1639,7 @@ double RSPPlayer_204157861::calcFlagSaftey()
 		return ((double)(-1 * enemyPieces) / (double)totalEnemyPieces);
 	return ((double)((2 * protectingBombs) + otherProtectingPieces) / (double)((2 * bombs) + movingPieces));
 }
+
 
 /**
     add to counter if a given neighbor to flag is a protecting or enemy piece.
@@ -1738,8 +1715,8 @@ void RSPPlayer_204157861::countProtectingPieces(int i, int j, int &protectingBom
 	//SearchDiagonal
 	piece = i + 1 > COLS - 1 || j + 1 > ROWS - 1 ? 0 : gameBoard.board[i + 1][j + 1].getPiece();
 	updateNeighborAsProtectorOrEnemy(piece, i + 1 , j + 1, protectingBombs, otherProtectingPieces, enemyPieces);
-
 }
+
 
 /**
     calculate a score of material parameter for scoring function.
@@ -1766,6 +1743,7 @@ double RSPPlayer_204157861::calcMaterial(Cell cell)
 
 }
 
+
 /**
     calculate a score of discovery parameter for scoring function.
     the less we know about a neighbor we can do a fight with in the next move -
@@ -1781,6 +1759,7 @@ double RSPPlayer_204157861::calcDiscovery(AICell cell)
 
 	return (double)(isFlagKnown + isJokerKnown + isMovingPiece) / 3.0; //normalized to one
 }
+
 
 /**
     AI algorithm function trying to change a joker piece to new representation
@@ -1825,7 +1804,6 @@ char RSPPlayer_204157861::shouldChangeJoker(double &score, int joker_x, int joke
 				newRep = amIPlayerOne ? 'B' : 'b';
 			break;
 		}
-
 		origRep = newRep;
 		Cell::updateCell(gameBoard.board[joker_x][joker_y],newRep, true);
 		currScore = calcScore(material, discovery, reveal, joker_x, joker_y);
@@ -1837,11 +1815,10 @@ char RSPPlayer_204157861::shouldChangeJoker(double &score, int joker_x, int joke
 		}
 		//change back to old rep
 		Cell::updateCell(gameBoard.board[joker_x][joker_y],oldRep, true);
-
 	}
-
 	return bestRep;
 }
+
 
 /**
     when AI algorithm is sure - changes all opponent's unknown pieces to moving pieces.
@@ -1867,6 +1844,7 @@ void RSPPlayer_204157861::updateMovingPiece()
 	}
 }
 
+
 void RSPPlayer_204157861::updateNoJokersLeft()
 {
 	for (int i = 0; i < COLS; ++i)
@@ -1882,13 +1860,13 @@ void RSPPlayer_204157861::updateNoJokersLeft()
 					continue;
 				}
 				gameBoard.board[i][j].isJokerKnown = true;
-				//gameBoard.board[i][j].isJoker = false;//todo : setJoker
 				gameBoard.board[i][j].setIsJoker(false);
-
 			}
 		}
 	}
+
 }
+
 
 /**
 	update AI board after manager notified on board's positions.
@@ -1943,6 +1921,7 @@ void RSPPlayer_204157861::PrintBoardToConsole()
 	}
 }
 
+
 /**
 	manager will ue this function to notify AI on opponent's move. and AI will
 	use this data to update its board and learn about the game.
@@ -1962,7 +1941,6 @@ void RSPPlayer_204157861::notifyOnOpponentMove(const Move &move)
 	//if piece was known as a bomb - than this is a joker
 	if (fromCell.isMovingPieceKnown && !fromCell.isMovingPiece) {
 		fromCell.isJokerKnown = true;
-		//fromCell.isJoker = true;//todo setter
 		fromCell.setIsJoker(true); //shawn added // todo check this
 	}
 	//we know for sure this is a moving piece

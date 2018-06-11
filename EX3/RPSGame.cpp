@@ -35,7 +35,7 @@ void RPSGame::updateJokerMovingPieces()
                                                                                          1)
                                                           : playerTwo.setNumOfPieces(pieceIndex,
                                                                                      playerTwo.numOfPieces[pieceIndex] +
-                                                                                         1);
+                                                                                     1);
             }
         }
     }
@@ -344,7 +344,7 @@ bool RPSGame::checkMovingPieceLeft(int playerNum)
 {
     if (playerNum == 1)
     {
-        if (!playerOne.isLeftMovingPieces()) //player one has no moving pieces
+        if (!playerOne.isLeftMovingPieces(false)) //player one has no moving pieces
         {
             return false;
         }
@@ -352,14 +352,13 @@ bool RPSGame::checkMovingPieceLeft(int playerNum)
     }
     if (playerNum == 2)
     {
-        if (!playerTwo.isLeftMovingPieces()) //player two has no moving pieces
+        if (!playerTwo.isLeftMovingPieces(false)) //player two has no moving pieces
         {
             return false;
         }
         return true;
     }
     return true; //shoule never get here
-
 }
 /*
  * Output - return -1 if there was an error  during move, or 0 if the move was successful.
@@ -418,6 +417,20 @@ int RPSGame::makeMove()
         else
         {
             xPiecePlayerTwo = move->getFrom().getX();
+        }
+        if (!checkMovingPieceLeft(1))
+        {
+            hasNoMovingPiecePlayerOne = true;
+            hasNoMovingPiecePlayerTwo = false;
+            isGameOverInternal = true;
+            break;
+        }
+        if (!checkMovingPieceLeft(2))
+        {
+            hasNoMovingPiecePlayerTwo = true;
+            hasNoMovingPiecePlayerOne = false;
+            isGameOverInternal = true;
+            break;
         }
         if (!isPlayerTwoEOF && xPiecePlayerTwo != READ_LINE_ERR)
         {
@@ -503,7 +516,7 @@ int RPSGame::closeGame(bool &isGameOverInternal, bool &isBadFormat, bool &isPlay
         {
             if (isPlayerOneTurn)
             {
-                if (!playerTwo.isLeftMovingPieces())
+                if (!playerTwo.isLeftMovingPieces(false))
                 {
                     setGameOver(1, ALL_PIECES_EATEN);
                     return GAME_OVER_SUCC;
@@ -511,7 +524,7 @@ int RPSGame::closeGame(bool &isGameOverInternal, bool &isBadFormat, bool &isPlay
             }
             else
             {
-                if (!playerOne.isLeftMovingPieces())
+                if (!playerOne.isLeftMovingPieces(false))
                 {
                     setGameOver(2, ALL_PIECES_EATEN);
                     return GAME_OVER_SUCC;
@@ -561,7 +574,14 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
         (to_y < 1 || to_y > ROWS))
     {
         cout << "Error: illegal location on board" << endl;
-        cout << "from col: " << from_x << "from row: " << from_y << " to_x: " << to_x << " to_y: " << to_y << endl;
+        cout << from_x << "," << from_y << endl;
+        cout << to_x << "," << to_y << endl;
+        cout << "is player one?" << isPlayer1 << endl;
+        cout<<"playerOne"<<playerOne.isLeftMovingPieces(true)<<endl;
+        cout<<"playerTwo"<<playerTwo.isLeftMovingPieces(true)<<endl;
+
+        PrintBoardToConsole();
+
         return false;
     }
     //checks  if the Move object we got actually moves an object on the board
@@ -574,7 +594,6 @@ bool RPSGame::isLegalMove(unique_ptr<Move> &move, bool isPlayer1)
     if (gameBoard.board.at(from_x).at(from_y).getPiece() == 0)
     {
         cout << "Error: there is no piece in this position" << endl;
-        cout << "from col: " << from_x << "from row: " << from_y << " to_x: " << to_x << " to_y: " << to_y << endl;
         return false;
     }
     //checks whether the piece we want to move belongs to the player from who we received the move
@@ -862,8 +881,10 @@ int RPSGame::locateOnBoard(int playerNum, std::vector<unique_ptr<PiecePosition>>
             //check position was already done there! (maybe we need to trasform here)
             x = vectorToFill[i]->getPosition().getX();
             y = vectorToFill[i]->getPosition().getY();
-            if (vectorToFill[i]->getJokerRep() != '#')
+            if (vectorToFill[i]->getJokerRep() != '#'){
+                cout<<"Joker Of player:"<<playerNum<<endl;
                 isJoker = true;
+            }
 
             if (-1 == checkNumOfPieces(playerNum, isPieceOkPlayer1, isPieceOkPlayer2, inputPiece, isPlayerLegalFormat,
                                        numOfPositionedPieces))
@@ -920,16 +941,21 @@ int RPSGame::checkPositionOnBoard(bool &isPlayerOneLegalFormat,
 
     playerAlgoOne->getInitialPositions(1, vectorToFillPlayerOne);
     playerAlgoTwo->getInitialPositions(2, vectorToFillPlayerTwo);
-
+    //NEED TO ERASE
+    PrintBoardToConsole();
+    //NEED TO ERASE
     int numOfPositionedPieces[6] = {0};
 
     //check player One Format
     int resultPlayerOne = locateOnBoard(1, vectorToFillPlayerOne, isPlayerOneLegalFormat, numOfPositionedPieces, fights,
                                         initFights);
+    cout<<"BEFORE UPDATE!!!"<<endl;
+    playerOne.isLeftMovingPieces(true);
     updateJokerMovingPieces();
     memset(numOfPositionedPieces, 0, sizeof(numOfPositionedPieces)); // for automatically-allocated arrays
     int resultPlayerTwo = locateOnBoard(2, vectorToFillPlayerTwo, isPlayerTwoLegalFormat, numOfPositionedPieces, fights,
                                         initFights);
+    playerTwo.isLeftMovingPieces(true);
     updateJokerMovingPieces();
     if (resultPlayerOne == BAD_FORMAT_POS_ERR || resultPlayerOne == READ_LINE_POS_ERR)
     {
@@ -1014,6 +1040,13 @@ int RPSGame::checkBadFormat()
         return -1;
     }
     const RPSBoard gameBoardConst = gameBoard;
+    //NEED TO ERASE
+    cout<<"After update:"<<endl;
+    PrintBoardToConsole();
+    playerOne.isLeftMovingPieces(true);
+    playerTwo.isLeftMovingPieces(true);
+    //NEED TO ERASE
+
     playerAlgoOne->notifyOnInitialBoard(gameBoardConst, initFights);
     playerAlgoTwo->notifyOnInitialBoard(gameBoardConst, initFights);
     return isLegalFormat;
@@ -1152,7 +1185,7 @@ bool RPSGame::checkGameOver(bool isBeforeMove, bool isPlayerOneTurn)
         return true;
     }
     //check if all of player one's moving pieces are eaten
-    if (isBeforeMove && !currPlayer->isLeftMovingPieces())
+    if (isBeforeMove && !currPlayer->isLeftMovingPieces(false))
     {
         gameOverSetter(currPlayer, nextPlayer, false, true, ALL_PIECES_EATEN);
 
@@ -1359,7 +1392,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
         if (currPlayerPiece == PAPER)
         {
             handlePaperOrRockVsScissors(1, currPlayer, nextPlayerNum, initFights, ptr, fights);
-            //fights.setPosition(*currPos);
         }
         else if (currPlayerPiece == ROCK)
         {
@@ -1367,10 +1399,6 @@ bool RPSGame::fight(bool isPlayerOneTurn, int x, int y, char currPiece,
             Cell::updateCell(gameBoard.board.at(x).at(y), currPiece,
                              isCurrPieceJoker);
         }
-    }
-    else
-    {
-        //cout <<"Error in fight !!!!!!!!!!!!!!!!!!!!!!!!"<<currPlayerPiece << ", "<<nextPlayerPiece<<endl;
     }
     return checkGameOver(false, isPlayerOneTurn);
 }
