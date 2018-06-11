@@ -38,7 +38,7 @@ void TournamentManager::registerAlgorithm(std::string id, std::function<std::uni
 }
 
 void TournamentManager::startNewGame(const string &playerOneId, const string &playerTwoId){
-	cout << "player one is: " << playerOneId <<" , player 2 is: " << playerTwoId << endl;
+	//cout << "player one is: " << playerOneId <<" , player 2 is: " << playerTwoId << endl;
 	RPSGame game (idToAlgoInfo[playerOneId], idToAlgoInfo[playerTwoId]);
 	game.startGame();
 	updateScore(game, playerOneId,playerTwoId);
@@ -276,7 +276,7 @@ bool TournamentManager::loadAlgorithemsFromPath() {
 		inputDirPath = "";
 	}
 	else {
-		inputDirPath = "/"+inputDirPath;
+		inputDirPath += "/";
 	}
 	string command =  "ls " + inputDirPath + "*.so 2>&1"; //TODO: CHECK THIS
 	//cout << command <<endl;
@@ -299,7 +299,7 @@ bool TournamentManager::loadAlgorithemsFromPath() {
 		//cout << name << "HEY" << endl;
 		dlib = dlopen(name, RTLD_NOW);
 		if(dlib == NULL){
-			cout << "Error: algorithm failed to open." << endl;
+			cout << "Error: algorithm in path: "<<inputDirPath<<" failed to open." << endl;
 			return false;
 		}
 		// add the handle to our list

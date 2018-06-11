@@ -258,6 +258,8 @@ int RPSGame::handleNonEmptyMove(bool playerOneNonEmpty, std::unique_ptr<Move> &m
 int RPSGame::handleEOF(bool playerOneEOF, bool &isBadFormat, bool &isPlayerOneTurn, bool &isGameOverInternal,
                        bool isPlayerOneEOF, bool isPlayerTwoEOF)
 {
+	cout<<"WE ARE IN EOF"<<endl;
+
     std::unique_ptr<Move> move;
     int nextPlayer = 2;
     bool hasNoMovingPiecePlayerOne = false;
@@ -401,8 +403,9 @@ int RPSGame::makeMove()
     bool isBadFormat = false;
     bool hasNoMovingPiecePlayerOne = false;
     bool hasNoMovingPiecePlayerTwo = false;
-    while (!isPlayerOneEOF && xPiecePlayerOne != READ_LINE_ERR && !isPlayerTwoEOF && xPiecePlayerTwo != READ_LINE_ERR &&
-           numOfMoves < MAX_NUM_OF_MOVES) //CHANGES??
+    //while (!isPlayerOneEOF && xPiecePlayerOne != READ_LINE_ERR && !isPlayerTwoEOF && xPiecePlayerTwo != READ_LINE_ERR &&
+    //       numOfMoves < MAX_NUM_OF_MOVES) //CHANGES??
+    while (!isPlayerOneEOF && xPiecePlayerOne != READ_LINE_ERR && numOfMoves < MAX_NUM_OF_MOVES)
     {
         if (!checkMovingPieceLeft(1))
         {
@@ -427,6 +430,11 @@ int RPSGame::makeMove()
                 break;
             }
         }
+
+        if(!isPlayerTwoEOF && xPiecePlayerTwo != READ_LINE_ERR && numOfMoves < MAX_NUM_OF_MOVES) {
+        	break;
+        }
+
         move = std::move(playerAlgoTwo->getMove());
         if (move == nullptr)
         {
