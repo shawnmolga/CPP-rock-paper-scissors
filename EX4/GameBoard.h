@@ -101,7 +101,7 @@ public:
             return false;//todo: should not get here!
         }
 
-        virtual iterator& operator++() {
+         iterator& operator++() {
             bool cont = incrementIndex();//if we need to continue - true
             while (iterBoard.at(currRow).at(currCol).piece == nullptr && cont ){
                 cont = incrementIndex();
@@ -109,18 +109,18 @@ public:
             return *this;
         }
 
-        virtual bool operator==(iterator other) const {
+        bool operator==(iterator other) const {
             if (currRow == other.currRow && currCol == other.currCol)
                 return true;
             else
                 return false;
         }
 
-        virtual bool operator!=(iterator other) const {
+         bool operator!=(iterator other) const {
             return !(*this == other);
         }
 
-        virtual const std::tuple<int, int, GAME_PIECE, int>  operator*() const {
+         const std::tuple<int, int, GAME_PIECE, int>  operator*() const {
             GAME_PIECE currPiece;
             if (iterBoard.at(currRow).at(currCol).piece == nullptr){
                 currPiece = nullptr;
@@ -132,17 +132,17 @@ public:
             return std::make_tuple(currRow, currCol, currPiece, player);
         }
 
-        iterator findLastPlayerPiece() {
-        	iterator tmpItr = iterator(0,0,iterBoard);
-        	for (;tmpItr != tmpItr.end(); ++tmpItr) {
-        		if (++tmpItr == tmpItr.end()) {
-        			break;
-        		}
-        		++(*this);
-        	}
+        // iterator findLastPlayerPiece() {
+        // 	iterator tmpItr = iterator(0,0,iterBoard);
+        // 	for (;tmpItr != tmpItr.end(); ++tmpItr) {
+        // 		if (++tmpItr == tmpItr.end()) {
+        // 			break;
+        // 		}
+        // 		++(*this);
+        // 	}
 
-        	return *this;
-        }
+        // 	return *this;
+        // }
     }; // iterator
 
     iterator begin() {
@@ -160,14 +160,16 @@ public:
     class playerBoard {
     public:
         int numPlayer;
+        std::vector <vector<Cell>> iterBoard;
+        playerBoard(int numPlayer_,std::vector <vector<Cell>> iterBoard_): numPlayer(numPlayer_),iterBoard(iterBoard_){}
+    public:
+        class playerIterator {
+        int numPlayer;
         int currRow = 0;
         int currCol = 0;
         std::vector <vector<Cell>> iterBoard;
-        class playerIterator {
-
             playerIterator(int currRow_, int currCol_, const std::vector <vector<Cell>> &board_, int numPlayer_)
-                    : currRow(
-                    currRow_), currCol(currCol_), iterBoard(board_), numPlayer(numPlayer_) {}
+                    : currRow(currRow_), currCol(currCol_), iterBoard(board_), numPlayer(numPlayer_) {}
 
             bool incrementIndex() {
                 if (currCol < COLS - 1 && currRow < ROWS - 1) {
@@ -218,26 +220,31 @@ public:
                 return std::make_tuple(currRow, currCol, currPiece, player);
             }
 
-            iterator findLastPlayerPiece() {
-                iterator tmpItr = iterator(0,0,iterBoard);
-                for (;tmpItr != tmpItr.end(); ++tmpItr) {
-                    if (++tmpItr == tmpItr.end()) {
-                        break;
-                    }
-                    ++(*this);
-                }
+            // iterator findLastPlayerPiece() {
+            //     iterator tmpItr = iterator(0,0,iterBoard);
+            //     for (;tmpItr != tmpItr.end(); ++tmpItr) {
+            //         if (++tmpItr == tmpItr.end()) {
+            //             break;
+            //         }
+            //         ++(*this);
+            //     }
 
-                return *this;
-            }
+            //     return *this;
+            // }
         };//playerIterator
 
         playerIterator begin() {
-            return playerIterator(0,0, GameBoardImp, numPlayer);
+            return playerIterator(0,0, iterBoard, numPlayer);
         }
 
-        iterator end() {
-            return playerIterator(ROWS,COLS,GameBoardImp, numPlayer);
-            //return it.findLastPlayerPiece();
+        playerIterator end() {
+            return playerIterator(ROWS,COLS,iterBoard, numPlayer);
         }
+    };
+
+    playerBoard allPiecesOfPlayer(int playerNum){
+            return playerBoard(playerNum,GameBoardImp);
+    }
+};
     
 #endif //CPP_PRJ_GAMEBOARD_H
