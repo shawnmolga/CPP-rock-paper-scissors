@@ -178,7 +178,7 @@ void RSPPlayer_204157861::positionUnmovingPieces(int player, std::vector<unique_
 	int x = getRandomNumInRange(0, COLS - 1);
 	int y = getRandomNumInRange(0, ROWS - 1);
 	bool shouldPositionRandomly = true;
-	int bombsPositioned = 0;							  //sum all bombs already positioned
+	int bombsPositioned = 0; //sum all bombs already positioned
 
 	//position all flags on board
 	positionFlagsOnBoard(player, vectorToFill, bombsPositioned);
