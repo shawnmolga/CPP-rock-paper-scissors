@@ -26,7 +26,7 @@
 			} }while (0)
 
 #ifdef __cplusplus
-}
+
 #endif
 
 #endif /* UNIT_TEST_UTIL_H_ */
