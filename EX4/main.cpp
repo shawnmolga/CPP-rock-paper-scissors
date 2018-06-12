@@ -33,27 +33,47 @@ static bool test1(){
 
 int main(){
     RUN_TEST(test1);
-    GameBoard<5, 5, string, 4> myBoard;
+    GameBoard<5, 5, int, 4> myBoard;
     int i =0;
     for (int row = 0; row < 2; row++){
         for(int col =0; col < 5; col++){
-            myBoard.setPiece(row, col, "Piece!!", i);
+            myBoard.setPiece(row, col, 2, i);
             i = (i+1)%4;
         }
     }
+    myBoard.setPiece(1, 1, 4, 1);
+
+    cout<<"A:"<<endl;
+
     for(auto pieceInfo : myBoard) {
         cout << "row: " << std::get<0>(pieceInfo);
         cout << " col: " << std::get<1>(pieceInfo);
         cout << " piece: " << std::get<2>(pieceInfo); // we assume here that GAME_PIECE implemented <<
         cout << " player: " << std::get<3>(pieceInfo) << endl;
     }
-
-    for (auto pieceInfo : myBoard.allPiecesOfPlayer(0)){
+    cout<<"B:"<<endl;
+    for (auto pieceInfo : myBoard.allPiecesOfPlayer(1)){
         cout << "row: " << std::get<0>(pieceInfo);
         cout << " col: " << std::get<1>(pieceInfo);
         cout << " piece: " << std::get<2>(pieceInfo); // we assume here that GAME_PIECE implemented <<
         cout << " player: " << std::get<3>(pieceInfo) << endl;
     }
+
+    cout<<"C:"<<endl;
+    for (auto pieceInfo : myBoard.allOccureneceOfPiece((2))){
+        cout << "row: " << std::get<0>(pieceInfo);
+        cout << " col: " << std::get<1>(pieceInfo);
+        cout << " piece: " << std::get<2>(pieceInfo); // we assume here that GAME_PIECE implemented <<
+        cout << " player: " << std::get<3>(pieceInfo) << endl;
+    }
+
+    cout<<"D:"<<endl;
+        for (auto pieceInfo : myBoard.allOccureneceOfPieceForPlayer(2,1)){
+            cout << "row: " << std::get<0>(pieceInfo);
+            cout << " col: " << std::get<1>(pieceInfo);
+            cout << " piece: " << std::get<2>(pieceInfo); // we assume here that GAME_PIECE implemented <<
+            cout << " player: " << std::get<3>(pieceInfo) << endl;
+        }
 
 
 

@@ -20,14 +20,17 @@ class GameBoard{
     struct Cell{
         GAME_PIECE* piece;
         int player;
-        string type = "cell";
         Cell(){
             piece = nullptr;
             player = -1;
         }
 
+        ~Cell(){
+        	delete piece;
+        }
+
     };
-    std::vector<vector<Cell>> GameBoardImp; //implemented GameBoard
+    std::vector<vector<Cell>>gameBoardImp; //implemented GameBoard
 
 
 public:
@@ -40,18 +43,18 @@ public:
                 rowGameVector.push_back(Cell());
             newGameBoard.push_back(rowGameVector);
         }
-        GameBoardImp = newGameBoard;
+        gameBoardImp = newGameBoard;
     };
 
     ~GameBoard(){} ;
 
     //Get the piece info for the piece in the requested location, or nullptr if no piece in this location.
     PieceInfo getPiece(int row, int col){
-        if ( GameBoardImp.at(row).at(col).piece == nullptr){
+        if (gameBoardImp.at(row).at(col).piece == nullptr){
             return nullptr;
         }
-        int playerNum = GameBoardImp.at(row).at(col).player;
-        auto p1 = std::make_pair(playerNum , *GameBoardImp.at(row).at(col).piece);
+        int playerNum = gameBoardImp.at(row).at(col).player;
+        auto p1 = std::make_pair(playerNum , *(gameBoardImp.at(row).at(col).piece));
         return std::make_unique<pair<int, GAME_PIECE>>(p1);
     }
 
@@ -64,20 +67,34 @@ public:
             return getPiece(row, col) ;
         }
         auto prevInfo = getPiece( row, col);
-        GameBoardImp.at(row).at(col).piece = &piece;
-        GameBoardImp.at(row).at(col).player = player;
+        gameBoardImp.at(row).at(col).piece = new GAME_PIECE(piece);
+        //cout <<"PIECE IS: "<<*(gameBoardImp.at(row).at(col).piece)<<endl;
+        gameBoardImp.at(row).at(col).player = player;
         return prevInfo;
     }
 
     //////////////////////////ITERATOR://////////////////////
     class iterator{
     public:
-
-        int currRow = 0;
-        int currCol = 0;
-        std::vector<vector<Cell>> iterBoard;
-        iterator(int currRow_, int currCol_, const std::vector<vector<Cell>> & board_) : currRow(currRow_), currCol(currCol_) , iterBoard(board_){
+        int currRow;
+        int currCol;
+        GameBoard* board;
+        int playerNum;
+        GAME_PIECE* pieceItr;
+        iterator(int currRow_, int currCol_, GameBoard* board_, int playerNum_, GAME_PIECE* piece_) :
+        	currRow(currRow_), currCol(currCol_) , board(board_), playerNum(playerNum_), pieceItr(piece_){
             cout << "in iterator constructor" << endl;
+        }
+        iterator(GameBoard* board_, int playerNum_, GAME_PIECE* piece_) :
+        	board(board_), playerNum(playerNum_), pieceItr(piece_){
+        	currRow = 0;
+        	currCol = 0;
+        	bool cont = true;
+        	while ((board->gameBoardImp.at(currRow).at(currCol).piece == nullptr ? true : (isNotDesiredPiece() || isNotPlayerPiece())) && cont ){
+
+        		cont = incrementIndex();
+        	}
+        	cout << "in begin iterator constructor" << endl;
         }
         bool incrementIndex(){
             if (currCol < COLS-1 && currRow < ROWS -1){
@@ -101,10 +118,24 @@ public:
             return false;//todo: should not get here!
         }
 
+        bool isNotPlayerPiece() {
+        	if (playerNum < 0)
+        		return false;
+        	return (board->gameBoardImp.at(currRow).at(currCol).player != playerNum);
+        }
+
+        bool isNotDesiredPiece() {
+        	if (pieceItr == nullptr)
+        		return false;
+        	return (*board->gameBoardImp.at(currRow).at(currCol).piece != *pieceItr);
+        }
+
          iterator& operator++() {
             bool cont = incrementIndex();//if we need to continue - true
-            while (iterBoard.at(currRow).at(currCol).piece == nullptr && cont ){
-                cont = incrementIndex();
+
+            while ((board->gameBoardImp.at(currRow).at(currCol).piece == nullptr ? true : (isNotDesiredPiece() || isNotPlayerPiece())) && cont ){
+
+            	cont = incrementIndex();
             }
             return *this;
         }
@@ -116,135 +147,65 @@ public:
                 return false;
         }
 
-         bool operator!=(iterator other) const {
+        bool operator!=(iterator other) const {
             return !(*this == other);
         }
 
          const std::tuple<int, int, GAME_PIECE, int>  operator*() const {
-            GAME_PIECE currPiece;
-            if (iterBoard.at(currRow).at(currCol).piece == nullptr){
-                currPiece = nullptr;
-            }
-            else{
-                currPiece = *iterBoard.at(currRow).at(currCol).piece;
-            }
-            int player = iterBoard.at(currRow).at(currCol).player;
-            return std::make_tuple(currRow, currCol, currPiece, player);
+            int player = board->gameBoardImp.at(currRow).at(currCol).player;
+            return std::make_tuple(currRow, currCol, *board->gameBoardImp.at(currRow).at(currCol).piece, player);
         }
 
-        // iterator findLastPlayerPiece() {
-        // 	iterator tmpItr = iterator(0,0,iterBoard);
-        // 	for (;tmpItr != tmpItr.end(); ++tmpItr) {
-        // 		if (++tmpItr == tmpItr.end()) {
-        // 			break;
-        // 		}
-        // 		++(*this);
-        // 	}
-
-        // 	return *this;
-        // }
-    }; // iterator
+    };
 
     iterator begin() {
-        return iterator(0,0, GameBoardImp);
+        return iterator(this, -1, nullptr);
     }
 
     iterator end() {
-    	return iterator(ROWS,COLS,GameBoardImp);
-        //return it.findLastPlayerPiece();
+    	return iterator(ROWS,COLS, this, -1, nullptr);
     }
 
 
 
     ///////////////////////////////PLAYER ITERATOR///////////////////
-    class playerBoard {
+    class IterFactory {
     public:
-        int numPlayer;
-        std::vector <vector<Cell>> iterBoard;
-        playerBoard(int numPlayer_,std::vector <vector<Cell>> iterBoard_): numPlayer(numPlayer_),iterBoard(iterBoard_){}
+    	GAME_PIECE* desiredPiece;
+    	int desiredPlayerNum;
+        int row;
+        int col;
+        GameBoard* desiredBoard;
 
-        class playerIterator {
-        public:
-        int numPlayer;
-        int currRow = 0;
-        int currCol = 0;
-        std::vector <vector<Cell>> iterBoard;
-            playerIterator(int currRow_, int currCol_, const std::vector <vector<Cell>> &board_, int numPlayer_)
-                    : currRow(currRow_), currCol(currCol_), iterBoard(board_), numPlayer(numPlayer_) {}
 
-            bool incrementIndex() {
-                if (currCol < COLS - 1 && currRow < ROWS - 1) {
-                    currCol++;
-                    return true;
-                } else if (currCol == COLS - 1 && currRow < ROWS - 1) {
-                    currCol = 0;
-                    currRow++;
-                    return true;
-                } else if (currCol < COLS - 1 && currRow == ROWS - 1) {
-                    currCol++;
-                    return true;
-                } else if (currCol == COLS - 1 && currRow == ROWS - 1) {
-                    currRow++;
-                    currCol++;
-                    return false;
-                }
-                return false;//todo: should not get here!
-            }
+        IterFactory(GAME_PIECE* piece_, int numPlayer_, int row_, int col_, GameBoard *board_) :
+        	desiredPiece(piece_), desiredPlayerNum(numPlayer_) , row(row_) , col(col_), desiredBoard(board_) {}
 
-            virtual playerIterator &operator++() {
-                bool cont = incrementIndex();//if we need to continue - true
-                while (iterBoard.at(currRow).at(currCol).player != numPlayer && cont) {
-                    cont = incrementIndex();
-                }
-                return *this;
-            }
-
-            virtual bool operator==(playerIterator other) const {
-                if (currRow == other.currRow && currCol == other.currCol)
-                    return true;
-                else
-                    return false;
-            }
-
-            virtual bool operator!=(playerIterator other) const {
-                return !(*this == other);
-            }
-
-            virtual const std::tuple<int, int, GAME_PIECE, int> operator*() const {
-                GAME_PIECE currPiece;
-                if (iterBoard.at(currRow).at(currCol).piece == nullptr) {
-                    currPiece = nullptr;
-                } else {
-                    currPiece = *iterBoard.at(currRow).at(currCol).piece;
-                }
-                int player = iterBoard.at(currRow).at(currCol).player;
-                return std::make_tuple(currRow, currCol, currPiece, player);
-            }
-
-            // iterator findLastPlayerPiece() {
-            //     iterator tmpItr = iterator(0,0,iterBoard);
-            //     for (;tmpItr != tmpItr.end(); ++tmpItr) {
-            //         if (++tmpItr == tmpItr.end()) {
-            //             break;
-            //         }
-            //         ++(*this);
-            //     }
-
-            //     return *this;
-            // }
-        };//playerIterator
-
-        playerIterator begin() {
-            return playerIterator(0,0, iterBoard, numPlayer);
+        ~IterFactory() {
+        	delete desiredPiece;
         }
 
-        playerIterator end() {
-            return playerIterator(ROWS,COLS,iterBoard, numPlayer);
+        iterator begin() {
+            return iterator(desiredBoard, desiredPlayerNum, desiredPiece);
+        }
+
+        iterator end() {
+            return iterator(ROWS,COLS, desiredBoard, desiredPlayerNum, desiredPiece);
         }
     };
 
-    playerBoard allPiecesOfPlayer(int playerNum){
-            return playerBoard(playerNum,GameBoardImp);
+    IterFactory allPiecesOfPlayer(int playerNum){
+            return IterFactory(nullptr,playerNum,0,0, this);
+    }
+
+    IterFactory allOccureneceOfPiece(GAME_PIECE piece){
+    	GAME_PIECE* p = new GAME_PIECE(piece);
+    	return IterFactory(p,-1,0,0, this);
+    }
+
+    IterFactory allOccureneceOfPieceForPlayer(GAME_PIECE piece, int playerNum){
+    	GAME_PIECE* p = new GAME_PIECE(piece);
+    	return IterFactory(p,playerNum,0,0, this);
     }
 };
     
