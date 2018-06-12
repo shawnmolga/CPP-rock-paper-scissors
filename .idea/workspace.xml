@@ -25,8 +25,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EX4/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="867">
-              <caret line="51" column="35" selection-start-line="51" selection-start-column="32" selection-end-line="51" selection-end-column="35" />
+            <state relative-caret-position="850">
+              <caret line="50" column="51" selection-start-line="50" selection-start-column="34" selection-end-line="50" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -34,8 +34,8 @@
       <file leaf-file-name="unit_test_util.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EX4/unit_test_util.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="21" column="17" lean-forward="true" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="18" />
+            <state relative-caret-position="357">
+              <caret line="21" column="17" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -52,12 +52,8 @@
       <file leaf-file-name="GameBoard.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/EX4/GameBoard.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
-              <caret line="241" column="4" selection-start-line="241" selection-start-column="4" selection-end-line="241" selection-end-column="4" />
-              <folding>
-                <element signature="e#204#263#0" expanded="true" />
-                <element signature="e#385#449#1" />
-              </folding>
+            <state relative-caret-position="-289">
+              <caret line="208" column="50" selection-start-line="208" selection-start-column="50" selection-end-line="208" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -257,7 +253,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="203169000" />
+    <option name="totallyTimeSpent" value="203209000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1293" height="693" extended-state="6" />
@@ -297,10 +293,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="109" column="24" selection-start-line="109" selection-start-column="20" selection-end-line="109" selection-end-column="24" />
-          <folding>
-            <element signature="e#204#263#0" expanded="true" />
-            <element signature="e#385#449#1" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -587,16 +579,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/EX4/unit_test_util.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="21" column="17" lean-forward="true" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="18" />
+        <state relative-caret-position="357">
+          <caret line="21" column="17" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="18" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/EX3/FilePlayerAlgorithm.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-153" />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/EX3/FilePlayerAlgorithm.h" />
     <entry file="file://$PROJECT_DIR$/EX4/Piece.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -606,19 +594,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/EX4/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="867">
-          <caret line="51" column="35" selection-start-line="51" selection-start-column="32" selection-end-line="51" selection-end-column="35" />
+        <state relative-caret-position="850">
+          <caret line="50" column="51" selection-start-line="50" selection-start-column="34" selection-end-line="50" selection-end-column="51" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/EX4/GameBoard.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="241" column="4" selection-start-line="241" selection-start-column="4" selection-end-line="241" selection-end-column="4" />
-          <folding>
-            <element signature="e#204#263#0" expanded="true" />
-            <element signature="e#385#449#1" />
-          </folding>
+        <state relative-caret-position="-289">
+          <caret line="208" column="50" selection-start-line="208" selection-start-column="50" selection-end-line="208" selection-end-column="50" />
         </state>
       </provider>
     </entry>

@@ -162,8 +162,9 @@ public:
         int numPlayer;
         std::vector <vector<Cell>> iterBoard;
         playerBoard(int numPlayer_,std::vector <vector<Cell>> iterBoard_): numPlayer(numPlayer_),iterBoard(iterBoard_){}
-    public:
+
         class playerIterator {
+        public:
         int numPlayer;
         int currRow = 0;
         int currCol = 0;
@@ -190,7 +191,7 @@ public:
                 return false;//todo: should not get here!
             }
 
-            virtual iterator &operator++() {
+            virtual playerIterator &operator++() {
                 bool cont = incrementIndex();//if we need to continue - true
                 while (iterBoard.at(currRow).at(currCol).player != numPlayer && cont) {
                     cont = incrementIndex();
@@ -198,14 +199,14 @@ public:
                 return *this;
             }
 
-            virtual bool operator==(iterator other) const {
+            virtual bool operator==(playerIterator other) const {
                 if (currRow == other.currRow && currCol == other.currCol)
                     return true;
                 else
                     return false;
             }
 
-            virtual bool operator!=(iterator other) const {
+            virtual bool operator!=(playerIterator other) const {
                 return !(*this == other);
             }
 
